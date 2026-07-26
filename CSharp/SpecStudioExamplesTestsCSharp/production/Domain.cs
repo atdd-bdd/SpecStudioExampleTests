@@ -153,28 +153,34 @@ namespace production
             return new Percentage(0);
         }
 
-        // --- what the cart comes to ---------------------------------------
+        // --- the Total Cart Price rule, over a bare item total -------------
+        //
+        // Stated as functions of the item total so the rule can be checked
+        // straight from its Examples table, which gives a TotalItems figure and
+        // no items. "Discount applied before shipping calculated", per that
+        // table's own note.
+
+        /// <summary>The discount as money: the tiered percentage of the total.</summary>
+        public static Dollar DiscountAmountFor(Dollar totalItems) =>
+            totalItems.PercentOf(DiscountFor(totalItems));
+
+        /// <summary>Shipping is judged on what the customer pays, so after the discount.</summary>
+        public static Dollar ShippingFor(Dollar totalItems) =>
+            ShippingCostFor(totalItems.Minus(DiscountAmountFor(totalItems)));
+
+        /// <summary>Item total, less the discount, plus shipping.</summary>
+        public static Dollar TotalPriceFor(Dollar totalItems) =>
+            totalItems.Minus(DiscountAmountFor(totalItems)).Plus(ShippingFor(totalItems));
+
+        // --- what this cart comes to ---------------------------------------
 
         /// <summary>What the items come to before any discount or shipping.</summary>
         public Dollar Subtotal() => Items.ComputeTotal();
 
-        /// <summary>The discount as money: the tiered percentage of the subtotal.</summary>
-        public Dollar DiscountAmount()
-        {
-            var amount = Subtotal();
-            return amount.PercentOf(DiscountFor(amount));
-        }
+        public Dollar DiscountAmount() => DiscountAmountFor(Subtotal());
 
-        /// <summary>
-        /// Shipping is charged on what the customer actually pays, so the discount
-        /// comes off before the $100 threshold is tested — following the scenario's
-        /// "Apply Discount to OrderItem Total, then add shipping".
-        /// </summary>
-        public Dollar ShippingCost() =>
-            ShippingCostFor(Subtotal().Minus(DiscountAmount()));
+        public Dollar ShippingCost() => ShippingFor(Subtotal());
 
-        /// <summary>Subtotal, less the discount, plus shipping.</summary>
-        public Dollar ComputeTotal() =>
-            Subtotal().Minus(DiscountAmount()).Plus(ShippingCost());
+        public Dollar ComputeTotal() => TotalPriceFor(Subtotal());
     }
 }

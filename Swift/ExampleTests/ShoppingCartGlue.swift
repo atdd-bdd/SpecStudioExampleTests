@@ -97,18 +97,18 @@ public class ShoppingCartGlue {
         }
     }
 
-    public func examplesBusinessRuleShippingCost(_ values: [ShippingString]) {
+    public func examplesBusinessRuleShippingCost(_ values: [ShippingInputString]) {
         for value in values {
-            let typed = ShippingTyped(from: value)
+            let typed = ShippingInputTyped(from: value)
             XCTAssertEqual(dollar(typed.shippingCost),
                            ShoppingCart.shippingCostFor(dollar(typed.totalPrice)),
                            "Shipping cost for \(typed.totalPrice)")
         }
     }
 
-    public func examplesBusinessRuleDiscount(_ values: [DiscountingString]) {
+    public func examplesBusinessRuleDiscount(_ values: [DiscountInputString]) {
         for value in values {
-            let typed = DiscountingTyped(from: value)
+            let typed = DiscountInputTyped(from: value)
             guard let expected = try? Percentage(typed.discount) else {
                 return XCTFail("bad percentage \(typed.discount)")
             }
@@ -126,4 +126,31 @@ public class ShoppingCartGlue {
             XCTAssertEqual(vvt.isValid, !failed, " Value \(vvt.value)")
         }
     }
+
+    public func thenTotalOfItemsIs(_ values: [ItemPriceInputString]) {
+        for value in values {
+            let typed = ItemPriceInputTyped(from: value)
+            XCTAssertEqual(dollar(typed.totalItems), currentItems.computeTotal(),
+                           "TotalItems")
+        }
+    }
+
+    public func examplesBusinessRuleTotalCartPrice(_ values: [CartInputString]) {
+        for value in values {
+            let typed = CartInputTyped(from: value)
+            // The rule states the whole calculation from an item total, so drive
+            // it that way rather than building a cart to reach the same numbers.
+            let total = dollar(typed.totalItems)
+            XCTAssertEqual(dollar(typed.discount),
+                           ShoppingCart.discountAmountFor(total),
+                           "Discount for \(typed.totalItems)")
+            XCTAssertEqual(dollar(typed.shipping),
+                           ShoppingCart.shippingFor(total),
+                           "Shipping for \(typed.totalItems)")
+            XCTAssertEqual(dollar(typed.totalPrice),
+                           ShoppingCart.totalPriceFor(total),
+                           "Total Price for \(typed.totalItems)")
+        }
+    }
+
 }

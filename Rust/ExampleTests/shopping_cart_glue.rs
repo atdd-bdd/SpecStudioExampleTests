@@ -105,9 +105,9 @@ impl ShoppingCartGlue {
         }
     }
 
-    pub fn examples_business_rule_shipping_cost(&mut self, values: &[ShippingString]) {
+    pub fn examples_business_rule_shipping_cost(&mut self, values: &[ShippingInputString]) {
         for value in values {
-            let typed = ShippingTyped::from_str_struct(value);
+            let typed = ShippingInputTyped::from_str_struct(value);
             let total = Dollar::parse(&typed.total_price).expect("bad total");
             assert_eq!(Dollar::parse(&typed.shipping_cost).unwrap(),
                        ShoppingCart::shipping_cost_for(&total),
@@ -115,9 +115,9 @@ impl ShoppingCartGlue {
         }
     }
 
-    pub fn examples_business_rule_discount(&mut self, values: &[DiscountingString]) {
+    pub fn examples_business_rule_discount(&mut self, values: &[DiscountInputString]) {
         for value in values {
-            let typed = DiscountingTyped::from_str_struct(value);
+            let typed = DiscountInputTyped::from_str_struct(value);
             let total = Dollar::parse(&typed.total_price).expect("bad total");
             assert_eq!(Percentage::parse(&typed.discount).unwrap(),
                        ShoppingCart::discount_for(&total),
@@ -132,4 +132,31 @@ impl ShoppingCartGlue {
             assert_eq!(vvt.isvalid, ok, " Value {}", vvt.value);
         }
     }
+
+    pub fn then_total_of_items_is(&mut self, values: &[ItemPriceInputString]) {
+        for value in values {
+            let typed = ItemPriceInputTyped::from_str_struct(value);
+            assert_eq!(Dollar::parse(&typed.totalitems).unwrap(),
+                       self.current_items.compute_total(), "TotalItems");
+        }
+    }
+
+    pub fn examples_business_rule_total_cart_price(&mut self, values: &[CartInputString]) {
+        for value in values {
+            let typed = CartInputTyped::from_str_struct(value);
+            // The rule states the whole calculation from an item total, so drive
+            // it that way rather than building a cart to reach the same numbers.
+            let total = Dollar::parse(&typed.totalitems).expect("bad total");
+            assert_eq!(Dollar::parse(&typed.discount).unwrap(),
+                       ShoppingCart::discount_amount_for(&total),
+                       "Discount for {}", typed.totalitems);
+            assert_eq!(Dollar::parse(&typed.shipping).unwrap(),
+                       ShoppingCart::shipping_for(&total),
+                       "Shipping for {}", typed.totalitems);
+            assert_eq!(Dollar::parse(&typed.total_price).unwrap(),
+                       ShoppingCart::total_price_for(&total),
+                       "Total Price for {}", typed.totalitems);
+        }
+    }
+
 }

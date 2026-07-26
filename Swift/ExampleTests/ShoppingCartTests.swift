@@ -24,6 +24,9 @@ final class ShoppingCartTests: XCTestCase {
             OrderItemString(fromArray: ["Widget", "2", "$10.00", "$20.00"]),
             OrderItemString(fromArray: ["WhatCallIt", "3", "$20.00", "$60.00"]),
         ])
+        glue.thenTotalOfItemsIs([
+            ItemPriceInputString(fromArray: ["$80"]),
+        ])
     }
 
     func testAShoppingCartWithAddresses() {
@@ -68,27 +71,34 @@ final class ShoppingCartTests: XCTestCase {
         ])
         glue.givenItemCollection([
         ])
-        glue.whenTotalComputed()
-        glue.thenResultIs([
-            PricingString(fromArray: ["$0"]),
+        glue.thenTotalOfItemsIs([
+            ItemPriceInputString(fromArray: ["$0"]),
+        ])
+    }
+
+    func testBusinessRuleTotalCartPrice() {
+        let glue = ShoppingCartGlue()
+        glue.examplesBusinessRuleTotalCartPrice([
+            CartInputString(fromArray: ["$110", "$5", "$11", "$104", "Discount applied before shipping calculated"]),
+            CartInputString(fromArray: ["$80", "$5", "$4", "$81", ""]),
         ])
     }
 
     func testBusinessRuleShippingCost() {
         let glue = ShoppingCartGlue()
         glue.examplesBusinessRuleShippingCost([
-            ShippingString(fromArray: ["$99.99", "$5.00", "Less than $100"]),
-            ShippingString(fromArray: ["$100.00", "$0", "Free if $100 or more"]),
+            ShippingInputString(fromArray: ["$99.99", "$5.00", "Less than $100"]),
+            ShippingInputString(fromArray: ["$100.00", "$0", "Free if $100 or more"]),
         ])
     }
 
     func testBusinessRuleDiscount() {
         let glue = ShoppingCartGlue()
         glue.examplesBusinessRuleDiscount([
-            DiscountingString(fromArray: ["$24.99", "0", ""]),
-            DiscountingString(fromArray: ["$25.00", "5", ""]),
-            DiscountingString(fromArray: ["$99.99", "5", ""]),
-            DiscountingString(fromArray: ["$100.00", "10", ""]),
+            DiscountInputString(fromArray: ["$24.99", "0", ""]),
+            DiscountInputString(fromArray: ["$25.00", "5", ""]),
+            DiscountInputString(fromArray: ["$99.99", "5", ""]),
+            DiscountInputString(fromArray: ["$100.00", "10", ""]),
         ])
     }
 

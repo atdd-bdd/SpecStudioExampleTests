@@ -81,14 +81,14 @@ class ShoppingCartGlue:
 
     def examples_BusinessRule_ShippingCost(self, values: list):
         for value in values:
-            typed = ShippingTyped.from_string_obj(value)
+            typed = ShippingInputTyped.from_string_obj(value)
             actual = ShoppingCart.shipping_cost_for(Dollar(typed.total_price))
             assert Dollar(typed.shipping_cost) == actual, \
                 f'Shipping cost for {typed.total_price}'
 
     def examples_BusinessRule_Discount(self, values: list):
         for value in values:
-            typed = DiscountingTyped.from_string_obj(value)
+            typed = DiscountInputTyped.from_string_obj(value)
             actual = ShoppingCart.discount_for(Dollar(typed.total_price))
             assert Percentage(typed.discount) == actual, \
                 f'Discount for {typed.total_price}'
@@ -102,3 +102,19 @@ class ShoppingCartGlue:
             except ValueError:
                 failed = True
             assert vvt.is_valid == (not failed), f' Value {vvt.value}'
+
+
+    def then_total_of_items_is(self, values: list):
+        for value in values:
+            typed = ItemPriceInputTyped.from_string_obj(value)
+            assert Dollar(typed.total_items) == self.current_items.compute_total(),                 'TotalItems'
+
+    def examples_BusinessRule_TotalCartPrice(self, values: list):
+        for value in values:
+            typed = CartInputTyped.from_string_obj(value)
+            # The rule states the whole calculation from an item total, so drive
+            # it that way rather than building a cart to reach the same numbers.
+            total_items = Dollar(typed.total_items)
+            assert Dollar(typed.discount) == ShoppingCart.discount_amount_for(total_items),                 f'Discount for {typed.total_items}'
+            assert Dollar(typed.shipping) == ShoppingCart.shipping_for(total_items),                 f'Shipping for {typed.total_items}'
+            assert Dollar(typed.total_price) == ShoppingCart.total_price_for(total_items),                 f'Total Price for {typed.total_items}'

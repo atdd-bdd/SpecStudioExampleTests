@@ -167,26 +167,42 @@ public class ShoppingCart {
         return Percentage(0)
     }
 
-    // --- what the cart comes to -------------------------------------------
+    // --- the Total Cart Price rule, over a bare item total -----------------
+    //
+    // Stated as functions of the item total so the rule can be checked straight
+    // from its Examples table, which gives a TotalItems figure and no items.
+    // "Discount applied before shipping calculated", per that table's own note.
+
+    /// The discount as money: the tiered percentage of the item total.
+    public static func discountAmountFor(_ totalItems: Dollar) -> Dollar {
+        return totalItems.percentOf(discountFor(totalItems))
+    }
+
+    /// Shipping is judged on what the customer pays, so after the discount.
+    public static func shippingFor(_ totalItems: Dollar) -> Dollar {
+        return shippingCostFor(totalItems.minus(discountAmountFor(totalItems)))
+    }
+
+    /// Item total, less the discount, plus shipping.
+    public static func totalPriceFor(_ totalItems: Dollar) -> Dollar {
+        return totalItems.minus(discountAmountFor(totalItems))
+                         .plus(shippingFor(totalItems))
+    }
+
+    // --- what this cart comes to ------------------------------------------
 
     /// What the items come to before any discount or shipping.
     public func subtotal() -> Dollar { return items.computeTotal() }
 
-    /// The discount as money: the tiered percentage of the subtotal.
     public func discountAmount() -> Dollar {
-        let amount = subtotal()
-        return amount.percentOf(ShoppingCart.discountFor(amount))
+        return ShoppingCart.discountAmountFor(subtotal())
     }
 
-    /// Shipping is charged on what the customer actually pays, so the discount
-    /// comes off before the $100 threshold is tested — following the scenario's
-    /// "Apply Discount to OrderItem Total, then add shipping".
     public func shippingCost() -> Dollar {
-        return ShoppingCart.shippingCostFor(subtotal().minus(discountAmount()))
+        return ShoppingCart.shippingFor(subtotal())
     }
 
-    /// Subtotal, less the discount, plus shipping.
     public func computeTotal() -> Dollar {
-        return subtotal().minus(discountAmount()).plus(shippingCost())
+        return ShoppingCart.totalPriceFor(subtotal())
     }
 }

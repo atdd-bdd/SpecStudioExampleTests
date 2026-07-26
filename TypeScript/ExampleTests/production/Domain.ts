@@ -154,28 +154,37 @@ export class ShoppingCart {
     return new Percentage(0);
   }
 
-  // --- what the cart comes to ---------------------------------------------
+  // --- the Total Cart Price rule, over a bare item total -------------------
+  //
+  // Stated as functions of the item total so the rule can be checked straight
+  // from its Examples table, which gives a TotalItems figure and no items.
+  // "Discount applied before shipping calculated", per that table's own note.
+
+  /** The discount as money: the tiered percentage of the item total. */
+  static discountAmountFor(totalItems: Dollar): Dollar {
+    return totalItems.percentOf(ShoppingCart.discountFor(totalItems));
+  }
+
+  /** Shipping is judged on what the customer pays, so after the discount. */
+  static shippingFor(totalItems: Dollar): Dollar {
+    return ShoppingCart.shippingCostFor(
+      totalItems.minus(ShoppingCart.discountAmountFor(totalItems)));
+  }
+
+  /** Item total, less the discount, plus shipping. */
+  static totalPriceFor(totalItems: Dollar): Dollar {
+    return totalItems.minus(ShoppingCart.discountAmountFor(totalItems))
+                     .plus(ShoppingCart.shippingFor(totalItems));
+  }
+
+  // --- what this cart comes to ---------------------------------------------
 
   /** What the items come to before any discount or shipping. */
   subtotal(): Dollar { return this.items.computeTotal(); }
 
-  /** The discount as money: the tiered percentage of the subtotal. */
-  discountAmount(): Dollar {
-    const amount = this.subtotal();
-    return amount.percentOf(ShoppingCart.discountFor(amount));
-  }
+  discountAmount(): Dollar { return ShoppingCart.discountAmountFor(this.subtotal()); }
 
-  /**
-   * Shipping is charged on what the customer actually pays, so the discount
-   * comes off before the $100 threshold is tested — following the scenario's
-   * "Apply Discount to OrderItem Total, then add shipping".
-   */
-  shippingCost(): Dollar {
-    return ShoppingCart.shippingCostFor(this.subtotal().minus(this.discountAmount()));
-  }
+  shippingCost(): Dollar { return ShoppingCart.shippingFor(this.subtotal()); }
 
-  /** Subtotal, less the discount, plus shipping. */
-  computeTotal(): Dollar {
-    return this.subtotal().minus(this.discountAmount()).plus(this.shippingCost());
-  }
+  computeTotal(): Dollar { return ShoppingCart.totalPriceFor(this.subtotal()); }
 }

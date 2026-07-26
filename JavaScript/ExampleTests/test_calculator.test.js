@@ -1,4 +1,4 @@
-import { AdderString, DiscountingString, FandCString, ShippingString, ValidValuesString } from "./common/index.js";
+import { AdderString, CartInputString, DiscountInputString, FandCString, ShippingInputString, ValidValuesString } from "./common/index.js";
 import { CalculatorGlue } from "./calculator_glue.js";
 
 describe("Calculator", () => {

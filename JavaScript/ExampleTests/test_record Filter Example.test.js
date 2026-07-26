@@ -1,4 +1,4 @@
-import { AdderString, DiscountingString, FandCString, FilterValueString, IDValueString, ResultValueString, ShippingString, ValidValuesString } from "./common/index.js";
+import { AdderString, CartInputString, DiscountInputString, FandCString, FilterValueString, IDValueString, ResultValueString, ShippingInputString, ValidValuesString } from "./common/index.js";
 import { RecordFilterExampleGlue } from "./record Filter Example_glue.js";
 
 describe("Record Filter Example", () => {

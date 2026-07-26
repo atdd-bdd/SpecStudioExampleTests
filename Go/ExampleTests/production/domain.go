@@ -172,25 +172,34 @@ func DiscountFor(totalPrice Dollar) Percentage {
 	}
 }
 
-// --- what the cart comes to ------------------------------------------------
+// --- the Total Cart Price rule, over a bare item total ---------------------
+//
+// Stated as functions of the item total so the rule can be checked straight from
+// its Examples table, which gives a TotalItems figure and no items. "Discount
+// applied before shipping calculated", per that table's own note.
+
+// DiscountAmountFor is the discount as money: the tiered percentage of the total.
+func DiscountAmountFor(totalItems Dollar) Dollar {
+	return totalItems.PercentOf(DiscountFor(totalItems))
+}
+
+// ShippingFor is judged on what the customer pays, so after the discount.
+func ShippingFor(totalItems Dollar) Dollar {
+	return ShippingCostFor(totalItems.Minus(DiscountAmountFor(totalItems)))
+}
+
+// TotalPriceFor is the item total, less the discount, plus shipping.
+func TotalPriceFor(totalItems Dollar) Dollar {
+	return totalItems.Minus(DiscountAmountFor(totalItems)).Plus(ShippingFor(totalItems))
+}
+
+// --- what this cart comes to -----------------------------------------------
 
 // Subtotal is what the items come to before any discount or shipping.
 func (s *ShoppingCart) Subtotal() Dollar { return s.Items.ComputeTotal() }
 
-// DiscountAmount is the discount as money: the tiered percentage of the subtotal.
-func (s *ShoppingCart) DiscountAmount() Dollar {
-	amount := s.Subtotal()
-	return amount.PercentOf(DiscountFor(amount))
-}
+func (s *ShoppingCart) DiscountAmount() Dollar { return DiscountAmountFor(s.Subtotal()) }
 
-// ShippingCost is charged on what the customer actually pays, so the discount
-// comes off before the $100 threshold is tested — following the scenario's
-// "Apply Discount to OrderItem Total, then add shipping".
-func (s *ShoppingCart) ShippingCost() Dollar {
-	return ShippingCostFor(s.Subtotal().Minus(s.DiscountAmount()))
-}
+func (s *ShoppingCart) ShippingCost() Dollar { return ShippingFor(s.Subtotal()) }
 
-// ComputeTotal is subtotal, less the discount, plus shipping.
-func (s *ShoppingCart) ComputeTotal() Dollar {
-	return s.Subtotal().Minus(s.DiscountAmount()).Plus(s.ShippingCost())
-}
+func (s *ShoppingCart) ComputeTotal() Dollar { return TotalPriceFor(s.Subtotal()) }

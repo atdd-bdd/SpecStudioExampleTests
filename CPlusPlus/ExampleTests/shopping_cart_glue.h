@@ -78,18 +78,18 @@ public:
         }
     }
 
-    void examples_businessrule_shipping_cost(const std::vector<ShippingString>& values) {
+    void examples_businessrule_shipping_cost(const std::vector<ShippingInputString>& values) {
         for (const auto& value : values) {
-            const ShippingTyped t = ShippingTyped::from_string_struct(value);
+            const ShippingInputTyped t = ShippingInputTyped::from_string_struct(value);
             EXPECT_EQ(Dollar(t.shipping_cost),
                       ShoppingCart::shipping_cost_for(Dollar(t.total_price)))
                 << "Shipping cost for " << t.total_price;
         }
     }
 
-    void examples_businessrule_discount(const std::vector<DiscountingString>& values) {
+    void examples_businessrule_discount(const std::vector<DiscountInputString>& values) {
         for (const auto& value : values) {
-            const DiscountingTyped t = DiscountingTyped::from_string_struct(value);
+            const DiscountInputTyped t = DiscountInputTyped::from_string_struct(value);
             EXPECT_EQ(Percentage(t.discount),
                       ShoppingCart::discount_for(Dollar(t.total_price)))
                 << "Discount for " << t.total_price;
@@ -105,8 +105,32 @@ public:
         }
     }
 
+    void then_total_of_items_is(const std::vector<ItemPriceInputString>& values) {
+        for (const auto& value : values) {
+            const ItemPriceInputTyped t = ItemPriceInputTyped::from_string_struct(value);
+            EXPECT_EQ(Dollar(t.totalitems), items_.compute_total()) << "TotalItems";
+        }
+    }
+
+    void examples_businessrule_total_cart_price(const std::vector<CartInputString>& values) {
+        for (const auto& value : values) {
+            const CartInputTyped t = CartInputTyped::from_string_struct(value);
+            // The rule states the whole calculation from an item total, so drive
+            // it that way rather than building a cart to reach the same numbers.
+            const Dollar total(t.totalitems);
+            EXPECT_EQ(Dollar(t.discount), ShoppingCart::discount_amount_for(total))
+                << "Discount for " << t.totalitems;
+            EXPECT_EQ(Dollar(t.shipping), ShoppingCart::shipping_for(total))
+                << "Shipping for " << t.totalitems;
+            EXPECT_EQ(Dollar(t.total_price), ShoppingCart::total_price_for(total))
+                << "Total Price for " << t.totalitems;
+        }
+    }
+
 private:
     Catalog catalog_;
     OrderItemCollection items_;
     Dollar computed_total_;
+
+
 };

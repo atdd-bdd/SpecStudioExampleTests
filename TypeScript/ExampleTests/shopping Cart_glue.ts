@@ -1,7 +1,8 @@
-import { CatalogItemString, CatalogItemTyped, DiscountingString, DiscountingTyped,
-         OrderItemString, OrderItemTyped, PricingString, PricingTyped,
-         ShippingString, ShippingTyped, ShoppingCartString, ShoppingCartTyped,
-         ValidValuesString, ValidValuesTyped } from "./common/index.js";
+import { CartInputString, CartInputTyped, CatalogItemString, CatalogItemTyped,
+         DiscountInputString, DiscountInputTyped, ItemPriceInputString,
+         ItemPriceInputTyped, OrderItemString, OrderItemTyped, PricingString,
+         PricingTyped, ShippingInputString, ShippingInputTyped, ShoppingCartString,
+         ShoppingCartTyped, ValidValuesString, ValidValuesTyped } from "./common/index.js";
 import { Catalog, CatalogItem, Dollar, OrderItem, OrderItemCollection,
          Percentage, ShoppingCart, SimpleText } from "./production/index.js";
 
@@ -85,17 +86,17 @@ export class ShoppingCartGlue {
     });
   }
 
-  examplesBusinessRuleShippingCost(values: readonly ShippingString[]): void {
+  examplesBusinessRuleShippingCost(values: readonly ShippingInputString[]): void {
     values.forEach((value) => {
-      const typed = ShippingTyped.fromStringObj(value);
+      const typed = ShippingInputTyped.fromStringObj(value);
       const actual = ShoppingCart.shippingCostFor(new Dollar(typed.totalPrice));
       expect(actual.equals(new Dollar(typed.shippingCost))).toBe(true);
     });
   }
 
-  examplesBusinessRuleDiscount(values: readonly DiscountingString[]): void {
+  examplesBusinessRuleDiscount(values: readonly DiscountInputString[]): void {
     values.forEach((value) => {
-      const typed = DiscountingTyped.fromStringObj(value);
+      const typed = DiscountInputTyped.fromStringObj(value);
       const actual = ShoppingCart.discountFor(new Dollar(typed.totalPrice));
       expect(actual.equals(new Percentage(typed.discount))).toBe(true);
     });
@@ -107,6 +108,29 @@ export class ShoppingCartGlue {
       let failed = false;
       try { new Percentage(vvt.value); } catch { failed = true; }
       expect(vvt.isValid).toBe(!failed);
+    });
+  }
+
+  thenTotalOfItemsIs(values: readonly ItemPriceInputString[]): void {
+    values.forEach((value) => {
+      const typed = ItemPriceInputTyped.fromStringObj(value);
+      expect(this.currentItems.computeTotal().equals(new Dollar(typed.totalItems)))
+        .toBe(true);
+    });
+  }
+
+  examplesBusinessRuleTotalCartPrice(values: readonly CartInputString[]): void {
+    values.forEach((value) => {
+      const typed = CartInputTyped.fromStringObj(value);
+      // The rule states the whole calculation from an item total, so drive it
+      // that way rather than building a cart to reach the same numbers.
+      const total = new Dollar(typed.totalItems);
+      expect(ShoppingCart.discountAmountFor(total).equals(new Dollar(typed.discount)))
+        .toBe(true);
+      expect(ShoppingCart.shippingFor(total).equals(new Dollar(typed.shipping)))
+        .toBe(true);
+      expect(ShoppingCart.totalPriceFor(total).equals(new Dollar(typed.totalPrice)))
+        .toBe(true);
     });
   }
 }

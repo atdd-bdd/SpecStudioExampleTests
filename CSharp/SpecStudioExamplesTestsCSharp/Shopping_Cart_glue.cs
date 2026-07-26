@@ -94,22 +94,22 @@ namespace SpecStudioExamplesTestsCSharp.Shopping_Cart
                 Assert.AreEqual(value.ToPricingTyped().totalPrice, computedTotal, "TotalPrice");
         }
 
-        public void Examples_BusinessRule_Shipping_Cost(List<ShippingString> values)
+        public void Examples_BusinessRule_Shipping_Cost(List<ShippingInputString> values)
         {
             foreach (var value in values)
             {
-                var typed = value.ToShippingTyped();
+                var typed = value.ToShippingInputTyped();
                 Assert.AreEqual(typed.shippingCost,
                                 ShoppingCart.ShippingCostFor(typed.totalPrice),
                                 $"Shipping cost for {typed.totalPrice}");
             }
         }
 
-        public void Examples_BusinessRule_Discount(List<DiscountingString> values)
+        public void Examples_BusinessRule_Discount(List<DiscountInputString> values)
         {
             foreach (var value in values)
             {
-                var typed = value.ToDiscountingTyped();
+                var typed = value.ToDiscountInputTyped();
                 Assert.AreEqual(typed.discount,
                                 ShoppingCart.DiscountFor(typed.totalPrice),
                                 $"Discount for {typed.totalPrice}");
@@ -126,5 +126,32 @@ namespace SpecStudioExamplesTestsCSharp.Shopping_Cart
                 Assert.AreEqual(vvt.isValid, !failed, $" Value {vvt.value}");
             }
         }
+
+        public void Then_total_of_items_is(List<ItemPriceInputString> values)
+        {
+            foreach (var value in values)
+            {
+                var typed = value.ToItemPriceInputTyped();
+                Assert.AreEqual(typed.totalItems, currentItems.ComputeTotal(), "TotalItems");
+            }
+        }
+
+        public void Examples_BusinessRule_Total_Cart_Price(List<CartInputString> values)
+        {
+            foreach (var value in values)
+            {
+                var typed = value.ToCartInputTyped();
+                // The rule states the whole calculation from an item total, so
+                // drive it that way rather than building a cart to match.
+                var total = typed.totalItems;
+                Assert.AreEqual(typed.discount, ShoppingCart.DiscountAmountFor(total),
+                                $"Discount for {total}");
+                Assert.AreEqual(typed.shipping, ShoppingCart.ShippingFor(total),
+                                $"Shipping for {total}");
+                Assert.AreEqual(typed.totalPrice, ShoppingCart.TotalPriceFor(total),
+                                $"Total Price for {total}");
+            }
+        }
+
     }
 }

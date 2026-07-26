@@ -22,6 +22,7 @@ fn scenario_add_items() {
         OrderItemString::from_vec(&["Widget", "2", "$10.00", "$20.00"]),
         OrderItemString::from_vec(&["WhatCallIt", "3", "$20.00", "$60.00"]),
     ]);
+    glue.then_total_of_items_is(&[ItemPriceInputString::from_vec(&["$80"])]);
 }
 
 #[test]
@@ -59,18 +60,26 @@ fn scenario_cost_of_empty_orderitemcollection() {
     ]);
     glue.given_item_collection(&[
     ]);
-    glue.when_total_computed();
-    glue.then_result_is(&[PricingString::from_vec(&["$0"])]);
+    glue.then_total_of_items_is(&[ItemPriceInputString::from_vec(&["$0"])]);
 }
 
 // --- BusinessRule Tests ---
 
 #[test]
+fn business_rule_total_cart_price() {
+    let mut glue = ShoppingCartGlue::new();
+    glue.examples_business_rule_total_cart_price(&[
+        CartInputString::from_vec(&["$110", "$5", "$11", "$104", "Discount applied before shipping calculated"]),
+        CartInputString::from_vec(&["$80", "$5", "$4", "$81", ""]),
+    ]);
+}
+
+#[test]
 fn business_rule_shipping_cost() {
     let mut glue = ShoppingCartGlue::new();
     glue.examples_business_rule_shipping_cost(&[
-        ShippingString::from_vec(&["$99.99", "$5.00", "Less than $100"]),
-        ShippingString::from_vec(&["$100.00", "$0", "Free if $100 or more"]),
+        ShippingInputString::from_vec(&["$99.99", "$5.00", "Less than $100"]),
+        ShippingInputString::from_vec(&["$100.00", "$0", "Free if $100 or more"]),
     ]);
 }
 
@@ -78,10 +87,10 @@ fn business_rule_shipping_cost() {
 fn business_rule_discount() {
     let mut glue = ShoppingCartGlue::new();
     glue.examples_business_rule_discount(&[
-        DiscountingString::from_vec(&["$24.99", "0", ""]),
-        DiscountingString::from_vec(&["$25.00", "5", ""]),
-        DiscountingString::from_vec(&["$99.99", "5", ""]),
-        DiscountingString::from_vec(&["$100.00", "10", ""]),
+        DiscountInputString::from_vec(&["$24.99", "0", ""]),
+        DiscountInputString::from_vec(&["$25.00", "5", ""]),
+        DiscountInputString::from_vec(&["$99.99", "5", ""]),
+        DiscountInputString::from_vec(&["$100.00", "10", ""]),
     ]);
 }
 

@@ -43,23 +43,28 @@ public void Test_Scenario_Add_items(){
          };
          shopping_Cart_glue_object.Then_item_collection_is(objectList6);
 
+         List<ItemPriceInputString> objectList7 = new List<ItemPriceInputString>{
+             new ItemPriceInputString("$80"),
+         };
+         shopping_Cart_glue_object.Then_total_of_items_is(objectList7);
+
 }
 
 [TestMethod]
 public void Test_Scenario_A_ShoppingCart_with_Addresses(){
      Shopping_Cart_glue shopping_Cart_glue_object = new Shopping_Cart_glue();
 
-         List<CatalogItemString> objectList7 = new List<CatalogItemString>{
+         List<CatalogItemString> objectList8 = new List<CatalogItemString>{
              new CatalogItemString("Widget","10"),
              new CatalogItemString("WhatCallIt","20"),
              new CatalogItemString("ThingaMaJig","30"),
          };
-         shopping_Cart_glue_object.Given_catalog_has(objectList7);
+         shopping_Cart_glue_object.Given_catalog_has(objectList8);
 
-         List<ShoppingCartString> objectList8 = new List<ShoppingCartString>{
+         List<ShoppingCartString> objectList9 = new List<ShoppingCartString>{
              new ShoppingCartString("=EmptyCart","$0","$0","$0",new AddressString("2 Apple Lane", "Somewhere", "NC", "27706"),new AddressString("1 Apple Lane", "Somewhere", "NC", "27705")),
          };
-         shopping_Cart_glue_object.Given_shopping_cart(objectList8);
+         shopping_Cart_glue_object.Given_shopping_cart(objectList9);
 
 }
 
@@ -67,32 +72,32 @@ public void Test_Scenario_A_ShoppingCart_with_Addresses(){
 public void Test_Scenario_Add_items_to_Shopping_Cart(){
      Shopping_Cart_glue shopping_Cart_glue_object = new Shopping_Cart_glue();
 
-         List<CatalogItemString> objectList9 = new List<CatalogItemString>{
+         List<CatalogItemString> objectList10 = new List<CatalogItemString>{
              new CatalogItemString("Widget","10"),
              new CatalogItemString("WhatCallIt","20"),
              new CatalogItemString("ThingaMaJig","30"),
          };
-         shopping_Cart_glue_object.Given_catalog_has(objectList9);
+         shopping_Cart_glue_object.Given_catalog_has(objectList10);
 
-         List<ShoppingCartString> objectList10 = new List<ShoppingCartString>{
+         List<ShoppingCartString> objectList11 = new List<ShoppingCartString>{
              new ShoppingCartString("=EmptyCart","$0","$0","$0",new AddressString("", "", "", ""),new AddressString("", "", "", "")),
          };
-         shopping_Cart_glue_object.Given_shopping_cart(objectList10);
-
-         List<OrderItemString> objectList11 = new List<OrderItemString>{
-             new OrderItemString("Widget","2","1","1"),
-         };
-         shopping_Cart_glue_object.When_item_added(objectList11);
+         shopping_Cart_glue_object.Given_shopping_cart(objectList11);
 
          List<OrderItemString> objectList12 = new List<OrderItemString>{
-             new OrderItemString("WhatCallIt","3","1","1"),
+             new OrderItemString("Widget","2","1","1"),
          };
          shopping_Cart_glue_object.When_item_added(objectList12);
 
-         List<ShoppingCartString> objectList13 = new List<ShoppingCartString>{
+         List<OrderItemString> objectList13 = new List<OrderItemString>{
+             new OrderItemString("WhatCallIt","3","1","1"),
+         };
+         shopping_Cart_glue_object.When_item_added(objectList13);
+
+         List<ShoppingCartString> objectList14 = new List<ShoppingCartString>{
              new ShoppingCartString("=TwoItemCart","$5","$4","$81",new AddressString("", "", "", ""),new AddressString("", "", "", "")),
          };
-         shopping_Cart_glue_object.Then_shopping_cart_is(objectList13);
+         shopping_Cart_glue_object.Then_shopping_cart_is(objectList14);
 
 }
 
@@ -100,23 +105,21 @@ public void Test_Scenario_Add_items_to_Shopping_Cart(){
 public void Test_Scenario_Cost_of_Empty_OrderItemCollection(){
      Shopping_Cart_glue shopping_Cart_glue_object = new Shopping_Cart_glue();
 
-         List<CatalogItemString> objectList14 = new List<CatalogItemString>{
+         List<CatalogItemString> objectList15 = new List<CatalogItemString>{
              new CatalogItemString("Widget","10"),
              new CatalogItemString("WhatCallIt","20"),
              new CatalogItemString("ThingaMaJig","30"),
          };
-         shopping_Cart_glue_object.Given_catalog_has(objectList14);
+         shopping_Cart_glue_object.Given_catalog_has(objectList15);
 
-         List<OrderItemString> objectList15 = new List<OrderItemString>{
+         List<OrderItemString> objectList16 = new List<OrderItemString>{
          };
-         shopping_Cart_glue_object.Given_item_collection(objectList15);
+         shopping_Cart_glue_object.Given_item_collection(objectList16);
 
-         shopping_Cart_glue_object.When_total_computed();
-
-         List<PricingString> objectList16 = new List<PricingString>{
-             new PricingString("$0"),
+         List<ItemPriceInputString> objectList17 = new List<ItemPriceInputString>{
+             new ItemPriceInputString("$0"),
          };
-         shopping_Cart_glue_object.Then_result_is(objectList16);
+         shopping_Cart_glue_object.Then_total_of_items_is(objectList17);
 
 }
 
@@ -124,25 +127,35 @@ public void Test_Scenario_Cost_of_Empty_OrderItemCollection(){
 // BusinessRule Tests
 // -------------------------
 [TestMethod]
+public void BusinessRule_Total_Cart_Price(){
+     Shopping_Cart_glue glue = new Shopping_Cart_glue();
+     List<CartInputString> objectList18 = new List<CartInputString>{
+         new CartInputString("$110","$5","$11","$104","Discount applied before shipping calculated"),
+         new CartInputString("$80","$5","$4","$81",""),
+     };
+     glue.Examples_BusinessRule_Total_Cart_Price(objectList18);
+}
+
+[TestMethod]
 public void BusinessRule_Shipping_Cost(){
      Shopping_Cart_glue glue = new Shopping_Cart_glue();
-     List<ShippingString> objectList17 = new List<ShippingString>{
-         new ShippingString("$99.99","$5.00","Less than $100"),
-         new ShippingString("$100.00","$0","Free if $100 or more"),
+     List<ShippingInputString> objectList19 = new List<ShippingInputString>{
+         new ShippingInputString("$99.99","$5.00","Less than $100"),
+         new ShippingInputString("$100.00","$0","Free if $100 or more"),
      };
-     glue.Examples_BusinessRule_Shipping_Cost(objectList17);
+     glue.Examples_BusinessRule_Shipping_Cost(objectList19);
 }
 
 [TestMethod]
 public void BusinessRule_Discount(){
      Shopping_Cart_glue glue = new Shopping_Cart_glue();
-     List<DiscountingString> objectList18 = new List<DiscountingString>{
-         new DiscountingString("$24.99","0",""),
-         new DiscountingString("$25.00","5",""),
-         new DiscountingString("$99.99","5",""),
-         new DiscountingString("$100.00","10",""),
+     List<DiscountInputString> objectList20 = new List<DiscountInputString>{
+         new DiscountInputString("$24.99","0",""),
+         new DiscountInputString("$25.00","5",""),
+         new DiscountInputString("$99.99","5",""),
+         new DiscountInputString("$100.00","10",""),
      };
-     glue.Examples_BusinessRule_Discount(objectList18);
+     glue.Examples_BusinessRule_Discount(objectList20);
 }
 
 // -------------------------
@@ -151,14 +164,14 @@ public void BusinessRule_Discount(){
 [TestMethod]
 public void DataType_Percentage(){
      Shopping_Cart_glue glue = new Shopping_Cart_glue();
-     List<ValidValuesString> objectList19 = new List<ValidValuesString>{
+     List<ValidValuesString> objectList21 = new List<ValidValuesString>{
          new ValidValuesString("0","y",""),
          new ValidValuesString("99","y",""),
          new ValidValuesString("100","y",""),
          new ValidValuesString("101","n",""),
          new ValidValuesString("-1","n",""),
      };
-     glue.Examples_DataType_Percentage(objectList19);
+     glue.Examples_DataType_Percentage(objectList21);
 }
 
 }

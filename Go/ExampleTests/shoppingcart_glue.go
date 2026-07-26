@@ -125,9 +125,9 @@ func (g *ShoppingCartGlue) ThenResultIs(t *testing.T, values []common.PricingStr
 	}
 }
 
-func (g *ShoppingCartGlue) ExamplesBusinessRuleShippingCost(t *testing.T, values []common.ShippingString) {
+func (g *ShoppingCartGlue) ExamplesBusinessRuleShippingCost(t *testing.T, values []common.ShippingInputString) {
 	for _, value := range values {
-		typed := common.NewShippingTypedFromString(value)
+		typed := common.NewShippingInputTypedFromString(value)
 		got := production.ShippingCostFor(mustDollar(t, typed.TotalPrice))
 		if e := mustDollar(t, typed.ShippingCost); e != got {
 			t.Errorf("Shipping cost for %s: expected %s, got %s", typed.TotalPrice, e, got)
@@ -135,9 +135,9 @@ func (g *ShoppingCartGlue) ExamplesBusinessRuleShippingCost(t *testing.T, values
 	}
 }
 
-func (g *ShoppingCartGlue) ExamplesBusinessRuleDiscount(t *testing.T, values []common.DiscountingString) {
+func (g *ShoppingCartGlue) ExamplesBusinessRuleDiscount(t *testing.T, values []common.DiscountInputString) {
 	for _, value := range values {
-		typed := common.NewDiscountingTypedFromString(value)
+		typed := common.NewDiscountInputTypedFromString(value)
 		got := production.DiscountFor(mustDollar(t, typed.TotalPrice))
 		e, err := production.ParsePercentage(typed.Discount)
 		if err != nil {
@@ -155,6 +155,36 @@ func (g *ShoppingCartGlue) ExamplesDataTypePercentage(t *testing.T, values []com
 		_, err := production.ParsePercentage(vvt.Value)
 		if vvt.IsValid != (err == nil) {
 			t.Errorf(" Value %s: expected valid=%v, got %v", vvt.Value, vvt.IsValid, err == nil)
+		}
+	}
+}
+
+func (g *ShoppingCartGlue) ThenTotalOfItemsIs(t *testing.T, values []common.ItemPriceInputString) {
+	for _, value := range values {
+		typed := common.NewItemPriceInputTypedFromString(value)
+		if e := mustDollar(t, typed.TotalItems); e != g.currentItems.ComputeTotal() {
+			t.Errorf("TotalItems: expected %s, got %s", e, g.currentItems.ComputeTotal())
+		}
+	}
+}
+
+func (g *ShoppingCartGlue) ExamplesBusinessRuleTotalCartPrice(t *testing.T, values []common.CartInputString) {
+	for _, value := range values {
+		typed := common.NewCartInputTypedFromString(value)
+		// The rule states the whole calculation from an item total, so drive it
+		// that way rather than building a cart to reach the same numbers.
+		total := mustDollar(t, typed.TotalItems)
+		if e := mustDollar(t, typed.Discount); e != production.DiscountAmountFor(total) {
+			t.Errorf("Discount for %s: expected %s, got %s", typed.TotalItems, e,
+				production.DiscountAmountFor(total))
+		}
+		if e := mustDollar(t, typed.Shipping); e != production.ShippingFor(total) {
+			t.Errorf("Shipping for %s: expected %s, got %s", typed.TotalItems, e,
+				production.ShippingFor(total))
+		}
+		if e := mustDollar(t, typed.TotalPrice); e != production.TotalPriceFor(total) {
+			t.Errorf("Total Price for %s: expected %s, got %s", typed.TotalItems, e,
+				production.TotalPriceFor(total))
 		}
 	}
 }

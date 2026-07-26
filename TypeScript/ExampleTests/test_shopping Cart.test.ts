@@ -1,4 +1,4 @@
-import { AdderString, AddressString, CatalogItemString, DiscountingString, FandCString, OrderItemString, PricingString, ShippingString, ShoppingCartString, ValidValuesString } from "./common/index.js";
+import { AdderString, AddressString, CartInputString, CatalogItemString, DiscountInputString, FandCString, ItemPriceInputString, OrderItemString, ShippingInputString, ShoppingCartString, ValidValuesString } from "./common/index.js";
 import { ShoppingCartGlue } from "./shopping Cart_glue.js";
 
 describe("Shopping Cart", () => {
@@ -31,96 +31,108 @@ describe("Shopping Cart", () => {
       new OrderItemString("WhatCallIt", "3", "$20.00", "$60.00"),
     ];
     glue.thenItemCollectionIs(objectList6);
+    const objectList7: ItemPriceInputString[] = [
+      new ItemPriceInputString("$80"),
+    ];
+    glue.thenTotalOfItemsIs(objectList7);
   });
 
   test("Scenario A ShoppingCart with Addresses", () => {
     const glue = new ShoppingCartGlue();
-    const objectList7: CatalogItemString[] = [
+    const objectList8: CatalogItemString[] = [
       new CatalogItemString("Widget", "10"),
       new CatalogItemString("WhatCallIt", "20"),
       new CatalogItemString("ThingaMaJig", "30"),
     ];
-    glue.givenCatalogHas(objectList7);
-    const objectList8: ShoppingCartString[] = [
+    glue.givenCatalogHas(objectList8);
+    const objectList9: ShoppingCartString[] = [
       new ShoppingCartString("=EmptyCart", "$0", "$0", "$0", new AddressString("2 Apple Lane", "Somewhere", "NC", "27706"), new AddressString("1 Apple Lane", "Somewhere", "NC", "27705")),
     ];
-    glue.givenShoppingCart(objectList8);
+    glue.givenShoppingCart(objectList9);
   });
 
   test("Scenario Add items to Shopping Cart", () => {
     const glue = new ShoppingCartGlue();
-    const objectList9: CatalogItemString[] = [
+    const objectList10: CatalogItemString[] = [
       new CatalogItemString("Widget", "10"),
       new CatalogItemString("WhatCallIt", "20"),
       new CatalogItemString("ThingaMaJig", "30"),
     ];
-    glue.givenCatalogHas(objectList9);
-    const objectList10: ShoppingCartString[] = [
+    glue.givenCatalogHas(objectList10);
+    const objectList11: ShoppingCartString[] = [
       new ShoppingCartString("=EmptyCart", "$0", "$0", "$0", new AddressString("", "", "", ""), new AddressString("", "", "", "")),
     ];
-    glue.givenShoppingCart(objectList10);
-    const objectList11: OrderItemString[] = [
+    glue.givenShoppingCart(objectList11);
+    const objectList12: OrderItemString[] = [
       new OrderItemString("Widget", "2", "1", "1"),
     ];
-    glue.whenItemAdded(objectList11);
-    const objectList12: OrderItemString[] = [
+    glue.whenItemAdded(objectList12);
+    const objectList13: OrderItemString[] = [
       new OrderItemString("WhatCallIt", "3", "1", "1"),
     ];
-    glue.whenItemAdded(objectList12);
-    const objectList13: ShoppingCartString[] = [
+    glue.whenItemAdded(objectList13);
+    const objectList14: ShoppingCartString[] = [
       new ShoppingCartString("=TwoItemCart", "$5", "$4", "$81", new AddressString("", "", "", ""), new AddressString("", "", "", "")),
     ];
-    glue.thenShoppingCartIs(objectList13);
+    glue.thenShoppingCartIs(objectList14);
   });
 
   test("Scenario Cost of Empty OrderItemCollection", () => {
     const glue = new ShoppingCartGlue();
-    const objectList14: CatalogItemString[] = [
+    const objectList15: CatalogItemString[] = [
       new CatalogItemString("Widget", "10"),
       new CatalogItemString("WhatCallIt", "20"),
       new CatalogItemString("ThingaMaJig", "30"),
     ];
-    glue.givenCatalogHas(objectList14);
-    const objectList15: OrderItemString[] = [
+    glue.givenCatalogHas(objectList15);
+    const objectList16: OrderItemString[] = [
     ];
-    glue.givenItemCollection(objectList15);
-    glue.whenTotalComputed();
-    const objectList16: PricingString[] = [
-      new PricingString("$0"),
+    glue.givenItemCollection(objectList16);
+    const objectList17: ItemPriceInputString[] = [
+      new ItemPriceInputString("$0"),
     ];
-    glue.thenResultIs(objectList16);
+    glue.thenTotalOfItemsIs(objectList17);
+  });
+
+  test("BusinessRule Total Cart Price", () => {
+    const glue = new ShoppingCartGlue();
+    const objectList18: CartInputString[] = [
+      new CartInputString("$110", "$5", "$11", "$104", "Discount applied before shipping calculated"),
+      new CartInputString("$80", "$5", "$4", "$81", ""),
+    ];
+    glue.examplesBusinessRuleTotalCartPrice(objectList18);
   });
 
   test("BusinessRule Shipping_Cost", () => {
     const glue = new ShoppingCartGlue();
-    const objectList17: ShippingString[] = [
-      new ShippingString("$99.99", "$5.00", "Less than $100"),
-      new ShippingString("$100.00", "$0", "Free if $100 or more"),
+    const objectList19: ShippingInputString[] = [
+      new ShippingInputString("$99.99", "$5.00", "Less than $100"),
+      new ShippingInputString("$100.00", "$0", "Free if $100 or more"),
     ];
-    glue.examplesBusinessRuleShippingCost(objectList17);
+    glue.examplesBusinessRuleShippingCost(objectList19);
   });
 
   test("BusinessRule Discount", () => {
     const glue = new ShoppingCartGlue();
-    const objectList18: DiscountingString[] = [
-      new DiscountingString("$24.99", "0", ""),
-      new DiscountingString("$25.00", "5", ""),
-      new DiscountingString("$99.99", "5", ""),
-      new DiscountingString("$100.00", "10", ""),
+    const objectList20: DiscountInputString[] = [
+      new DiscountInputString("$24.99", "0", ""),
+      new DiscountInputString("$25.00", "5", ""),
+      new DiscountInputString("$99.99", "5", ""),
+      new DiscountInputString("$100.00", "10", ""),
     ];
-    glue.examplesBusinessRuleDiscount(objectList18);
+    glue.examplesBusinessRuleDiscount(objectList20);
   });
 
   test("DataType Percentage", () => {
     const glue = new ShoppingCartGlue();
-    const objectList19: ValidValuesString[] = [
+    const objectList21: ValidValuesString[] = [
       new ValidValuesString("0", "y", ""),
       new ValidValuesString("99", "y", ""),
       new ValidValuesString("100", "y", ""),
       new ValidValuesString("101", "n", ""),
       new ValidValuesString("-1", "n", ""),
     ];
-    glue.examplesDataTypePercentage(objectList19);
+    glue.examplesDataTypePercentage(objectList21);
   });
 
 });

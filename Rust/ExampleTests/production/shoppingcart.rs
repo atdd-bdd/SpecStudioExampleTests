@@ -29,26 +29,42 @@ impl ShoppingCart {
         else { Percentage::new(0) }
     }
 
-    // --- what the cart comes to -------------------------------------------
+    // --- the Total Cart Price rule, over a bare item total -----------------
+    //
+    // Stated as functions of the item total so the rule can be checked straight
+    // from its Examples table, which gives a TotalItems figure and no items.
+    // "Discount applied before shipping calculated", per that table's own note.
+
+    /// The discount as money: the tiered percentage of the item total.
+    pub fn discount_amount_for(total_items: &Dollar) -> Dollar {
+        total_items.percent_of(&Self::discount_for(total_items))
+    }
+
+    /// Shipping is judged on what the customer pays, so after the discount.
+    pub fn shipping_for(total_items: &Dollar) -> Dollar {
+        Self::shipping_cost_for(&total_items.minus(&Self::discount_amount_for(total_items)))
+    }
+
+    /// Item total, less the discount, plus shipping.
+    pub fn total_price_for(total_items: &Dollar) -> Dollar {
+        total_items.minus(&Self::discount_amount_for(total_items))
+                   .plus(&Self::shipping_for(total_items))
+    }
+
+    // --- what this cart comes to ------------------------------------------
 
     /// What the items come to before any discount or shipping.
     pub fn subtotal(&self) -> Dollar { self.items.compute_total() }
 
-    /// The discount as money: the tiered percentage of the subtotal.
     pub fn discount_amount(&self) -> Dollar {
-        let amount = self.subtotal();
-        amount.percent_of(&Self::discount_for(&amount))
+        Self::discount_amount_for(&self.subtotal())
     }
 
-    /// Shipping is charged on what the customer actually pays, so the discount
-    /// comes off before the $100 threshold is tested — following the scenario's
-    /// "Apply Discount to OrderItem Total, then add shipping".
     pub fn shipping_cost(&self) -> Dollar {
-        Self::shipping_cost_for(&self.subtotal().minus(&self.discount_amount()))
+        Self::shipping_for(&self.subtotal())
     }
 
-    /// Subtotal, less the discount, plus shipping.
     pub fn compute_total(&self) -> Dollar {
-        self.subtotal().minus(&self.discount_amount()).plus(&self.shipping_cost())
+        Self::total_price_for(&self.subtotal())
     }
 }

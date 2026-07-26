@@ -161,28 +161,38 @@ public:
         return Percentage(0);
     }
 
-    // --- what the cart comes to -------------------------------------------
+    // --- the Total Cart Price rule, over a bare item total ----------------
+    //
+    // Stated as functions of the item total so the rule can be checked straight
+    // from its Examples table, which gives a TotalItems figure and no items.
+    // "Discount applied before shipping calculated", per that table's own note.
+
+    /// The discount as money: the tiered percentage of the item total.
+    static Dollar discount_amount_for(const Dollar& total_items) {
+        return total_items.percent_of(discount_for(total_items));
+    }
+
+    /// Shipping is judged on what the customer pays, so after the discount.
+    static Dollar shipping_for(const Dollar& total_items) {
+        return shipping_cost_for(total_items.minus(discount_amount_for(total_items)));
+    }
+
+    /// Item total, less the discount, plus shipping.
+    static Dollar total_price_for(const Dollar& total_items) {
+        return total_items.minus(discount_amount_for(total_items))
+                          .plus(shipping_for(total_items));
+    }
+
+    // --- what this cart comes to ------------------------------------------
 
     /// What the items come to before any discount or shipping.
     Dollar subtotal() const { return items_.compute_total(); }
 
-    /// The discount as money: the tiered percentage of the subtotal.
-    Dollar discount_amount() const {
-        const Dollar amount = subtotal();
-        return amount.percent_of(discount_for(amount));
-    }
+    Dollar discount_amount() const { return discount_amount_for(subtotal()); }
 
-    /// Shipping is charged on what the customer actually pays, so the discount
-    /// comes off before the $100 threshold is tested — following the scenario's
-    /// "Apply Discount to OrderItem Total, then add shipping".
-    Dollar shipping_cost() const {
-        return shipping_cost_for(subtotal().minus(discount_amount()));
-    }
+    Dollar shipping_cost() const { return shipping_for(subtotal()); }
 
-    /// Subtotal, less the discount, plus shipping.
-    Dollar compute_total() const {
-        return subtotal().minus(discount_amount()).plus(shipping_cost());
-    }
+    Dollar compute_total() const { return total_price_for(subtotal()); }
 
 private:
     OrderItemCollection items_;

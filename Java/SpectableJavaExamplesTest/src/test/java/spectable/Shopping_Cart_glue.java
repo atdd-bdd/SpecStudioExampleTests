@@ -127,17 +127,17 @@ public class Shopping_Cart_glue {
         }
     }
 
-    public void Examples_BusinessRule_Shipping_Cost(List<ShippingString> values) {
-        for (ShippingString value : values) {
-            ShippingTyped typed = new ShippingTyped(value);
+    public void Examples_BusinessRule_Shipping_Cost(List<ShippingInputString> values) {
+        for (ShippingInputString value : values) {
+            ShippingInputTyped typed = new ShippingInputTyped(value);
             Dollar actual = ShoppingCart.shippingCostFor(typed.totalPrice);
             assertDollarEquals(typed.shippingCost, actual, "Shipping cost for " + typed.totalPrice.value);
         }
     }
 
-    public void Examples_BusinessRule_Discount(List<DiscountingString> values) {
-        for (DiscountingString value : values) {
-            DiscountingTyped typed = new DiscountingTyped(value);
+    public void Examples_BusinessRule_Discount(List<DiscountInputString> values) {
+        for (DiscountInputString value : values) {
+            DiscountInputTyped typed = new DiscountInputTyped(value);
             Percentage actual = ShoppingCart.discountFor(typed.totalPrice);
             assertPercentageEquals(typed.discount, actual, "Discount for " + typed.totalPrice.value);
         }
@@ -156,4 +156,27 @@ public class Shopping_Cart_glue {
             assertEquals(vvt.isValid.toBoolean(), !error, " Value " + vvt.value);
         }
     }
+
+    public void Then_total_of_items_is(List<ItemPriceInputString> values) {
+        for (ItemPriceInputString value : values) {
+            ItemPriceInputTyped typed = new ItemPriceInputTyped(value);
+            assertDollarEquals(typed.totalItems, currentItems.computeTotal(), "TotalItems");
+        }
+    }
+
+    public void Examples_BusinessRule_Total_Cart_Price(List<CartInputString> values) {
+        for (CartInputString value : values) {
+            CartInputTyped typed = new CartInputTyped(value);
+            // The rule states the whole calculation from an item total, so drive
+            // it that way rather than building a cart to reach the same numbers.
+            Dollar totalItems = typed.totalItems;
+            assertDollarEquals(typed.discount, ShoppingCart.discountAmountFor(totalItems),
+                               "Discount for " + totalItems.value);
+            assertDollarEquals(typed.shipping, ShoppingCart.shippingFor(totalItems),
+                               "Shipping for " + totalItems.value);
+            assertDollarEquals(typed.totalPrice, ShoppingCart.totalPriceFor(totalItems),
+                               "Total Price for " + totalItems.value);
+        }
+    }
+
 }

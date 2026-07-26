@@ -1,4 +1,4 @@
-import { AdderString, DiscountingString, FandCString, ShippingString, ValidValuesString } from "./common/index.js";
+import { AdderString, CartInputString, DiscountInputString, FandCString, ShippingInputString, ValidValuesString } from "./common/index.js";
 import { TypesGlue } from "./types_glue.js";
 
 describe("Types", () => {
