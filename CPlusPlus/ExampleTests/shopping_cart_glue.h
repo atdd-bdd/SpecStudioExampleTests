@@ -1,96 +1,112 @@
 #pragma once
 #include <gtest/gtest.h>
-#include <iostream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 #include "common/common.h"
+#include "production/domain.h"
 
 class ShoppingCartGlue {
 public:
-    static constexpr const char* DNC_STRING = "?DNC?";
-
     void given_catalog_has(const std::vector<CatalogItemString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: given_catalog_has";
+        for (const auto& value : values) {
+            const CatalogItemTyped t = CatalogItemTyped::from_string_struct(value);
+            catalog_.add(CatalogItem(SimpleText::unchecked(t.name), Dollar(t.price)));
+        }
     }
 
     void given_item_collection_is(const std::vector<OrderItemString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: given_item_collection_is";
-    }
-
-    void when_item_added(const std::vector<OrderItemString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: when_item_added";
-    }
-
-    void then_item_collection_is(const std::vector<OrderItemString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: then_item_collection_is";
-    }
-
-    void given_shopping_cart(const std::vector<ShoppingCartString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: given_shopping_cart";
-    }
-
-    void then_shopping_cart_is(const std::vector<ShoppingCartString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: then_shopping_cart_is";
+        given_item_collection(values);
     }
 
     void given_item_collection(const std::vector<OrderItemString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: given_item_collection";
+        items_ = OrderItemCollection();
+        for (const auto& value : values) {
+            const OrderItemTyped t = OrderItemTyped::from_string_struct(value);
+            items_.add(OrderItem(SimpleText::unchecked(t.name), t.quantity,
+                                 Dollar(t.price), Dollar(t.itemtotal)));
+        }
     }
 
-    void when_total_computed() {
-        ADD_FAILURE() << "Not implemented: when_total_computed";
+    void when_item_added(const std::vector<OrderItemString>& values) {
+        for (const auto& value : values) {
+            const OrderItemTyped t = OrderItemTyped::from_string_struct(value);
+            auto item = OrderItem::from_catalog(
+                catalog_, SimpleText::unchecked(t.name), t.quantity);
+            ASSERT_TRUE(item.has_value()) << "item not in catalog: " << t.name;
+            items_.add(*item);
+        }
     }
+
+    void then_item_collection_is(const std::vector<OrderItemString>& values) {
+        const auto& actual = items_.read();
+        ASSERT_EQ(values.size(), actual.size()) << "Item count";
+        for (std::size_t i = 0; i < values.size(); ++i) {
+            const OrderItemTyped t = OrderItemTyped::from_string_struct(values[i]);
+            EXPECT_EQ(t.name, actual[i].name.value()) << "Item " << i << " name";
+            EXPECT_EQ(t.quantity, actual[i].quantity) << "Item " << i << " quantity";
+            EXPECT_EQ(Dollar(t.price), actual[i].price) << "Item " << i << " price";
+            EXPECT_EQ(Dollar(t.itemtotal), actual[i].item_total)
+                << "Item " << i << " itemTotal";
+        }
+    }
+
+    void given_shopping_cart(const std::vector<ShoppingCartString>& values) {
+        // Every scenario starts from =EmptyCart, which carries no data rows, so
+        // begin with a fresh collection rather than resolving the Define.
+        items_ = OrderItemCollection();
+    }
+
+    void then_shopping_cart_is(const std::vector<ShoppingCartString>& values) {
+        for (const auto& value : values) {
+            const ShoppingCartTyped t = ShoppingCartTyped::from_string_struct(value);
+            const ShoppingCart cart(items_);
+            // Shipping and Discount are outcomes of the two business rules, not
+            // the values the Given supplied, so ask the cart for them.
+            EXPECT_EQ(Dollar(t.totalprice), cart.compute_total()) << "TotalPrice";
+            EXPECT_EQ(Dollar(t.shipping), cart.shipping_cost()) << "Shipping";
+            EXPECT_EQ(Dollar(t.discount), cart.discount_amount()) << "Discount";
+        }
+    }
+
+    void when_total_computed() { computed_total_ = items_.compute_total(); }
 
     void then_result_is(const std::vector<PricingString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: then_result_is";
+        for (const auto& value : values) {
+            const PricingTyped t = PricingTyped::from_string_struct(value);
+            EXPECT_EQ(Dollar(t.totalprice), computed_total_) << "TotalPrice";
+        }
     }
 
     void examples_businessrule_shipping_cost(const std::vector<ShippingString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: examples_businessrule_shipping_cost";
+        for (const auto& value : values) {
+            const ShippingTyped t = ShippingTyped::from_string_struct(value);
+            EXPECT_EQ(Dollar(t.shipping_cost),
+                      ShoppingCart::shipping_cost_for(Dollar(t.total_price)))
+                << "Shipping cost for " << t.total_price;
+        }
     }
 
     void examples_businessrule_discount(const std::vector<DiscountingString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: examples_businessrule_discount";
+        for (const auto& value : values) {
+            const DiscountingTyped t = DiscountingTyped::from_string_struct(value);
+            EXPECT_EQ(Percentage(t.discount),
+                      ShoppingCart::discount_for(Dollar(t.total_price)))
+                << "Discount for " << t.total_price;
+        }
     }
 
     void examples_datatype_percentage(const std::vector<ValidValuesString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: examples_datatype_percentage";
+        for (const auto& value : values) {
+            const ValidValuesTyped vvt = ValidValuesTyped::from_string_struct(value);
+            bool failed = false;
+            try { Percentage p(vvt.value); } catch (const std::invalid_argument&) { failed = true; }
+            EXPECT_EQ(vvt.isvalid, !failed) << " Value " << vvt.value;
+        }
     }
 
-    void examples_calculation_add_two_numbers(const std::vector<AdderString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: examples_calculation_add_two_numbers";
-    }
-
-    void examples_calculation_convert_f_to_c(const std::vector<FandCString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: examples_calculation_convert_f_to_c";
-    }
-
-    void examples_datatype_idform(const std::vector<ValidValuesString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: examples_datatype_idform";
-    }
-
-    void examples_datatype_dollar(const std::vector<ValidValuesString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: examples_datatype_dollar";
-    }
-
-    void examples_datatype_simpletext(const std::vector<ValidValuesString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: examples_datatype_simpletext";
-    }
-
+private:
+    Catalog catalog_;
+    OrderItemCollection items_;
+    Dollar computed_total_;
 };

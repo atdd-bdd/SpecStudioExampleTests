@@ -1,33 +1,33 @@
-from order_item import OrderItem
+from .Dollar import Dollar
+from .OrderItem import OrderItem
+
+ORDER_ITEM_COLLECTION_MINIMUM = 0
+ORDER_ITEM_COLLECTION_MAXIMUM = 100
 
 
 class OrderItemCollection:
-    MINIMUM = 0
-    MAXIMUM = 100
-
     def __init__(self):
         self._items: list[OrderItem] = []
 
     def add(self, item: OrderItem) -> None:
         self._items.append(item)
 
-    def delete(self, item: OrderItem) -> bool:
-        try:
-            self._items.remove(item)
-            return True
-        except ValueError:
-            return False
-
     def read(self) -> list[OrderItem]:
         return list(self._items)
 
-    def update(self, old_item: OrderItem, new_item: OrderItem) -> bool:
-        try:
-            idx = self._items.index(old_item)
-            self._items[idx] = new_item
-            return True
-        except ValueError:
-            return False
-
     def size(self) -> int:
         return len(self._items)
+
+    def compute_total(self) -> Dollar:
+        total = Dollar('0')
+        for item in self._items:
+            total = total.plus(item.item_total)
+        return total
+
+    def __eq__(self, other):
+        if not isinstance(other, OrderItemCollection):
+            return NotImplemented
+        return self._items == other._items
+
+    def __str__(self):
+        return f'OrderItemCollection{{{len(self._items)} items}}'

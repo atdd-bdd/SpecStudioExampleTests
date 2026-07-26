@@ -1,6 +1,6 @@
 use super::*;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct Address {
     pub street: SimpleText,
     pub city: SimpleText,
@@ -10,6 +10,6 @@ pub struct Address {
 
 impl Address {
     pub fn new(street: SimpleText, city: SimpleText, state: SimpleText, zip: SimpleText) -> Self {
-        Self { street,  city,  state,  zip }
+        Self { street, city, state, zip }
     }
 }

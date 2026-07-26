@@ -1,9 +1,13 @@
-from catalog_item import CatalogItem
+from .CatalogItem import CatalogItem
+from .Dollar import Dollar
+from .SimpleText import SimpleText
+
+CATALOG_MINIMUM = 0
+CATALOG_MAXIMUM = 10000000
 
 
 class Catalog:
-    MINIMUM = 0
-    MAXIMUM = 10000000
+    """The items on offer, each with the price an order line is charged."""
 
     def __init__(self):
         self._items: list[CatalogItem] = []
@@ -11,23 +15,14 @@ class Catalog:
     def add(self, item: CatalogItem) -> None:
         self._items.append(item)
 
-    def delete(self, item: CatalogItem) -> bool:
-        try:
-            self._items.remove(item)
-            return True
-        except ValueError:
-            return False
-
     def read(self) -> list[CatalogItem]:
         return list(self._items)
 
-    def update(self, old_item: CatalogItem, new_item: CatalogItem) -> bool:
-        try:
-            idx = self._items.index(old_item)
-            self._items[idx] = new_item
-            return True
-        except ValueError:
-            return False
-
     def size(self) -> int:
         return len(self._items)
+
+    def price_for(self, name: SimpleText) -> Dollar:
+        for item in self._items:
+            if item.name == name:
+                return item.price
+        raise KeyError(f'No catalog item named {name}')

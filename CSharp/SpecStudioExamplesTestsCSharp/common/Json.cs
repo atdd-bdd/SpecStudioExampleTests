@@ -66,6 +66,15 @@ using production;
             if (v.ValueKind != JsonValueKind.Array) throw TypeError(ctx, "an array", v);
         }
 
+        /// <summary>Reads a JSON array into a list, mapping each element.</summary>
+        public static List<T> ReadArray<T>(JsonElement v, Func<JsonElement, T> read)
+        {
+            RequireArray(v, "array");
+            var result = new List<T>();
+            foreach (var e in v.EnumerateArray()) result.Add(read(e));
+            return result;
+        }
+
         /// <summary>Invariant text for any value; used for user-defined DataTypes.</summary>
         public static string ToText(object value)
         {

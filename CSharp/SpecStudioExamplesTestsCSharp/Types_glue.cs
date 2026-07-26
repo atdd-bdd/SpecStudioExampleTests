@@ -5,6 +5,7 @@ namespace SpecStudioExamplesTestsCSharp.Types
     using SpecStudioExamplesTestsCSharp.common;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using static Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+    using production;
 
     public class Types_glue
     {
@@ -14,73 +15,22 @@ namespace SpecStudioExamplesTestsCSharp.Types
         {
             foreach (var value in values)
             {
-                Console.WriteLine(value);
+                var vvt = value.ToValidValuesTyped();
+                bool failed = false;
+                try { new Dollar(vvt.value); } catch (FormatException) { failed = true; }
+                Assert.AreEqual(vvt.isValid, !failed, $" Value {vvt.value}");
             }
-            Assert.Fail("Not implemented: Examples_DataType_Dollar");
         }
 
         public void Examples_DataType_SimpleText(List<ValidValuesString> values)
         {
             foreach (var value in values)
             {
-                Console.WriteLine(value);
+                var vvt = value.ToValidValuesTyped();
+                bool failed = false;
+                try { new SimpleText(vvt.value); } catch (FormatException) { failed = true; }
+                Assert.AreEqual(vvt.isValid, !failed, $" Value {vvt.value}");
             }
-            Assert.Fail("Not implemented: Examples_DataType_SimpleText");
         }
-
-        public void Examples_Calculation_Add_two_numbers(List<AdderString> values)
-        {
-            foreach (var value in values)
-            {
-                Console.WriteLine(value);
-            }
-            Assert.Fail("Not implemented: Examples_Calculation_Add_two_numbers");
-        }
-
-        public void Examples_Calculation_Convert_F_to_C(List<FandCString> values)
-        {
-            foreach (var value in values)
-            {
-                Console.WriteLine(value);
-            }
-            Assert.Fail("Not implemented: Examples_Calculation_Convert_F_to_C");
-        }
-
-        public void Examples_DataType_IDForm(List<ValidValuesString> values)
-        {
-            foreach (var value in values)
-            {
-                Console.WriteLine(value);
-            }
-            Assert.Fail("Not implemented: Examples_DataType_IDForm");
-        }
-
-        public void Examples_BusinessRule_Shipping_Cost(List<ShippingString> values)
-        {
-            foreach (var value in values)
-            {
-                Console.WriteLine(value);
-            }
-            Assert.Fail("Not implemented: Examples_BusinessRule_Shipping_Cost");
-        }
-
-        public void Examples_BusinessRule_Discount(List<DiscountingString> values)
-        {
-            foreach (var value in values)
-            {
-                Console.WriteLine(value);
-            }
-            Assert.Fail("Not implemented: Examples_BusinessRule_Discount");
-        }
-
-        public void Examples_DataType_Percentage(List<ValidValuesString> values)
-        {
-            foreach (var value in values)
-            {
-                Console.WriteLine(value);
-            }
-            Assert.Fail("Not implemented: Examples_DataType_Percentage");
-        }
-
     }
 }

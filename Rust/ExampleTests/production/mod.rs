@@ -1,6 +1,7 @@
 #![allow(non_snake_case, unused_imports, dead_code)]
 
 pub mod address;
+pub mod calculator;
 pub mod catalog;
 pub mod catalogitem;
 pub mod dollar;
@@ -9,9 +10,12 @@ pub mod idvalue;
 pub mod orderitem;
 pub mod orderitemcollection;
 pub mod percentage;
+pub mod recordfilter;
 pub mod shoppingcart;
 pub mod simpletext;
+pub mod temperature_converter;
 pub use address::*;
+pub use calculator::*;
 pub use catalog::*;
 pub use catalogitem::*;
 pub use dollar::*;
@@ -20,5 +24,7 @@ pub use idvalue::*;
 pub use orderitem::*;
 pub use orderitemcollection::*;
 pub use percentage::*;
+pub use recordfilter::*;
 pub use shoppingcart::*;
 pub use simpletext::*;
+pub use temperature_converter::*;

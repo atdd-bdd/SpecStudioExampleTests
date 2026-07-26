@@ -30,7 +30,10 @@ using production;
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();
-            w.WriteString("items", Json.ToText(this.items));
+            w.WritePropertyName("items");
+            w.WriteStartArray();
+            foreach (var e in this.items) e.WriteJson(w);
+            w.WriteEndArray();
             w.WriteString("shipping", Json.ToText(this.shipping));
             w.WriteString("discount", Json.ToText(this.discount));
             w.WriteString("totalPrice", Json.ToText(this.totalPrice));
@@ -51,7 +54,7 @@ using production;
         public static ShoppingCartTyped FromJsonElement(JsonElement m)
         {
             return new ShoppingCartTyped(
-                new OrderItemCollection(Json.AsString(Json.Require(m, "items"), "items")),
+                Json.ReadArray(Json.Require(m, "items"), e => OrderItemTyped.FromJsonElement(e)),
                 new Dollar(Json.AsString(Json.Require(m, "shipping"), "shipping")),
                 new Dollar(Json.AsString(Json.Require(m, "discount"), "discount")),
                 new Dollar(Json.AsString(Json.Require(m, "totalPrice"), "totalPrice")),

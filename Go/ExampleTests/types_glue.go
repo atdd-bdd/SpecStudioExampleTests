@@ -1,52 +1,31 @@
-package types
+package exampletests
 
 import (
 	"testing"
-	"types/common"
+	"exampletests/common"
+	"exampletests/production"
 )
 
-type TypesGlue struct {
-	// Add state fields here
-}
+type TypesGlue struct{}
 
 func NewTypesGlue() *TypesGlue { return &TypesGlue{} }
 
 func (g *TypesGlue) ExamplesDataTypeDollar(t *testing.T, values []common.ValidValuesString) {
-	_ = values
-	t.Fatal("Not implemented: ExamplesDataTypeDollar")
+	for _, value := range values {
+		vvt := common.NewValidValuesTypedFromString(value)
+		_, err := production.ParseDollar(vvt.Value)
+		if vvt.IsValid != (err == nil) {
+			t.Errorf(" Value %s: expected valid=%v, got %v", vvt.Value, vvt.IsValid, err == nil)
+		}
+	}
 }
 
 func (g *TypesGlue) ExamplesDataTypeSimpleText(t *testing.T, values []common.ValidValuesString) {
-	_ = values
-	t.Fatal("Not implemented: ExamplesDataTypeSimpleText")
-}
-
-func (g *TypesGlue) ExamplesCalculationAddTwoNumbers(t *testing.T, values []common.AdderString) {
-	_ = values
-	t.Fatal("Not implemented: ExamplesCalculationAddTwoNumbers")
-}
-
-func (g *TypesGlue) ExamplesCalculationConvertFToC(t *testing.T, values []common.FandCString) {
-	_ = values
-	t.Fatal("Not implemented: ExamplesCalculationConvertFToC")
-}
-
-func (g *TypesGlue) ExamplesDataTypeIDForm(t *testing.T, values []common.ValidValuesString) {
-	_ = values
-	t.Fatal("Not implemented: ExamplesDataTypeIDForm")
-}
-
-func (g *TypesGlue) ExamplesBusinessRuleShippingCost(t *testing.T, values []common.ShippingString) {
-	_ = values
-	t.Fatal("Not implemented: ExamplesBusinessRuleShippingCost")
-}
-
-func (g *TypesGlue) ExamplesBusinessRuleDiscount(t *testing.T, values []common.DiscountingString) {
-	_ = values
-	t.Fatal("Not implemented: ExamplesBusinessRuleDiscount")
-}
-
-func (g *TypesGlue) ExamplesDataTypePercentage(t *testing.T, values []common.ValidValuesString) {
-	_ = values
-	t.Fatal("Not implemented: ExamplesDataTypePercentage")
+	for _, value := range values {
+		vvt := common.NewValidValuesTypedFromString(value)
+		_, err := production.ParseSimpleText(vvt.Value)
+		if vvt.IsValid != (err == nil) {
+			t.Errorf(" Value %s: expected valid=%v, got %v", vvt.Value, vvt.IsValid, err == nil)
+		}
+	}
 }

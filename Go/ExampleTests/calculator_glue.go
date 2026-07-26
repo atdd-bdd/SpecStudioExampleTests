@@ -1,52 +1,25 @@
-package calculator
+package exampletests
 
 import (
 	"testing"
-	"calculator/common"
+	"exampletests/common"
+	"exampletests/production"
 )
 
 type CalculatorGlue struct {
-	// Add state fields here
+	calc *production.Calculator
 }
 
-func NewCalculatorGlue() *CalculatorGlue { return &CalculatorGlue{} }
+func NewCalculatorGlue() *CalculatorGlue {
+	return &CalculatorGlue{calc: production.NewCalculator()}
+}
 
 func (g *CalculatorGlue) ExamplesCalculationAddTwoNumbers(t *testing.T, values []common.AdderString) {
-	_ = values
-	t.Fatal("Not implemented: ExamplesCalculationAddTwoNumbers")
-}
-
-func (g *CalculatorGlue) ExamplesCalculationConvertFToC(t *testing.T, values []common.FandCString) {
-	_ = values
-	t.Fatal("Not implemented: ExamplesCalculationConvertFToC")
-}
-
-func (g *CalculatorGlue) ExamplesDataTypeIDForm(t *testing.T, values []common.ValidValuesString) {
-	_ = values
-	t.Fatal("Not implemented: ExamplesDataTypeIDForm")
-}
-
-func (g *CalculatorGlue) ExamplesBusinessRuleShippingCost(t *testing.T, values []common.ShippingString) {
-	_ = values
-	t.Fatal("Not implemented: ExamplesBusinessRuleShippingCost")
-}
-
-func (g *CalculatorGlue) ExamplesBusinessRuleDiscount(t *testing.T, values []common.DiscountingString) {
-	_ = values
-	t.Fatal("Not implemented: ExamplesBusinessRuleDiscount")
-}
-
-func (g *CalculatorGlue) ExamplesDataTypePercentage(t *testing.T, values []common.ValidValuesString) {
-	_ = values
-	t.Fatal("Not implemented: ExamplesDataTypePercentage")
-}
-
-func (g *CalculatorGlue) ExamplesDataTypeDollar(t *testing.T, values []common.ValidValuesString) {
-	_ = values
-	t.Fatal("Not implemented: ExamplesDataTypeDollar")
-}
-
-func (g *CalculatorGlue) ExamplesDataTypeSimpleText(t *testing.T, values []common.ValidValuesString) {
-	_ = values
-	t.Fatal("Not implemented: ExamplesDataTypeSimpleText")
+	for _, value := range values {
+		typed := common.NewAdderTypedFromString(value)
+		if got := g.calc.Add(typed.Number1, typed.Number2); got != typed.Result {
+			t.Errorf("Add %d + %d: expected %d, got %d",
+				typed.Number1, typed.Number2, typed.Result, got)
+		}
+	}
 }

@@ -31,6 +31,10 @@ public class Dollar {
         return new Dollar(this.amount.add(other.amount));
     }
 
+    public Dollar minus(Dollar other) {
+        return new Dollar(this.amount.subtract(other.amount));
+    }
+
     public Dollar times(int factor) {
         return new Dollar(this.amount.multiply(BigDecimal.valueOf(factor)));
     }

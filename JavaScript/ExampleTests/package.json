@@ -1,0 +1,20 @@
+{
+  "name": "exampletests",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Generated example tests for the SpecStudio standard specifications.",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/test_*.test.js"
+    ],
+    "transform": {}
+  },
+  "devDependencies": {
+    "jest": "^30.0.0"
+  }
+}

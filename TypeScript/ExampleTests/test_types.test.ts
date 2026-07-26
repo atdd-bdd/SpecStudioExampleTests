@@ -5,7 +5,7 @@ describe("Types", () => {
 
   test("DataType Dollar", () => {
     const glue = new TypesGlue();
-    const objectList1 = [
+    const objectList1: ValidValuesString[] = [
       new ValidValuesString("0", "true", ""),
       new ValidValuesString("0.01", "true", ""),
       new ValidValuesString("-1", "false", "Negative not allowed"),
@@ -16,7 +16,7 @@ describe("Types", () => {
 
   test("DataType SimpleText", () => {
     const glue = new TypesGlue();
-    const objectList2 = [
+    const objectList2: ValidValuesString[] = [
       new ValidValuesString("abc", "y", ""),
       new ValidValuesString("ab.", "y", "period okay"),
       new ValidValuesString("1234567890", "y", "digits"),

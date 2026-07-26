@@ -1,82 +1,69 @@
 #pragma once
 #include <gtest/gtest.h>
-#include <iostream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 #include "common/common.h"
+#include "production/domain.h"
 
 class RecordFilterExampleGlue {
 public:
-    static constexpr const char* DNC_STRING = "?DNC?";
-
     void given_list_of_numbers(const std::vector<IDValueString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: given_list_of_numbers";
+        filter_ = RecordFilter();
+        for (const auto& value : values) {
+            const IDValueTyped t = IDValueTyped::from_string_struct(value);
+            filter_.add(IDValue(IDForm(t.id), t.value));
+        }
     }
 
     void when_filtered_by_id_with_value(const std::vector<std::vector<std::string>>& values) {
-        for (const auto& row : values) { for (const auto& c : row) std::cout << c << " "; std::cout << "\n"; }
-        ADD_FAILURE() << "Not implemented: when_filtered_by_id_with_value";
+        if (!values.empty() && !values[0].empty())
+            sum_ = filter_.sum_by_label(IDForm(values[0][0]));
     }
 
     void then_sum_is(const std::vector<std::vector<std::string>>& values) {
-        for (const auto& row : values) { for (const auto& c : row) std::cout << c << " "; std::cout << "\n"; }
-        ADD_FAILURE() << "Not implemented: then_sum_is";
+        if (!values.empty() && !values[0].empty())
+            EXPECT_EQ(std::stoi(values[0][0]), sum_) << "Sum";
     }
 
     void when_filtered_by(const std::vector<FilterValueString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: when_filtered_by";
+        for (const auto& value : values) {
+            const FilterValueTyped t = FilterValueTyped::from_string_struct(value);
+            sum_ = filter_.sum_by_label(IDForm(t.value));
+        }
     }
 
     void then_result(const std::vector<ResultValueString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: then_result";
+        for (const auto& value : values) {
+            const ResultValueTyped t = ResultValueTyped::from_string_struct(value);
+            EXPECT_EQ(t.sum, sum_) << "Filtered sum";
+        }
     }
 
     void when_element_added(const std::vector<IDValueString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: when_element_added";
+        for (const auto& value : values) {
+            const IDValueTyped t = IDValueTyped::from_string_struct(value);
+            filter_.add(IDValue(IDForm(t.id), t.value));
+        }
     }
 
     void examples_calculation_convert_f_to_c(const std::vector<FandCString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: examples_calculation_convert_f_to_c";
+        for (const auto& value : values) {
+            const FandCTyped t = FandCTyped::from_string_struct(value);
+            EXPECT_EQ(t.c, fahrenheit_to_celsius(t.f)) << "Convert " << t.f << "F to C";
+        }
     }
 
     void examples_datatype_idform(const std::vector<ValidValuesString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: examples_datatype_idform";
+        for (const auto& value : values) {
+            const ValidValuesTyped vvt = ValidValuesTyped::from_string_struct(value);
+            bool failed = false;
+            try { IDForm i(vvt.value); } catch (const std::invalid_argument&) { failed = true; }
+            EXPECT_EQ(vvt.isvalid, !failed) << " Value " << vvt.value;
+        }
     }
 
-    void examples_calculation_add_two_numbers(const std::vector<AdderString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: examples_calculation_add_two_numbers";
-    }
-
-    void examples_businessrule_shipping_cost(const std::vector<ShippingString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: examples_businessrule_shipping_cost";
-    }
-
-    void examples_businessrule_discount(const std::vector<DiscountingString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: examples_businessrule_discount";
-    }
-
-    void examples_datatype_percentage(const std::vector<ValidValuesString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: examples_datatype_percentage";
-    }
-
-    void examples_datatype_dollar(const std::vector<ValidValuesString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: examples_datatype_dollar";
-    }
-
-    void examples_datatype_simpletext(const std::vector<ValidValuesString>& values) {
-        for (const auto& v : values) { std::cout << v.to_string() << "\n"; }
-        ADD_FAILURE() << "Not implemented: examples_datatype_simpletext";
-    }
-
+private:
+    RecordFilter filter_;
+    int sum_ = 0;
 };

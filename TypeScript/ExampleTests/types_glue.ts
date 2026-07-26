@@ -1,45 +1,22 @@
-import { AdderString, DiscountingString, FandCString, ShippingString, ValidValuesString } from "./common/index.js";
+import { ValidValuesString, ValidValuesTyped } from "./common/index.js";
+import { Dollar, SimpleText } from "./production/index.js";
 
 export class TypesGlue {
-  static DNC_STRING = "?DNC?";
-
   examplesDataTypeDollar(values: readonly ValidValuesString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: examplesDataTypeDollar");
+    values.forEach((value) => {
+      const vvt = ValidValuesTyped.fromStringObj(value);
+      let failed = false;
+      try { new Dollar(vvt.value); } catch { failed = true; }
+      expect(vvt.isValid).toBe(!failed);
+    });
   }
 
   examplesDataTypeSimpleText(values: readonly ValidValuesString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: examplesDataTypeSimpleText");
-  }
-
-  examplesCalculationAddTwoNumbers(values: readonly AdderString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: examplesCalculationAddTwoNumbers");
-  }
-
-  examplesCalculationConvertFToC(values: readonly FandCString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: examplesCalculationConvertFToC");
-  }
-
-  examplesDataTypeIDForm(values: readonly ValidValuesString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: examplesDataTypeIDForm");
-  }
-
-  examplesBusinessRuleShippingCost(values: readonly ShippingString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: examplesBusinessRuleShippingCost");
-  }
-
-  examplesBusinessRuleDiscount(values: readonly DiscountingString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: examplesBusinessRuleDiscount");
-  }
-
-  examplesDataTypePercentage(values: readonly ValidValuesString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: examplesDataTypePercentage");
+    values.forEach((value) => {
+      const vvt = ValidValuesTyped.fromStringObj(value);
+      let failed = false;
+      try { new SimpleText(vvt.value); } catch { failed = true; }
+      expect(vvt.isValid).toBe(!failed);
+    });
   }
 }

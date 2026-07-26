@@ -1,75 +1,67 @@
-import { AdderString, DiscountingString, FandCString, FilterValueString, IDValueString, ResultValueString, ShippingString, ValidValuesString } from "./common/index.js";
+import { FandCString, FandCTyped, FilterValueString, FilterValueTyped,
+         IDValueString, IDValueTyped, ResultValueString, ResultValueTyped,
+         ValidValuesString, ValidValuesTyped } from "./common/index.js";
+import { IDForm, IDValue, RecordFilter, fahrenheitToCelsius }
+  from "./production/index.js";
 
 export class RecordFilterExampleGlue {
-  static DNC_STRING = "?DNC?";
+  private recordFilter = new RecordFilter();
+  private computedSum = 0;
 
   givenListOfNumbers(values: readonly IDValueString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: givenListOfNumbers");
+    this.recordFilter = new RecordFilter();
+    values.forEach((value) => {
+      const typed = IDValueTyped.fromStringObj(value);
+      this.recordFilter.add(new IDValue(new IDForm(typed.iD), typed.value));
+    });
   }
 
   whenFilteredByIDWithValue(values: readonly (readonly string[])[]): void {
-    values.forEach((row) => console.log(Array.isArray(row) ? row.join(", ") : String(row)));
-    throw new Error("Not implemented: whenFilteredByIDWithValue");
+    if (values.length > 0 && values[0]!.length > 0) {
+      this.computedSum = this.recordFilter.sumByLabel(new IDForm(values[0]![0]!));
+    }
   }
 
   thenSumIs(values: readonly (readonly string[])[]): void {
-    values.forEach((row) => console.log(Array.isArray(row) ? row.join(", ") : String(row)));
-    throw new Error("Not implemented: thenSumIs");
+    if (values.length > 0 && values[0]!.length > 0) {
+      expect(this.computedSum).toBe(parseInt(String(values[0]![0]).trim(), 10));
+    }
   }
 
   whenFilteredBy(values: readonly FilterValueString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: whenFilteredBy");
+    values.forEach((value) => {
+      const typed = FilterValueTyped.fromStringObj(value);
+      this.computedSum = this.recordFilter.sumByLabel(new IDForm(typed.value));
+    });
   }
 
   thenResult(values: readonly ResultValueString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: thenResult");
+    values.forEach((value) => {
+      const typed = ResultValueTyped.fromStringObj(value);
+      expect(this.computedSum).toBe(typed.sum);
+    });
   }
 
   whenElementAdded(values: readonly IDValueString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: whenElementAdded");
+    values.forEach((value) => {
+      const typed = IDValueTyped.fromStringObj(value);
+      this.recordFilter.add(new IDValue(new IDForm(typed.iD), typed.value));
+    });
   }
 
   examplesCalculationConvertFToC(values: readonly FandCString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: examplesCalculationConvertFToC");
+    values.forEach((value) => {
+      const typed = FandCTyped.fromStringObj(value);
+      expect(fahrenheitToCelsius(typed.f)).toBe(typed.c);
+    });
   }
 
   examplesDataTypeIDForm(values: readonly ValidValuesString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: examplesDataTypeIDForm");
-  }
-
-  examplesCalculationAddTwoNumbers(values: readonly AdderString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: examplesCalculationAddTwoNumbers");
-  }
-
-  examplesBusinessRuleShippingCost(values: readonly ShippingString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: examplesBusinessRuleShippingCost");
-  }
-
-  examplesBusinessRuleDiscount(values: readonly DiscountingString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: examplesBusinessRuleDiscount");
-  }
-
-  examplesDataTypePercentage(values: readonly ValidValuesString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: examplesDataTypePercentage");
-  }
-
-  examplesDataTypeDollar(values: readonly ValidValuesString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: examplesDataTypeDollar");
-  }
-
-  examplesDataTypeSimpleText(values: readonly ValidValuesString[]): void {
-    values.forEach((v) => console.log(v.toString()));
-    throw new Error("Not implemented: examplesDataTypeSimpleText");
+    values.forEach((value) => {
+      const vvt = ValidValuesTyped.fromStringObj(value);
+      let failed = false;
+      try { new IDForm(vvt.value); } catch { failed = true; }
+      expect(vvt.isValid).toBe(!failed);
+    });
   }
 }

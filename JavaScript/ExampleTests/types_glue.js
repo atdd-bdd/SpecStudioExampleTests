@@ -1,45 +1,24 @@
-import { } from "./common/index.js";
+import { ValidValuesTyped } from "./common/index.js";
+import { Dollar, SimpleText } from "./production/index.js";
 
 export class TypesGlue {
   static DNC_STRING = "?DNC?";
 
   examplesDataTypeDollar(values) {
-    values.forEach(v => console.log(v.toString()));
-    throw new Error("Not implemented: examplesDataTypeDollar");
+    values.forEach((value) => {
+      const vvt = ValidValuesTyped.fromStringObj(value);
+      let failed = false;
+      try { new Dollar(vvt.value); } catch (e) { failed = true; }
+      expect(vvt.isValid).toBe(!failed);
+    });
   }
 
   examplesDataTypeSimpleText(values) {
-    values.forEach(v => console.log(v.toString()));
-    throw new Error("Not implemented: examplesDataTypeSimpleText");
-  }
-
-  examplesCalculationAddTwoNumbers(values) {
-    values.forEach(v => console.log(v.toString()));
-    throw new Error("Not implemented: examplesCalculationAddTwoNumbers");
-  }
-
-  examplesCalculationConvertFToC(values) {
-    values.forEach(v => console.log(v.toString()));
-    throw new Error("Not implemented: examplesCalculationConvertFToC");
-  }
-
-  examplesDataTypeIDForm(values) {
-    values.forEach(v => console.log(v.toString()));
-    throw new Error("Not implemented: examplesDataTypeIDForm");
-  }
-
-  examplesBusinessRuleShippingCost(values) {
-    values.forEach(v => console.log(v.toString()));
-    throw new Error("Not implemented: examplesBusinessRuleShippingCost");
-  }
-
-  examplesBusinessRuleDiscount(values) {
-    values.forEach(v => console.log(v.toString()));
-    throw new Error("Not implemented: examplesBusinessRuleDiscount");
-  }
-
-  examplesDataTypePercentage(values) {
-    values.forEach(v => console.log(v.toString()));
-    throw new Error("Not implemented: examplesDataTypePercentage");
+    values.forEach((value) => {
+      const vvt = ValidValuesTyped.fromStringObj(value);
+      let failed = false;
+      try { new SimpleText(vvt.value); } catch (e) { failed = true; }
+      expect(vvt.isValid).toBe(!failed);
+    });
   }
 }

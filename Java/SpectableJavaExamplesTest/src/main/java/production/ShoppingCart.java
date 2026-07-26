@@ -20,8 +20,34 @@ public class ShoppingCart {
         this.billingAddress = billingAddress;
     }
 
-    public Dollar computeTotal() {
+    /** What the items come to before any discount or shipping. */
+    public Dollar subtotal() {
         return items.computeTotal();
+    }
+
+    /**
+     * The discount as money: the tiered percentage applied to the subtotal.
+     * The Discount rule states a Percentage, while the cart carries a Dollar.
+     */
+    public Dollar discountAmount() {
+        Dollar amount = subtotal();
+        return amount.times(discountFor(amount));
+    }
+
+    /**
+     * Shipping is charged on what the customer actually pays, so the discount
+     * comes off before the $100 threshold is tested. Both readings agree on the
+     * specification's own example — $80 and $76 are each under $100 — and this
+     * one follows its Details line, "Apply Discount to OrderItem Total, then
+     * add shipping".
+     */
+    public Dollar shippingCost() {
+        return shippingCostFor(subtotal().minus(discountAmount()));
+    }
+
+    /** Subtotal, less the discount, plus shipping. */
+    public Dollar computeTotal() {
+        return subtotal().minus(discountAmount()).plus(shippingCost());
     }
 
     // Shipping is free once the order total reaches $100, otherwise a flat $5.

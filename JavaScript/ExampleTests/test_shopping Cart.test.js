@@ -1,4 +1,4 @@
-import { AdderString, CatalogItemString, DiscountingString, FandCString, OrderItemString, PricingString, ShippingString, ShoppingCartString, ValidValuesString } from "./common/index.js";
+import { AdderString, AddressString, CatalogItemString, DiscountingString, FandCString, OrderItemString, PricingString, ShippingString, ShoppingCartString, ValidValuesString } from "./common/index.js";
 import { ShoppingCartGlue } from "./shopping Cart_glue.js";
 
 describe("Shopping Cart", () => {

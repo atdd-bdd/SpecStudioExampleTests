@@ -1,13 +1,11 @@
 use super::*;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct IDValue {
     pub id: IDForm,
     pub value: i32,
 }
 
 impl IDValue {
-    pub fn new(id: IDForm, value: i32) -> Self {
-        Self { id,  value }
-    }
+    pub fn new(id: IDForm, value: i32) -> Self { Self { id, value } }
 }

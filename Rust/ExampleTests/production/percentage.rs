@@ -1,26 +1,22 @@
-#[derive(Debug, Clone, PartialEq, Eq)]
+/// A percentage from 0 to 100 inclusive.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct Percentage {
-    pub value: String,
+    value: i32,
 }
 
 impl Percentage {
-    pub fn new(value: impl Into<String>) -> Self {
-        Self { value: value.into() }
+    pub fn parse(value: &str) -> Result<Self, String> {
+        let text = value.replace('%', "");
+        let text = text.trim();
+        let n: i32 = text.parse().map_err(|_| format!("Not a number: {value}"))?;
+        if !(0..=100).contains(&n) {
+            return Err(format!("Percentage must be between 0 and 100: {value}"));
+        }
+        Ok(Percentage { value: n })
     }
 
-    pub fn is_valid(&self) -> bool {
-        matches!(self.value.to_lowercase().as_str(),
-            "0" | "99" | "100"
-        )
-    }
-}
-
-impl From<String> for Percentage {
-    fn from(value: String) -> Self { Self { value } }
-}
-
-impl From<&str> for Percentage {
-    fn from(value: &str) -> Self { Self { value: value.to_string() } }
+    pub fn new(value: i32) -> Self { Percentage { value } }
+    pub fn value(&self) -> i32 { self.value }
 }
 
 impl std::fmt::Display for Percentage {

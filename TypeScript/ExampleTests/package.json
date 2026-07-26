@@ -1,0 +1,24 @@
+{
+  "name": "exampletests-ts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Generated example tests for the SpecStudio standard specifications.",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --experimental-vm-modules node_modules/jest/bin/jest.js"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "rootDir": "dist",
+    "testMatch": [
+      "**/test_*.test.js"
+    ],
+    "transform": {}
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "jest": "^30.0.0",
+    "typescript": "^5.6.0"
+  }
+}

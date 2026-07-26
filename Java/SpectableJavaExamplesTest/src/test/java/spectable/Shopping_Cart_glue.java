@@ -74,11 +74,13 @@ public class Shopping_Cart_glue {
     public void Then_shopping_cart_is(List<ShoppingCartString> values) {
         for (ShoppingCartString value : values) {
             ShoppingCartTyped typed = new ShoppingCartTyped(value);
-            Dollar actualTotal = currentCart().computeTotal();
+            ShoppingCart cart = currentCart();
 
-            assertDollarEquals(typed.totalPrice, actualTotal, "TotalPrice");
-            assertDollarEquals(typed.shipping, cartShipping, "Shipping");
-            assertDollarEquals(typed.discount, cartDiscount, "Discount");
+            // Shipping and Discount are outcomes of the two business rules, not
+            // the values the Given supplied, so ask the cart for them.
+            assertDollarEquals(typed.totalPrice, cart.computeTotal(), "TotalPrice");
+            assertDollarEquals(typed.shipping, cart.shippingCost(), "Shipping");
+            assertDollarEquals(typed.discount, cart.discountAmount(), "Discount");
             assertEquals(typed.shippingAddress, cartShippingAddress, "ShippingAddress");
             assertEquals(typed.billingAddress, cartBillingAddress, "BillingAddress");
         }
