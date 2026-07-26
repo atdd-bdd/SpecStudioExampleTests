@@ -33,4 +33,3 @@ export * from "./ShoppingCartString.js";
 export * from "./ShoppingCartTyped.js";
 export * from "./ValidValuesString.js";
 export * from "./ValidValuesTyped.js";
-export * from "./json.js";
