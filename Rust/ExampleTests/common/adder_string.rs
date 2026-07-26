@@ -27,3 +27,11 @@ impl std::fmt::Display for AdderString {
         )
     }
 }
+
+impl PartialEq for AdderString {
+    fn eq(&self, other: &Self) -> bool {
+        crate::common::dnc_equal(&self.number1, &other.number1)
+            && crate::common::dnc_equal(&self.number2, &other.number2)
+            && crate::common::dnc_equal(&self.result, &other.result)
+    }
+}

@@ -1,22 +1,22 @@
 package common
 
 type CatalogItemTyped struct {
-	Name SimpleText
-	Price Dollar
+	Name string
+	Price string
 }
 
 func NewCatalogItemTypedFromString(s CatalogItemString) CatalogItemTyped {
 	t := CatalogItemTyped{}
-	t.Name = SimpleText(s.Name)
-	t.Price = Dollar(s.Price)
+	t.Name = s.Name
+	t.Price = s.Price
 	return t
 }
 
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t CatalogItemTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"name": string(t.Name),
-		"price": string(t.Price),
+		"name": t.Name,
+		"price": t.Price,
 	}
 }
 
@@ -34,7 +34,7 @@ func NewCatalogItemTypedFromJSONValue(m map[string]interface{}) (CatalogItemType
 	if err != nil {
 		return t, err
 	}
-	t.Name = SimpleText(valName)
+	t.Name = valName
 	rawPrice, err := JSONRequire(m, "price")
 	if err != nil {
 		return t, err
@@ -43,7 +43,7 @@ func NewCatalogItemTypedFromJSONValue(m map[string]interface{}) (CatalogItemType
 	if err != nil {
 		return t, err
 	}
-	t.Price = Dollar(valPrice)
+	t.Price = valPrice
 	return t, nil
 }
 

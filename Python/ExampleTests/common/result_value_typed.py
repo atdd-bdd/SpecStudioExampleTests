@@ -37,3 +37,20 @@ class ResultValueTyped:
     def from_json_list(cls, text: str) -> list:
         raw = _json.as_list(_json.loads(text), 'ResultValueTyped')
         return [cls.from_json_value(e) for e in raw]
+
+    def __str__(self):
+        return (f'Sum={self.sum}')
+
+    def _key(self):
+        return (self.sum,)
+
+    def __eq__(self, other):
+        if not isinstance(other, ResultValueTyped):
+            return NotImplemented
+        return self._key() == other._key()
+
+    def __hash__(self):
+        return hash(self._key())
+
+    def __repr__(self):
+        return f'ResultValueTyped({self})'

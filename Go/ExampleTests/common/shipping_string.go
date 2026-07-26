@@ -19,3 +19,17 @@ func NewShippingStringFromSlice(v []string) ShippingString {
 func (s ShippingString) String() string {
 	return fmt.Sprintf("Total Price=%s, Shipping Cost=%s, Notes=%s", s.TotalPrice, s.ShippingCost, s.Notes)
 }
+
+func (s ShippingString) Equals(o ShippingString) bool {
+	return DNCEqual(s.TotalPrice, o.TotalPrice) &&
+		DNCEqual(s.ShippingCost, o.ShippingCost) &&
+		DNCEqual(s.Notes, o.Notes)
+}
+
+func EqualShippingStringSlices(a, b []ShippingString) bool {
+	if len(a) != len(b) { return false }
+	for i := range a {
+		if !a[i].Equals(b[i]) { return false }
+	}
+	return true
+}

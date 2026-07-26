@@ -27,3 +27,11 @@ impl std::fmt::Display for ValidValuesString {
         )
     }
 }
+
+impl PartialEq for ValidValuesString {
+    fn eq(&self, other: &Self) -> bool {
+        crate::common::dnc_equal(&self.value, &other.value)
+            && crate::common::dnc_equal(&self.isvalid, &other.isvalid)
+            && crate::common::dnc_equal(&self.notes, &other.notes)
+    }
+}

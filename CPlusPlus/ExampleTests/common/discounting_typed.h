@@ -5,22 +5,22 @@
 #include "discounting_string.h"
 
 struct DiscountingTyped {
-    Dollar total_price;
-    Percentage discount;
+    std::string total_price;
+    std::string discount;
     std::string notes;
 
     static DiscountingTyped from_string_struct(const DiscountingString& s) {
         DiscountingTyped t;
-        t.total_price = Dollar(s.total_price);
-        t.discount = Percentage(s.discount);
+        t.total_price = s.total_price;
+        t.discount = s.discount;
         t.notes = s.notes;
         return t;
     }
 
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("total_price", json::Convert<Dollar>::to_json(total_price));
-        m.emplace_back("discount", json::Convert<Percentage>::to_json(discount));
+        m.emplace_back("total_price", json::Convert<std::string>::to_json(total_price));
+        m.emplace_back("discount", json::Convert<std::string>::to_json(discount));
         m.emplace_back("notes", json::Convert<std::string>::to_json(notes));
         return json::Value::make_object(std::move(m));
     }
@@ -29,8 +29,8 @@ struct DiscountingTyped {
 
     static DiscountingTyped from_json_value(const json::Value& v) {
         DiscountingTyped t;
-        t.total_price = json::Convert<Dollar>::from_json(json::require(v, "total_price"), "total_price");
-        t.discount = json::Convert<Percentage>::from_json(json::require(v, "discount"), "discount");
+        t.total_price = json::Convert<std::string>::from_json(json::require(v, "total_price"), "total_price");
+        t.discount = json::Convert<std::string>::from_json(json::require(v, "discount"), "discount");
         t.notes = json::Convert<std::string>::from_json(json::require(v, "notes"), "notes");
         return t;
     }
@@ -53,4 +53,11 @@ struct DiscountingTyped {
             result.push_back(from_json_value(e));
         return result;
     }
+
+    bool operator==(const DiscountingTyped& o) const {
+        return total_price == o.total_price
+            && discount == o.discount
+            && notes == o.notes;
+    }
+    bool operator!=(const DiscountingTyped& o) const { return !(*this == o); }
 };

@@ -1,12 +1,12 @@
-public struct ShoppingCartTyped {
-    public let items: OrderItemCollection
-    public let shipping: Dollar
-    public let discount: Dollar
-    public let totalPrice: Dollar
-    public let shippingAddress: Address
-    public let billingAddress: Address
+public struct ShoppingCartTyped: Equatable, CustomStringConvertible {
+    public let items: String
+    public let shipping: String
+    public let discount: String
+    public let totalPrice: String
+    public let shippingAddress: AddressTyped
+    public let billingAddress: AddressTyped
 
-    public init(items: OrderItemCollection, shipping: Dollar, discount: Dollar, totalPrice: Dollar, shippingAddress: Address, billingAddress: Address) {
+    public init(items: String, shipping: String, discount: String, totalPrice: String, shippingAddress: AddressTyped, billingAddress: AddressTyped) {
         self.items = items
         self.shipping = shipping
         self.discount = discount
@@ -16,22 +16,22 @@ public struct ShoppingCartTyped {
     }
 
     public init(from s: ShoppingCartString) {
-        self.items = OrderItemCollection(s.items)
-        self.shipping = Dollar(s.shipping)
-        self.discount = Dollar(s.discount)
-        self.totalPrice = Dollar(s.totalPrice)
-        self.shippingAddress = Address(s.shippingAddress)
-        self.billingAddress = Address(s.billingAddress)
+        self.items = s.items
+        self.shipping = s.shipping
+        self.discount = s.discount
+        self.totalPrice = s.totalPrice
+        self.shippingAddress = AddressTyped(from: s.shippingAddress)
+        self.billingAddress = AddressTyped(from: s.billingAddress)
     }
 
     public func toJSONValue() -> [String: Any] {
         return [
-            "items": String(describing: items),
-            "shipping": String(describing: shipping),
-            "discount": String(describing: discount),
-            "totalPrice": String(describing: totalPrice),
-            "shippingAddress": String(describing: shippingAddress),
-            "billingAddress": String(describing: billingAddress),
+            "items": items,
+            "shipping": shipping,
+            "discount": discount,
+            "totalPrice": totalPrice,
+            "shippingAddress": shippingAddress.toJSONValue(),
+            "billingAddress": billingAddress.toJSONValue(),
         ]
     }
 
@@ -40,12 +40,12 @@ public struct ShoppingCartTyped {
     }
 
     public init(fromJSONValue m: [String: Any]) throws {
-        self.items = OrderItemCollection(try Json.asString(Json.require(m, "items"), "items"))
-        self.shipping = Dollar(try Json.asString(Json.require(m, "shipping"), "shipping"))
-        self.discount = Dollar(try Json.asString(Json.require(m, "discount"), "discount"))
-        self.totalPrice = Dollar(try Json.asString(Json.require(m, "totalPrice"), "totalPrice"))
-        self.shippingAddress = Address(try Json.asString(Json.require(m, "shippingAddress"), "shippingAddress"))
-        self.billingAddress = Address(try Json.asString(Json.require(m, "billingAddress"), "billingAddress"))
+        self.items = try Json.asString(Json.require(m, "items"), "items")
+        self.shipping = try Json.asString(Json.require(m, "shipping"), "shipping")
+        self.discount = try Json.asString(Json.require(m, "discount"), "discount")
+        self.totalPrice = try Json.asString(Json.require(m, "totalPrice"), "totalPrice")
+        self.shippingAddress = try AddressTyped(fromJSONValue: Json.asObject(Json.require(m, "shippingAddress"), "shippingAddress"))
+        self.billingAddress = try AddressTyped(fromJSONValue: Json.asObject(Json.require(m, "billingAddress"), "billingAddress"))
     }
 
     public init(fromJSON text: String) throws {
@@ -60,5 +60,9 @@ public struct ShoppingCartTyped {
         return try Json.parseArray(text).map {
             try ShoppingCartTyped(fromJSONValue: Json.asObject($0, "ShoppingCartTyped"))
         }
+    }
+
+    public var description: String {
+        return "Items=\(items), Shipping=\(shipping), Discount=\(discount), TotalPrice=\(totalPrice), ShippingAddress=\(shippingAddress), BillingAddress=\(billingAddress)"
     }
 }

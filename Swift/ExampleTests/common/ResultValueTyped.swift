@@ -1,4 +1,4 @@
-public struct ResultValueTyped {
+public struct ResultValueTyped: Equatable, CustomStringConvertible {
     public let sum: Int
 
     public init(sum: Int) {
@@ -35,5 +35,9 @@ public struct ResultValueTyped {
         return try Json.parseArray(text).map {
             try ResultValueTyped(fromJSONValue: Json.asObject($0, "ResultValueTyped"))
         }
+    }
+
+    public var description: String {
+        return "Sum=\(sum)"
     }
 }

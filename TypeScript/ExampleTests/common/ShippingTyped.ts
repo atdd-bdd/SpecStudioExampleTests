@@ -2,11 +2,11 @@ import { ShippingString } from "./ShippingString.js";
 import * as _json from "./json.js";
 
 export class ShippingTyped {
-  totalPrice: Dollar;
-  shippingCost: Dollar;
+  totalPrice: string;
+  shippingCost: string;
   notes: string;
 
-  constructor(totalPrice: Dollar, shippingCost: Dollar, notes: string) {
+  constructor(totalPrice: string, shippingCost: string, notes: string) {
     this.totalPrice = totalPrice;
     this.shippingCost = shippingCost;
     this.notes = notes;
@@ -14,16 +14,16 @@ export class ShippingTyped {
 
   static fromStringObj(s: ShippingString): ShippingTyped {
     return new ShippingTyped(
-      new Dollar(s.totalPrice),
-      new Dollar(s.shippingCost),
+      s.totalPrice,
+      s.shippingCost,
       s.notes
     );
   }
 
   toJsonValue(): Record<string, unknown> {
     return {
-      totalPrice: this.totalPrice == null ? null : String(this.totalPrice),
-      shippingCost: this.shippingCost == null ? null : String(this.shippingCost),
+      totalPrice: this.totalPrice,
+      shippingCost: this.shippingCost,
       notes: this.notes,
     };
   }
@@ -32,8 +32,8 @@ export class ShippingTyped {
 
   static fromJsonValue(m: unknown): ShippingTyped {
     return new ShippingTyped(
-      new Dollar(_json.asString(_json.requireField(m, "totalPrice"), "totalPrice")),
-      new Dollar(_json.asString(_json.requireField(m, "shippingCost"), "shippingCost")),
+      _json.asString(_json.requireField(m, "totalPrice"), "totalPrice"),
+      _json.asString(_json.requireField(m, "shippingCost"), "shippingCost"),
       _json.asString(_json.requireField(m, "notes"), "notes")
     );
   }
@@ -49,5 +49,15 @@ export class ShippingTyped {
   static fromJSONList(text: string): ShippingTyped[] {
     const raw = _json.asArray(_json.parse(text), "ShippingTyped") ?? [];
     return raw.map((e) => ShippingTyped.fromJsonValue(e));
+  }
+
+  toString(): string {
+    return `Total Price=${this.totalPrice}, Shipping Cost=${this.shippingCost}, Notes=${this.notes}`;
+  }
+
+  equals(other: ShippingTyped): boolean {
+    return this.totalPrice === other.totalPrice
+      && this.shippingCost === other.shippingCost
+      && this.notes === other.notes;
   }
 }

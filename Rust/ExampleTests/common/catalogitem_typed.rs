@@ -3,24 +3,24 @@
 use super::json;
 use super::catalogitem_string::CatalogItemString;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct CatalogItemTyped {
-    pub name: SimpleText,
-    pub price: Dollar,
+    pub name: String,
+    pub price: String,
 }
 
 impl CatalogItemTyped {
     pub fn from_str_struct(s: &CatalogItemString) -> Self {
         Self {
-            name: SimpleText::from(s.name.clone()),
-            price: Dollar::from(s.price.clone()),
+            name: s.name.clone(),
+            price: s.price.clone(),
         }
     }
 
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("name".to_string(), json::Value::Str(self.name.to_string())),
-            ("price".to_string(), json::Value::Str(self.price.to_string())),
+            ("name".to_string(), json::Value::Str(self.name.clone())),
+            ("price".to_string(), json::Value::Str(self.price.clone())),
         ])
     }
 
@@ -30,8 +30,8 @@ impl CatalogItemTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            name: SimpleText::from(json::as_string(json::require(v, "name")?, "name")?),
-            price: Dollar::from(json::as_string(json::require(v, "price")?, "price")?),
+            name: json::as_string(json::require(v, "name")?, "name")?,
+            price: json::as_string(json::require(v, "price")?, "price")?,
         })
     }
 

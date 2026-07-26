@@ -27,3 +27,11 @@ impl std::fmt::Display for ShippingString {
         )
     }
 }
+
+impl PartialEq for ShippingString {
+    fn eq(&self, other: &Self) -> bool {
+        crate::common::dnc_equal(&self.total_price, &other.total_price)
+            && crate::common::dnc_equal(&self.shipping_cost, &other.shipping_cost)
+            && crate::common::dnc_equal(&self.notes, &other.notes)
+    }
+}

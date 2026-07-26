@@ -63,5 +63,23 @@ using production;
             foreach (var e in root.EnumerateArray()) result.Add(FromJsonElement(e));
             return result;
         }
+
+        public override string ToString()
+        {
+            return $"Sum={sum}";
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not ResultValueTyped other) return false;
+            return object.Equals(this.sum, other.sum);
+        }
+
+        public override int GetHashCode()
+        {
+            var h = new System.HashCode();
+            h.Add(this.sum);
+            return h.ToHashCode();
+        }
     }
 }

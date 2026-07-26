@@ -3,7 +3,7 @@
 use super::json;
 use super::resultvalue_string::ResultValueString;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct ResultValueTyped {
     pub sum: i32,
 }

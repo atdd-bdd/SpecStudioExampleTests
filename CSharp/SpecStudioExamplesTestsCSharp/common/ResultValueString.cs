@@ -22,5 +22,20 @@ using production;
         {
             return $"Sum={sum}";
         }
+
+        const string DNCString = "?DNC?";
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not ResultValueString other) return false;
+            return (DNCString == this.sum || DNCString == other.sum || object.Equals(this.sum, other.sum));
+        }
+
+        public override int GetHashCode()
+        {
+            var h = new System.HashCode();
+            h.Add(this.sum);
+            return h.ToHashCode();
+        }
     }
 }

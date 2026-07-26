@@ -24,3 +24,10 @@ impl std::fmt::Display for IDValueString {
         )
     }
 }
+
+impl PartialEq for IDValueString {
+    fn eq(&self, other: &Self) -> bool {
+        crate::common::dnc_equal(&self.id, &other.id)
+            && crate::common::dnc_equal(&self.value, &other.value)
+    }
+}

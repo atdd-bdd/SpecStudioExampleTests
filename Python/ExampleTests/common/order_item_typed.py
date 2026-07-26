@@ -49,3 +49,23 @@ class OrderItemTyped:
     def from_json_list(cls, text: str) -> list:
         raw = _json.as_list(_json.loads(text), 'OrderItemTyped')
         return [cls.from_json_value(e) for e in raw]
+
+    def __str__(self):
+        return (f'Name={self.name}' + ', ' +
+                f'Quantity={self.quantity}' + ', ' +
+                f'Price={self.price}' + ', ' +
+                f'ItemTotal={self.item_total}')
+
+    def _key(self):
+        return (self.name, self.quantity, self.price, self.item_total)
+
+    def __eq__(self, other):
+        if not isinstance(other, OrderItemTyped):
+            return NotImplemented
+        return self._key() == other._key()
+
+    def __hash__(self):
+        return hash(self._key())
+
+    def __repr__(self):
+        return f'OrderItemTyped({self})'

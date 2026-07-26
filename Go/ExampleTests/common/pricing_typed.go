@@ -1,19 +1,19 @@
 package common
 
 type PricingTyped struct {
-	TotalPrice Dollar
+	TotalPrice string
 }
 
 func NewPricingTypedFromString(s PricingString) PricingTyped {
 	t := PricingTyped{}
-	t.TotalPrice = Dollar(s.TotalPrice)
+	t.TotalPrice = s.TotalPrice
 	return t
 }
 
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t PricingTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"totalprice": string(t.TotalPrice),
+		"totalprice": t.TotalPrice,
 	}
 }
 
@@ -31,7 +31,7 @@ func NewPricingTypedFromJSONValue(m map[string]interface{}) (PricingTyped, error
 	if err != nil {
 		return t, err
 	}
-	t.TotalPrice = Dollar(valTotalPrice)
+	t.TotalPrice = valTotalPrice
 	return t, nil
 }
 

@@ -1,3 +1,6 @@
+DNC_STRING = '?DNC?'
+
+
 class ValidValuesString:
     def __init__(self, value: str = '', is_valid: str = '', notes: str = ''):
         self.value = value
@@ -17,3 +20,18 @@ class ValidValuesString:
         return (f'Value={self.value}' + ', ' +
                 f'IsValid={self.is_valid}' + ', ' +
                 f'Notes={self.notes}')
+
+    def _key(self):
+        return (self.value, self.is_valid, self.notes)
+
+    def __eq__(self, other):
+        if not isinstance(other, ValidValuesString):
+            return NotImplemented
+        return all(a == b or a == DNC_STRING or b == DNC_STRING
+                   for a, b in zip(self._key(), other._key()))
+
+    def __hash__(self):
+        return hash(self._key())
+
+    def __repr__(self):
+        return f'ValidValuesString({self})'

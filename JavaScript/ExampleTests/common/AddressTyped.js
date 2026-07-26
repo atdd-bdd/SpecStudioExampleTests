@@ -11,10 +11,10 @@ export class AddressTyped {
 
   static fromStringObj(s) {
     return new AddressTyped(
-      new SimpleText(s.street),
-      new SimpleText(s.city),
-      new SimpleText(s.state),
-      new SimpleText(s.zIP)
+      s.street,
+      s.city,
+      s.state,
+      s.zIP
     );
   }
 
@@ -47,5 +47,17 @@ export class AddressTyped {
   static fromJSONList(text) {
     const raw = _json.asArray(_json.parse(text), "AddressTyped");
     return raw.map((e) => AddressTyped.fromJsonValue(e));
+  }
+
+  toString() {
+    return `Street=${this.street}, City=${this.city}, State=${this.state}, ZIP=${this.zIP}`;
+  }
+
+  equals(other) {
+    if (!(other instanceof AddressTyped)) return false;
+    return this.street === other.street
+      && this.city === other.city
+      && this.state === other.state
+      && this.zIP === other.zIP;
   }
 }

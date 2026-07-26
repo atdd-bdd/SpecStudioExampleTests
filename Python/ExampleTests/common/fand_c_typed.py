@@ -45,3 +45,22 @@ class FandCTyped:
     def from_json_list(cls, text: str) -> list:
         raw = _json.as_list(_json.loads(text), 'FandCTyped')
         return [cls.from_json_value(e) for e in raw]
+
+    def __str__(self):
+        return (f'F={self.f}' + ', ' +
+                f'C={self.c}' + ', ' +
+                f'Notes={self.notes}')
+
+    def _key(self):
+        return (self.f, self.c, self.notes)
+
+    def __eq__(self, other):
+        if not isinstance(other, FandCTyped):
+            return NotImplemented
+        return self._key() == other._key()
+
+    def __hash__(self):
+        return hash(self._key())
+
+    def __repr__(self):
+        return f'FandCTyped({self})'

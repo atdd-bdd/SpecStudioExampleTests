@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import spectable.common.*;
 import spectable.Shopping_Cart_glue;
 import production.*;
+import records.*;
+import calculator.*;
 import org.junit.jupiter.api.Test;
 
 public class Shopping_Cart_Test {
@@ -97,9 +99,9 @@ public class Shopping_Cart_Test {
         List<ShoppingCartString> objectList13 = new ArrayList<>();
         objectList13.add(new ShoppingCartString(
                 "=TwoItemCart",
-                "$0",
-                "$0",
-                "$80",
+                "$5",
+                "$4",
+                "$81",
                 new AddressString("", "", "", ""),
                 new AddressString("", "", "", "")));
         glue.Then_shopping_cart_is(objectList13);

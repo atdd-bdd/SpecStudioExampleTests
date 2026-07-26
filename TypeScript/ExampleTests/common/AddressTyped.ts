@@ -2,12 +2,12 @@ import { AddressString } from "./AddressString.js";
 import * as _json from "./json.js";
 
 export class AddressTyped {
-  street: SimpleText;
-  city: SimpleText;
-  state: SimpleText;
-  zIP: SimpleText;
+  street: string;
+  city: string;
+  state: string;
+  zIP: string;
 
-  constructor(street: SimpleText, city: SimpleText, state: SimpleText, zIP: SimpleText) {
+  constructor(street: string, city: string, state: string, zIP: string) {
     this.street = street;
     this.city = city;
     this.state = state;
@@ -16,19 +16,19 @@ export class AddressTyped {
 
   static fromStringObj(s: AddressString): AddressTyped {
     return new AddressTyped(
-      new SimpleText(s.street),
-      new SimpleText(s.city),
-      new SimpleText(s.state),
-      new SimpleText(s.zIP)
+      s.street,
+      s.city,
+      s.state,
+      s.zIP
     );
   }
 
   toJsonValue(): Record<string, unknown> {
     return {
-      street: this.street == null ? null : String(this.street),
-      city: this.city == null ? null : String(this.city),
-      state: this.state == null ? null : String(this.state),
-      zIP: this.zIP == null ? null : String(this.zIP),
+      street: this.street,
+      city: this.city,
+      state: this.state,
+      zIP: this.zIP,
     };
   }
 
@@ -36,10 +36,10 @@ export class AddressTyped {
 
   static fromJsonValue(m: unknown): AddressTyped {
     return new AddressTyped(
-      new SimpleText(_json.asString(_json.requireField(m, "street"), "street")),
-      new SimpleText(_json.asString(_json.requireField(m, "city"), "city")),
-      new SimpleText(_json.asString(_json.requireField(m, "state"), "state")),
-      new SimpleText(_json.asString(_json.requireField(m, "zIP"), "zIP"))
+      _json.asString(_json.requireField(m, "street"), "street"),
+      _json.asString(_json.requireField(m, "city"), "city"),
+      _json.asString(_json.requireField(m, "state"), "state"),
+      _json.asString(_json.requireField(m, "zIP"), "zIP")
     );
   }
 
@@ -54,5 +54,16 @@ export class AddressTyped {
   static fromJSONList(text: string): AddressTyped[] {
     const raw = _json.asArray(_json.parse(text), "AddressTyped") ?? [];
     return raw.map((e) => AddressTyped.fromJsonValue(e));
+  }
+
+  toString(): string {
+    return `Street=${this.street}, City=${this.city}, State=${this.state}, ZIP=${this.zIP}`;
+  }
+
+  equals(other: AddressTyped): boolean {
+    return this.street === other.street
+      && this.city === other.city
+      && this.state === other.state
+      && this.zIP === other.zIP;
   }
 }

@@ -1,5 +1,7 @@
 
 export class IDValueString {
+  static readonly DNC_STRING = "?DNC?";
+
   iD: string;
   value: string;
 
@@ -10,13 +12,23 @@ export class IDValueString {
 
   static fromList(values: Iterable<string>): IDValueString {
     const v = Array.from(values);
-    return new IDValueString(
-      v[0] ?? "",
-      v[1] ?? ""
-    );
+    const r = new IDValueString();
+    r.iD = v[0] ?? "";
+    r.value = v[1] ?? "";
+    return r;
   }
 
   toString(): string {
     return `ID=${this.iD}, Value=${this.value}`;
+  }
+
+  equals(other: IDValueString): boolean {
+    return (this.iD === IDValueString.DNC_STRING || other.iD === IDValueString.DNC_STRING || this.iD === other.iD)
+      && (this.value === IDValueString.DNC_STRING || other.value === IDValueString.DNC_STRING || this.value === other.value);
+  }
+
+  static equalLists(a: IDValueString[], b: IDValueString[]): boolean {
+    if (a.length !== b.length) return false;
+    return a.every((row, i) => row.equals(b[i]!));
   }
 }

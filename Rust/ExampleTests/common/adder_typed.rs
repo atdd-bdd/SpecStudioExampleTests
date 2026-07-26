@@ -3,7 +3,7 @@
 use super::json;
 use super::adder_string::AdderString;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct AdderTyped {
     pub number1: i32,
     pub number2: i32,

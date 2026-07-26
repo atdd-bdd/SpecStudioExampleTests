@@ -27,3 +27,11 @@ impl std::fmt::Display for DiscountingString {
         )
     }
 }
+
+impl PartialEq for DiscountingString {
+    fn eq(&self, other: &Self) -> bool {
+        crate::common::dnc_equal(&self.total_price, &other.total_price)
+            && crate::common::dnc_equal(&self.discount, &other.discount)
+            && crate::common::dnc_equal(&self.notes, &other.notes)
+    }
+}

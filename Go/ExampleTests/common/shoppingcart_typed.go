@@ -1,34 +1,34 @@
 package common
 
 type ShoppingCartTyped struct {
-	Items OrderItemCollection
-	Shipping Dollar
-	Discount Dollar
-	TotalPrice Dollar
-	ShippingAddress Address
-	BillingAddress Address
+	Items string
+	Shipping string
+	Discount string
+	TotalPrice string
+	ShippingAddress AddressTyped
+	BillingAddress AddressTyped
 }
 
 func NewShoppingCartTypedFromString(s ShoppingCartString) ShoppingCartTyped {
 	t := ShoppingCartTyped{}
-	t.Items = OrderItemCollection(s.Items)
-	t.Shipping = Dollar(s.Shipping)
-	t.Discount = Dollar(s.Discount)
-	t.TotalPrice = Dollar(s.TotalPrice)
-	t.ShippingAddress = Address(s.ShippingAddress)
-	t.BillingAddress = Address(s.BillingAddress)
+	t.Items = s.Items
+	t.Shipping = s.Shipping
+	t.Discount = s.Discount
+	t.TotalPrice = s.TotalPrice
+	t.ShippingAddress = NewAddressTypedFromString(s.ShippingAddress)
+	t.BillingAddress = NewAddressTypedFromString(s.BillingAddress)
 	return t
 }
 
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t ShoppingCartTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"items": string(t.Items),
-		"shipping": string(t.Shipping),
-		"discount": string(t.Discount),
-		"totalprice": string(t.TotalPrice),
-		"shippingaddress": string(t.ShippingAddress),
-		"billingaddress": string(t.BillingAddress),
+		"items": t.Items,
+		"shipping": t.Shipping,
+		"discount": t.Discount,
+		"totalprice": t.TotalPrice,
+		"shippingaddress": t.ShippingAddress.ToJSONValue(),
+		"billingaddress": t.BillingAddress.ToJSONValue(),
 	}
 }
 
@@ -46,7 +46,7 @@ func NewShoppingCartTypedFromJSONValue(m map[string]interface{}) (ShoppingCartTy
 	if err != nil {
 		return t, err
 	}
-	t.Items = OrderItemCollection(valItems)
+	t.Items = valItems
 	rawShipping, err := JSONRequire(m, "shipping")
 	if err != nil {
 		return t, err
@@ -55,7 +55,7 @@ func NewShoppingCartTypedFromJSONValue(m map[string]interface{}) (ShoppingCartTy
 	if err != nil {
 		return t, err
 	}
-	t.Shipping = Dollar(valShipping)
+	t.Shipping = valShipping
 	rawDiscount, err := JSONRequire(m, "discount")
 	if err != nil {
 		return t, err
@@ -64,7 +64,7 @@ func NewShoppingCartTypedFromJSONValue(m map[string]interface{}) (ShoppingCartTy
 	if err != nil {
 		return t, err
 	}
-	t.Discount = Dollar(valDiscount)
+	t.Discount = valDiscount
 	rawTotalPrice, err := JSONRequire(m, "totalprice")
 	if err != nil {
 		return t, err
@@ -73,25 +73,33 @@ func NewShoppingCartTypedFromJSONValue(m map[string]interface{}) (ShoppingCartTy
 	if err != nil {
 		return t, err
 	}
-	t.TotalPrice = Dollar(valTotalPrice)
+	t.TotalPrice = valTotalPrice
 	rawShippingAddress, err := JSONRequire(m, "shippingaddress")
 	if err != nil {
 		return t, err
 	}
-	valShippingAddress, err := JSONAsString(rawShippingAddress, "shippingaddress")
+	valShippingAddress, err := JSONAsObject(rawShippingAddress, "shippingaddress")
 	if err != nil {
 		return t, err
 	}
-	t.ShippingAddress = Address(valShippingAddress)
+	subShippingAddress, err := NewAddressTypedFromJSONValue(valShippingAddress)
+	if err != nil {
+		return t, err
+	}
+	t.ShippingAddress = subShippingAddress
 	rawBillingAddress, err := JSONRequire(m, "billingaddress")
 	if err != nil {
 		return t, err
 	}
-	valBillingAddress, err := JSONAsString(rawBillingAddress, "billingaddress")
+	valBillingAddress, err := JSONAsObject(rawBillingAddress, "billingaddress")
 	if err != nil {
 		return t, err
 	}
-	t.BillingAddress = Address(valBillingAddress)
+	subBillingAddress, err := NewAddressTypedFromJSONValue(valBillingAddress)
+	if err != nil {
+		return t, err
+	}
+	t.BillingAddress = subBillingAddress
 	return t, nil
 }
 

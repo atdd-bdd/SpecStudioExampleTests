@@ -1,7 +1,7 @@
 #![allow(unused_mut, unused_variables, unused_imports)]
 
 use crate::common::*;
-use crate::types_glue::TypesGlue;
+use super::types_glue::TypesGlue;
 
 // --- DataType Tests ---
 

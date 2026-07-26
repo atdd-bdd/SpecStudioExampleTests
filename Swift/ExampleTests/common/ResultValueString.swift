@@ -12,4 +12,10 @@ public struct ResultValueString: CustomStringConvertible, Equatable {
     public var description: String {
         return "Sum=\(sum)"
     }
+
+    public static let dncString = "?DNC?"
+
+    public static func == (a: ResultValueString, b: ResultValueString) -> Bool {
+        return (a.sum == dncString || b.sum == dncString || a.sum == b.sum)
+    }
 }

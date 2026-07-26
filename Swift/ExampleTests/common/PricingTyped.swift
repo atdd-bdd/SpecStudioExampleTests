@@ -1,17 +1,17 @@
-public struct PricingTyped {
-    public let totalPrice: Dollar
+public struct PricingTyped: Equatable, CustomStringConvertible {
+    public let totalPrice: String
 
-    public init(totalPrice: Dollar) {
+    public init(totalPrice: String) {
         self.totalPrice = totalPrice
     }
 
     public init(from s: PricingString) {
-        self.totalPrice = Dollar(s.totalPrice)
+        self.totalPrice = s.totalPrice
     }
 
     public func toJSONValue() -> [String: Any] {
         return [
-            "totalPrice": String(describing: totalPrice),
+            "totalPrice": totalPrice,
         ]
     }
 
@@ -20,7 +20,7 @@ public struct PricingTyped {
     }
 
     public init(fromJSONValue m: [String: Any]) throws {
-        self.totalPrice = Dollar(try Json.asString(Json.require(m, "totalPrice"), "totalPrice"))
+        self.totalPrice = try Json.asString(Json.require(m, "totalPrice"), "totalPrice")
     }
 
     public init(fromJSON text: String) throws {
@@ -35,5 +35,9 @@ public struct PricingTyped {
         return try Json.parseArray(text).map {
             try PricingTyped(fromJSONValue: Json.asObject($0, "PricingTyped"))
         }
+    }
+
+    public var description: String {
+        return "TotalPrice=\(totalPrice)"
     }
 }

@@ -1,3 +1,6 @@
+DNC_STRING = '?DNC?'
+
+
 class ShippingString:
     def __init__(self, total_price: str = '', shipping_cost: str = '', notes: str = ''):
         self.total_price = total_price
@@ -17,3 +20,18 @@ class ShippingString:
         return (f'Total Price={self.total_price}' + ', ' +
                 f'Shipping Cost={self.shipping_cost}' + ', ' +
                 f'Notes={self.notes}')
+
+    def _key(self):
+        return (self.total_price, self.shipping_cost, self.notes)
+
+    def __eq__(self, other):
+        if not isinstance(other, ShippingString):
+            return NotImplemented
+        return all(a == b or a == DNC_STRING or b == DNC_STRING
+                   for a, b in zip(self._key(), other._key()))
+
+    def __hash__(self):
+        return hash(self._key())
+
+    def __repr__(self):
+        return f'ShippingString({self})'

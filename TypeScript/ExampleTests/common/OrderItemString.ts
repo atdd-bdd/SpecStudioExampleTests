@@ -1,5 +1,7 @@
 
 export class OrderItemString {
+  static readonly DNC_STRING = "?DNC?";
+
   name: string;
   quantity: string;
   price: string;
@@ -14,15 +16,27 @@ export class OrderItemString {
 
   static fromList(values: Iterable<string>): OrderItemString {
     const v = Array.from(values);
-    return new OrderItemString(
-      v[0] ?? "",
-      v[1] ?? "",
-      v[2] ?? "",
-      v[3] ?? ""
-    );
+    const r = new OrderItemString();
+    r.name = v[0] ?? "";
+    r.quantity = v[1] ?? "";
+    r.price = v[2] ?? "";
+    r.itemTotal = v[3] ?? "";
+    return r;
   }
 
   toString(): string {
     return `Name=${this.name}, Quantity=${this.quantity}, Price=${this.price}, ItemTotal=${this.itemTotal}`;
+  }
+
+  equals(other: OrderItemString): boolean {
+    return (this.name === OrderItemString.DNC_STRING || other.name === OrderItemString.DNC_STRING || this.name === other.name)
+      && (this.quantity === OrderItemString.DNC_STRING || other.quantity === OrderItemString.DNC_STRING || this.quantity === other.quantity)
+      && (this.price === OrderItemString.DNC_STRING || other.price === OrderItemString.DNC_STRING || this.price === other.price)
+      && (this.itemTotal === OrderItemString.DNC_STRING || other.itemTotal === OrderItemString.DNC_STRING || this.itemTotal === other.itemTotal);
+  }
+
+  static equalLists(a: OrderItemString[], b: OrderItemString[]): boolean {
+    if (a.length !== b.length) return false;
+    return a.every((row, i) => row.equals(b[i]!));
   }
 }

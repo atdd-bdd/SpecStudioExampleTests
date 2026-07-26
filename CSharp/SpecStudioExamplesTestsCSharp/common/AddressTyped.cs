@@ -75,5 +75,29 @@ using production;
             foreach (var e in root.EnumerateArray()) result.Add(FromJsonElement(e));
             return result;
         }
+
+        public override string ToString()
+        {
+            return $"Street={street}, City={city}, State={state}, ZIP={zIP}";
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not AddressTyped other) return false;
+            return object.Equals(this.street, other.street)
+                && object.Equals(this.city, other.city)
+                && object.Equals(this.state, other.state)
+                && object.Equals(this.zIP, other.zIP);
+        }
+
+        public override int GetHashCode()
+        {
+            var h = new System.HashCode();
+            h.Add(this.street);
+            h.Add(this.city);
+            h.Add(this.state);
+            h.Add(this.zIP);
+            return h.ToHashCode();
+        }
     }
 }

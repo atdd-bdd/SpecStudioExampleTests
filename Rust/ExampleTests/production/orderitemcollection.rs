@@ -1,7 +1,9 @@
+use super::*;
+
 pub const ORDERITEMCOLLECTION_MINIMUM: usize = 0;
 pub const ORDERITEMCOLLECTION_MAXIMUM: usize = 100;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct OrderItemCollection {
     items: Vec<OrderItem>,
 }

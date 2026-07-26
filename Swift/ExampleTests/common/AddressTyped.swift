@@ -1,10 +1,10 @@
-public struct AddressTyped {
-    public let street: SimpleText
-    public let city: SimpleText
-    public let state: SimpleText
-    public let zIP: SimpleText
+public struct AddressTyped: Equatable, CustomStringConvertible {
+    public let street: String
+    public let city: String
+    public let state: String
+    public let zIP: String
 
-    public init(street: SimpleText, city: SimpleText, state: SimpleText, zIP: SimpleText) {
+    public init(street: String, city: String, state: String, zIP: String) {
         self.street = street
         self.city = city
         self.state = state
@@ -12,18 +12,18 @@ public struct AddressTyped {
     }
 
     public init(from s: AddressString) {
-        self.street = SimpleText(s.street)
-        self.city = SimpleText(s.city)
-        self.state = SimpleText(s.state)
-        self.zIP = SimpleText(s.zIP)
+        self.street = s.street
+        self.city = s.city
+        self.state = s.state
+        self.zIP = s.zIP
     }
 
     public func toJSONValue() -> [String: Any] {
         return [
-            "street": String(describing: street),
-            "city": String(describing: city),
-            "state": String(describing: state),
-            "zIP": String(describing: zIP),
+            "street": street,
+            "city": city,
+            "state": state,
+            "zIP": zIP,
         ]
     }
 
@@ -32,10 +32,10 @@ public struct AddressTyped {
     }
 
     public init(fromJSONValue m: [String: Any]) throws {
-        self.street = SimpleText(try Json.asString(Json.require(m, "street"), "street"))
-        self.city = SimpleText(try Json.asString(Json.require(m, "city"), "city"))
-        self.state = SimpleText(try Json.asString(Json.require(m, "state"), "state"))
-        self.zIP = SimpleText(try Json.asString(Json.require(m, "zIP"), "zIP"))
+        self.street = try Json.asString(Json.require(m, "street"), "street")
+        self.city = try Json.asString(Json.require(m, "city"), "city")
+        self.state = try Json.asString(Json.require(m, "state"), "state")
+        self.zIP = try Json.asString(Json.require(m, "zIP"), "zIP")
     }
 
     public init(fromJSON text: String) throws {
@@ -50,5 +50,9 @@ public struct AddressTyped {
         return try Json.parseArray(text).map {
             try AddressTyped(fromJSONValue: Json.asObject($0, "AddressTyped"))
         }
+    }
+
+    public var description: String {
+        return "Street=\(street), City=\(city), State=\(state), ZIP=\(zIP)"
     }
 }

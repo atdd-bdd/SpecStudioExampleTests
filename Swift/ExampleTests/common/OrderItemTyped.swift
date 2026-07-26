@@ -1,10 +1,10 @@
-public struct OrderItemTyped {
-    public let name: SimpleText
+public struct OrderItemTyped: Equatable, CustomStringConvertible {
+    public let name: String
     public let quantity: Int
-    public let price: Dollar
-    public let itemTotal: Dollar
+    public let price: String
+    public let itemTotal: String
 
-    public init(name: SimpleText, quantity: Int, price: Dollar, itemTotal: Dollar) {
+    public init(name: String, quantity: Int, price: String, itemTotal: String) {
         self.name = name
         self.quantity = quantity
         self.price = price
@@ -12,18 +12,18 @@ public struct OrderItemTyped {
     }
 
     public init(from s: OrderItemString) {
-        self.name = SimpleText(s.name)
+        self.name = s.name
         self.quantity = Int(s.quantity) ?? 0
-        self.price = Dollar(s.price)
-        self.itemTotal = Dollar(s.itemTotal)
+        self.price = s.price
+        self.itemTotal = s.itemTotal
     }
 
     public func toJSONValue() -> [String: Any] {
         return [
-            "name": String(describing: name),
+            "name": name,
             "quantity": quantity,
-            "price": String(describing: price),
-            "itemTotal": String(describing: itemTotal),
+            "price": price,
+            "itemTotal": itemTotal,
         ]
     }
 
@@ -32,10 +32,10 @@ public struct OrderItemTyped {
     }
 
     public init(fromJSONValue m: [String: Any]) throws {
-        self.name = SimpleText(try Json.asString(Json.require(m, "name"), "name"))
+        self.name = try Json.asString(Json.require(m, "name"), "name")
         self.quantity = try Json.asInt(Json.require(m, "quantity"), "quantity")
-        self.price = Dollar(try Json.asString(Json.require(m, "price"), "price"))
-        self.itemTotal = Dollar(try Json.asString(Json.require(m, "itemTotal"), "itemTotal"))
+        self.price = try Json.asString(Json.require(m, "price"), "price")
+        self.itemTotal = try Json.asString(Json.require(m, "itemTotal"), "itemTotal")
     }
 
     public init(fromJSON text: String) throws {
@@ -50,5 +50,9 @@ public struct OrderItemTyped {
         return try Json.parseArray(text).map {
             try OrderItemTyped(fromJSONValue: Json.asObject($0, "OrderItemTyped"))
         }
+    }
+
+    public var description: String {
+        return "Name=\(name), Quantity=\(quantity), Price=\(price), ItemTotal=\(itemTotal)"
     }
 }

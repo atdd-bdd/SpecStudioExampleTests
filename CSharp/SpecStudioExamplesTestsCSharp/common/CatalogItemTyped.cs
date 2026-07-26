@@ -67,5 +67,25 @@ using production;
             foreach (var e in root.EnumerateArray()) result.Add(FromJsonElement(e));
             return result;
         }
+
+        public override string ToString()
+        {
+            return $"Name={name}, Price={price}";
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not CatalogItemTyped other) return false;
+            return object.Equals(this.name, other.name)
+                && object.Equals(this.price, other.price);
+        }
+
+        public override int GetHashCode()
+        {
+            var h = new System.HashCode();
+            h.Add(this.name);
+            h.Add(this.price);
+            return h.ToHashCode();
+        }
     }
 }

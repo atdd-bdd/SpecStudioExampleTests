@@ -5,26 +5,26 @@
 #include "orderitem_string.h"
 
 struct OrderItemTyped {
-    SimpleText name;
+    std::string name;
     int quantity = 0;
-    Dollar price;
-    Dollar itemtotal;
+    std::string price;
+    std::string itemtotal;
 
     static OrderItemTyped from_string_struct(const OrderItemString& s) {
         OrderItemTyped t;
-        t.name = SimpleText(s.name);
+        t.name = s.name;
         t.quantity = !s.quantity.empty() ? std::stoi(s.quantity) : 0;
-        t.price = Dollar(s.price);
-        t.itemtotal = Dollar(s.itemtotal);
+        t.price = s.price;
+        t.itemtotal = s.itemtotal;
         return t;
     }
 
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("name", json::Convert<SimpleText>::to_json(name));
+        m.emplace_back("name", json::Convert<std::string>::to_json(name));
         m.emplace_back("quantity", json::Convert<int>::to_json(quantity));
-        m.emplace_back("price", json::Convert<Dollar>::to_json(price));
-        m.emplace_back("itemtotal", json::Convert<Dollar>::to_json(itemtotal));
+        m.emplace_back("price", json::Convert<std::string>::to_json(price));
+        m.emplace_back("itemtotal", json::Convert<std::string>::to_json(itemtotal));
         return json::Value::make_object(std::move(m));
     }
 
@@ -32,10 +32,10 @@ struct OrderItemTyped {
 
     static OrderItemTyped from_json_value(const json::Value& v) {
         OrderItemTyped t;
-        t.name = json::Convert<SimpleText>::from_json(json::require(v, "name"), "name");
+        t.name = json::Convert<std::string>::from_json(json::require(v, "name"), "name");
         t.quantity = json::Convert<int>::from_json(json::require(v, "quantity"), "quantity");
-        t.price = json::Convert<Dollar>::from_json(json::require(v, "price"), "price");
-        t.itemtotal = json::Convert<Dollar>::from_json(json::require(v, "itemtotal"), "itemtotal");
+        t.price = json::Convert<std::string>::from_json(json::require(v, "price"), "price");
+        t.itemtotal = json::Convert<std::string>::from_json(json::require(v, "itemtotal"), "itemtotal");
         return t;
     }
 
@@ -57,4 +57,12 @@ struct OrderItemTyped {
             result.push_back(from_json_value(e));
         return result;
     }
+
+    bool operator==(const OrderItemTyped& o) const {
+        return name == o.name
+            && quantity == o.quantity
+            && price == o.price
+            && itemtotal == o.itemtotal;
+    }
+    bool operator!=(const OrderItemTyped& o) const { return !(*this == o); }
 };

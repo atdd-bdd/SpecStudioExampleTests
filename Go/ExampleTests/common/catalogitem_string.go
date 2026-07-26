@@ -17,3 +17,16 @@ func NewCatalogItemStringFromSlice(v []string) CatalogItemString {
 func (s CatalogItemString) String() string {
 	return fmt.Sprintf("Name=%s, Price=%s", s.Name, s.Price)
 }
+
+func (s CatalogItemString) Equals(o CatalogItemString) bool {
+	return DNCEqual(s.Name, o.Name) &&
+		DNCEqual(s.Price, o.Price)
+}
+
+func EqualCatalogItemStringSlices(a, b []CatalogItemString) bool {
+	if len(a) != len(b) { return false }
+	for i := range a {
+		if !a[i].Equals(b[i]) { return false }
+	}
+	return true
+}

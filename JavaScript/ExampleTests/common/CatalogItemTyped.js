@@ -9,8 +9,8 @@ export class CatalogItemTyped {
 
   static fromStringObj(s) {
     return new CatalogItemTyped(
-      new SimpleText(s.name),
-      new Dollar(s.price)
+      s.name,
+      s.price
     );
   }
 
@@ -39,5 +39,15 @@ export class CatalogItemTyped {
   static fromJSONList(text) {
     const raw = _json.asArray(_json.parse(text), "CatalogItemTyped");
     return raw.map((e) => CatalogItemTyped.fromJsonValue(e));
+  }
+
+  toString() {
+    return `Name=${this.name}, Price=${this.price}`;
+  }
+
+  equals(other) {
+    if (!(other instanceof CatalogItemTyped)) return false;
+    return this.name === other.name
+      && this.price === other.price;
   }
 }

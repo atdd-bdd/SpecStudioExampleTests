@@ -28,5 +28,24 @@ using production;
         {
             return $"Value={value}, IsValid={isValid}, Notes={notes}";
         }
+
+        const string DNCString = "?DNC?";
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not ValidValuesString other) return false;
+            return (DNCString == this.value || DNCString == other.value || object.Equals(this.value, other.value))
+                && (DNCString == this.isValid || DNCString == other.isValid || object.Equals(this.isValid, other.isValid))
+                && (DNCString == this.notes || DNCString == other.notes || object.Equals(this.notes, other.notes));
+        }
+
+        public override int GetHashCode()
+        {
+            var h = new System.HashCode();
+            h.Add(this.value);
+            h.Add(this.isValid);
+            h.Add(this.notes);
+            return h.ToHashCode();
+        }
     }
 }

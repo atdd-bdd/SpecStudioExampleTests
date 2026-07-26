@@ -21,3 +21,18 @@ func NewOrderItemStringFromSlice(v []string) OrderItemString {
 func (s OrderItemString) String() string {
 	return fmt.Sprintf("Name=%s, Quantity=%s, Price=%s, ItemTotal=%s", s.Name, s.Quantity, s.Price, s.ItemTotal)
 }
+
+func (s OrderItemString) Equals(o OrderItemString) bool {
+	return DNCEqual(s.Name, o.Name) &&
+		DNCEqual(s.Quantity, o.Quantity) &&
+		DNCEqual(s.Price, o.Price) &&
+		DNCEqual(s.ItemTotal, o.ItemTotal)
+}
+
+func EqualOrderItemStringSlices(a, b []OrderItemString) bool {
+	if len(a) != len(b) { return false }
+	for i := range a {
+		if !a[i].Equals(b[i]) { return false }
+	}
+	return true
+}

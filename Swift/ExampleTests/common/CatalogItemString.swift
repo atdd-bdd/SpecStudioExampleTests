@@ -15,4 +15,11 @@ public struct CatalogItemString: CustomStringConvertible, Equatable {
     public var description: String {
         return "Name=\(name), Price=\(price)"
     }
+
+    public static let dncString = "?DNC?"
+
+    public static func == (a: CatalogItemString, b: CatalogItemString) -> Bool {
+        return (a.name == dncString || b.name == dncString || a.name == b.name)
+            && (a.price == dncString || b.price == dncString || a.price == b.price)
+    }
 }

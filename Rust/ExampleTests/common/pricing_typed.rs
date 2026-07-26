@@ -3,21 +3,21 @@
 use super::json;
 use super::pricing_string::PricingString;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct PricingTyped {
-    pub totalprice: Dollar,
+    pub totalprice: String,
 }
 
 impl PricingTyped {
     pub fn from_str_struct(s: &PricingString) -> Self {
         Self {
-            totalprice: Dollar::from(s.totalprice.clone()),
+            totalprice: s.totalprice.clone(),
         }
     }
 
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("totalprice".to_string(), json::Value::Str(self.totalprice.to_string())),
+            ("totalprice".to_string(), json::Value::Str(self.totalprice.clone())),
         ])
     }
 
@@ -27,7 +27,7 @@ impl PricingTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            totalprice: Dollar::from(json::as_string(json::require(v, "totalprice")?, "totalprice")?),
+            totalprice: json::as_string(json::require(v, "totalprice")?, "totalprice")?,
         })
     }
 

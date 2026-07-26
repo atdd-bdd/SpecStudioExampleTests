@@ -17,7 +17,7 @@ def test_Scenario_AddItems():
     glue.given_item_collection_is(object_list_2)
 
     object_list_3 = [
-        OrderItemString('Widget', '2', '', ''),
+        OrderItemString('Widget', '2', '1', '1'),
     ]
     glue.when_item_added(object_list_3)
 
@@ -27,7 +27,7 @@ def test_Scenario_AddItems():
     glue.then_item_collection_is(object_list_4)
 
     object_list_5 = [
-        OrderItemString('WhatCallIt', '3', '', ''),
+        OrderItemString('WhatCallIt', '3', '1', '1'),
     ]
     glue.when_item_added(object_list_5)
 
@@ -49,7 +49,7 @@ def test_Scenario_AShoppingCartWithAddresses():
     glue.given_catalog_has(object_list_7)
 
     object_list_8 = [
-        ShoppingCartString('=EmptyCart', '', '', '', '=AShippingAddress', '=ABillingAddress'),
+        ShoppingCartString('=EmptyCart', '$0', '$0', '$0', AddressString('2 Apple Lane', 'Somewhere', 'NC', '27706'), AddressString('1 Apple Lane', 'Somewhere', 'NC', '27705')),
     ]
     glue.given_shopping_cart(object_list_8)
 
@@ -65,22 +65,22 @@ def test_Scenario_AddItemsToShoppingCart():
     glue.given_catalog_has(object_list_9)
 
     object_list_10 = [
-        ShoppingCartString('=EmptyCart', '$0', '$0', '$0', '', ''),
+        ShoppingCartString('=EmptyCart', '$0', '$0', '$0', AddressString('', '', '', ''), AddressString('', '', '', '')),
     ]
     glue.given_shopping_cart(object_list_10)
 
     object_list_11 = [
-        OrderItemString('Widget', '2', '', ''),
+        OrderItemString('Widget', '2', '1', '1'),
     ]
     glue.when_item_added(object_list_11)
 
     object_list_12 = [
-        OrderItemString('WhatCallIt', '3', '', ''),
+        OrderItemString('WhatCallIt', '3', '1', '1'),
     ]
     glue.when_item_added(object_list_12)
 
     object_list_13 = [
-        ShoppingCartString('=TwoItemCart', '$0', '$0', '$80', '', ''),
+        ShoppingCartString('=TwoItemCart', '$5', '$4', '$81', AddressString('', '', '', ''), AddressString('', '', '', '')),
     ]
     glue.then_shopping_cart_is(object_list_13)
 

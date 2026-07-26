@@ -11,10 +11,10 @@ export class OrderItemTyped {
 
   static fromStringObj(s) {
     return new OrderItemTyped(
-      new SimpleText(s.name),
+      s.name,
       s.quantity !== "" ? Number(s.quantity) : 0,
-      new Dollar(s.price),
-      new Dollar(s.itemTotal)
+      s.price,
+      s.itemTotal
     );
   }
 
@@ -47,5 +47,17 @@ export class OrderItemTyped {
   static fromJSONList(text) {
     const raw = _json.asArray(_json.parse(text), "OrderItemTyped");
     return raw.map((e) => OrderItemTyped.fromJsonValue(e));
+  }
+
+  toString() {
+    return `Name=${this.name}, Quantity=${this.quantity}, Price=${this.price}, ItemTotal=${this.itemTotal}`;
+  }
+
+  equals(other) {
+    if (!(other instanceof OrderItemTyped)) return false;
+    return this.name === other.name
+      && this.quantity === other.quantity
+      && this.price === other.price
+      && this.itemTotal === other.itemTotal;
   }
 }

@@ -22,5 +22,20 @@ using production;
         {
             return $"TotalPrice={totalPrice}";
         }
+
+        const string DNCString = "?DNC?";
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not PricingString other) return false;
+            return (DNCString == this.totalPrice || DNCString == other.totalPrice || object.Equals(this.totalPrice, other.totalPrice));
+        }
+
+        public override int GetHashCode()
+        {
+            var h = new System.HashCode();
+            h.Add(this.totalPrice);
+            return h.ToHashCode();
+        }
     }
 }

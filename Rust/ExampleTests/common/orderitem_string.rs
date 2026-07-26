@@ -30,3 +30,12 @@ impl std::fmt::Display for OrderItemString {
         )
     }
 }
+
+impl PartialEq for OrderItemString {
+    fn eq(&self, other: &Self) -> bool {
+        crate::common::dnc_equal(&self.name, &other.name)
+            && crate::common::dnc_equal(&self.quantity, &other.quantity)
+            && crate::common::dnc_equal(&self.price, &other.price)
+            && crate::common::dnc_equal(&self.itemtotal, &other.itemtotal)
+    }
+}

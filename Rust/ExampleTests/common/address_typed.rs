@@ -3,30 +3,30 @@
 use super::json;
 use super::address_string::AddressString;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct AddressTyped {
-    pub street: SimpleText,
-    pub city: SimpleText,
-    pub state: SimpleText,
-    pub zip: SimpleText,
+    pub street: String,
+    pub city: String,
+    pub state: String,
+    pub zip: String,
 }
 
 impl AddressTyped {
     pub fn from_str_struct(s: &AddressString) -> Self {
         Self {
-            street: SimpleText::from(s.street.clone()),
-            city: SimpleText::from(s.city.clone()),
-            state: SimpleText::from(s.state.clone()),
-            zip: SimpleText::from(s.zip.clone()),
+            street: s.street.clone(),
+            city: s.city.clone(),
+            state: s.state.clone(),
+            zip: s.zip.clone(),
         }
     }
 
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("street".to_string(), json::Value::Str(self.street.to_string())),
-            ("city".to_string(), json::Value::Str(self.city.to_string())),
-            ("state".to_string(), json::Value::Str(self.state.to_string())),
-            ("zip".to_string(), json::Value::Str(self.zip.to_string())),
+            ("street".to_string(), json::Value::Str(self.street.clone())),
+            ("city".to_string(), json::Value::Str(self.city.clone())),
+            ("state".to_string(), json::Value::Str(self.state.clone())),
+            ("zip".to_string(), json::Value::Str(self.zip.clone())),
         ])
     }
 
@@ -36,10 +36,10 @@ impl AddressTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            street: SimpleText::from(json::as_string(json::require(v, "street")?, "street")?),
-            city: SimpleText::from(json::as_string(json::require(v, "city")?, "city")?),
-            state: SimpleText::from(json::as_string(json::require(v, "state")?, "state")?),
-            zip: SimpleText::from(json::as_string(json::require(v, "zip")?, "zip")?),
+            street: json::as_string(json::require(v, "street")?, "street")?,
+            city: json::as_string(json::require(v, "city")?, "city")?,
+            state: json::as_string(json::require(v, "state")?, "state")?,
+            zip: json::as_string(json::require(v, "zip")?, "zip")?,
         })
     }
 

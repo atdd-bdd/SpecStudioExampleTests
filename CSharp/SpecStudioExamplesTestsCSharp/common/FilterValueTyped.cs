@@ -63,5 +63,23 @@ using production;
             foreach (var e in root.EnumerateArray()) result.Add(FromJsonElement(e));
             return result;
         }
+
+        public override string ToString()
+        {
+            return $"Value={value}";
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not FilterValueTyped other) return false;
+            return object.Equals(this.value, other.value);
+        }
+
+        public override int GetHashCode()
+        {
+            var h = new System.HashCode();
+            h.Add(this.value);
+            return h.ToHashCode();
+        }
     }
 }

@@ -3,7 +3,7 @@
 use super::json;
 use super::fandc_string::FandCString;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct FandCTyped {
     pub f: i32,
     pub c: i32,

@@ -3,23 +3,23 @@
 use super::json;
 use super::idvalue_string::IDValueString;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct IDValueTyped {
-    pub id: IDForm,
+    pub id: String,
     pub value: i32,
 }
 
 impl IDValueTyped {
     pub fn from_str_struct(s: &IDValueString) -> Self {
         Self {
-            id: IDForm::from(s.id.clone()),
+            id: s.id.clone(),
             value: s.value.parse::<i32>().unwrap_or_default(),
         }
     }
 
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("id".to_string(), json::Value::Str(self.id.to_string())),
+            ("id".to_string(), json::Value::Str(self.id.clone())),
             ("value".to_string(), json::Value::number_from_i64(self.value as i64)),
         ])
     }
@@ -30,7 +30,7 @@ impl IDValueTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            id: IDForm::from(json::as_string(json::require(v, "id")?, "id")?),
+            id: json::as_string(json::require(v, "id")?, "id")?,
             value: json::as_i32(json::require(v, "value")?, "value")?,
         })
     }

@@ -1,4 +1,6 @@
-#[derive(Debug, Clone)]
+use super::*;
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct OrderItem {
     pub name: SimpleText,
     pub quantity: i32,

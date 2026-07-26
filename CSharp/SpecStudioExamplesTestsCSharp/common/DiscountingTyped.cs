@@ -71,5 +71,27 @@ using production;
             foreach (var e in root.EnumerateArray()) result.Add(FromJsonElement(e));
             return result;
         }
+
+        public override string ToString()
+        {
+            return $"Total Price={totalPrice}, Discount={discount}, Notes={notes}";
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not DiscountingTyped other) return false;
+            return object.Equals(this.totalPrice, other.totalPrice)
+                && object.Equals(this.discount, other.discount)
+                && object.Equals(this.notes, other.notes);
+        }
+
+        public override int GetHashCode()
+        {
+            var h = new System.HashCode();
+            h.Add(this.totalPrice);
+            h.Add(this.discount);
+            h.Add(this.notes);
+            return h.ToHashCode();
+        }
     }
 }

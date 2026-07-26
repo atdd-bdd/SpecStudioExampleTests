@@ -9,7 +9,7 @@ type ValidValuesTyped struct {
 func NewValidValuesTypedFromString(s ValidValuesString) ValidValuesTyped {
 	t := ValidValuesTyped{}
 	t.Value = s.Value
-	t.IsValid = s.IsValid == "true" || s.IsValid == "t" || s.IsValid == "yes" || s.IsValid == "y" || s.IsValid == "1"
+	t.IsValid = ParseBoolCell(s.IsValid)
 	t.Notes = s.Notes
 	return t
 }

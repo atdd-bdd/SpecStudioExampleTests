@@ -2,37 +2,38 @@
 
 use super::json;
 use super::shoppingcart_string::ShoppingCartString;
+use super::address_typed::AddressTyped;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct ShoppingCartTyped {
-    pub items: OrderItemCollection,
-    pub shipping: Dollar,
-    pub discount: Dollar,
-    pub totalprice: Dollar,
-    pub shippingaddress: Address,
-    pub billingaddress: Address,
+    pub items: String,
+    pub shipping: String,
+    pub discount: String,
+    pub totalprice: String,
+    pub shippingaddress: AddressTyped,
+    pub billingaddress: AddressTyped,
 }
 
 impl ShoppingCartTyped {
     pub fn from_str_struct(s: &ShoppingCartString) -> Self {
         Self {
-            items: OrderItemCollection::from(s.items.clone()),
-            shipping: Dollar::from(s.shipping.clone()),
-            discount: Dollar::from(s.discount.clone()),
-            totalprice: Dollar::from(s.totalprice.clone()),
-            shippingaddress: Address::from(s.shippingaddress.clone()),
-            billingaddress: Address::from(s.billingaddress.clone()),
+            items: s.items.clone(),
+            shipping: s.shipping.clone(),
+            discount: s.discount.clone(),
+            totalprice: s.totalprice.clone(),
+            shippingaddress: AddressTyped::from_str_struct(&s.shippingaddress),
+            billingaddress: AddressTyped::from_str_struct(&s.billingaddress),
         }
     }
 
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("items".to_string(), json::Value::Str(self.items.to_string())),
-            ("shipping".to_string(), json::Value::Str(self.shipping.to_string())),
-            ("discount".to_string(), json::Value::Str(self.discount.to_string())),
-            ("totalprice".to_string(), json::Value::Str(self.totalprice.to_string())),
-            ("shippingaddress".to_string(), json::Value::Str(self.shippingaddress.to_string())),
-            ("billingaddress".to_string(), json::Value::Str(self.billingaddress.to_string())),
+            ("items".to_string(), json::Value::Str(self.items.clone())),
+            ("shipping".to_string(), json::Value::Str(self.shipping.clone())),
+            ("discount".to_string(), json::Value::Str(self.discount.clone())),
+            ("totalprice".to_string(), json::Value::Str(self.totalprice.clone())),
+            ("shippingaddress".to_string(), self.shippingaddress.to_json_value()),
+            ("billingaddress".to_string(), self.billingaddress.to_json_value()),
         ])
     }
 
@@ -42,12 +43,12 @@ impl ShoppingCartTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            items: OrderItemCollection::from(json::as_string(json::require(v, "items")?, "items")?),
-            shipping: Dollar::from(json::as_string(json::require(v, "shipping")?, "shipping")?),
-            discount: Dollar::from(json::as_string(json::require(v, "discount")?, "discount")?),
-            totalprice: Dollar::from(json::as_string(json::require(v, "totalprice")?, "totalprice")?),
-            shippingaddress: Address::from(json::as_string(json::require(v, "shippingaddress")?, "shippingaddress")?),
-            billingaddress: Address::from(json::as_string(json::require(v, "billingaddress")?, "billingaddress")?),
+            items: json::as_string(json::require(v, "items")?, "items")?,
+            shipping: json::as_string(json::require(v, "shipping")?, "shipping")?,
+            discount: json::as_string(json::require(v, "discount")?, "discount")?,
+            totalprice: json::as_string(json::require(v, "totalprice")?, "totalprice")?,
+            shippingaddress: AddressTyped::from_json_value(json::require(v, "shippingaddress")?)?,
+            billingaddress: AddressTyped::from_json_value(json::require(v, "billingaddress")?)?,
         })
     }
 

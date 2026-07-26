@@ -21,3 +21,9 @@ impl std::fmt::Display for ResultValueString {
         )
     }
 }
+
+impl PartialEq for ResultValueString {
+    fn eq(&self, other: &Self) -> bool {
+        crate::common::dnc_equal(&self.sum, &other.sum)
+    }
+}

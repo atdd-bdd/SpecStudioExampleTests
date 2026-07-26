@@ -9,7 +9,7 @@ export class IDValueTyped {
 
   static fromStringObj(s) {
     return new IDValueTyped(
-      new IDForm(s.iD),
+      s.iD,
       s.value !== "" ? Number(s.value) : 0
     );
   }
@@ -39,5 +39,15 @@ export class IDValueTyped {
   static fromJSONList(text) {
     const raw = _json.asArray(_json.parse(text), "IDValueTyped");
     return raw.map((e) => IDValueTyped.fromJsonValue(e));
+  }
+
+  toString() {
+    return `ID=${this.iD}, Value=${this.value}`;
+  }
+
+  equals(other) {
+    if (!(other instanceof IDValueTyped)) return false;
+    return this.iD === other.iD
+      && this.value === other.value;
   }
 }

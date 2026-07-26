@@ -45,3 +45,22 @@ class ShippingTyped:
     def from_json_list(cls, text: str) -> list:
         raw = _json.as_list(_json.loads(text), 'ShippingTyped')
         return [cls.from_json_value(e) for e in raw]
+
+    def __str__(self):
+        return (f'Total Price={self.total_price}' + ', ' +
+                f'Shipping Cost={self.shipping_cost}' + ', ' +
+                f'Notes={self.notes}')
+
+    def _key(self):
+        return (self.total_price, self.shipping_cost, self.notes)
+
+    def __eq__(self, other):
+        if not isinstance(other, ShippingTyped):
+            return NotImplemented
+        return self._key() == other._key()
+
+    def __hash__(self):
+        return hash(self._key())
+
+    def __repr__(self):
+        return f'ShippingTyped({self})'

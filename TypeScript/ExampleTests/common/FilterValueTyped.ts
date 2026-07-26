@@ -2,21 +2,21 @@ import { FilterValueString } from "./FilterValueString.js";
 import * as _json from "./json.js";
 
 export class FilterValueTyped {
-  value: IDForm;
+  value: string;
 
-  constructor(value: IDForm) {
+  constructor(value: string) {
     this.value = value;
   }
 
   static fromStringObj(s: FilterValueString): FilterValueTyped {
     return new FilterValueTyped(
-      new IDForm(s.value)
+      s.value
     );
   }
 
   toJsonValue(): Record<string, unknown> {
     return {
-      value: this.value == null ? null : String(this.value),
+      value: this.value,
     };
   }
 
@@ -24,7 +24,7 @@ export class FilterValueTyped {
 
   static fromJsonValue(m: unknown): FilterValueTyped {
     return new FilterValueTyped(
-      new IDForm(_json.asString(_json.requireField(m, "value"), "value"))
+      _json.asString(_json.requireField(m, "value"), "value")
     );
   }
 
@@ -39,5 +39,13 @@ export class FilterValueTyped {
   static fromJSONList(text: string): FilterValueTyped[] {
     const raw = _json.asArray(_json.parse(text), "FilterValueTyped") ?? [];
     return raw.map((e) => FilterValueTyped.fromJsonValue(e));
+  }
+
+  toString(): string {
+    return `Value=${this.value}`;
+  }
+
+  equals(other: FilterValueTyped): boolean {
+    return this.value === other.value;
   }
 }

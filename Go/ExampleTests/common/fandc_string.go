@@ -19,3 +19,17 @@ func NewFandCStringFromSlice(v []string) FandCString {
 func (s FandCString) String() string {
 	return fmt.Sprintf("F=%s, C=%s, Notes=%s", s.F, s.C, s.Notes)
 }
+
+func (s FandCString) Equals(o FandCString) bool {
+	return DNCEqual(s.F, o.F) &&
+		DNCEqual(s.C, o.C) &&
+		DNCEqual(s.Notes, o.Notes)
+}
+
+func EqualFandCStringSlices(a, b []FandCString) bool {
+	if len(a) != len(b) { return false }
+	for i := range a {
+		if !a[i].Equals(b[i]) { return false }
+	}
+	return true
+}

@@ -17,3 +17,16 @@ func NewIDValueStringFromSlice(v []string) IDValueString {
 func (s IDValueString) String() string {
 	return fmt.Sprintf("ID=%s, Value=%s", s.ID, s.Value)
 }
+
+func (s IDValueString) Equals(o IDValueString) bool {
+	return DNCEqual(s.ID, o.ID) &&
+		DNCEqual(s.Value, o.Value)
+}
+
+func EqualIDValueStringSlices(a, b []IDValueString) bool {
+	if len(a) != len(b) { return false }
+	for i := range a {
+		if !a[i].Equals(b[i]) { return false }
+	}
+	return true
+}

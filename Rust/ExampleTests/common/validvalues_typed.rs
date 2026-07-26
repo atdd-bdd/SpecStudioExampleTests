@@ -3,7 +3,7 @@
 use super::json;
 use super::validvalues_string::ValidValuesString;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct ValidValuesTyped {
     pub value: String,
     pub isvalid: bool,

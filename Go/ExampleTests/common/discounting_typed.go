@@ -1,15 +1,15 @@
 package common
 
 type DiscountingTyped struct {
-	TotalPrice Dollar
-	Discount Percentage
+	TotalPrice string
+	Discount string
 	Notes string
 }
 
 func NewDiscountingTypedFromString(s DiscountingString) DiscountingTyped {
 	t := DiscountingTyped{}
-	t.TotalPrice = Dollar(s.TotalPrice)
-	t.Discount = Percentage(s.Discount)
+	t.TotalPrice = s.TotalPrice
+	t.Discount = s.Discount
 	t.Notes = s.Notes
 	return t
 }
@@ -17,8 +17,8 @@ func NewDiscountingTypedFromString(s DiscountingString) DiscountingTyped {
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t DiscountingTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"total_price": string(t.TotalPrice),
-		"discount": string(t.Discount),
+		"total_price": t.TotalPrice,
+		"discount": t.Discount,
 		"notes": t.Notes,
 	}
 }
@@ -37,7 +37,7 @@ func NewDiscountingTypedFromJSONValue(m map[string]interface{}) (DiscountingType
 	if err != nil {
 		return t, err
 	}
-	t.TotalPrice = Dollar(valTotalPrice)
+	t.TotalPrice = valTotalPrice
 	rawDiscount, err := JSONRequire(m, "discount")
 	if err != nil {
 		return t, err
@@ -46,7 +46,7 @@ func NewDiscountingTypedFromJSONValue(m map[string]interface{}) (DiscountingType
 	if err != nil {
 		return t, err
 	}
-	t.Discount = Percentage(valDiscount)
+	t.Discount = valDiscount
 	rawNotes, err := JSONRequire(m, "notes")
 	if err != nil {
 		return t, err

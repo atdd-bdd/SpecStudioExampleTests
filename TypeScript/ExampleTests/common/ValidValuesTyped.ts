@@ -50,4 +50,14 @@ export class ValidValuesTyped {
     const raw = _json.asArray(_json.parse(text), "ValidValuesTyped") ?? [];
     return raw.map((e) => ValidValuesTyped.fromJsonValue(e));
   }
+
+  toString(): string {
+    return `Value=${this.value}, IsValid=${this.isValid}, Notes=${this.notes}`;
+  }
+
+  equals(other: ValidValuesTyped): boolean {
+    return this.value === other.value
+      && this.isValid === other.isValid
+      && this.notes === other.notes;
+  }
 }

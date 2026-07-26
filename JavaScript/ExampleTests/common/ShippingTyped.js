@@ -10,8 +10,8 @@ export class ShippingTyped {
 
   static fromStringObj(s) {
     return new ShippingTyped(
-      new Dollar(s.totalPrice),
-      new Dollar(s.shippingCost),
+      s.totalPrice,
+      s.shippingCost,
       s.notes
     );
   }
@@ -43,5 +43,16 @@ export class ShippingTyped {
   static fromJSONList(text) {
     const raw = _json.asArray(_json.parse(text), "ShippingTyped");
     return raw.map((e) => ShippingTyped.fromJsonValue(e));
+  }
+
+  toString() {
+    return `Total Price=${this.totalPrice}, Shipping Cost=${this.shippingCost}, Notes=${this.notes}`;
+  }
+
+  equals(other) {
+    if (!(other instanceof ShippingTyped)) return false;
+    return this.totalPrice === other.totalPrice
+      && this.shippingCost === other.shippingCost
+      && this.notes === other.notes;
   }
 }

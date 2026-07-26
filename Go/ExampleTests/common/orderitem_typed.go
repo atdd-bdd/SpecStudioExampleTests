@@ -3,28 +3,28 @@ package common
 import "strconv"
 
 type OrderItemTyped struct {
-	Name SimpleText
+	Name string
 	Quantity int
-	Price Dollar
-	ItemTotal Dollar
+	Price string
+	ItemTotal string
 }
 
 func NewOrderItemTypedFromString(s OrderItemString) OrderItemTyped {
 	t := OrderItemTyped{}
-	t.Name = SimpleText(s.Name)
+	t.Name = s.Name
 	if v, err := strconv.Atoi(s.Quantity); err == nil { t.Quantity = v }
-	t.Price = Dollar(s.Price)
-	t.ItemTotal = Dollar(s.ItemTotal)
+	t.Price = s.Price
+	t.ItemTotal = s.ItemTotal
 	return t
 }
 
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t OrderItemTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"name": string(t.Name),
+		"name": t.Name,
 		"quantity": t.Quantity,
-		"price": string(t.Price),
-		"itemtotal": string(t.ItemTotal),
+		"price": t.Price,
+		"itemtotal": t.ItemTotal,
 	}
 }
 
@@ -42,7 +42,7 @@ func NewOrderItemTypedFromJSONValue(m map[string]interface{}) (OrderItemTyped, e
 	if err != nil {
 		return t, err
 	}
-	t.Name = SimpleText(valName)
+	t.Name = valName
 	rawQuantity, err := JSONRequire(m, "quantity")
 	if err != nil {
 		return t, err
@@ -60,7 +60,7 @@ func NewOrderItemTypedFromJSONValue(m map[string]interface{}) (OrderItemTyped, e
 	if err != nil {
 		return t, err
 	}
-	t.Price = Dollar(valPrice)
+	t.Price = valPrice
 	rawItemTotal, err := JSONRequire(m, "itemtotal")
 	if err != nil {
 		return t, err
@@ -69,7 +69,7 @@ func NewOrderItemTypedFromJSONValue(m map[string]interface{}) (OrderItemTyped, e
 	if err != nil {
 		return t, err
 	}
-	t.ItemTotal = Dollar(valItemTotal)
+	t.ItemTotal = valItemTotal
 	return t, nil
 }
 

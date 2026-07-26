@@ -1,7 +1,7 @@
 #![allow(unused_mut, unused_variables, unused_imports)]
 
 use crate::common::*;
-use crate::calculator_glue::CalculatorGlue;
+use super::calculator_glue::CalculatorGlue;
 
 // --- Calculation Tests ---
 

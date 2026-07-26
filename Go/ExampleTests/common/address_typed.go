@@ -1,28 +1,28 @@
 package common
 
 type AddressTyped struct {
-	Street SimpleText
-	City SimpleText
-	State SimpleText
-	ZIP SimpleText
+	Street string
+	City string
+	State string
+	ZIP string
 }
 
 func NewAddressTypedFromString(s AddressString) AddressTyped {
 	t := AddressTyped{}
-	t.Street = SimpleText(s.Street)
-	t.City = SimpleText(s.City)
-	t.State = SimpleText(s.State)
-	t.ZIP = SimpleText(s.ZIP)
+	t.Street = s.Street
+	t.City = s.City
+	t.State = s.State
+	t.ZIP = s.ZIP
 	return t
 }
 
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t AddressTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"street": string(t.Street),
-		"city": string(t.City),
-		"state": string(t.State),
-		"zip": string(t.ZIP),
+		"street": t.Street,
+		"city": t.City,
+		"state": t.State,
+		"zip": t.ZIP,
 	}
 }
 
@@ -40,7 +40,7 @@ func NewAddressTypedFromJSONValue(m map[string]interface{}) (AddressTyped, error
 	if err != nil {
 		return t, err
 	}
-	t.Street = SimpleText(valStreet)
+	t.Street = valStreet
 	rawCity, err := JSONRequire(m, "city")
 	if err != nil {
 		return t, err
@@ -49,7 +49,7 @@ func NewAddressTypedFromJSONValue(m map[string]interface{}) (AddressTyped, error
 	if err != nil {
 		return t, err
 	}
-	t.City = SimpleText(valCity)
+	t.City = valCity
 	rawState, err := JSONRequire(m, "state")
 	if err != nil {
 		return t, err
@@ -58,7 +58,7 @@ func NewAddressTypedFromJSONValue(m map[string]interface{}) (AddressTyped, error
 	if err != nil {
 		return t, err
 	}
-	t.State = SimpleText(valState)
+	t.State = valState
 	rawZIP, err := JSONRequire(m, "zip")
 	if err != nil {
 		return t, err
@@ -67,7 +67,7 @@ func NewAddressTypedFromJSONValue(m map[string]interface{}) (AddressTyped, error
 	if err != nil {
 		return t, err
 	}
-	t.ZIP = SimpleText(valZIP)
+	t.ZIP = valZIP
 	return t, nil
 }
 

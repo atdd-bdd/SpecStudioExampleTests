@@ -18,4 +18,12 @@ public struct ShippingString: CustomStringConvertible, Equatable {
     public var description: String {
         return "Total Price=\(totalPrice), Shipping Cost=\(shippingCost), Notes=\(notes)"
     }
+
+    public static let dncString = "?DNC?"
+
+    public static func == (a: ShippingString, b: ShippingString) -> Bool {
+        return (a.totalPrice == dncString || b.totalPrice == dncString || a.totalPrice == b.totalPrice)
+            && (a.shippingCost == dncString || b.shippingCost == dncString || a.shippingCost == b.shippingCost)
+            && (a.notes == dncString || b.notes == dncString || a.notes == b.notes)
+    }
 }

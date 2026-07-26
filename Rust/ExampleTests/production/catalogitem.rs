@@ -1,4 +1,6 @@
-#[derive(Debug, Clone)]
+use super::*;
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct CatalogItem {
     pub name: SimpleText,
     pub price: Dollar,

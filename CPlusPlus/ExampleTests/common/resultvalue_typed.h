@@ -45,4 +45,9 @@ struct ResultValueTyped {
             result.push_back(from_json_value(e));
         return result;
     }
+
+    bool operator==(const ResultValueTyped& o) const {
+        return sum == o.sum;
+    }
+    bool operator!=(const ResultValueTyped& o) const { return !(*this == o); }
 };

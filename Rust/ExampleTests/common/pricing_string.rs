@@ -21,3 +21,9 @@ impl std::fmt::Display for PricingString {
         )
     }
 }
+
+impl PartialEq for PricingString {
+    fn eq(&self, other: &Self) -> bool {
+        crate::common::dnc_equal(&self.totalprice, &other.totalprice)
+    }
+}

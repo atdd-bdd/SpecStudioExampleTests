@@ -8,7 +8,7 @@ export class PricingTyped {
 
   static fromStringObj(s) {
     return new PricingTyped(
-      new Dollar(s.totalPrice)
+      s.totalPrice
     );
   }
 
@@ -35,5 +35,14 @@ export class PricingTyped {
   static fromJSONList(text) {
     const raw = _json.asArray(_json.parse(text), "PricingTyped");
     return raw.map((e) => PricingTyped.fromJsonValue(e));
+  }
+
+  toString() {
+    return `TotalPrice=${this.totalPrice}`;
+  }
+
+  equals(other) {
+    if (!(other instanceof PricingTyped)) return false;
+    return this.totalPrice === other.totalPrice;
   }
 }

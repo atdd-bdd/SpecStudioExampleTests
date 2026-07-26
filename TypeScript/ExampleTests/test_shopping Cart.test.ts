@@ -15,7 +15,7 @@ describe("Shopping Cart", () => {
     ];
     glue.givenItemCollectionIs(objectList2);
     const objectList3 = [
-      new OrderItemString("Widget", "2", "", ""),
+      new OrderItemString("Widget", "2", "1", "1"),
     ];
     glue.whenItemAdded(objectList3);
     const objectList4 = [
@@ -23,7 +23,7 @@ describe("Shopping Cart", () => {
     ];
     glue.thenItemCollectionIs(objectList4);
     const objectList5 = [
-      new OrderItemString("WhatCallIt", "3", "", ""),
+      new OrderItemString("WhatCallIt", "3", "1", "1"),
     ];
     glue.whenItemAdded(objectList5);
     const objectList6 = [
@@ -42,7 +42,7 @@ describe("Shopping Cart", () => {
     ];
     glue.givenCatalogHas(objectList7);
     const objectList8 = [
-      new ShoppingCartString("=EmptyCart", "", "", "", "=AShippingAddress", "=ABillingAddress"),
+      new ShoppingCartString("=EmptyCart", "$0", "$0", "$0", new AddressString("2 Apple Lane", "Somewhere", "NC", "27706"), new AddressString("1 Apple Lane", "Somewhere", "NC", "27705")),
     ];
     glue.givenShoppingCart(objectList8);
   });
@@ -56,19 +56,19 @@ describe("Shopping Cart", () => {
     ];
     glue.givenCatalogHas(objectList9);
     const objectList10 = [
-      new ShoppingCartString("=EmptyCart", "$0", "$0", "$0", "", ""),
+      new ShoppingCartString("=EmptyCart", "$0", "$0", "$0", new AddressString("", "", "", ""), new AddressString("", "", "", "")),
     ];
     glue.givenShoppingCart(objectList10);
     const objectList11 = [
-      new OrderItemString("Widget", "2", "", ""),
+      new OrderItemString("Widget", "2", "1", "1"),
     ];
     glue.whenItemAdded(objectList11);
     const objectList12 = [
-      new OrderItemString("WhatCallIt", "3", "", ""),
+      new OrderItemString("WhatCallIt", "3", "1", "1"),
     ];
     glue.whenItemAdded(objectList12);
     const objectList13 = [
-      new ShoppingCartString("=TwoItemCart", "$0", "$0", "$80", "", ""),
+      new ShoppingCartString("=TwoItemCart", "$5", "$4", "$81", new AddressString("", "", "", ""), new AddressString("", "", "", "")),
     ];
     glue.thenShoppingCartIs(objectList13);
   });

@@ -3,12 +3,12 @@ import XCTest
 public class ShoppingCartGlue {
     public init() {}
 
-    public func givenCatalogHas(_ values: [CatalogString]) {
+    public func givenCatalogHas(_ values: [CatalogItemString]) {
         for value in values { print(value) }
         XCTFail("Not implemented: givenCatalogHas")
     }
 
-    public func givenItemCollectionIs(_ values: [OrderItemCollectionString]) {
+    public func givenItemCollectionIs(_ values: [OrderItemString]) {
         for value in values { print(value) }
         XCTFail("Not implemented: givenItemCollectionIs")
     }
@@ -18,7 +18,7 @@ public class ShoppingCartGlue {
         XCTFail("Not implemented: whenItemAdded")
     }
 
-    public func thenItemCollectionIs(_ values: [OrderItemCollectionString]) {
+    public func thenItemCollectionIs(_ values: [OrderItemString]) {
         for value in values { print(value) }
         XCTFail("Not implemented: thenItemCollectionIs")
     }
@@ -33,7 +33,7 @@ public class ShoppingCartGlue {
         XCTFail("Not implemented: thenShoppingCartIs")
     }
 
-    public func givenItemCollection(_ values: [OrderItemCollectionString]) {
+    public func givenItemCollection(_ values: [OrderItemString]) {
         for value in values { print(value) }
         XCTFail("Not implemented: givenItemCollection")
     }
@@ -60,30 +60,5 @@ public class ShoppingCartGlue {
     public func examplesDataTypePercentage(_ values: [ValidValuesString]) {
         for value in values { print(value) }
         XCTFail("Not implemented: examplesDataTypePercentage")
-    }
-
-    public func examplesCalculationAddTwoNumbers(_ values: [AdderString]) {
-        for value in values { print(value) }
-        XCTFail("Not implemented: examplesCalculationAddTwoNumbers")
-    }
-
-    public func examplesCalculationConvertFToC(_ values: [FandCString]) {
-        for value in values { print(value) }
-        XCTFail("Not implemented: examplesCalculationConvertFToC")
-    }
-
-    public func examplesDataTypeIDForm(_ values: [ValidValuesString]) {
-        for value in values { print(value) }
-        XCTFail("Not implemented: examplesDataTypeIDForm")
-    }
-
-    public func examplesDataTypeDollar(_ values: [ValidValuesString]) {
-        for value in values { print(value) }
-        XCTFail("Not implemented: examplesDataTypeDollar")
-    }
-
-    public func examplesDataTypeSimpleText(_ values: [ValidValuesString]) {
-        for value in values { print(value) }
-        XCTFail("Not implemented: examplesDataTypeSimpleText")
     }
 }

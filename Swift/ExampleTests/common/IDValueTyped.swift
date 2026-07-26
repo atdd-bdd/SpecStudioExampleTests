@@ -1,20 +1,20 @@
-public struct IDValueTyped {
-    public let iD: IDForm
+public struct IDValueTyped: Equatable, CustomStringConvertible {
+    public let iD: String
     public let value: Int
 
-    public init(iD: IDForm, value: Int) {
+    public init(iD: String, value: Int) {
         self.iD = iD
         self.value = value
     }
 
     public init(from s: IDValueString) {
-        self.iD = IDForm(s.iD)
+        self.iD = s.iD
         self.value = Int(s.value) ?? 0
     }
 
     public func toJSONValue() -> [String: Any] {
         return [
-            "iD": String(describing: iD),
+            "iD": iD,
             "value": value,
         ]
     }
@@ -24,7 +24,7 @@ public struct IDValueTyped {
     }
 
     public init(fromJSONValue m: [String: Any]) throws {
-        self.iD = IDForm(try Json.asString(Json.require(m, "iD"), "iD"))
+        self.iD = try Json.asString(Json.require(m, "iD"), "iD")
         self.value = try Json.asInt(Json.require(m, "value"), "value")
     }
 
@@ -40,5 +40,9 @@ public struct IDValueTyped {
         return try Json.parseArray(text).map {
             try IDValueTyped(fromJSONValue: Json.asObject($0, "IDValueTyped"))
         }
+    }
+
+    public var description: String {
+        return "ID=\(iD), Value=\(value)"
     }
 }

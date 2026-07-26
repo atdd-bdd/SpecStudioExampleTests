@@ -18,4 +18,12 @@ public struct AdderString: CustomStringConvertible, Equatable {
     public var description: String {
         return "number1=\(number1), number2=\(number2), result=\(result)"
     }
+
+    public static let dncString = "?DNC?"
+
+    public static func == (a: AdderString, b: AdderString) -> Bool {
+        return (a.number1 == dncString || b.number1 == dncString || a.number1 == b.number1)
+            && (a.number2 == dncString || b.number2 == dncString || a.number2 == b.number2)
+            && (a.result == dncString || b.result == dncString || a.result == b.result)
+    }
 }

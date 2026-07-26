@@ -1,3 +1,6 @@
+DNC_STRING = '?DNC?'
+
+
 class OrderItemString:
     def __init__(self, name: str = '', quantity: str = '', price: str = '', item_total: str = ''):
         self.name = name
@@ -20,3 +23,18 @@ class OrderItemString:
                 f'Quantity={self.quantity}' + ', ' +
                 f'Price={self.price}' + ', ' +
                 f'ItemTotal={self.item_total}')
+
+    def _key(self):
+        return (self.name, self.quantity, self.price, self.item_total)
+
+    def __eq__(self, other):
+        if not isinstance(other, OrderItemString):
+            return NotImplemented
+        return all(a == b or a == DNC_STRING or b == DNC_STRING
+                   for a, b in zip(self._key(), other._key()))
+
+    def __hash__(self):
+        return hash(self._key())
+
+    def __repr__(self):
+        return f'OrderItemString({self})'

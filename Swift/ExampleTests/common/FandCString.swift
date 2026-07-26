@@ -18,4 +18,12 @@ public struct FandCString: CustomStringConvertible, Equatable {
     public var description: String {
         return "F=\(f), C=\(c), Notes=\(notes)"
     }
+
+    public static let dncString = "?DNC?"
+
+    public static func == (a: FandCString, b: FandCString) -> Bool {
+        return (a.f == dncString || b.f == dncString || a.f == b.f)
+            && (a.c == dncString || b.c == dncString || a.c == b.c)
+            && (a.notes == dncString || b.notes == dncString || a.notes == b.notes)
+    }
 }

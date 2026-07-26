@@ -1,24 +1,24 @@
-public struct ShippingTyped {
-    public let totalPrice: Dollar
-    public let shippingCost: Dollar
+public struct ShippingTyped: Equatable, CustomStringConvertible {
+    public let totalPrice: String
+    public let shippingCost: String
     public let notes: String
 
-    public init(totalPrice: Dollar, shippingCost: Dollar, notes: String) {
+    public init(totalPrice: String, shippingCost: String, notes: String) {
         self.totalPrice = totalPrice
         self.shippingCost = shippingCost
         self.notes = notes
     }
 
     public init(from s: ShippingString) {
-        self.totalPrice = Dollar(s.totalPrice)
-        self.shippingCost = Dollar(s.shippingCost)
+        self.totalPrice = s.totalPrice
+        self.shippingCost = s.shippingCost
         self.notes = s.notes
     }
 
     public func toJSONValue() -> [String: Any] {
         return [
-            "totalPrice": String(describing: totalPrice),
-            "shippingCost": String(describing: shippingCost),
+            "totalPrice": totalPrice,
+            "shippingCost": shippingCost,
             "notes": notes,
         ]
     }
@@ -28,8 +28,8 @@ public struct ShippingTyped {
     }
 
     public init(fromJSONValue m: [String: Any]) throws {
-        self.totalPrice = Dollar(try Json.asString(Json.require(m, "totalPrice"), "totalPrice"))
-        self.shippingCost = Dollar(try Json.asString(Json.require(m, "shippingCost"), "shippingCost"))
+        self.totalPrice = try Json.asString(Json.require(m, "totalPrice"), "totalPrice")
+        self.shippingCost = try Json.asString(Json.require(m, "shippingCost"), "shippingCost")
         self.notes = try Json.asString(Json.require(m, "notes"), "notes")
     }
 
@@ -45,5 +45,9 @@ public struct ShippingTyped {
         return try Json.parseArray(text).map {
             try ShippingTyped(fromJSONValue: Json.asObject($0, "ShippingTyped"))
         }
+    }
+
+    public var description: String {
+        return "Total Price=\(totalPrice), Shipping Cost=\(shippingCost), Notes=\(notes)"
     }
 }

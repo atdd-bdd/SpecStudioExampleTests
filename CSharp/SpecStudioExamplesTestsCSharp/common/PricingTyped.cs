@@ -63,5 +63,23 @@ using production;
             foreach (var e in root.EnumerateArray()) result.Add(FromJsonElement(e));
             return result;
         }
+
+        public override string ToString()
+        {
+            return $"TotalPrice={totalPrice}";
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not PricingTyped other) return false;
+            return object.Equals(this.totalPrice, other.totalPrice);
+        }
+
+        public override int GetHashCode()
+        {
+            var h = new System.HashCode();
+            h.Add(this.totalPrice);
+            return h.ToHashCode();
+        }
     }
 }

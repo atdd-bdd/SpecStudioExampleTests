@@ -24,3 +24,10 @@ impl std::fmt::Display for CatalogItemString {
         )
     }
 }
+
+impl PartialEq for CatalogItemString {
+    fn eq(&self, other: &Self) -> bool {
+        crate::common::dnc_equal(&self.name, &other.name)
+            && crate::common::dnc_equal(&self.price, &other.price)
+    }
+}

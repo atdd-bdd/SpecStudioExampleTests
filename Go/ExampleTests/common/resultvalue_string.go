@@ -15,3 +15,15 @@ func NewResultValueStringFromSlice(v []string) ResultValueString {
 func (s ResultValueString) String() string {
 	return fmt.Sprintf("Sum=%s", s.Sum)
 }
+
+func (s ResultValueString) Equals(o ResultValueString) bool {
+	return DNCEqual(s.Sum, o.Sum)
+}
+
+func EqualResultValueStringSlices(a, b []ResultValueString) bool {
+	if len(a) != len(b) { return false }
+	for i := range a {
+		if !a[i].Equals(b[i]) { return false }
+	}
+	return true
+}

@@ -1,13 +1,16 @@
+import { AddressString } from "./AddressString.js";
 
 export class ShoppingCartString {
+  static readonly DNC_STRING = "?DNC?";
+
   items: string;
   shipping: string;
   discount: string;
   totalPrice: string;
-  shippingAddress: string;
-  billingAddress: string;
+  shippingAddress: AddressString;
+  billingAddress: AddressString;
 
-  constructor(items: string = "", shipping: string = "", discount: string = "", totalPrice: string = "", shippingAddress: string = "", billingAddress: string = "") {
+  constructor(items: string = "", shipping: string = "", discount: string = "", totalPrice: string = "", shippingAddress: AddressString = new AddressString(), billingAddress: AddressString = new AddressString()) {
     this.items = items;
     this.shipping = shipping;
     this.discount = discount;
@@ -18,17 +21,29 @@ export class ShoppingCartString {
 
   static fromList(values: Iterable<string>): ShoppingCartString {
     const v = Array.from(values);
-    return new ShoppingCartString(
-      v[0] ?? "",
-      v[1] ?? "",
-      v[2] ?? "",
-      v[3] ?? "",
-      v[4] ?? "",
-      v[5] ?? ""
-    );
+    const r = new ShoppingCartString();
+    r.items = v[0] ?? "";
+    r.shipping = v[1] ?? "";
+    r.discount = v[2] ?? "";
+    r.totalPrice = v[3] ?? "";
+    return r;
   }
 
   toString(): string {
     return `Items=${this.items}, Shipping=${this.shipping}, Discount=${this.discount}, TotalPrice=${this.totalPrice}, ShippingAddress=${this.shippingAddress}, BillingAddress=${this.billingAddress}`;
+  }
+
+  equals(other: ShoppingCartString): boolean {
+    return (this.items === ShoppingCartString.DNC_STRING || other.items === ShoppingCartString.DNC_STRING || this.items === other.items)
+      && (this.shipping === ShoppingCartString.DNC_STRING || other.shipping === ShoppingCartString.DNC_STRING || this.shipping === other.shipping)
+      && (this.discount === ShoppingCartString.DNC_STRING || other.discount === ShoppingCartString.DNC_STRING || this.discount === other.discount)
+      && (this.totalPrice === ShoppingCartString.DNC_STRING || other.totalPrice === ShoppingCartString.DNC_STRING || this.totalPrice === other.totalPrice)
+      && this.shippingAddress.equals(other.shippingAddress)
+      && this.billingAddress.equals(other.billingAddress);
+  }
+
+  static equalLists(a: ShoppingCartString[], b: ShoppingCartString[]): boolean {
+    if (a.length !== b.length) return false;
+    return a.every((row, i) => row.equals(b[i]!));
   }
 }

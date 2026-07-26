@@ -8,7 +8,7 @@ export class FilterValueTyped {
 
   static fromStringObj(s) {
     return new FilterValueTyped(
-      new IDForm(s.value)
+      s.value
     );
   }
 
@@ -35,5 +35,14 @@ export class FilterValueTyped {
   static fromJSONList(text) {
     const raw = _json.asArray(_json.parse(text), "FilterValueTyped");
     return raw.map((e) => FilterValueTyped.fromJsonValue(e));
+  }
+
+  toString() {
+    return `Value=${this.value}`;
+  }
+
+  equals(other) {
+    if (!(other instanceof FilterValueTyped)) return false;
+    return this.value === other.value;
   }
 }

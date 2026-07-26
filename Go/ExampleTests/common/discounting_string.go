@@ -19,3 +19,17 @@ func NewDiscountingStringFromSlice(v []string) DiscountingString {
 func (s DiscountingString) String() string {
 	return fmt.Sprintf("Total Price=%s, Discount=%s, Notes=%s", s.TotalPrice, s.Discount, s.Notes)
 }
+
+func (s DiscountingString) Equals(o DiscountingString) bool {
+	return DNCEqual(s.TotalPrice, o.TotalPrice) &&
+		DNCEqual(s.Discount, o.Discount) &&
+		DNCEqual(s.Notes, o.Notes)
+}
+
+func EqualDiscountingStringSlices(a, b []DiscountingString) bool {
+	if len(a) != len(b) { return false }
+	for i := range a {
+		if !a[i].Equals(b[i]) { return false }
+	}
+	return true
+}

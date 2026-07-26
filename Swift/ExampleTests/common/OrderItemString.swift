@@ -21,4 +21,13 @@ public struct OrderItemString: CustomStringConvertible, Equatable {
     public var description: String {
         return "Name=\(name), Quantity=\(quantity), Price=\(price), ItemTotal=\(itemTotal)"
     }
+
+    public static let dncString = "?DNC?"
+
+    public static func == (a: OrderItemString, b: OrderItemString) -> Bool {
+        return (a.name == dncString || b.name == dncString || a.name == b.name)
+            && (a.quantity == dncString || b.quantity == dncString || a.quantity == b.quantity)
+            && (a.price == dncString || b.price == dncString || a.price == b.price)
+            && (a.itemTotal == dncString || b.itemTotal == dncString || a.itemTotal == b.itemTotal)
+    }
 }

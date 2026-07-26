@@ -1,4 +1,4 @@
-public struct FandCTyped {
+public struct FandCTyped: Equatable, CustomStringConvertible {
     public let f: Int
     public let c: Int
     public let notes: String
@@ -45,5 +45,9 @@ public struct FandCTyped {
         return try Json.parseArray(text).map {
             try FandCTyped(fromJSONValue: Json.asObject($0, "FandCTyped"))
         }
+    }
+
+    public var description: String {
+        return "F=\(f), C=\(c), Notes=\(notes)"
     }
 }

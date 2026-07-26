@@ -5,17 +5,17 @@
 #include "pricing_string.h"
 
 struct PricingTyped {
-    Dollar totalprice;
+    std::string totalprice;
 
     static PricingTyped from_string_struct(const PricingString& s) {
         PricingTyped t;
-        t.totalprice = Dollar(s.totalprice);
+        t.totalprice = s.totalprice;
         return t;
     }
 
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("totalprice", json::Convert<Dollar>::to_json(totalprice));
+        m.emplace_back("totalprice", json::Convert<std::string>::to_json(totalprice));
         return json::Value::make_object(std::move(m));
     }
 
@@ -23,7 +23,7 @@ struct PricingTyped {
 
     static PricingTyped from_json_value(const json::Value& v) {
         PricingTyped t;
-        t.totalprice = json::Convert<Dollar>::from_json(json::require(v, "totalprice"), "totalprice");
+        t.totalprice = json::Convert<std::string>::from_json(json::require(v, "totalprice"), "totalprice");
         return t;
     }
 
@@ -45,4 +45,9 @@ struct PricingTyped {
             result.push_back(from_json_value(e));
         return result;
     }
+
+    bool operator==(const PricingTyped& o) const {
+        return totalprice == o.totalprice;
+    }
+    bool operator!=(const PricingTyped& o) const { return !(*this == o); }
 };

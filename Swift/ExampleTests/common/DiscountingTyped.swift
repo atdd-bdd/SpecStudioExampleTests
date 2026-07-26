@@ -1,24 +1,24 @@
-public struct DiscountingTyped {
-    public let totalPrice: Dollar
-    public let discount: Percentage
+public struct DiscountingTyped: Equatable, CustomStringConvertible {
+    public let totalPrice: String
+    public let discount: String
     public let notes: String
 
-    public init(totalPrice: Dollar, discount: Percentage, notes: String) {
+    public init(totalPrice: String, discount: String, notes: String) {
         self.totalPrice = totalPrice
         self.discount = discount
         self.notes = notes
     }
 
     public init(from s: DiscountingString) {
-        self.totalPrice = Dollar(s.totalPrice)
-        self.discount = Percentage(s.discount)
+        self.totalPrice = s.totalPrice
+        self.discount = s.discount
         self.notes = s.notes
     }
 
     public func toJSONValue() -> [String: Any] {
         return [
-            "totalPrice": String(describing: totalPrice),
-            "discount": String(describing: discount),
+            "totalPrice": totalPrice,
+            "discount": discount,
             "notes": notes,
         ]
     }
@@ -28,8 +28,8 @@ public struct DiscountingTyped {
     }
 
     public init(fromJSONValue m: [String: Any]) throws {
-        self.totalPrice = Dollar(try Json.asString(Json.require(m, "totalPrice"), "totalPrice"))
-        self.discount = Percentage(try Json.asString(Json.require(m, "discount"), "discount"))
+        self.totalPrice = try Json.asString(Json.require(m, "totalPrice"), "totalPrice")
+        self.discount = try Json.asString(Json.require(m, "discount"), "discount")
         self.notes = try Json.asString(Json.require(m, "notes"), "notes")
     }
 
@@ -45,5 +45,9 @@ public struct DiscountingTyped {
         return try Json.parseArray(text).map {
             try DiscountingTyped(fromJSONValue: Json.asObject($0, "DiscountingTyped"))
         }
+    }
+
+    public var description: String {
+        return "Total Price=\(totalPrice), Discount=\(discount), Notes=\(notes)"
     }
 }

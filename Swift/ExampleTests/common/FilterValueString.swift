@@ -12,4 +12,10 @@ public struct FilterValueString: CustomStringConvertible, Equatable {
     public var description: String {
         return "Value=\(value)"
     }
+
+    public static let dncString = "?DNC?"
+
+    public static func == (a: FilterValueString, b: FilterValueString) -> Bool {
+        return (a.value == dncString || b.value == dncString || a.value == b.value)
+    }
 }

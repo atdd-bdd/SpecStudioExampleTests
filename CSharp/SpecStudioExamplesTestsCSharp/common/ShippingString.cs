@@ -28,5 +28,24 @@ using production;
         {
             return $"Total Price={totalPrice}, Shipping Cost={shippingCost}, Notes={notes}";
         }
+
+        const string DNCString = "?DNC?";
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not ShippingString other) return false;
+            return (DNCString == this.totalPrice || DNCString == other.totalPrice || object.Equals(this.totalPrice, other.totalPrice))
+                && (DNCString == this.shippingCost || DNCString == other.shippingCost || object.Equals(this.shippingCost, other.shippingCost))
+                && (DNCString == this.notes || DNCString == other.notes || object.Equals(this.notes, other.notes));
+        }
+
+        public override int GetHashCode()
+        {
+            var h = new System.HashCode();
+            h.Add(this.totalPrice);
+            h.Add(this.shippingCost);
+            h.Add(this.notes);
+            return h.ToHashCode();
+        }
     }
 }

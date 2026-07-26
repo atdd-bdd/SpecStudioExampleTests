@@ -2,6 +2,8 @@ package spectable.common;
 
 import java.util.Objects;
 import production.*;
+import records.*;
+import calculator.*;
 
 public class CatalogItemString {
     private static final String DNCString = "?DNC?";

@@ -5,17 +5,17 @@
 #include "filtervalue_string.h"
 
 struct FilterValueTyped {
-    IDForm value;
+    std::string value;
 
     static FilterValueTyped from_string_struct(const FilterValueString& s) {
         FilterValueTyped t;
-        t.value = IDForm(s.value);
+        t.value = s.value;
         return t;
     }
 
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("value", json::Convert<IDForm>::to_json(value));
+        m.emplace_back("value", json::Convert<std::string>::to_json(value));
         return json::Value::make_object(std::move(m));
     }
 
@@ -23,7 +23,7 @@ struct FilterValueTyped {
 
     static FilterValueTyped from_json_value(const json::Value& v) {
         FilterValueTyped t;
-        t.value = json::Convert<IDForm>::from_json(json::require(v, "value"), "value");
+        t.value = json::Convert<std::string>::from_json(json::require(v, "value"), "value");
         return t;
     }
 
@@ -45,4 +45,9 @@ struct FilterValueTyped {
             result.push_back(from_json_value(e));
         return result;
     }
+
+    bool operator==(const FilterValueTyped& o) const {
+        return value == o.value;
+    }
+    bool operator!=(const FilterValueTyped& o) const { return !(*this == o); }
 };

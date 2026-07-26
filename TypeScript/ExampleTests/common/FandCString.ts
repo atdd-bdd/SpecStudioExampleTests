@@ -1,5 +1,7 @@
 
 export class FandCString {
+  static readonly DNC_STRING = "?DNC?";
+
   f: string;
   c: string;
   notes: string;
@@ -12,14 +14,25 @@ export class FandCString {
 
   static fromList(values: Iterable<string>): FandCString {
     const v = Array.from(values);
-    return new FandCString(
-      v[0] ?? "",
-      v[1] ?? "",
-      v[2] ?? ""
-    );
+    const r = new FandCString();
+    r.f = v[0] ?? "";
+    r.c = v[1] ?? "";
+    r.notes = v[2] ?? "";
+    return r;
   }
 
   toString(): string {
     return `F=${this.f}, C=${this.c}, Notes=${this.notes}`;
+  }
+
+  equals(other: FandCString): boolean {
+    return (this.f === FandCString.DNC_STRING || other.f === FandCString.DNC_STRING || this.f === other.f)
+      && (this.c === FandCString.DNC_STRING || other.c === FandCString.DNC_STRING || this.c === other.c)
+      && (this.notes === FandCString.DNC_STRING || other.notes === FandCString.DNC_STRING || this.notes === other.notes);
+  }
+
+  static equalLists(a: FandCString[], b: FandCString[]): boolean {
+    if (a.length !== b.length) return false;
+    return a.every((row, i) => row.equals(b[i]!));
   }
 }

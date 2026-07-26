@@ -1,7 +1,9 @@
+use super::*;
+
 pub const CATALOG_MINIMUM: usize = 0;
 pub const CATALOG_MAXIMUM: usize = 10000000;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct Catalog {
     items: Vec<CatalogItem>,
 }

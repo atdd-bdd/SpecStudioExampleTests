@@ -45,3 +45,22 @@ class AdderTyped:
     def from_json_list(cls, text: str) -> list:
         raw = _json.as_list(_json.loads(text), 'AdderTyped')
         return [cls.from_json_value(e) for e in raw]
+
+    def __str__(self):
+        return (f'number1={self.number1}' + ', ' +
+                f'number2={self.number2}' + ', ' +
+                f'result={self.result}')
+
+    def _key(self):
+        return (self.number1, self.number2, self.result)
+
+    def __eq__(self, other):
+        if not isinstance(other, AdderTyped):
+            return NotImplemented
+        return self._key() == other._key()
+
+    def __hash__(self):
+        return hash(self._key())
+
+    def __repr__(self):
+        return f'AdderTyped({self})'

@@ -19,3 +19,17 @@ func NewValidValuesStringFromSlice(v []string) ValidValuesString {
 func (s ValidValuesString) String() string {
 	return fmt.Sprintf("Value=%s, IsValid=%s, Notes=%s", s.Value, s.IsValid, s.Notes)
 }
+
+func (s ValidValuesString) Equals(o ValidValuesString) bool {
+	return DNCEqual(s.Value, o.Value) &&
+		DNCEqual(s.IsValid, o.IsValid) &&
+		DNCEqual(s.Notes, o.Notes)
+}
+
+func EqualValidValuesStringSlices(a, b []ValidValuesString) bool {
+	if len(a) != len(b) { return false }
+	for i := range a {
+		if !a[i].Equals(b[i]) { return false }
+	}
+	return true
+}

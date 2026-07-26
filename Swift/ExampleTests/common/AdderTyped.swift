@@ -1,4 +1,4 @@
-public struct AdderTyped {
+public struct AdderTyped: Equatable, CustomStringConvertible {
     public let number1: Int
     public let number2: Int
     public let result: Int
@@ -45,5 +45,9 @@ public struct AdderTyped {
         return try Json.parseArray(text).map {
             try AdderTyped(fromJSONValue: Json.asObject($0, "AdderTyped"))
         }
+    }
+
+    public var description: String {
+        return "number1=\(number1), number2=\(number2), result=\(result)"
     }
 }

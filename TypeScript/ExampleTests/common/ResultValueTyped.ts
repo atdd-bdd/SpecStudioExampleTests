@@ -40,4 +40,12 @@ export class ResultValueTyped {
     const raw = _json.asArray(_json.parse(text), "ResultValueTyped") ?? [];
     return raw.map((e) => ResultValueTyped.fromJsonValue(e));
   }
+
+  toString(): string {
+    return `Sum=${this.sum}`;
+  }
+
+  equals(other: ResultValueTyped): boolean {
+    return this.sum === other.sum;
+  }
 }

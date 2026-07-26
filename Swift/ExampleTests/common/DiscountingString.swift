@@ -18,4 +18,12 @@ public struct DiscountingString: CustomStringConvertible, Equatable {
     public var description: String {
         return "Total Price=\(totalPrice), Discount=\(discount), Notes=\(notes)"
     }
+
+    public static let dncString = "?DNC?"
+
+    public static func == (a: DiscountingString, b: DiscountingString) -> Bool {
+        return (a.totalPrice == dncString || b.totalPrice == dncString || a.totalPrice == b.totalPrice)
+            && (a.discount == dncString || b.discount == dncString || a.discount == b.discount)
+            && (a.notes == dncString || b.notes == dncString || a.notes == b.notes)
+    }
 }

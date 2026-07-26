@@ -44,4 +44,15 @@ export class AdderTyped {
     const raw = _json.asArray(_json.parse(text), "AdderTyped");
     return raw.map((e) => AdderTyped.fromJsonValue(e));
   }
+
+  toString() {
+    return `number1=${this.number1}, number2=${this.number2}, result=${this.result}`;
+  }
+
+  equals(other) {
+    if (!(other instanceof AdderTyped)) return false;
+    return this.number1 === other.number1
+      && this.number2 === other.number2
+      && this.result === other.result;
+  }
 }

@@ -23,7 +23,7 @@ public void Test_Scenario_Add_items(){
          shopping_Cart_glue_object.Given_item_collection_is(objectList2);
 
          List<OrderItemString> objectList3 = new List<OrderItemString>{
-             new OrderItemString("Widget","2","",""),
+             new OrderItemString("Widget","2","1","1"),
          };
          shopping_Cart_glue_object.When_item_added(objectList3);
 
@@ -33,7 +33,7 @@ public void Test_Scenario_Add_items(){
          shopping_Cart_glue_object.Then_item_collection_is(objectList4);
 
          List<OrderItemString> objectList5 = new List<OrderItemString>{
-             new OrderItemString("WhatCallIt","3","",""),
+             new OrderItemString("WhatCallIt","3","1","1"),
          };
          shopping_Cart_glue_object.When_item_added(objectList5);
 
@@ -57,7 +57,7 @@ public void Test_Scenario_A_ShoppingCart_with_Addresses(){
          shopping_Cart_glue_object.Given_catalog_has(objectList7);
 
          List<ShoppingCartString> objectList8 = new List<ShoppingCartString>{
-             new ShoppingCartString("=EmptyCart","","","","=AShippingAddress","=ABillingAddress"),
+             new ShoppingCartString("=EmptyCart","$0","$0","$0",new AddressString("2 Apple Lane", "Somewhere", "NC", "27706"),new AddressString("1 Apple Lane", "Somewhere", "NC", "27705")),
          };
          shopping_Cart_glue_object.Given_shopping_cart(objectList8);
 
@@ -75,22 +75,22 @@ public void Test_Scenario_Add_items_to_Shopping_Cart(){
          shopping_Cart_glue_object.Given_catalog_has(objectList9);
 
          List<ShoppingCartString> objectList10 = new List<ShoppingCartString>{
-             new ShoppingCartString("=EmptyCart","$0","$0","$0","",""),
+             new ShoppingCartString("=EmptyCart","$0","$0","$0",new AddressString("", "", "", ""),new AddressString("", "", "", "")),
          };
          shopping_Cart_glue_object.Given_shopping_cart(objectList10);
 
          List<OrderItemString> objectList11 = new List<OrderItemString>{
-             new OrderItemString("Widget","2","",""),
+             new OrderItemString("Widget","2","1","1"),
          };
          shopping_Cart_glue_object.When_item_added(objectList11);
 
          List<OrderItemString> objectList12 = new List<OrderItemString>{
-             new OrderItemString("WhatCallIt","3","",""),
+             new OrderItemString("WhatCallIt","3","1","1"),
          };
          shopping_Cart_glue_object.When_item_added(objectList12);
 
          List<ShoppingCartString> objectList13 = new List<ShoppingCartString>{
-             new ShoppingCartString("=TwoItemCart","$0","$0","$80","",""),
+             new ShoppingCartString("=TwoItemCart","$5","$4","$81",new AddressString("", "", "", ""),new AddressString("", "", "", "")),
          };
          shopping_Cart_glue_object.Then_shopping_cart_is(objectList13);
 

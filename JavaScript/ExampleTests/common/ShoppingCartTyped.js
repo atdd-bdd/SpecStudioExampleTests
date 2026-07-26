@@ -1,5 +1,6 @@
 import { ShoppingCartString } from "./ShoppingCartString.js";
 import * as _json from "./json.js";
+import { AddressTyped } from "./AddressTyped.js";
 
 export class ShoppingCartTyped {
   constructor(items = "", shipping = "", discount = "", totalPrice = "", shippingAddress = "", billingAddress = "") {
@@ -13,12 +14,12 @@ export class ShoppingCartTyped {
 
   static fromStringObj(s) {
     return new ShoppingCartTyped(
-      new OrderItemCollection(s.items),
-      new Dollar(s.shipping),
-      new Dollar(s.discount),
-      new Dollar(s.totalPrice),
-      new Address(s.shippingAddress),
-      new Address(s.billingAddress)
+      s.items,
+      s.shipping,
+      s.discount,
+      s.totalPrice,
+      AddressTyped.fromStringObj(s.shippingAddress),
+      AddressTyped.fromStringObj(s.billingAddress)
     );
   }
 
@@ -55,5 +56,19 @@ export class ShoppingCartTyped {
   static fromJSONList(text) {
     const raw = _json.asArray(_json.parse(text), "ShoppingCartTyped");
     return raw.map((e) => ShoppingCartTyped.fromJsonValue(e));
+  }
+
+  toString() {
+    return `Items=${this.items}, Shipping=${this.shipping}, Discount=${this.discount}, TotalPrice=${this.totalPrice}, ShippingAddress=${this.shippingAddress}, BillingAddress=${this.billingAddress}`;
+  }
+
+  equals(other) {
+    if (!(other instanceof ShoppingCartTyped)) return false;
+    return this.items === other.items
+      && this.shipping === other.shipping
+      && this.discount === other.discount
+      && this.totalPrice === other.totalPrice
+      && this.shippingAddress.equals(other.shippingAddress)
+      && this.billingAddress.equals(other.billingAddress);
   }
 }

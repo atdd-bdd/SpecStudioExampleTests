@@ -1,15 +1,15 @@
 package common
 
 type ShippingTyped struct {
-	TotalPrice Dollar
-	ShippingCost Dollar
+	TotalPrice string
+	ShippingCost string
 	Notes string
 }
 
 func NewShippingTypedFromString(s ShippingString) ShippingTyped {
 	t := ShippingTyped{}
-	t.TotalPrice = Dollar(s.TotalPrice)
-	t.ShippingCost = Dollar(s.ShippingCost)
+	t.TotalPrice = s.TotalPrice
+	t.ShippingCost = s.ShippingCost
 	t.Notes = s.Notes
 	return t
 }
@@ -17,8 +17,8 @@ func NewShippingTypedFromString(s ShippingString) ShippingTyped {
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t ShippingTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"total_price": string(t.TotalPrice),
-		"shipping_cost": string(t.ShippingCost),
+		"total_price": t.TotalPrice,
+		"shipping_cost": t.ShippingCost,
 		"notes": t.Notes,
 	}
 }
@@ -37,7 +37,7 @@ func NewShippingTypedFromJSONValue(m map[string]interface{}) (ShippingTyped, err
 	if err != nil {
 		return t, err
 	}
-	t.TotalPrice = Dollar(valTotalPrice)
+	t.TotalPrice = valTotalPrice
 	rawShippingCost, err := JSONRequire(m, "shipping_cost")
 	if err != nil {
 		return t, err
@@ -46,7 +46,7 @@ func NewShippingTypedFromJSONValue(m map[string]interface{}) (ShippingTyped, err
 	if err != nil {
 		return t, err
 	}
-	t.ShippingCost = Dollar(valShippingCost)
+	t.ShippingCost = valShippingCost
 	rawNotes, err := JSONRequire(m, "notes")
 	if err != nil {
 		return t, err

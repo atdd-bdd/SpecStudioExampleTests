@@ -19,3 +19,17 @@ func NewAdderStringFromSlice(v []string) AdderString {
 func (s AdderString) String() string {
 	return fmt.Sprintf("number1=%s, number2=%s, result=%s", s.Number1, s.Number2, s.Result)
 }
+
+func (s AdderString) Equals(o AdderString) bool {
+	return DNCEqual(s.Number1, o.Number1) &&
+		DNCEqual(s.Number2, o.Number2) &&
+		DNCEqual(s.Result, o.Result)
+}
+
+func EqualAdderStringSlices(a, b []AdderString) bool {
+	if len(a) != len(b) { return false }
+	for i := range a {
+		if !a[i].Equals(b[i]) { return false }
+	}
+	return true
+}

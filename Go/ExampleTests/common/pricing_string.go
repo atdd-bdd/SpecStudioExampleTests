@@ -15,3 +15,15 @@ func NewPricingStringFromSlice(v []string) PricingString {
 func (s PricingString) String() string {
 	return fmt.Sprintf("TotalPrice=%s", s.TotalPrice)
 }
+
+func (s PricingString) Equals(o PricingString) bool {
+	return DNCEqual(s.TotalPrice, o.TotalPrice)
+}
+
+func EqualPricingStringSlices(a, b []PricingString) bool {
+	if len(a) != len(b) { return false }
+	for i := range a {
+		if !a[i].Equals(b[i]) { return false }
+	}
+	return true
+}

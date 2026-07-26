@@ -1,4 +1,6 @@
-#[derive(Debug, Clone)]
+use super::*;
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct IDValue {
     pub id: IDForm,
     pub value: i32,

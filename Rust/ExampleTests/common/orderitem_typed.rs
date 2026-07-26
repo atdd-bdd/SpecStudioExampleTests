@@ -3,30 +3,30 @@
 use super::json;
 use super::orderitem_string::OrderItemString;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct OrderItemTyped {
-    pub name: SimpleText,
+    pub name: String,
     pub quantity: i32,
-    pub price: Dollar,
-    pub itemtotal: Dollar,
+    pub price: String,
+    pub itemtotal: String,
 }
 
 impl OrderItemTyped {
     pub fn from_str_struct(s: &OrderItemString) -> Self {
         Self {
-            name: SimpleText::from(s.name.clone()),
+            name: s.name.clone(),
             quantity: s.quantity.parse::<i32>().unwrap_or_default(),
-            price: Dollar::from(s.price.clone()),
-            itemtotal: Dollar::from(s.itemtotal.clone()),
+            price: s.price.clone(),
+            itemtotal: s.itemtotal.clone(),
         }
     }
 
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("name".to_string(), json::Value::Str(self.name.to_string())),
+            ("name".to_string(), json::Value::Str(self.name.clone())),
             ("quantity".to_string(), json::Value::number_from_i64(self.quantity as i64)),
-            ("price".to_string(), json::Value::Str(self.price.to_string())),
-            ("itemtotal".to_string(), json::Value::Str(self.itemtotal.to_string())),
+            ("price".to_string(), json::Value::Str(self.price.clone())),
+            ("itemtotal".to_string(), json::Value::Str(self.itemtotal.clone())),
         ])
     }
 
@@ -36,10 +36,10 @@ impl OrderItemTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            name: SimpleText::from(json::as_string(json::require(v, "name")?, "name")?),
+            name: json::as_string(json::require(v, "name")?, "name")?,
             quantity: json::as_i32(json::require(v, "quantity")?, "quantity")?,
-            price: Dollar::from(json::as_string(json::require(v, "price")?, "price")?),
-            itemtotal: Dollar::from(json::as_string(json::require(v, "itemtotal")?, "itemtotal")?),
+            price: json::as_string(json::require(v, "price")?, "price")?,
+            itemtotal: json::as_string(json::require(v, "itemtotal")?, "itemtotal")?,
         })
     }
 

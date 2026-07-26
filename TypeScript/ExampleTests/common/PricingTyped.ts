@@ -2,21 +2,21 @@ import { PricingString } from "./PricingString.js";
 import * as _json from "./json.js";
 
 export class PricingTyped {
-  totalPrice: Dollar;
+  totalPrice: string;
 
-  constructor(totalPrice: Dollar) {
+  constructor(totalPrice: string) {
     this.totalPrice = totalPrice;
   }
 
   static fromStringObj(s: PricingString): PricingTyped {
     return new PricingTyped(
-      new Dollar(s.totalPrice)
+      s.totalPrice
     );
   }
 
   toJsonValue(): Record<string, unknown> {
     return {
-      totalPrice: this.totalPrice == null ? null : String(this.totalPrice),
+      totalPrice: this.totalPrice,
     };
   }
 
@@ -24,7 +24,7 @@ export class PricingTyped {
 
   static fromJsonValue(m: unknown): PricingTyped {
     return new PricingTyped(
-      new Dollar(_json.asString(_json.requireField(m, "totalPrice"), "totalPrice"))
+      _json.asString(_json.requireField(m, "totalPrice"), "totalPrice")
     );
   }
 
@@ -39,5 +39,13 @@ export class PricingTyped {
   static fromJSONList(text: string): PricingTyped[] {
     const raw = _json.asArray(_json.parse(text), "PricingTyped") ?? [];
     return raw.map((e) => PricingTyped.fromJsonValue(e));
+  }
+
+  toString(): string {
+    return `TotalPrice=${this.totalPrice}`;
+  }
+
+  equals(other: PricingTyped): boolean {
+    return this.totalPrice === other.totalPrice;
   }
 }

@@ -1,5 +1,7 @@
 
 export class ResultValueString {
+  static DNC_STRING = "?DNC?";
+
   constructor(sum = "") {
     this.sum = sum;
   }
@@ -13,5 +15,15 @@ export class ResultValueString {
 
   toString() {
     return `Sum=${this.sum}`;
+  }
+
+  equals(other) {
+    if (!(other instanceof ResultValueString)) return false;
+    return (this.sum === ResultValueString.DNC_STRING || other.sum === ResultValueString.DNC_STRING || this.sum === other.sum);
+  }
+
+  static equalLists(a, b) {
+    if (a.length !== b.length) return false;
+    return a.every((row, i) => row.equals(b[i]));
   }
 }

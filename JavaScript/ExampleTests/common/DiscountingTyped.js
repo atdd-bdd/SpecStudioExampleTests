@@ -10,8 +10,8 @@ export class DiscountingTyped {
 
   static fromStringObj(s) {
     return new DiscountingTyped(
-      new Dollar(s.totalPrice),
-      new Percentage(s.discount),
+      s.totalPrice,
+      s.discount,
       s.notes
     );
   }
@@ -43,5 +43,16 @@ export class DiscountingTyped {
   static fromJSONList(text) {
     const raw = _json.asArray(_json.parse(text), "DiscountingTyped");
     return raw.map((e) => DiscountingTyped.fromJsonValue(e));
+  }
+
+  toString() {
+    return `Total Price=${this.totalPrice}, Discount=${this.discount}, Notes=${this.notes}`;
+  }
+
+  equals(other) {
+    if (!(other instanceof DiscountingTyped)) return false;
+    return this.totalPrice === other.totalPrice
+      && this.discount === other.discount
+      && this.notes === other.notes;
   }
 }

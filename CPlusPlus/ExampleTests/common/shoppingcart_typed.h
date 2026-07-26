@@ -3,34 +3,35 @@
 #include <vector>
 #include "json.h"
 #include "shoppingcart_string.h"
+#include "address_typed.h"
 
 struct ShoppingCartTyped {
-    OrderItemCollection items;
-    Dollar shipping;
-    Dollar discount;
-    Dollar totalprice;
-    Address shippingaddress;
-    Address billingaddress;
+    std::string items;
+    std::string shipping;
+    std::string discount;
+    std::string totalprice;
+    AddressTyped shippingaddress;
+    AddressTyped billingaddress;
 
     static ShoppingCartTyped from_string_struct(const ShoppingCartString& s) {
         ShoppingCartTyped t;
-        t.items = OrderItemCollection(s.items);
-        t.shipping = Dollar(s.shipping);
-        t.discount = Dollar(s.discount);
-        t.totalprice = Dollar(s.totalprice);
-        t.shippingaddress = Address(s.shippingaddress);
-        t.billingaddress = Address(s.billingaddress);
+        t.items = s.items;
+        t.shipping = s.shipping;
+        t.discount = s.discount;
+        t.totalprice = s.totalprice;
+        t.shippingaddress = AddressTyped::from_string_struct(s.shippingaddress);
+        t.billingaddress = AddressTyped::from_string_struct(s.billingaddress);
         return t;
     }
 
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("items", json::Convert<OrderItemCollection>::to_json(items));
-        m.emplace_back("shipping", json::Convert<Dollar>::to_json(shipping));
-        m.emplace_back("discount", json::Convert<Dollar>::to_json(discount));
-        m.emplace_back("totalprice", json::Convert<Dollar>::to_json(totalprice));
-        m.emplace_back("shippingaddress", json::Convert<Address>::to_json(shippingaddress));
-        m.emplace_back("billingaddress", json::Convert<Address>::to_json(billingaddress));
+        m.emplace_back("items", json::Convert<std::string>::to_json(items));
+        m.emplace_back("shipping", json::Convert<std::string>::to_json(shipping));
+        m.emplace_back("discount", json::Convert<std::string>::to_json(discount));
+        m.emplace_back("totalprice", json::Convert<std::string>::to_json(totalprice));
+        m.emplace_back("shippingaddress", shippingaddress.to_json_value());
+        m.emplace_back("billingaddress", billingaddress.to_json_value());
         return json::Value::make_object(std::move(m));
     }
 
@@ -38,12 +39,12 @@ struct ShoppingCartTyped {
 
     static ShoppingCartTyped from_json_value(const json::Value& v) {
         ShoppingCartTyped t;
-        t.items = json::Convert<OrderItemCollection>::from_json(json::require(v, "items"), "items");
-        t.shipping = json::Convert<Dollar>::from_json(json::require(v, "shipping"), "shipping");
-        t.discount = json::Convert<Dollar>::from_json(json::require(v, "discount"), "discount");
-        t.totalprice = json::Convert<Dollar>::from_json(json::require(v, "totalprice"), "totalprice");
-        t.shippingaddress = json::Convert<Address>::from_json(json::require(v, "shippingaddress"), "shippingaddress");
-        t.billingaddress = json::Convert<Address>::from_json(json::require(v, "billingaddress"), "billingaddress");
+        t.items = json::Convert<std::string>::from_json(json::require(v, "items"), "items");
+        t.shipping = json::Convert<std::string>::from_json(json::require(v, "shipping"), "shipping");
+        t.discount = json::Convert<std::string>::from_json(json::require(v, "discount"), "discount");
+        t.totalprice = json::Convert<std::string>::from_json(json::require(v, "totalprice"), "totalprice");
+        t.shippingaddress = AddressTyped::from_json_value(json::require(v, "shippingaddress"));
+        t.billingaddress = AddressTyped::from_json_value(json::require(v, "billingaddress"));
         return t;
     }
 
@@ -65,4 +66,14 @@ struct ShoppingCartTyped {
             result.push_back(from_json_value(e));
         return result;
     }
+
+    bool operator==(const ShoppingCartTyped& o) const {
+        return items == o.items
+            && shipping == o.shipping
+            && discount == o.discount
+            && totalprice == o.totalprice
+            && shippingaddress == o.shippingaddress
+            && billingaddress == o.billingaddress;
+    }
+    bool operator!=(const ShoppingCartTyped& o) const { return !(*this == o); }
 };

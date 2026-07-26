@@ -71,5 +71,27 @@ using production;
             foreach (var e in root.EnumerateArray()) result.Add(FromJsonElement(e));
             return result;
         }
+
+        public override string ToString()
+        {
+            return $"Value={value}, IsValid={isValid}, Notes={notes}";
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not ValidValuesTyped other) return false;
+            return object.Equals(this.value, other.value)
+                && object.Equals(this.isValid, other.isValid)
+                && object.Equals(this.notes, other.notes);
+        }
+
+        public override int GetHashCode()
+        {
+            var h = new System.HashCode();
+            h.Add(this.value);
+            h.Add(this.isValid);
+            h.Add(this.notes);
+            return h.ToHashCode();
+        }
     }
 }

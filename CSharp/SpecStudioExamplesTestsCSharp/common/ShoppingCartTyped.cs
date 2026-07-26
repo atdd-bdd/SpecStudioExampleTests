@@ -10,14 +10,14 @@ using production;
 
     public class ShoppingCartTyped
     {
-        public OrderItemCollection items;
+        public List<OrderItemTyped> items;
         public Dollar shipping;
         public Dollar discount;
         public Dollar totalPrice;
-        public Address shippingAddress;
-        public Address billingAddress;
+        public AddressTyped shippingAddress;
+        public AddressTyped billingAddress;
 
-        public ShoppingCartTyped(OrderItemCollection items, Dollar shipping, Dollar discount, Dollar totalPrice, Address shippingAddress, Address billingAddress)
+        public ShoppingCartTyped(List<OrderItemTyped> items, Dollar shipping, Dollar discount, Dollar totalPrice, AddressTyped shippingAddress, AddressTyped billingAddress)
         {
             this.items = items;
             this.shipping = shipping;
@@ -34,8 +34,10 @@ using production;
             w.WriteString("shipping", Json.ToText(this.shipping));
             w.WriteString("discount", Json.ToText(this.discount));
             w.WriteString("totalPrice", Json.ToText(this.totalPrice));
-            w.WriteString("shippingAddress", Json.ToText(this.shippingAddress));
-            w.WriteString("billingAddress", Json.ToText(this.billingAddress));
+            w.WritePropertyName("shippingAddress");
+            this.shippingAddress.WriteJson(w);
+            w.WritePropertyName("billingAddress");
+            this.billingAddress.WriteJson(w);
             w.WriteEndObject();
         }
 
@@ -53,8 +55,8 @@ using production;
                 new Dollar(Json.AsString(Json.Require(m, "shipping"), "shipping")),
                 new Dollar(Json.AsString(Json.Require(m, "discount"), "discount")),
                 new Dollar(Json.AsString(Json.Require(m, "totalPrice"), "totalPrice")),
-                new Address(Json.AsString(Json.Require(m, "shippingAddress"), "shippingAddress")),
-                new Address(Json.AsString(Json.Require(m, "billingAddress"), "billingAddress"))
+                AddressTyped.FromJsonElement(Json.Require(m, "shippingAddress")),
+                AddressTyped.FromJsonElement(Json.Require(m, "billingAddress"))
             );
         }
 
@@ -82,6 +84,34 @@ using production;
             Json.RequireArray(root, "ShoppingCartTyped");
             foreach (var e in root.EnumerateArray()) result.Add(FromJsonElement(e));
             return result;
+        }
+
+        public override string ToString()
+        {
+            return $"Items={items}, Shipping={shipping}, Discount={discount}, TotalPrice={totalPrice}, ShippingAddress={shippingAddress}, BillingAddress={billingAddress}";
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not ShoppingCartTyped other) return false;
+            return object.Equals(this.items, other.items)
+                && object.Equals(this.shipping, other.shipping)
+                && object.Equals(this.discount, other.discount)
+                && object.Equals(this.totalPrice, other.totalPrice)
+                && object.Equals(this.shippingAddress, other.shippingAddress)
+                && object.Equals(this.billingAddress, other.billingAddress);
+        }
+
+        public override int GetHashCode()
+        {
+            var h = new System.HashCode();
+            h.Add(this.items);
+            h.Add(this.shipping);
+            h.Add(this.discount);
+            h.Add(this.totalPrice);
+            h.Add(this.shippingAddress);
+            h.Add(this.billingAddress);
+            return h.ToHashCode();
         }
     }
 }

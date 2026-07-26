@@ -1,4 +1,4 @@
-public struct ValidValuesTyped {
+public struct ValidValuesTyped: Equatable, CustomStringConvertible {
     public let value: String
     public let isValid: Bool
     public let notes: String
@@ -45,5 +45,9 @@ public struct ValidValuesTyped {
         return try Json.parseArray(text).map {
             try ValidValuesTyped(fromJSONValue: Json.asObject($0, "ValidValuesTyped"))
         }
+    }
+
+    public var description: String {
+        return "Value=\(value), IsValid=\(isValid), Notes=\(notes)"
     }
 }

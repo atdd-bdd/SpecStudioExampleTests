@@ -1,5 +1,10 @@
+from .address_string import AddressString
+from .address_string import AddressString
+DNC_STRING = '?DNC?'
+
+
 class ShoppingCartString:
-    def __init__(self, items: str = '', shipping: str = '', discount: str = '', total_price: str = '', shipping_address: str = '', billing_address: str = ''):
+    def __init__(self, items: str = '', shipping: str = '', discount: str = '', total_price: str = '', shipping_address: 'AddressString' = None, billing_address: 'AddressString' = None):
         self.items = items
         self.shipping = shipping
         self.discount = discount
@@ -26,3 +31,18 @@ class ShoppingCartString:
                 f'TotalPrice={self.total_price}' + ', ' +
                 f'ShippingAddress={self.shipping_address}' + ', ' +
                 f'BillingAddress={self.billing_address}')
+
+    def _key(self):
+        return (self.items, self.shipping, self.discount, self.total_price, self.shipping_address, self.billing_address)
+
+    def __eq__(self, other):
+        if not isinstance(other, ShoppingCartString):
+            return NotImplemented
+        return all(a == b or a == DNC_STRING or b == DNC_STRING
+                   for a, b in zip(self._key(), other._key()))
+
+    def __hash__(self):
+        return hash(self._key())
+
+    def __repr__(self):
+        return f'ShoppingCartString({self})'

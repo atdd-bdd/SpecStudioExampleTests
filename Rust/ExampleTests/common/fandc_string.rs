@@ -27,3 +27,11 @@ impl std::fmt::Display for FandCString {
         )
     }
 }
+
+impl PartialEq for FandCString {
+    fn eq(&self, other: &Self) -> bool {
+        crate::common::dnc_equal(&self.f, &other.f)
+            && crate::common::dnc_equal(&self.c, &other.c)
+            && crate::common::dnc_equal(&self.notes, &other.notes)
+    }
+}

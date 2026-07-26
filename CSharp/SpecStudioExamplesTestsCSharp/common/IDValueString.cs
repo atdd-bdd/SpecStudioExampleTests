@@ -25,5 +25,22 @@ using production;
         {
             return $"ID={iD}, Value={value}";
         }
+
+        const string DNCString = "?DNC?";
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not IDValueString other) return false;
+            return (DNCString == this.iD || DNCString == other.iD || object.Equals(this.iD, other.iD))
+                && (DNCString == this.value || DNCString == other.value || object.Equals(this.value, other.value));
+        }
+
+        public override int GetHashCode()
+        {
+            var h = new System.HashCode();
+            h.Add(this.iD);
+            h.Add(this.value);
+            return h.ToHashCode();
+        }
     }
 }

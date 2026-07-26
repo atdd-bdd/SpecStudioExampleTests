@@ -53,4 +53,11 @@ struct AdderTyped {
             result.push_back(from_json_value(e));
         return result;
     }
+
+    bool operator==(const AdderTyped& o) const {
+        return number1 == o.number1
+            && number2 == o.number2
+            && result == o.result;
+    }
+    bool operator!=(const AdderTyped& o) const { return !(*this == o); }
 };

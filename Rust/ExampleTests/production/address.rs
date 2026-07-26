@@ -1,4 +1,6 @@
-#[derive(Debug, Clone)]
+use super::*;
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct Address {
     pub street: SimpleText,
     pub city: SimpleText,

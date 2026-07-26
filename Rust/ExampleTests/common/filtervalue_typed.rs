@@ -3,21 +3,21 @@
 use super::json;
 use super::filtervalue_string::FilterValueString;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct FilterValueTyped {
-    pub value: IDForm,
+    pub value: String,
 }
 
 impl FilterValueTyped {
     pub fn from_str_struct(s: &FilterValueString) -> Self {
         Self {
-            value: IDForm::from(s.value.clone()),
+            value: s.value.clone(),
         }
     }
 
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("value".to_string(), json::Value::Str(self.value.to_string())),
+            ("value".to_string(), json::Value::Str(self.value.clone())),
         ])
     }
 
@@ -27,7 +27,7 @@ impl FilterValueTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            value: IDForm::from(json::as_string(json::require(v, "value")?, "value")?),
+            value: json::as_string(json::require(v, "value")?, "value")?,
         })
     }
 

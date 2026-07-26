@@ -75,5 +75,29 @@ using production;
             foreach (var e in root.EnumerateArray()) result.Add(FromJsonElement(e));
             return result;
         }
+
+        public override string ToString()
+        {
+            return $"Name={name}, Quantity={quantity}, Price={price}, ItemTotal={itemTotal}";
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not OrderItemTyped other) return false;
+            return object.Equals(this.name, other.name)
+                && object.Equals(this.quantity, other.quantity)
+                && object.Equals(this.price, other.price)
+                && object.Equals(this.itemTotal, other.itemTotal);
+        }
+
+        public override int GetHashCode()
+        {
+            var h = new System.HashCode();
+            h.Add(this.name);
+            h.Add(this.quantity);
+            h.Add(this.price);
+            h.Add(this.itemTotal);
+            return h.ToHashCode();
+        }
     }
 }

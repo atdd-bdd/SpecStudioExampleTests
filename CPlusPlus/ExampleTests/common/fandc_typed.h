@@ -53,4 +53,11 @@ struct FandCTyped {
             result.push_back(from_json_value(e));
         return result;
     }
+
+    bool operator==(const FandCTyped& o) const {
+        return f == o.f
+            && c == o.c
+            && notes == o.notes;
+    }
+    bool operator!=(const FandCTyped& o) const { return !(*this == o); }
 };

@@ -17,7 +17,7 @@ TEST(ShoppingCart, Scenario_AddItems) {
     glue.given_item_collection_is(objectList2);
 
     std::vector<OrderItemString> objectList3 = {
-        OrderItemString::from_vec({"Widget", "2", "", ""}),
+        OrderItemString::from_vec({"Widget", "2", "1", "1"}),
     };
     glue.when_item_added(objectList3);
 
@@ -27,7 +27,7 @@ TEST(ShoppingCart, Scenario_AddItems) {
     glue.then_item_collection_is(objectList4);
 
     std::vector<OrderItemString> objectList5 = {
-        OrderItemString::from_vec({"WhatCallIt", "3", "", ""}),
+        OrderItemString::from_vec({"WhatCallIt", "3", "1", "1"}),
     };
     glue.when_item_added(objectList5);
 
@@ -49,7 +49,7 @@ TEST(ShoppingCart, Scenario_AShoppingCartWithAddresses) {
     glue.given_catalog_has(objectList7);
 
     std::vector<ShoppingCartString> objectList8 = {
-        ShoppingCartString::from_vec({"=EmptyCart", "", "", "", "=AShippingAddress", "=ABillingAddress"}),
+        ShoppingCartString{"=EmptyCart", "$0", "$0", "$0", AddressString{"2 Apple Lane", "Somewhere", "NC", "27706"}, AddressString{"1 Apple Lane", "Somewhere", "NC", "27705"}},
     };
     glue.given_shopping_cart(objectList8);
 
@@ -65,22 +65,22 @@ TEST(ShoppingCart, Scenario_AddItemsToShoppingCart) {
     glue.given_catalog_has(objectList9);
 
     std::vector<ShoppingCartString> objectList10 = {
-        ShoppingCartString::from_vec({"=EmptyCart", "$0", "$0", "$0", "", ""}),
+        ShoppingCartString{"=EmptyCart", "$0", "$0", "$0", AddressString{"", "", "", ""}, AddressString{"", "", "", ""}},
     };
     glue.given_shopping_cart(objectList10);
 
     std::vector<OrderItemString> objectList11 = {
-        OrderItemString::from_vec({"Widget", "2", "", ""}),
+        OrderItemString::from_vec({"Widget", "2", "1", "1"}),
     };
     glue.when_item_added(objectList11);
 
     std::vector<OrderItemString> objectList12 = {
-        OrderItemString::from_vec({"WhatCallIt", "3", "", ""}),
+        OrderItemString::from_vec({"WhatCallIt", "3", "1", "1"}),
     };
     glue.when_item_added(objectList12);
 
     std::vector<ShoppingCartString> objectList13 = {
-        ShoppingCartString::from_vec({"=TwoItemCart", "$0", "$0", "$80", "", ""}),
+        ShoppingCartString{"=TwoItemCart", "$5", "$4", "$81", AddressString{"", "", "", ""}, AddressString{"", "", "", ""}},
     };
     glue.then_shopping_cart_is(objectList13);
 

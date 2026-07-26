@@ -50,4 +50,14 @@ export class FandCTyped {
     const raw = _json.asArray(_json.parse(text), "FandCTyped") ?? [];
     return raw.map((e) => FandCTyped.fromJsonValue(e));
   }
+
+  toString(): string {
+    return `F=${this.f}, C=${this.c}, Notes=${this.notes}`;
+  }
+
+  equals(other: FandCTyped): boolean {
+    return this.f === other.f
+      && this.c === other.c
+      && this.notes === other.notes;
+  }
 }

@@ -1,0 +1,24 @@
+#![allow(non_snake_case, unused_imports, dead_code)]
+
+pub mod address;
+pub mod catalog;
+pub mod catalogitem;
+pub mod dollar;
+pub mod idform;
+pub mod idvalue;
+pub mod orderitem;
+pub mod orderitemcollection;
+pub mod percentage;
+pub mod shoppingcart;
+pub mod simpletext;
+pub use address::*;
+pub use catalog::*;
+pub use catalogitem::*;
+pub use dollar::*;
+pub use idform::*;
+pub use idvalue::*;
+pub use orderitem::*;
+pub use orderitemcollection::*;
+pub use percentage::*;
+pub use shoppingcart::*;
+pub use simpletext::*;

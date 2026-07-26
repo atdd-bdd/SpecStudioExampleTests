@@ -5,19 +5,19 @@
 #include "idvalue_string.h"
 
 struct IDValueTyped {
-    IDForm id;
+    std::string id;
     int value = 0;
 
     static IDValueTyped from_string_struct(const IDValueString& s) {
         IDValueTyped t;
-        t.id = IDForm(s.id);
+        t.id = s.id;
         t.value = !s.value.empty() ? std::stoi(s.value) : 0;
         return t;
     }
 
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("id", json::Convert<IDForm>::to_json(id));
+        m.emplace_back("id", json::Convert<std::string>::to_json(id));
         m.emplace_back("value", json::Convert<int>::to_json(value));
         return json::Value::make_object(std::move(m));
     }
@@ -26,7 +26,7 @@ struct IDValueTyped {
 
     static IDValueTyped from_json_value(const json::Value& v) {
         IDValueTyped t;
-        t.id = json::Convert<IDForm>::from_json(json::require(v, "id"), "id");
+        t.id = json::Convert<std::string>::from_json(json::require(v, "id"), "id");
         t.value = json::Convert<int>::from_json(json::require(v, "value"), "value");
         return t;
     }
@@ -49,4 +49,10 @@ struct IDValueTyped {
             result.push_back(from_json_value(e));
         return result;
     }
+
+    bool operator==(const IDValueTyped& o) const {
+        return id == o.id
+            && value == o.value;
+    }
+    bool operator!=(const IDValueTyped& o) const { return !(*this == o); }
 };

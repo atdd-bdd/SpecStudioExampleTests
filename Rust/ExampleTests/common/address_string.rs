@@ -30,3 +30,12 @@ impl std::fmt::Display for AddressString {
         )
     }
 }
+
+impl PartialEq for AddressString {
+    fn eq(&self, other: &Self) -> bool {
+        crate::common::dnc_equal(&self.street, &other.street)
+            && crate::common::dnc_equal(&self.city, &other.city)
+            && crate::common::dnc_equal(&self.state, &other.state)
+            && crate::common::dnc_equal(&self.zip, &other.zip)
+    }
+}

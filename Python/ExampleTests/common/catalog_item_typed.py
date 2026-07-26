@@ -41,3 +41,21 @@ class CatalogItemTyped:
     def from_json_list(cls, text: str) -> list:
         raw = _json.as_list(_json.loads(text), 'CatalogItemTyped')
         return [cls.from_json_value(e) for e in raw]
+
+    def __str__(self):
+        return (f'Name={self.name}' + ', ' +
+                f'Price={self.price}')
+
+    def _key(self):
+        return (self.name, self.price)
+
+    def __eq__(self, other):
+        if not isinstance(other, CatalogItemTyped):
+            return NotImplemented
+        return self._key() == other._key()
+
+    def __hash__(self):
+        return hash(self._key())
+
+    def __repr__(self):
+        return f'CatalogItemTyped({self})'

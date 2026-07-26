@@ -15,3 +15,15 @@ func NewFilterValueStringFromSlice(v []string) FilterValueString {
 func (s FilterValueString) String() string {
 	return fmt.Sprintf("Value=%s", s.Value)
 }
+
+func (s FilterValueString) Equals(o FilterValueString) bool {
+	return DNCEqual(s.Value, o.Value)
+}
+
+func EqualFilterValueStringSlices(a, b []FilterValueString) bool {
+	if len(a) != len(b) { return false }
+	for i := range a {
+		if !a[i].Equals(b[i]) { return false }
+	}
+	return true
+}

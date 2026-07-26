@@ -49,3 +49,23 @@ class AddressTyped:
     def from_json_list(cls, text: str) -> list:
         raw = _json.as_list(_json.loads(text), 'AddressTyped')
         return [cls.from_json_value(e) for e in raw]
+
+    def __str__(self):
+        return (f'Street={self.street}' + ', ' +
+                f'City={self.city}' + ', ' +
+                f'State={self.state}' + ', ' +
+                f'ZIP={self.zip}')
+
+    def _key(self):
+        return (self.street, self.city, self.state, self.zip)
+
+    def __eq__(self, other):
+        if not isinstance(other, AddressTyped):
+            return NotImplemented
+        return self._key() == other._key()
+
+    def __hash__(self):
+        return hash(self._key())
+
+    def __repr__(self):
+        return f'AddressTyped({self})'

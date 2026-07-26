@@ -15,4 +15,11 @@ public struct IDValueString: CustomStringConvertible, Equatable {
     public var description: String {
         return "ID=\(iD), Value=\(value)"
     }
+
+    public static let dncString = "?DNC?"
+
+    public static func == (a: IDValueString, b: IDValueString) -> Bool {
+        return (a.iD == dncString || b.iD == dncString || a.iD == b.iD)
+            && (a.value == dncString || b.value == dncString || a.value == b.value)
+    }
 }

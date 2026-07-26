@@ -3,26 +3,26 @@
 use super::json;
 use super::discounting_string::DiscountingString;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct DiscountingTyped {
-    pub total_price: Dollar,
-    pub discount: Percentage,
+    pub total_price: String,
+    pub discount: String,
     pub notes: String,
 }
 
 impl DiscountingTyped {
     pub fn from_str_struct(s: &DiscountingString) -> Self {
         Self {
-            total_price: Dollar::from(s.total_price.clone()),
-            discount: Percentage::from(s.discount.clone()),
+            total_price: s.total_price.clone(),
+            discount: s.discount.clone(),
             notes: s.notes.clone(),
         }
     }
 
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("total_price".to_string(), json::Value::Str(self.total_price.to_string())),
-            ("discount".to_string(), json::Value::Str(self.discount.to_string())),
+            ("total_price".to_string(), json::Value::Str(self.total_price.clone())),
+            ("discount".to_string(), json::Value::Str(self.discount.clone())),
             ("notes".to_string(), json::Value::Str(self.notes.clone())),
         ])
     }
@@ -33,8 +33,8 @@ impl DiscountingTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            total_price: Dollar::from(json::as_string(json::require(v, "total_price")?, "total_price")?),
-            discount: Percentage::from(json::as_string(json::require(v, "discount")?, "discount")?),
+            total_price: json::as_string(json::require(v, "total_price")?, "total_price")?,
+            discount: json::as_string(json::require(v, "discount")?, "discount")?,
             notes: json::as_string(json::require(v, "notes")?, "notes")?,
         })
     }

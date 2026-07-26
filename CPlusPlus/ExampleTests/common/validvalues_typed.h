@@ -12,7 +12,7 @@ struct ValidValuesTyped {
     static ValidValuesTyped from_string_struct(const ValidValuesString& s) {
         ValidValuesTyped t;
         t.value = s.value;
-        t.isvalid = (s.isvalid == "true" || s.isvalid == "t" || s.isvalid == "yes" || s.isvalid == "y" || s.isvalid == "1");
+        t.isvalid = parse_bool_cell(s.isvalid);
         t.notes = s.notes;
         return t;
     }
@@ -53,4 +53,11 @@ struct ValidValuesTyped {
             result.push_back(from_json_value(e));
         return result;
     }
+
+    bool operator==(const ValidValuesTyped& o) const {
+        return value == o.value
+            && isvalid == o.isvalid
+            && notes == o.notes;
+    }
+    bool operator!=(const ValidValuesTyped& o) const { return !(*this == o); }
 };

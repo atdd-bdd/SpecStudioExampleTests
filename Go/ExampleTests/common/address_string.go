@@ -21,3 +21,18 @@ func NewAddressStringFromSlice(v []string) AddressString {
 func (s AddressString) String() string {
 	return fmt.Sprintf("Street=%s, City=%s, State=%s, ZIP=%s", s.Street, s.City, s.State, s.ZIP)
 }
+
+func (s AddressString) Equals(o AddressString) bool {
+	return DNCEqual(s.Street, o.Street) &&
+		DNCEqual(s.City, o.City) &&
+		DNCEqual(s.State, o.State) &&
+		DNCEqual(s.ZIP, o.ZIP)
+}
+
+func EqualAddressStringSlices(a, b []AddressString) bool {
+	if len(a) != len(b) { return false }
+	for i := range a {
+		if !a[i].Equals(b[i]) { return false }
+	}
+	return true
+}

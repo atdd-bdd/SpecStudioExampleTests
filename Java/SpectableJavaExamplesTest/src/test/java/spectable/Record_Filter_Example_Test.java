@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import spectable.common.*;
 import spectable.Record_Filter_Example_glue;
 import production.*;
+import records.*;
+import calculator.*;
 import org.junit.jupiter.api.Test;
 
 public class Record_Filter_Example_Test {

@@ -21,4 +21,13 @@ public struct AddressString: CustomStringConvertible, Equatable {
     public var description: String {
         return "Street=\(street), City=\(city), State=\(state), ZIP=\(zIP)"
     }
+
+    public static let dncString = "?DNC?"
+
+    public static func == (a: AddressString, b: AddressString) -> Bool {
+        return (a.street == dncString || b.street == dncString || a.street == b.street)
+            && (a.city == dncString || b.city == dncString || a.city == b.city)
+            && (a.state == dncString || b.state == dncString || a.state == b.state)
+            && (a.zIP == dncString || b.zIP == dncString || a.zIP == b.zIP)
+    }
 }

@@ -3,26 +3,26 @@
 use super::json;
 use super::shipping_string::ShippingString;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct ShippingTyped {
-    pub total_price: Dollar,
-    pub shipping_cost: Dollar,
+    pub total_price: String,
+    pub shipping_cost: String,
     pub notes: String,
 }
 
 impl ShippingTyped {
     pub fn from_str_struct(s: &ShippingString) -> Self {
         Self {
-            total_price: Dollar::from(s.total_price.clone()),
-            shipping_cost: Dollar::from(s.shipping_cost.clone()),
+            total_price: s.total_price.clone(),
+            shipping_cost: s.shipping_cost.clone(),
             notes: s.notes.clone(),
         }
     }
 
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("total_price".to_string(), json::Value::Str(self.total_price.to_string())),
-            ("shipping_cost".to_string(), json::Value::Str(self.shipping_cost.to_string())),
+            ("total_price".to_string(), json::Value::Str(self.total_price.clone())),
+            ("shipping_cost".to_string(), json::Value::Str(self.shipping_cost.clone())),
             ("notes".to_string(), json::Value::Str(self.notes.clone())),
         ])
     }
@@ -33,8 +33,8 @@ impl ShippingTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            total_price: Dollar::from(json::as_string(json::require(v, "total_price")?, "total_price")?),
-            shipping_cost: Dollar::from(json::as_string(json::require(v, "shipping_cost")?, "shipping_cost")?),
+            total_price: json::as_string(json::require(v, "total_price")?, "total_price")?,
+            shipping_cost: json::as_string(json::require(v, "shipping_cost")?, "shipping_cost")?,
             notes: json::as_string(json::require(v, "notes")?, "notes")?,
         })
     }

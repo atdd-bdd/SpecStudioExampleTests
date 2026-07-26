@@ -5,26 +5,26 @@
 #include "address_string.h"
 
 struct AddressTyped {
-    SimpleText street;
-    SimpleText city;
-    SimpleText state;
-    SimpleText zip;
+    std::string street;
+    std::string city;
+    std::string state;
+    std::string zip;
 
     static AddressTyped from_string_struct(const AddressString& s) {
         AddressTyped t;
-        t.street = SimpleText(s.street);
-        t.city = SimpleText(s.city);
-        t.state = SimpleText(s.state);
-        t.zip = SimpleText(s.zip);
+        t.street = s.street;
+        t.city = s.city;
+        t.state = s.state;
+        t.zip = s.zip;
         return t;
     }
 
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("street", json::Convert<SimpleText>::to_json(street));
-        m.emplace_back("city", json::Convert<SimpleText>::to_json(city));
-        m.emplace_back("state", json::Convert<SimpleText>::to_json(state));
-        m.emplace_back("zip", json::Convert<SimpleText>::to_json(zip));
+        m.emplace_back("street", json::Convert<std::string>::to_json(street));
+        m.emplace_back("city", json::Convert<std::string>::to_json(city));
+        m.emplace_back("state", json::Convert<std::string>::to_json(state));
+        m.emplace_back("zip", json::Convert<std::string>::to_json(zip));
         return json::Value::make_object(std::move(m));
     }
 
@@ -32,10 +32,10 @@ struct AddressTyped {
 
     static AddressTyped from_json_value(const json::Value& v) {
         AddressTyped t;
-        t.street = json::Convert<SimpleText>::from_json(json::require(v, "street"), "street");
-        t.city = json::Convert<SimpleText>::from_json(json::require(v, "city"), "city");
-        t.state = json::Convert<SimpleText>::from_json(json::require(v, "state"), "state");
-        t.zip = json::Convert<SimpleText>::from_json(json::require(v, "zip"), "zip");
+        t.street = json::Convert<std::string>::from_json(json::require(v, "street"), "street");
+        t.city = json::Convert<std::string>::from_json(json::require(v, "city"), "city");
+        t.state = json::Convert<std::string>::from_json(json::require(v, "state"), "state");
+        t.zip = json::Convert<std::string>::from_json(json::require(v, "zip"), "zip");
         return t;
     }
 
@@ -57,4 +57,12 @@ struct AddressTyped {
             result.push_back(from_json_value(e));
         return result;
     }
+
+    bool operator==(const AddressTyped& o) const {
+        return street == o.street
+            && city == o.city
+            && state == o.state
+            && zip == o.zip;
+    }
+    bool operator!=(const AddressTyped& o) const { return !(*this == o); }
 };

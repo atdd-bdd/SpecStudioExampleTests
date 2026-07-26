@@ -21,3 +21,9 @@ impl std::fmt::Display for FilterValueString {
         )
     }
 }
+
+impl PartialEq for FilterValueString {
+    fn eq(&self, other: &Self) -> bool {
+        crate::common::dnc_equal(&self.value, &other.value)
+    }
+}

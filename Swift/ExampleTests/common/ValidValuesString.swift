@@ -18,4 +18,12 @@ public struct ValidValuesString: CustomStringConvertible, Equatable {
     public var description: String {
         return "Value=\(value), IsValid=\(isValid), Notes=\(notes)"
     }
+
+    public static let dncString = "?DNC?"
+
+    public static func == (a: ValidValuesString, b: ValidValuesString) -> Bool {
+        return (a.value == dncString || b.value == dncString || a.value == b.value)
+            && (a.isValid == dncString || b.isValid == dncString || a.isValid == b.isValid)
+            && (a.notes == dncString || b.notes == dncString || a.notes == b.notes)
+    }
 }

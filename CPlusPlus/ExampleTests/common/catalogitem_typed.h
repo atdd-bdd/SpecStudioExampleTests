@@ -5,20 +5,20 @@
 #include "catalogitem_string.h"
 
 struct CatalogItemTyped {
-    SimpleText name;
-    Dollar price;
+    std::string name;
+    std::string price;
 
     static CatalogItemTyped from_string_struct(const CatalogItemString& s) {
         CatalogItemTyped t;
-        t.name = SimpleText(s.name);
-        t.price = Dollar(s.price);
+        t.name = s.name;
+        t.price = s.price;
         return t;
     }
 
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("name", json::Convert<SimpleText>::to_json(name));
-        m.emplace_back("price", json::Convert<Dollar>::to_json(price));
+        m.emplace_back("name", json::Convert<std::string>::to_json(name));
+        m.emplace_back("price", json::Convert<std::string>::to_json(price));
         return json::Value::make_object(std::move(m));
     }
 
@@ -26,8 +26,8 @@ struct CatalogItemTyped {
 
     static CatalogItemTyped from_json_value(const json::Value& v) {
         CatalogItemTyped t;
-        t.name = json::Convert<SimpleText>::from_json(json::require(v, "name"), "name");
-        t.price = json::Convert<Dollar>::from_json(json::require(v, "price"), "price");
+        t.name = json::Convert<std::string>::from_json(json::require(v, "name"), "name");
+        t.price = json::Convert<std::string>::from_json(json::require(v, "price"), "price");
         return t;
     }
 
@@ -49,4 +49,10 @@ struct CatalogItemTyped {
             result.push_back(from_json_value(e));
         return result;
     }
+
+    bool operator==(const CatalogItemTyped& o) const {
+        return name == o.name
+            && price == o.price;
+    }
+    bool operator!=(const CatalogItemTyped& o) const { return !(*this == o); }
 };
