@@ -30,5 +30,9 @@ $jdk = Get-ChildItem 'C:\Program Files\Java' -Directory -Filter 'jdk-*' -ErrorAc
        Sort-Object Name -Descending | Select-Object -First 1
 if ($jdk) { $env:JAVA_HOME = $jdk.FullName }
 
-& $mvn -B test
+# clean, not just test: Maven skips recompiling when nothing is newer than
+# target/, so after generated sources are deleted -- which a project or solution
+# build in SpecStudio now does on purpose -- surefire would happily run stale
+# .class files and report green.
+& $mvn -B clean test
 exit $LASTEXITCODE

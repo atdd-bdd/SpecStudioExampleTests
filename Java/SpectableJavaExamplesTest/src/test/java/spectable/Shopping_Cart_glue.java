@@ -98,13 +98,6 @@ public class Shopping_Cart_glue {
         computedTotal = currentItems.computeTotal();
     }
 
-    public void Then_result_is(List<PricingString> values) {
-        for (PricingString value : values) {
-            PricingTyped typed = new PricingTyped(value);
-            assertDollarEquals(typed.totalPrice, computedTotal, "TotalPrice");
-        }
-    }
-
     public void Given_item_collection_is(List<OrderItemString> values) {
         Given_item_collection(values);
     }
