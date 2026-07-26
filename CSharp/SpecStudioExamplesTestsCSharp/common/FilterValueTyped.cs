@@ -1,0 +1,67 @@
+namespace SpecStudioExamplesTestsCSharp.common
+{
+using System;
+using System.Buffers;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
+using System.Text.Json;
+using production;
+
+    public class FilterValueTyped
+    {
+        public IDForm value;
+
+        public FilterValueTyped(IDForm value)
+        {
+            this.value = value;
+        }
+
+        public void WriteJson(Utf8JsonWriter w)
+        {
+            w.WriteStartObject();
+            w.WriteString("value", Json.ToText(this.value));
+            w.WriteEndObject();
+        }
+
+        public string ToJSON()
+        {
+            var buffer = new ArrayBufferWriter<byte>();
+            using (var w = new Utf8JsonWriter(buffer)) { WriteJson(w); }
+            return Encoding.UTF8.GetString(buffer.WrittenSpan);
+        }
+
+        public static FilterValueTyped FromJsonElement(JsonElement m)
+        {
+            return new FilterValueTyped(
+                new IDForm(Json.AsString(Json.Require(m, "value"), "value"))
+            );
+        }
+
+        public static FilterValueTyped FromJSON(string json)
+        {
+            return FromJsonElement(Json.Parse(json));
+        }
+
+        public static string ToJSONList(List<FilterValueTyped> list)
+        {
+            var buffer = new ArrayBufferWriter<byte>();
+            using (var w = new Utf8JsonWriter(buffer))
+            {
+                w.WriteStartArray();
+                foreach (var item in list) item.WriteJson(w);
+                w.WriteEndArray();
+            }
+            return Encoding.UTF8.GetString(buffer.WrittenSpan);
+        }
+
+        public static List<FilterValueTyped> FromJSONList(string json)
+        {
+            var result = new List<FilterValueTyped>();
+            var root = Json.Parse(json);
+            Json.RequireArray(root, "FilterValueTyped");
+            foreach (var e in root.EnumerateArray()) result.Add(FromJsonElement(e));
+            return result;
+        }
+    }
+}

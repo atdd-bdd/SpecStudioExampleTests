@@ -1,0 +1,42 @@
+# Build output and dependencies for the nine language targets. The generated
+# sources are tracked; what a build or package manager produces from them is not.
+
+# Java / Maven
+target/
+
+# C#
+bin/
+obj/
+*.user
+
+# C++ / CMake
+build/
+
+# Rust / Cargo
+target/
+Cargo.lock
+
+# Go
+go.sum
+
+# JavaScript / TypeScript
+node_modules/
+dist/
+package-lock.json
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Swift / SwiftPM
+.build/
+.swiftpm/
+
+# IDE session state, not project configuration
+**/.idea/workspace.xml
+.vs/
+*.swp
+
+# Build logs written next to the specs
+build.log
