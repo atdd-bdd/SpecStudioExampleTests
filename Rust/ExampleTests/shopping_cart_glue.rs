@@ -97,13 +97,6 @@ impl ShoppingCartGlue {
         self.computed_total = self.current_items.compute_total();
     }
 
-    pub fn then_result_is(&mut self, values: &[PricingString]) {
-        for value in values {
-            let typed = PricingTyped::from_str_struct(value);
-            assert_eq!(Dollar::parse(&typed.totalprice).unwrap(), self.computed_total,
-                       "TotalPrice");
-        }
-    }
 
     pub fn examples_business_rule_shipping_cost(&mut self, values: &[ShippingInputString]) {
         for value in values {

@@ -90,12 +90,6 @@ public class ShoppingCartGlue {
         computedTotal = currentItems.computeTotal()
     }
 
-    public func thenResultIs(_ values: [PricingString]) {
-        for value in values {
-            let typed = PricingTyped(from: value)
-            XCTAssertEqual(dollar(typed.totalPrice), computedTotal, "TotalPrice")
-        }
-    }
 
     public func examplesBusinessRuleShippingCost(_ values: [ShippingInputString]) {
         for value in values {

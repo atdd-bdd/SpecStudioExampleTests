@@ -8,8 +8,6 @@ from .catalog_item_string import CatalogItemString
 from .catalog_item_typed import CatalogItemTyped
 from .discount_input_string import DiscountInputString
 from .discount_input_typed import DiscountInputTyped
-from .discounting_string import DiscountingString
-from .discounting_typed import DiscountingTyped
 from .fand_c_string import FandCString
 from .fand_c_typed import FandCTyped
 from .filter_value_string import FilterValueString
@@ -20,14 +18,10 @@ from .item_price_input_string import ItemPriceInputString
 from .item_price_input_typed import ItemPriceInputTyped
 from .order_item_string import OrderItemString
 from .order_item_typed import OrderItemTyped
-from .pricing_string import PricingString
-from .pricing_typed import PricingTyped
 from .result_value_string import ResultValueString
 from .result_value_typed import ResultValueTyped
 from .shipping_input_string import ShippingInputString
 from .shipping_input_typed import ShippingInputTyped
-from .shipping_string import ShippingString
-from .shipping_typed import ShippingTyped
 from .shopping_cart_string import ShoppingCartString
 from .shopping_cart_typed import ShoppingCartTyped
 from .valid_values_string import ValidValuesString

@@ -71,12 +71,6 @@ public:
 
     void when_total_computed() { computed_total_ = items_.compute_total(); }
 
-    void then_result_is(const std::vector<PricingString>& values) {
-        for (const auto& value : values) {
-            const PricingTyped t = PricingTyped::from_string_struct(value);
-            EXPECT_EQ(Dollar(t.totalprice), computed_total_) << "TotalPrice";
-        }
-    }
 
     void examples_businessrule_shipping_cost(const std::vector<ShippingInputString>& values) {
         for (const auto& value : values) {

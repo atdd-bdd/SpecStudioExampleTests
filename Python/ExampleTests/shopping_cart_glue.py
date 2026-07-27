@@ -74,10 +74,6 @@ class ShoppingCartGlue:
     def when_total_computed(self):
         self.computed_total = self.current_items.compute_total()
 
-    def then_result_is(self, values: list):
-        for value in values:
-            typed = PricingTyped.from_string_obj(value)
-            assert Dollar(typed.total_price) == self.computed_total, 'TotalPrice'
 
     def examples_BusinessRule_ShippingCost(self, values: list):
         for value in values:

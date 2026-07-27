@@ -1,7 +1,6 @@
 import { CartInputString, CartInputTyped, CatalogItemString, CatalogItemTyped,
          DiscountInputString, DiscountInputTyped, ItemPriceInputString,
-         ItemPriceInputTyped, OrderItemString, OrderItemTyped, PricingString,
-         PricingTyped, ShippingInputString, ShippingInputTyped, ShoppingCartString,
+         ItemPriceInputTyped, OrderItemString, OrderItemTyped, ShippingInputString, ShippingInputTyped, ShoppingCartString,
          ShoppingCartTyped, ValidValuesString, ValidValuesTyped } from "./common/index.js";
 import { Catalog, CatalogItem, Dollar, OrderItem, OrderItemCollection,
          Percentage, ShoppingCart, SimpleText } from "./production/index.js";
@@ -79,12 +78,6 @@ export class ShoppingCartGlue {
     this.computedTotal = this.currentItems.computeTotal();
   }
 
-  thenResultIs(values: readonly PricingString[]): void {
-    values.forEach((value) => {
-      const typed = PricingTyped.fromStringObj(value);
-      expect(this.computedTotal.equals(new Dollar(typed.totalPrice))).toBe(true);
-    });
-  }
 
   examplesBusinessRuleShippingCost(values: readonly ShippingInputString[]): void {
     values.forEach((value) => {

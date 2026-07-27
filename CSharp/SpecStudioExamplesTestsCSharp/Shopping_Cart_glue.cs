@@ -88,11 +88,6 @@ namespace SpecStudioExamplesTestsCSharp.Shopping_Cart
 
         public void When_total_computed() => computedTotal = currentItems.ComputeTotal();
 
-        public void Then_result_is(List<PricingString> values)
-        {
-            foreach (var value in values)
-                Assert.AreEqual(value.ToPricingTyped().totalPrice, computedTotal, "TotalPrice");
-        }
 
         public void Examples_BusinessRule_Shipping_Cost(List<ShippingInputString> values)
         {

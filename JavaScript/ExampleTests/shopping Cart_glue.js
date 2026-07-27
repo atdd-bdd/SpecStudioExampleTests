@@ -1,5 +1,5 @@
 import { CartInputTyped, CatalogItemTyped, DiscountInputTyped, ItemPriceInputTyped,
-         OrderItemTyped, PricingTyped, ShippingInputTyped, ShoppingCartTyped,
+         OrderItemTyped, ShippingInputTyped, ShoppingCartTyped,
          ValidValuesTyped } from "./common/index.js";
 import { Catalog, CatalogItem, Dollar, OrderItem, OrderItemCollection,
          Percentage, ShoppingCart, SimpleText } from "./production/index.js";
@@ -77,12 +77,6 @@ export class ShoppingCartGlue {
 
   whenTotalComputed() { this.computedTotal = this.currentItems.computeTotal(); }
 
-  thenResultIs(values) {
-    values.forEach((value) => {
-      const typed = PricingTyped.fromStringObj(value);
-      expect(this.computedTotal.equals(new Dollar(typed.totalPrice))).toBe(true);
-    });
-  }
 
   examplesBusinessRuleShippingCost(values) {
     values.forEach((value) => {

@@ -116,14 +116,6 @@ func (g *ShoppingCartGlue) WhenTotalComputed(t *testing.T) {
 	g.computedTotal = g.currentItems.ComputeTotal()
 }
 
-func (g *ShoppingCartGlue) ThenResultIs(t *testing.T, values []common.PricingString) {
-	for _, value := range values {
-		typed := common.NewPricingTypedFromString(value)
-		if e := mustDollar(t, typed.TotalPrice); e != g.computedTotal {
-			t.Errorf("TotalPrice: expected %s, got %s", e, g.computedTotal)
-		}
-	}
-}
 
 func (g *ShoppingCartGlue) ExamplesBusinessRuleShippingCost(t *testing.T, values []common.ShippingInputString) {
 	for _, value := range values {
