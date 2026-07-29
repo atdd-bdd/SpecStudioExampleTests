@@ -1,0 +1,11 @@
+{
+    "name": "ExampleTests",
+    "projects": [
+        {
+            "name": "StandardExamplesTests",
+            "relativePath": "StandardExamplesTests"
+        }
+    ],
+    "sharingMode": "github",
+    "version": 2
+}

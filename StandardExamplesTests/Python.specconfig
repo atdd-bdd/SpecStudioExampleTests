@@ -1,0 +1,12 @@
+{
+    "copySpectable": true,
+    "createProductionClasses": true,
+    "framework": "pytest",
+    "language": "Python",
+    "namespace": "spectable",
+    "outputDirectory": "../Python/ExampleTests",
+    "overwriteGlue": false,
+    "productionClassesDir": "../Python/ExampleTests/production",
+    "productionClassesPackage": "production",
+    "version": 1
+}

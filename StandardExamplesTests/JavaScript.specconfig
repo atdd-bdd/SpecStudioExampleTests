@@ -1,0 +1,10 @@
+{
+    "copySpectable": true,
+    "createProductionClasses": true,
+    "framework": "Jest",
+    "language": "JavaScript",
+    "outputDirectory": "../JavaScript/ExampleTests",
+    "overwriteGlue": false,
+    "productionClassesDir": "../JavaScript/ExampleTests/production",
+    "version": 1
+}

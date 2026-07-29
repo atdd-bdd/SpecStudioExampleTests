@@ -1,0 +1,12 @@
+{
+    "createProductionClasses": true,
+    "failEveryTest": true,
+    "framework": "MSTest",
+    "language": "CSharp",
+    "namespace": "SpecStudioExamplesTestsCSharp",
+    "outputDirectory": "../CSharp/SpecStudioExamplesTestsCSharp",
+    "overwriteGlue": false,
+    "productionClassesDir": "../CSharp/SpecStudioExamplesTestsCSharp/production",
+    "productionClassesPackage": "production",
+    "version": 1
+}

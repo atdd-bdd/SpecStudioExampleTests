@@ -1,0 +1,10 @@
+{
+    "copySpectable": true,
+    "createProductionClasses": true,
+    "framework": "builtin",
+    "language": "Rust",
+    "outputDirectory": "../Rust/ExampleTests",
+    "overwriteGlue": false,
+    "productionClassesDir": "../Rust/ExampleTests/production",
+    "version": 1
+}

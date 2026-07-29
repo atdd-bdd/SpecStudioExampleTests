@@ -1,0 +1,10 @@
+{
+    "copySpectable": true,
+    "createProductionClasses": true,
+    "framework": "testing",
+    "language": "Go",
+    "outputDirectory": "../Go/ExampleTests",
+    "overwriteGlue": false,
+    "productionClassesDir": "../Go/ExampleTests/production",
+    "version": 1
+}

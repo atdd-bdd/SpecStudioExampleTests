@@ -1,0 +1,10 @@
+{
+    "copySpectable": true,
+    "createProductionClasses": true,
+    "framework": "XCTest",
+    "language": "Swift",
+    "outputDirectory": "../Swift/ExampleTests",
+    "overwriteGlue": false,
+    "productionClassesDir": "../Swift/ExampleTests/production",
+    "version": 1
+}
