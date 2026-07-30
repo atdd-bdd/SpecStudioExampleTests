@@ -28,6 +28,8 @@ pub mod shippinginput_string;
 pub mod shippinginput_typed;
 pub mod shoppingcart_string;
 pub mod shoppingcart_typed;
+pub mod simpleclass_string;
+pub mod simpleclass_typed;
 pub mod validvalues_string;
 pub mod validvalues_typed;
 pub use adder_string::*;
@@ -56,6 +58,8 @@ pub use shippinginput_string::*;
 pub use shippinginput_typed::*;
 pub use shoppingcart_string::*;
 pub use shoppingcart_typed::*;
+pub use simpleclass_string::*;
+pub use simpleclass_typed::*;
 pub use validvalues_string::*;
 pub use validvalues_typed::*;
 

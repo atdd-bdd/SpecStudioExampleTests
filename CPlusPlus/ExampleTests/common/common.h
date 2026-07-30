@@ -26,5 +26,7 @@
 #include "shippinginput_typed.h"
 #include "shoppingcart_string.h"
 #include "shoppingcart_typed.h"
+#include "simpleclass_string.h"
+#include "simpleclass_typed.h"
 #include "validvalues_string.h"
 #include "validvalues_typed.h"

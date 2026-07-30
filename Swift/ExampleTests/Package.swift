@@ -14,6 +14,7 @@ let package = Package(
             path: ".",
             exclude: [
                 "Calculator.spectable",
+                "json.spectable",
                 "RecordFilterExample.spectable",
                 "Shopping Cart.spectable",
                 "Types.spectable",

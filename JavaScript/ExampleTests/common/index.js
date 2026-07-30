@@ -25,5 +25,7 @@ export * from "./ShippingInputString.js";
 export * from "./ShippingInputTyped.js";
 export * from "./ShoppingCartString.js";
 export * from "./ShoppingCartTyped.js";
+export * from "./SimpleClassString.js";
+export * from "./SimpleClassTyped.js";
 export * from "./ValidValuesString.js";
 export * from "./ValidValuesTyped.js";

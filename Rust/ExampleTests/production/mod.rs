@@ -12,6 +12,7 @@ pub mod orderitemcollection;
 pub mod percentage;
 pub mod recordfilter;
 pub mod shoppingcart;
+pub mod simple_json;
 pub mod simpletext;
 pub mod temperature_converter;
 pub use address::*;

@@ -1,6 +1,7 @@
 from .Calculator import Calculator
 from .Dollar import Dollar
 from .Percentage import Percentage
+from .SimpleJson import SimpleJson
 from .SimpleText import SimpleText
 from .IDForm import IDForm
 from .IDValue import IDValue

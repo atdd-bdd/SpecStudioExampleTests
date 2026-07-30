@@ -24,5 +24,7 @@ from .shipping_input_string import ShippingInputString
 from .shipping_input_typed import ShippingInputTyped
 from .shopping_cart_string import ShoppingCartString
 from .shopping_cart_typed import ShoppingCartTyped
+from .simple_class_string import SimpleClassString
+from .simple_class_typed import SimpleClassTyped
 from .valid_values_string import ValidValuesString
 from .valid_values_typed import ValidValuesTyped
