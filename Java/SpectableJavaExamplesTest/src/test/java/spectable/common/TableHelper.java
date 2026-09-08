@@ -27,4 +27,14 @@ public class TableHelper {
         }
         return result;
     }
+
+    public static List<List<String>> toListListString(List<List<String>> values) {
+        List<List<String>> result = new ArrayList<>();
+        for (List<String> row : values) {
+            List<String> typedRow = new ArrayList<>();
+            for (String cell : row) { typedRow.add(cell); }
+            result.add(typedRow);
+        }
+        return result;
+    }
 }

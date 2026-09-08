@@ -1,0 +1,58 @@
+Remaining Work -- SpecStudioExampleTests
+========================================
+
+## AddressCorrection is generated into Java only
+
+Added 2026-09-08. Five scenarios, 0 failures, over HTTP against the US Census
+Bureau geocoder. The other eight languages are outstanding: each needs its own
+transport (the equivalent of RestCall.java) and its own JSON navigation before
+it can run, because the service answers with result.addressMatches nested two
+levels down and a table is flat.
+
+Nothing else in this repository makes a network call, so this is also the first
+example whose tests fail when the machine is offline. They fail naming the URL
+that could not be reached -- the transport saying so, rather than an assertion
+failing -- which is the distinction RestCall exists to preserve.
+
+
+## TableHelper.java is hand-maintained here too
+
+The generator writes common/TableHelper.java per .spectable and **replaces**
+whatever was there, so only the last specification generated keeps its grid
+converters. Generating AddressCorrection alone threw away toListListIDForm and
+toListListInteger, which RecordFilterExample and Calculator need, and left only
+toListListString.
+
+The file on disk is now the union of all three, merged by hand:
+
+    *** Build > Project or Build > Solution will overwrite it and the module
+    *** will stop compiling.
+
+Two further things worth knowing, both found the same day:
+
+  - A specification with no grid step writes **nothing at all** --
+    genTableHelperClass returns empty and the caller skips the write. So
+    deleting TableHelper.java and rebuilding a single file does not bring it
+    back if that file has no grid step.
+  - The pre-build clean deliberately does not delete TableHelper
+    (AppController.cpp names it), so a project build leaves whatever the last
+    grid-using specification wrote.
+
+The fix belongs in the generator -- merge with the file already on disk instead
+of replacing it -- and is filed in specstudio's Remaining Work.txt. The same
+stopgap and the same warning apply in SpecStudioVariousTests.
+
+
+## Generate through the IDE, or pass the .specconfig options
+
+Running SpecTableConverter.exe by hand with only -l/-f/-n regenerates
+common/Json.java and common/YesNo.java without the configured imports, silently
+dropping `import production.*;`, `import records.*;` and `import calculator.*;`
+from them. The module then fails to compile on unrelated files.
+
+Java.specconfig's imports and production settings correspond to:
+
+    --prod-dir <...>/src/main/java/production --prod-package production
+    --import "import records.*;" --import "import calculator.*;"
+
+The IDE passes these; a bare command line does not.
