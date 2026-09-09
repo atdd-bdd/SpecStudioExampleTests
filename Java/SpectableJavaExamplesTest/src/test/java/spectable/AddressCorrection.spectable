@@ -2,23 +2,25 @@ Specification AddressCorrection
 Description Standardizes US street addresses through the Census Bureau geocoder
 
 # Testing a live API. There are no production classes: the service is the thing
-# under test, so the glue is all there is. It builds the query, calls the
-# service, lifts the matches out of the response and compares them.
+# under test, so the glue is all there is -- and there is very little of it.
 #
 # The service is the US Census Bureau's address geocoder, which is public and
 # needs no API key:
 #
 #   https://geocoding.geo.census.gov/geocoder/locations/onelineaddress
 #
-# It answers with the same data every time, so every expected value below is a
-# real one. A cell reading "string" would assert almost nothing -- any non-empty
-# text passes -- and the scenario would read as covered while checking that a
-# field exists.
+# The attribute sets below mirror the shape of the JSON it answers with, so the
+# generated Response.fromJSON reads the whole reply on its own. The glue never
+# touches the JSON: it calls the service, hands the body to fromJSON, and
+# compares. If glue is ever seen navigating a reply, the specification is not
+# describing that reply honestly.
 #
-# The response is nested: {"result": {"addressMatches": [ ... ]}}, and each match
-# carries its parts under "addressComponents". A table is flat, so the glue lifts
-# result.addressMatches out and flattens each match before comparing. That is
-# translation, which is glue's job; no rule about addresses is decided there.
+# Declaring a field means it must be present in the reply. Fields of the reply
+# that are not declared are simply not read, which is why tigerLine and
+# coordinates are absent here -- nothing is asserted about them.
+#
+# The service answers with the same data every time, so every expected value is
+# a real one.
 
 Background
 Given base Page is : String
@@ -33,21 +35,16 @@ When sending request : Request Vertical
 | Address | 1600 pennsylvania ave nw, washington, dc |
 Then response status is : Status Vertical
 | Code | 200 |
-And match count is : Result Vertical
-| MatchCount | 1 |
-And the matched address is : Match Vertical
-| MatchedAddress  | 1600 PENNSYLVANIA AVE NW, WASHINGTON, DC, 20500 |
-| StreetName      | PENNSYLVANIA                                    |
-| SuffixType      | AVE                                             |
-| SuffixDirection | NW                                              |
-| PreDirection    |                                                 |
-| City            | WASHINGTON                                      |
-| State           | DC                                              |
-| Zip             | 20500                                           |
+And the matched addresses are : Match
+| matchedAddress                                  | addressComponents                          |
+| 1600 PENNSYLVANIA AVE NW, WASHINGTON, DC, 20500 | 20500 PENNSYLVANIA WASHINGTON "" NW DC AVE |
 
-# The caller typed it in lower case and left the ZIP off entirely. Case, and a
-# ZIP the caller never supplied, are what the service is for -- so both are
-# stated as literals. PreDirection is empty here and the blank cell says so.
+# One row means one match. The count is the table, not a separate claim.
+#
+# addressComponents is a nested block, so its cell holds that block's text form:
+# the values space separated, in the order the attributes are declared, with an
+# empty one written "". The caller typed the address in lower case and left the
+# ZIP off; case, and a ZIP that was never supplied, are what the service is for.
 
 # ============================================================
 # A spelled out street name becomes its numeral
@@ -58,36 +55,16 @@ When sending request : Request Vertical
 | Address | 350 fifth ave, new york, ny |
 Then response status is : Status Vertical
 | Code | 200 |
-And match count is : Result Vertical
-| MatchCount | 1 |
-And the matched address is : Match CompareOnly
-| MatchedAddress                     | StreetName | Zip   |
-| 350 5TH AVE, NEW YORK, NY, 10118   | 5TH        | 10118 |
+And the matched addresses are : Match CompareOnly
+| matchedAddress                   |
+| 350 5TH AVE, NEW YORK, NY, 10118 |
 
-# "fifth" became "5TH" -- the reason anyone calls an address corrector. This is
-# the same rule as "1 Penny LN" becoming "1 Penny Lane", in the direction this
-# particular service standardizes.
+# "fifth" became "5TH" -- the reason anyone calls an address corrector.
 #
-# CompareOnly limits equality to the columns actually shown; every other field
-# of Match is filled with ?DNC? and skipped. Use it when the scenario is about
-# one rule. A step takes one modifier, so a CompareOnly table cannot also be
-# Vertical -- which is why this one is on its side compared with the first.
-
-# ============================================================
-# Only the fields the rule is about
-# ============================================================
-
-Scenario Keep a directional the caller supplied
-When sending request : Request Vertical
-| Address | 200 e main st, columbus, oh |
-Then response status is : Status Vertical
-| Code | 200 |
-And the matched address is : Match CompareOnly
-| MatchedAddress                   | PreDirection |
-| 200 E MAIN ST, COLUMBUS, OH, 43215 | E          |
-
-# Adding a field to the response does not break this scenario, because nothing
-# but these two columns is compared.
+# CompareOnly limits equality to the columns shown, so addressComponents is
+# filled with the do-not-care marker all the way down and nothing inside it is
+# compared. A step takes one modifier, so a CompareOnly table cannot also be
+# Vertical.
 
 # ============================================================
 # Ambiguity returns every candidate
@@ -98,21 +75,15 @@ When sending request : Request Vertical
 | Address | 1600 pennsylvania ave, washington, dc |
 Then response status is : Status Vertical
 | Code | 200 |
-And match count is : Result Vertical
-| MatchCount | 2 |
 And the matched addresses are : Match CompareOnly
-| MatchedAddress                                  |
-| 1600 PENNSYLVANIA AVE NW, WASHINGTON, DC, 20500 |
+| matchedAddress                                  |
 | 1600 PENNSYLVANIA AVE SE, WASHINGTON, DC, 20003 |
+| 1600 PENNSYLVANIA AVE NW, WASHINGTON, DC, 20500 |
 
 # Drop the directional and the corrector cannot choose between the two
-# Pennsylvania Avenues, so it returns both rather than guessing.
-#
-# Two rows checked against the array the service returned. The glue matches each
-# expected row to an actual one and requires the counts to agree, so the check
-# is on the set rather than on the order -- the service happens to be stable
-# here, but a test that fails when a service reorders its results is testing the
-# wrong thing.
+# Pennsylvania Avenues, so it returns both rather than guessing. Two rows means
+# two matches: a third would fail on the count without anything being said
+# about counting.
 
 # ============================================================
 # An address that does not exist
@@ -123,21 +94,19 @@ When sending request : Request Vertical
 | Address | 99999 nonexistent rd, nowhere, zz 00000 |
 Then response status is : Status Vertical
 | Code | 200 |
-And match count is : Result Vertical
-| MatchCount | 0 |
+And there are no matched addresses
 
 # A failure to correct is still a 200. The call succeeded; the address did not
-# exist. Those are different things, and checking status separately from the
-# body is what keeps them apart -- a 404 here would be a defect in the service,
-# not an unknown address.
+# exist. Checking the status separately from the body is what keeps those apart
+# -- a 404 here would be a defect in the service, not an unknown address.
 
 Attributes Request
-| Attribute | Type   | Default                            | Notes                                     |
-| Method    | String | GET                                |                                           |
+| Attribute | Type   | Default                            | Notes                                         |
+| Method    | String | GET                                |                                               |
 | Page      | String | geocoder/locations/onelineaddress  | Appended to the base Page from the Background |
-| Address   | String |                                    | As the caller typed it                    |
-| Benchmark | String | Public_AR_Current                  | Which edition of the address ranges       |
-| Format    | String | json                               |                                           |
+| Address   | String |                                    | As the caller typed it                        |
+| Benchmark | String | Public_AR_Current                  | Which edition of the address ranges           |
+| Format    | String | json                               |                                               |
 
 # Everything but Address has a default, so a scenario states only what is
 # peculiar to it. The glue turns these into the query string.
@@ -146,17 +115,39 @@ Attributes Status
 | Attribute | Type    | Default | Notes            |
 | Code      | Integer | 200     | HTTP status code |
 
-Attributes Result
-| Attribute  | Type    | Default | Notes                                |
-| MatchCount | Integer |         | How many addresses the service found |
+# ---- the shape of the reply -------------------------------------------------
+# {"result": {"addressMatches": [ {"matchedAddress": ...,
+#                                  "addressComponents": { ... }} ]}}
 
-Attributes Match
-| Attribute       | Type   | Default | Notes                                  |
-| MatchedAddress  | String |         | The standardized address, as one line  |
-| PreDirection    | String |         | N, S, E, W before the street name      |
-| StreetName      | String |         |                                        |
-| SuffixType      | String |         | ST, AVE, RD, LN                        |
-| SuffixDirection | String |         | NW, SE and so on, after the suffix     |
-| City            | String |         |                                        |
-| State           | String |         | Two letters                            |
-| Zip             | String |         | Five digits                            |
+Attributes Response
+| Attribute | Type   | Default | Notes                   |
+| result    | Result |         | The one top level field |
+
+Attributes Result
+| Attribute      | Type            | Default | Notes                        |
+| addressMatches | MatchCollection |         | Empty when nothing was found |
+
+Collection MatchCollection
+| DataType | Minimum | Maximum | Notes                         |
+| Match    | 0       | 10000   | One per address the API found |
+
+Entity Match
+| Attribute         | Type              | Default | Notes                          |
+| matchedAddress    | String            |         | The standardized address       |
+| addressComponents | AddressComponents |         | The same address, in its parts |
+
+Entity AddressComponents
+| Attribute       | Type   | Default | Notes                              |
+| zip             | String |         | Five digits                        |
+| streetName      | String |         |                                    |
+| city            | String |         |                                    |
+| preDirection    | String |         | N, S, E, W before the street name  |
+| suffixDirection | String |         | NW, SE and so on, after the suffix |
+| state           | String |         | Two letters                        |
+| suffixType      | String |         | ST, AVE, RD, LN                    |
+
+# The names are the JSON's own. The generator camelCases an attribute name to
+# get the key it reads, and the Census keys are already camelCase, so these line
+# up exactly. The five components not declared -- preType, fromAddress,
+# toAddress, suffixQualifier, preQualifier -- are present in the reply and are
+# simply not read.

@@ -11,34 +11,16 @@ import calculator.*;
 
 public class MatchTyped {
     public String matchedAddress;
-    public String preDirection;
-    public String streetName;
-    public String suffixType;
-    public String suffixDirection;
-    public String city;
-    public String state;
-    public String zip;
+    public AddressComponentsTyped addressComponents;
 
-    public MatchTyped(String matchedAddress, String preDirection, String streetName, String suffixType, String suffixDirection, String city, String state, String zip) {
+    public MatchTyped(String matchedAddress, AddressComponentsTyped addressComponents) {
         this.matchedAddress = matchedAddress;
-        this.preDirection = preDirection;
-        this.streetName = streetName;
-        this.suffixType = suffixType;
-        this.suffixDirection = suffixDirection;
-        this.city = city;
-        this.state = state;
-        this.zip = zip;
+        this.addressComponents = addressComponents;
     }
 
     public MatchTyped(MatchString s) {
         this.matchedAddress = s.matchedAddress;
-        this.preDirection = s.preDirection;
-        this.streetName = s.streetName;
-        this.suffixType = s.suffixType;
-        this.suffixDirection = s.suffixDirection;
-        this.city = s.city;
-        this.state = s.state;
-        this.zip = s.zip;
+        this.addressComponents = new AddressComponentsTyped(s.addressComponents);
     }
 
     @Override
@@ -47,22 +29,16 @@ public class MatchTyped {
         if (!(o instanceof MatchTyped)) return false;
         MatchTyped that = (MatchTyped) o;
         return Objects.equals(matchedAddress, that.matchedAddress)
-            && Objects.equals(preDirection, that.preDirection)
-            && Objects.equals(streetName, that.streetName)
-            && Objects.equals(suffixType, that.suffixType)
-            && Objects.equals(suffixDirection, that.suffixDirection)
-            && Objects.equals(city, that.city)
-            && Objects.equals(state, that.state)
-            && Objects.equals(zip, that.zip);
+            && Objects.equals(addressComponents, that.addressComponents);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(matchedAddress, preDirection, streetName, suffixType, suffixDirection, city, state, zip);
+        return Objects.hash(matchedAddress, addressComponents);
     }
 
     public MatchString toMatchString() {
-        return new MatchString(String.valueOf(matchedAddress), String.valueOf(preDirection), String.valueOf(streetName), String.valueOf(suffixType), String.valueOf(suffixDirection), String.valueOf(city), String.valueOf(state), String.valueOf(zip));
+        return new MatchString(String.valueOf(matchedAddress), addressComponents.toAddressComponentsString());
     }
 
     public static List<MatchTyped> fromStringList(List<MatchString> list) {
@@ -81,13 +57,7 @@ public class MatchTyped {
     public Map<String, Object> toJsonValue() {
         Map<String, Object> m = new LinkedHashMap<String, Object>();
         m.put("matchedAddress", matchedAddress);
-        m.put("preDirection", preDirection);
-        m.put("streetName", streetName);
-        m.put("suffixType", suffixType);
-        m.put("suffixDirection", suffixDirection);
-        m.put("city", city);
-        m.put("state", state);
-        m.put("zip", zip);
+        m.put("addressComponents", addressComponents == null ? null : addressComponents.toJsonValue());
         return m;
     }
 
@@ -98,13 +68,7 @@ public class MatchTyped {
         if (m == null) return null;
         return new MatchTyped(
             Json.asString(Json.require(m, "matchedAddress"), "matchedAddress"),
-            Json.asString(Json.require(m, "preDirection"), "preDirection"),
-            Json.asString(Json.require(m, "streetName"), "streetName"),
-            Json.asString(Json.require(m, "suffixType"), "suffixType"),
-            Json.asString(Json.require(m, "suffixDirection"), "suffixDirection"),
-            Json.asString(Json.require(m, "city"), "city"),
-            Json.asString(Json.require(m, "state"), "state"),
-            Json.asString(Json.require(m, "zip"), "zip"));
+            AddressComponentsTyped.fromJsonValue(Json.asObject(Json.require(m, "addressComponents"), "addressComponents")));
     }
 
     public static MatchTyped fromJSON(String json) {

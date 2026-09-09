@@ -8,10 +8,10 @@ import calculator.*;
 public class ResultString {
     private static final String DNCString = "?DNC?";
 
-    public String matchCount;
+    public String addressMatches;
 
-    public ResultString(String matchCount) {
-        this.matchCount = matchCount;
+    public ResultString(String addressMatches) {
+        this.addressMatches = addressMatches;
     }
 
     /** Builds from the text form, e.g. Money as "25 USD". */
@@ -25,16 +25,16 @@ public class ResultString {
         if (this == o) return true;
         if (!(o instanceof ResultString)) return false;
         ResultString that = (ResultString) o;
-        return (DNCString.equals(matchCount) || DNCString.equals(that.matchCount) || Objects.equals(matchCount, that.matchCount));
+        return (DNCString.equals(addressMatches) || DNCString.equals(that.addressMatches) || Objects.equals(addressMatches, that.addressMatches));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(matchCount);
+        return Objects.hash(addressMatches);
     }
 
     @Override
     public String toString() {
-        return Tokens.token(matchCount);
+        return Tokens.token(addressMatches);
     }
 }

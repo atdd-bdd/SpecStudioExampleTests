@@ -2,6 +2,7 @@ package spectable.common;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -10,14 +11,14 @@ import records.*;
 import calculator.*;
 
 public class ResultTyped {
-    public int matchCount;
+    public List<MatchTyped> addressMatches;
 
-    public ResultTyped(int matchCount) {
-        this.matchCount = matchCount;
+    public ResultTyped(List<MatchTyped> addressMatches) {
+        this.addressMatches = addressMatches;
     }
 
     public ResultTyped(ResultString s) {
-        this.matchCount = Integer.parseInt(s.matchCount);
+        this.addressMatches = new ArrayList<>(); // Collection — populate from s.addressMatches
     }
 
     @Override
@@ -25,16 +26,16 @@ public class ResultTyped {
         if (this == o) return true;
         if (!(o instanceof ResultTyped)) return false;
         ResultTyped that = (ResultTyped) o;
-        return Objects.equals(matchCount, that.matchCount);
+        return Objects.equals(addressMatches, that.addressMatches);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(matchCount);
+        return Objects.hash(addressMatches);
     }
 
     public ResultString toResultString() {
-        return new ResultString(String.valueOf(matchCount));
+        return new ResultString(String.valueOf(addressMatches));
     }
 
     public static List<ResultTyped> fromStringList(List<ResultString> list) {
@@ -52,7 +53,10 @@ public class ResultTyped {
     /** Internal plumbing for {@link Json}; use toJSON() for JSON text. */
     public Map<String, Object> toJsonValue() {
         Map<String, Object> m = new LinkedHashMap<String, Object>();
-        m.put("matchCount", matchCount);
+        List<Object> json_addressMatches = new ArrayList<Object>();
+        if (addressMatches != null)
+            for (MatchTyped e : addressMatches) json_addressMatches.add(e == null ? null : e.toJsonValue());
+        m.put("addressMatches", addressMatches == null ? null : json_addressMatches);
         return m;
     }
 
@@ -61,8 +65,12 @@ public class ResultTyped {
     /** Internal plumbing for {@link Json}; use fromJSON(String) for JSON text. */
     public static ResultTyped fromJsonValue(Map<String, Object> m) {
         if (m == null) return null;
+        List<MatchTyped> addressMatches = new ArrayList<MatchTyped>();
+        List<Object> json_addressMatches = Json.getArray(m, "addressMatches");
+        if (json_addressMatches != null)
+            for (Object e : json_addressMatches) addressMatches.add(MatchTyped.fromJsonValue(Json.asObject(e, "addressMatches")));
         return new ResultTyped(
-            Json.asInt(Json.require(m, "matchCount"), "matchCount"));
+            addressMatches);
     }
 
     public static ResultTyped fromJSON(String json) {
