@@ -9,8 +9,14 @@ public struct ResultValueString: CustomStringConvertible, Equatable {
         self.sum = v.count > 0 ? v[0] : ""
     }
 
+    /// Builds from the text form, e.g. Money as "25 USD".
+    public static func fromText(_ text: String) -> ResultValueString {
+        let parts = Tokens.require(text, 1, "ResultValue")
+        return ResultValueString(sum: parts[0])
+    }
+
     public var description: String {
-        return "Sum=\(sum)"
+        return Tokens.token(sum)
     }
 
     public static let dncString = "?DNC?"

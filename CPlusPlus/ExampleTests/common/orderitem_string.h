@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include "tokens.h"
 
 #ifndef SPECTABLE_DNC_STRING
 #define SPECTABLE_DNC_STRING
@@ -33,15 +34,26 @@ struct OrderItemString {
         return obj;
     }
 
+    /// Builds from the text form, e.g. Money as "25 USD".
+    static OrderItemString from_text(const std::string& text) {
+        const std::vector<std::string> parts = tokens::require(text, 4, "OrderItem");
+        OrderItemString obj;
+        obj.name = parts[0];
+        obj.quantity = parts[1];
+        obj.price = parts[2];
+        obj.itemtotal = parts[3];
+        return obj;
+    }
+
     std::string to_string() const {
         std::ostringstream ss;
-        ss << "Name=" << name;
-        ss << ", ";
-        ss << "Quantity=" << quantity;
-        ss << ", ";
-        ss << "Price=" << price;
-        ss << ", ";
-        ss << "ItemTotal=" << itemtotal;
+        ss << tokens::token(name);
+        ss << " ";
+        ss << tokens::token(quantity);
+        ss << " ";
+        ss << tokens::token(price);
+        ss << " ";
+        ss << tokens::token(itemtotal);
         return ss.str();
     }
 

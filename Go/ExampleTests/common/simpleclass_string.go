@@ -1,7 +1,5 @@
 package common
 
-import "fmt"
-
 type SimpleClassString struct {
 	AnInt string
 	AString string
@@ -14,8 +12,17 @@ func NewSimpleClassStringFromSlice(v []string) SimpleClassString {
 	return s
 }
 
+// NewSimpleClassStringFromText builds from the text form, e.g. Money as "25 USD".
+func NewSimpleClassStringFromText(text string) SimpleClassString {
+	parts := RequireTokens(text, 2, "SimpleClass")
+	return SimpleClassString{
+		AnInt: parts[0],
+		AString: parts[1],
+	}
+}
+
 func (s SimpleClassString) String() string {
-	return fmt.Sprintf("anInt=%s, aString=%s", s.AnInt, s.AString)
+	return Token(s.AnInt) + " " + Token(s.AString)
 }
 
 func (s SimpleClassString) Equals(o SimpleClassString) bool {

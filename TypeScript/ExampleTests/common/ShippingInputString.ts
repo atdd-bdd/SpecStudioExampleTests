@@ -34,7 +34,7 @@ export class ShippingInputString {
   }
 
   toString(): string {
-    return `Total Price=${this.totalPrice}, Shipping Cost=${this.shippingCost}, Notes=${this.notes}`;
+    return tokens.token(this.totalPrice) + " " + tokens.token(this.shippingCost) + " " + tokens.token(this.notes);
   }
 
   equals(other: ShippingInputString): boolean {

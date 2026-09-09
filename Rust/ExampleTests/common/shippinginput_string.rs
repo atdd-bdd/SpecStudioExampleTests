@@ -15,16 +15,21 @@ impl ShippingInputString {
             notes: v.get(2).copied().unwrap_or("").to_string(),
         }
     }
+
+    /// Builds from the text form, e.g. Money as "25 USD".
+    pub fn from_text(text: &str) -> Self {
+        let parts = crate::common::tokens::require(text, 3, "ShippingInput");
+        Self {
+            total_price: parts[0].clone(),
+            shipping_cost: parts[1].clone(),
+            notes: parts[2].clone(),
+        }
+    }
 }
 
 impl std::fmt::Display for ShippingInputString {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f,
-            "Total Price={}, Shipping Cost={}, Notes={}",
-            self.total_price,
-            self.shipping_cost,
-            self.notes
-        )
+        write!(f, "{}", [crate::common::tokens::token(&self.total_price), crate::common::tokens::token(&self.shipping_cost), crate::common::tokens::token(&self.notes)].join(" "))
     }
 }
 

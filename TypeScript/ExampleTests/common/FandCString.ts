@@ -34,7 +34,7 @@ export class FandCString {
   }
 
   toString(): string {
-    return `F=${this.f}, C=${this.c}, Notes=${this.notes}`;
+    return tokens.token(this.f) + " " + tokens.token(this.c) + " " + tokens.token(this.notes);
   }
 
   equals(other: FandCString): boolean {

@@ -17,17 +17,22 @@ impl OrderItemString {
             itemtotal: v.get(3).copied().unwrap_or("").to_string(),
         }
     }
+
+    /// Builds from the text form, e.g. Money as "25 USD".
+    pub fn from_text(text: &str) -> Self {
+        let parts = crate::common::tokens::require(text, 4, "OrderItem");
+        Self {
+            name: parts[0].clone(),
+            quantity: parts[1].clone(),
+            price: parts[2].clone(),
+            itemtotal: parts[3].clone(),
+        }
+    }
 }
 
 impl std::fmt::Display for OrderItemString {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f,
-            "Name={}, Quantity={}, Price={}, ItemTotal={}",
-            self.name,
-            self.quantity,
-            self.price,
-            self.itemtotal
-        )
+        write!(f, "{}", [crate::common::tokens::token(&self.name), crate::common::tokens::token(&self.quantity), crate::common::tokens::token(&self.price), crate::common::tokens::token(&self.itemtotal)].join(" "))
     }
 }
 

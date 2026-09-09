@@ -34,7 +34,7 @@ export class DiscountInputString {
   }
 
   toString(): string {
-    return `Total Price=${this.totalPrice}, Discount=${this.discount}, Notes=${this.notes}`;
+    return tokens.token(this.totalPrice) + " " + tokens.token(this.discount) + " " + tokens.token(this.notes);
   }
 
   equals(other: DiscountInputString): boolean {

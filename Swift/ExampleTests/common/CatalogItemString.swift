@@ -12,8 +12,14 @@ public struct CatalogItemString: CustomStringConvertible, Equatable {
         self.price = v.count > 1 ? v[1] : ""
     }
 
+    /// Builds from the text form, e.g. Money as "25 USD".
+    public static func fromText(_ text: String) -> CatalogItemString {
+        let parts = Tokens.require(text, 2, "CatalogItem")
+        return CatalogItemString(name: parts[0], price: parts[1])
+    }
+
     public var description: String {
-        return "Name=\(name), Price=\(price)"
+        return Tokens.token(name) + " " + Tokens.token(price)
     }
 
     public static let dncString = "?DNC?"

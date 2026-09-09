@@ -15,16 +15,21 @@ impl AdderString {
             result: v.get(2).copied().unwrap_or("").to_string(),
         }
     }
+
+    /// Builds from the text form, e.g. Money as "25 USD".
+    pub fn from_text(text: &str) -> Self {
+        let parts = crate::common::tokens::require(text, 3, "Adder");
+        Self {
+            number1: parts[0].clone(),
+            number2: parts[1].clone(),
+            result: parts[2].clone(),
+        }
+    }
 }
 
 impl std::fmt::Display for AdderString {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f,
-            "number1={}, number2={}, result={}",
-            self.number1,
-            self.number2,
-            self.result
-        )
+        write!(f, "{}", [crate::common::tokens::token(&self.number1), crate::common::tokens::token(&self.number2), crate::common::tokens::token(&self.result)].join(" "))
     }
 }
 

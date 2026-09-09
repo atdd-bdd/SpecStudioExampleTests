@@ -1,7 +1,5 @@
 package common
 
-import "fmt"
-
 type ValidValuesString struct {
 	Value string
 	IsValid string
@@ -16,8 +14,18 @@ func NewValidValuesStringFromSlice(v []string) ValidValuesString {
 	return s
 }
 
+// NewValidValuesStringFromText builds from the text form, e.g. Money as "25 USD".
+func NewValidValuesStringFromText(text string) ValidValuesString {
+	parts := RequireTokens(text, 3, "ValidValues")
+	return ValidValuesString{
+		Value: parts[0],
+		IsValid: parts[1],
+		Notes: parts[2],
+	}
+}
+
 func (s ValidValuesString) String() string {
-	return fmt.Sprintf("Value=%s, IsValid=%s, Notes=%s", s.Value, s.IsValid, s.Notes)
+	return Token(s.Value) + " " + Token(s.IsValid) + " " + Token(s.Notes)
 }
 
 func (s ValidValuesString) Equals(o ValidValuesString) bool {

@@ -1,7 +1,5 @@
 package common
 
-import "fmt"
-
 type AddressString struct {
 	Street string
 	City string
@@ -18,8 +16,19 @@ func NewAddressStringFromSlice(v []string) AddressString {
 	return s
 }
 
+// NewAddressStringFromText builds from the text form, e.g. Money as "25 USD".
+func NewAddressStringFromText(text string) AddressString {
+	parts := RequireTokens(text, 4, "Address")
+	return AddressString{
+		Street: parts[0],
+		City: parts[1],
+		State: parts[2],
+		ZIP: parts[3],
+	}
+}
+
 func (s AddressString) String() string {
-	return fmt.Sprintf("Street=%s, City=%s, State=%s, ZIP=%s", s.Street, s.City, s.State, s.ZIP)
+	return Token(s.Street) + " " + Token(s.City) + " " + Token(s.State) + " " + Token(s.ZIP)
 }
 
 func (s AddressString) Equals(o AddressString) bool {

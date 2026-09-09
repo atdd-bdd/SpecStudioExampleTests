@@ -38,7 +38,7 @@ export class AddressString {
   }
 
   toString(): string {
-    return `Street=${this.street}, City=${this.city}, State=${this.state}, ZIP=${this.zIP}`;
+    return tokens.token(this.street) + " " + tokens.token(this.city) + " " + tokens.token(this.state) + " " + tokens.token(this.zIP);
   }
 
   equals(other: AddressString): boolean {

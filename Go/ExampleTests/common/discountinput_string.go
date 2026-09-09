@@ -1,7 +1,5 @@
 package common
 
-import "fmt"
-
 type DiscountInputString struct {
 	TotalPrice string
 	Discount string
@@ -16,8 +14,18 @@ func NewDiscountInputStringFromSlice(v []string) DiscountInputString {
 	return s
 }
 
+// NewDiscountInputStringFromText builds from the text form, e.g. Money as "25 USD".
+func NewDiscountInputStringFromText(text string) DiscountInputString {
+	parts := RequireTokens(text, 3, "DiscountInput")
+	return DiscountInputString{
+		TotalPrice: parts[0],
+		Discount: parts[1],
+		Notes: parts[2],
+	}
+}
+
 func (s DiscountInputString) String() string {
-	return fmt.Sprintf("Total Price=%s, Discount=%s, Notes=%s", s.TotalPrice, s.Discount, s.Notes)
+	return Token(s.TotalPrice) + " " + Token(s.Discount) + " " + Token(s.Notes)
 }
 
 func (s DiscountInputString) Equals(o DiscountInputString) bool {

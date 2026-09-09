@@ -19,18 +19,23 @@ impl CartInputString {
             notes: v.get(4).copied().unwrap_or("").to_string(),
         }
     }
+
+    /// Builds from the text form, e.g. Money as "25 USD".
+    pub fn from_text(text: &str) -> Self {
+        let parts = crate::common::tokens::require(text, 5, "CartInput");
+        Self {
+            totalitems: parts[0].clone(),
+            shipping: parts[1].clone(),
+            discount: parts[2].clone(),
+            total_price: parts[3].clone(),
+            notes: parts[4].clone(),
+        }
+    }
 }
 
 impl std::fmt::Display for CartInputString {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f,
-            "TotalItems={}, Shipping={}, Discount={}, Total Price={}, Notes={}",
-            self.totalitems,
-            self.shipping,
-            self.discount,
-            self.total_price,
-            self.notes
-        )
+        write!(f, "{}", [crate::common::tokens::token(&self.totalitems), crate::common::tokens::token(&self.shipping), crate::common::tokens::token(&self.discount), crate::common::tokens::token(&self.total_price), crate::common::tokens::token(&self.notes)].join(" "))
     }
 }
 

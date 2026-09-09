@@ -34,7 +34,7 @@ export class AdderString {
   }
 
   toString(): string {
-    return `number1=${this.number1}, number2=${this.number2}, result=${this.result}`;
+    return tokens.token(this.number1) + " " + tokens.token(this.number2) + " " + tokens.token(this.result);
   }
 
   equals(other: AdderString): boolean {

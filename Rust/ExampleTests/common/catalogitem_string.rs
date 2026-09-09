@@ -13,15 +13,20 @@ impl CatalogItemString {
             price: v.get(1).copied().unwrap_or("").to_string(),
         }
     }
+
+    /// Builds from the text form, e.g. Money as "25 USD".
+    pub fn from_text(text: &str) -> Self {
+        let parts = crate::common::tokens::require(text, 2, "CatalogItem");
+        Self {
+            name: parts[0].clone(),
+            price: parts[1].clone(),
+        }
+    }
 }
 
 impl std::fmt::Display for CatalogItemString {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f,
-            "Name={}, Price={}",
-            self.name,
-            self.price
-        )
+        write!(f, "{}", [crate::common::tokens::token(&self.name), crate::common::tokens::token(&self.price)].join(" "))
     }
 }
 

@@ -1,7 +1,5 @@
 package common
 
-import "fmt"
-
 type FilterValueString struct {
 	Value string
 }
@@ -12,8 +10,16 @@ func NewFilterValueStringFromSlice(v []string) FilterValueString {
 	return s
 }
 
+// NewFilterValueStringFromText builds from the text form, e.g. Money as "25 USD".
+func NewFilterValueStringFromText(text string) FilterValueString {
+	parts := RequireTokens(text, 1, "FilterValue")
+	return FilterValueString{
+		Value: parts[0],
+	}
+}
+
 func (s FilterValueString) String() string {
-	return fmt.Sprintf("Value=%s", s.Value)
+	return Token(s.Value)
 }
 
 func (s FilterValueString) Equals(o FilterValueString) bool {

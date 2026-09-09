@@ -1,7 +1,5 @@
 package common
 
-import "fmt"
-
 type CatalogItemString struct {
 	Name string
 	Price string
@@ -14,8 +12,17 @@ func NewCatalogItemStringFromSlice(v []string) CatalogItemString {
 	return s
 }
 
+// NewCatalogItemStringFromText builds from the text form, e.g. Money as "25 USD".
+func NewCatalogItemStringFromText(text string) CatalogItemString {
+	parts := RequireTokens(text, 2, "CatalogItem")
+	return CatalogItemString{
+		Name: parts[0],
+		Price: parts[1],
+	}
+}
+
 func (s CatalogItemString) String() string {
-	return fmt.Sprintf("Name=%s, Price=%s", s.Name, s.Price)
+	return Token(s.Name) + " " + Token(s.Price)
 }
 
 func (s CatalogItemString) Equals(o CatalogItemString) bool {

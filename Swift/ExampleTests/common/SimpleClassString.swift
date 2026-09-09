@@ -12,8 +12,14 @@ public struct SimpleClassString: CustomStringConvertible, Equatable {
         self.aString = v.count > 1 ? v[1] : ""
     }
 
+    /// Builds from the text form, e.g. Money as "25 USD".
+    public static func fromText(_ text: String) -> SimpleClassString {
+        let parts = Tokens.require(text, 2, "SimpleClass")
+        return SimpleClassString(anInt: parts[0], aString: parts[1])
+    }
+
     public var description: String {
-        return "anInt=\(anInt), aString=\(aString)"
+        return Tokens.token(anInt) + " " + Tokens.token(aString)
     }
 
     public static let dncString = "?DNC?"

@@ -18,8 +18,14 @@ public struct OrderItemString: CustomStringConvertible, Equatable {
         self.itemTotal = v.count > 3 ? v[3] : ""
     }
 
+    /// Builds from the text form, e.g. Money as "25 USD".
+    public static func fromText(_ text: String) -> OrderItemString {
+        let parts = Tokens.require(text, 4, "OrderItem")
+        return OrderItemString(name: parts[0], quantity: parts[1], price: parts[2], itemTotal: parts[3])
+    }
+
     public var description: String {
-        return "Name=\(name), Quantity=\(quantity), Price=\(price), ItemTotal=\(itemTotal)"
+        return Tokens.token(name) + " " + Tokens.token(quantity) + " " + Tokens.token(price) + " " + Tokens.token(itemTotal)
     }
 
     public static let dncString = "?DNC?"

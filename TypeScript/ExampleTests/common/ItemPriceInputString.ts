@@ -26,7 +26,7 @@ export class ItemPriceInputString {
   }
 
   toString(): string {
-    return `TotalItems=${this.totalItems}`;
+    return tokens.token(this.totalItems);
   }
 
   equals(other: ItemPriceInputString): boolean {

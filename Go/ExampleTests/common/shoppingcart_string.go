@@ -1,7 +1,5 @@
 package common
 
-import "fmt"
-
 type ShoppingCartString struct {
 	Items string
 	Shipping string
@@ -20,8 +18,21 @@ func NewShoppingCartStringFromSlice(v []string) ShoppingCartString {
 	return s
 }
 
+// NewShoppingCartStringFromText builds from the text form, e.g. Money as "25 USD".
+func NewShoppingCartStringFromText(text string) ShoppingCartString {
+	parts := RequireTokens(text, 6, "ShoppingCart")
+	return ShoppingCartString{
+		Items: parts[0],
+		Shipping: parts[1],
+		Discount: parts[2],
+		TotalPrice: parts[3],
+		ShippingAddress: NewAddressStringFromText(parts[4]),
+		BillingAddress: NewAddressStringFromText(parts[5]),
+	}
+}
+
 func (s ShoppingCartString) String() string {
-	return fmt.Sprintf("Items=%s, Shipping=%s, Discount=%s, TotalPrice=%s, ShippingAddress=%v, BillingAddress=%v", s.Items, s.Shipping, s.Discount, s.TotalPrice, s.ShippingAddress, s.BillingAddress)
+	return Token(s.Items) + " " + Token(s.Shipping) + " " + Token(s.Discount) + " " + Token(s.TotalPrice) + " " + Nested(s.ShippingAddress.String()) + " " + Nested(s.BillingAddress.String())
 }
 
 func (s ShoppingCartString) Equals(o ShoppingCartString) bool {

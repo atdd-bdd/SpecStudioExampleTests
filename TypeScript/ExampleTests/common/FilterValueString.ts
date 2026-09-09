@@ -26,7 +26,7 @@ export class FilterValueString {
   }
 
   toString(): string {
-    return `Value=${this.value}`;
+    return tokens.token(this.value);
   }
 
   equals(other: FilterValueString): boolean {

@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include "tokens.h"
 
 #ifndef SPECTABLE_DNC_STRING
 #define SPECTABLE_DNC_STRING
@@ -29,11 +30,20 @@ struct SimpleClassString {
         return obj;
     }
 
+    /// Builds from the text form, e.g. Money as "25 USD".
+    static SimpleClassString from_text(const std::string& text) {
+        const std::vector<std::string> parts = tokens::require(text, 2, "SimpleClass");
+        SimpleClassString obj;
+        obj.anint = parts[0];
+        obj.astring = parts[1];
+        return obj;
+    }
+
     std::string to_string() const {
         std::ostringstream ss;
-        ss << "anInt=" << anint;
-        ss << ", ";
-        ss << "aString=" << astring;
+        ss << tokens::token(anint);
+        ss << " ";
+        ss << tokens::token(astring);
         return ss.str();
     }
 

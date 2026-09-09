@@ -18,8 +18,14 @@ public struct AddressString: CustomStringConvertible, Equatable {
         self.zIP = v.count > 3 ? v[3] : ""
     }
 
+    /// Builds from the text form, e.g. Money as "25 USD".
+    public static func fromText(_ text: String) -> AddressString {
+        let parts = Tokens.require(text, 4, "Address")
+        return AddressString(street: parts[0], city: parts[1], state: parts[2], zIP: parts[3])
+    }
+
     public var description: String {
-        return "Street=\(street), City=\(city), State=\(state), ZIP=\(zIP)"
+        return Tokens.token(street) + " " + Tokens.token(city) + " " + Tokens.token(state) + " " + Tokens.token(zIP)
     }
 
     public static let dncString = "?DNC?"

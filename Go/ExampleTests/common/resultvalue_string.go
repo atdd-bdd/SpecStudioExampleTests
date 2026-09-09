@@ -1,7 +1,5 @@
 package common
 
-import "fmt"
-
 type ResultValueString struct {
 	Sum string
 }
@@ -12,8 +10,16 @@ func NewResultValueStringFromSlice(v []string) ResultValueString {
 	return s
 }
 
+// NewResultValueStringFromText builds from the text form, e.g. Money as "25 USD".
+func NewResultValueStringFromText(text string) ResultValueString {
+	parts := RequireTokens(text, 1, "ResultValue")
+	return ResultValueString{
+		Sum: parts[0],
+	}
+}
+
 func (s ResultValueString) String() string {
-	return fmt.Sprintf("Sum=%s", s.Sum)
+	return Token(s.Sum)
 }
 
 func (s ResultValueString) Equals(o ResultValueString) bool {

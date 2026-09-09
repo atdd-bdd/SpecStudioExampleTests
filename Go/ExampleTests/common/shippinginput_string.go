@@ -1,7 +1,5 @@
 package common
 
-import "fmt"
-
 type ShippingInputString struct {
 	TotalPrice string
 	ShippingCost string
@@ -16,8 +14,18 @@ func NewShippingInputStringFromSlice(v []string) ShippingInputString {
 	return s
 }
 
+// NewShippingInputStringFromText builds from the text form, e.g. Money as "25 USD".
+func NewShippingInputStringFromText(text string) ShippingInputString {
+	parts := RequireTokens(text, 3, "ShippingInput")
+	return ShippingInputString{
+		TotalPrice: parts[0],
+		ShippingCost: parts[1],
+		Notes: parts[2],
+	}
+}
+
 func (s ShippingInputString) String() string {
-	return fmt.Sprintf("Total Price=%s, Shipping Cost=%s, Notes=%s", s.TotalPrice, s.ShippingCost, s.Notes)
+	return Token(s.TotalPrice) + " " + Token(s.ShippingCost) + " " + Token(s.Notes)
 }
 
 func (s ShippingInputString) Equals(o ShippingInputString) bool {

@@ -15,16 +15,21 @@ impl DiscountInputString {
             notes: v.get(2).copied().unwrap_or("").to_string(),
         }
     }
+
+    /// Builds from the text form, e.g. Money as "25 USD".
+    pub fn from_text(text: &str) -> Self {
+        let parts = crate::common::tokens::require(text, 3, "DiscountInput");
+        Self {
+            total_price: parts[0].clone(),
+            discount: parts[1].clone(),
+            notes: parts[2].clone(),
+        }
+    }
 }
 
 impl std::fmt::Display for DiscountInputString {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f,
-            "Total Price={}, Discount={}, Notes={}",
-            self.total_price,
-            self.discount,
-            self.notes
-        )
+        write!(f, "{}", [crate::common::tokens::token(&self.total_price), crate::common::tokens::token(&self.discount), crate::common::tokens::token(&self.notes)].join(" "))
     }
 }
 

@@ -13,15 +13,20 @@ impl IDValueString {
             value: v.get(1).copied().unwrap_or("").to_string(),
         }
     }
+
+    /// Builds from the text form, e.g. Money as "25 USD".
+    pub fn from_text(text: &str) -> Self {
+        let parts = crate::common::tokens::require(text, 2, "IDValue");
+        Self {
+            id: parts[0].clone(),
+            value: parts[1].clone(),
+        }
+    }
 }
 
 impl std::fmt::Display for IDValueString {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f,
-            "ID={}, Value={}",
-            self.id,
-            self.value
-        )
+        write!(f, "{}", [crate::common::tokens::token(&self.id), crate::common::tokens::token(&self.value)].join(" "))
     }
 }
 

@@ -42,7 +42,7 @@ export class CartInputString {
   }
 
   toString(): string {
-    return `TotalItems=${this.totalItems}, Shipping=${this.shipping}, Discount=${this.discount}, Total Price=${this.totalPrice}, Notes=${this.notes}`;
+    return tokens.token(this.totalItems) + " " + tokens.token(this.shipping) + " " + tokens.token(this.discount) + " " + tokens.token(this.totalPrice) + " " + tokens.token(this.notes);
   }
 
   equals(other: CartInputString): boolean {

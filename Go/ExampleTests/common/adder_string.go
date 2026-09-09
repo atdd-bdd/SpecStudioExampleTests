@@ -1,7 +1,5 @@
 package common
 
-import "fmt"
-
 type AdderString struct {
 	Number1 string
 	Number2 string
@@ -16,8 +14,18 @@ func NewAdderStringFromSlice(v []string) AdderString {
 	return s
 }
 
+// NewAdderStringFromText builds from the text form, e.g. Money as "25 USD".
+func NewAdderStringFromText(text string) AdderString {
+	parts := RequireTokens(text, 3, "Adder")
+	return AdderString{
+		Number1: parts[0],
+		Number2: parts[1],
+		Result: parts[2],
+	}
+}
+
 func (s AdderString) String() string {
-	return fmt.Sprintf("number1=%s, number2=%s, result=%s", s.Number1, s.Number2, s.Result)
+	return Token(s.Number1) + " " + Token(s.Number2) + " " + Token(s.Result)
 }
 
 func (s AdderString) Equals(o AdderString) bool {

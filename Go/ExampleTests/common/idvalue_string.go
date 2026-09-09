@@ -1,7 +1,5 @@
 package common
 
-import "fmt"
-
 type IDValueString struct {
 	ID string
 	Value string
@@ -14,8 +12,17 @@ func NewIDValueStringFromSlice(v []string) IDValueString {
 	return s
 }
 
+// NewIDValueStringFromText builds from the text form, e.g. Money as "25 USD".
+func NewIDValueStringFromText(text string) IDValueString {
+	parts := RequireTokens(text, 2, "IDValue")
+	return IDValueString{
+		ID: parts[0],
+		Value: parts[1],
+	}
+}
+
 func (s IDValueString) String() string {
-	return fmt.Sprintf("ID=%s, Value=%s", s.ID, s.Value)
+	return Token(s.ID) + " " + Token(s.Value)
 }
 
 func (s IDValueString) Equals(o IDValueString) bool {

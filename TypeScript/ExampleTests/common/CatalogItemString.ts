@@ -30,7 +30,7 @@ export class CatalogItemString {
   }
 
   toString(): string {
-    return `Name=${this.name}, Price=${this.price}`;
+    return tokens.token(this.name) + " " + tokens.token(this.price);
   }
 
   equals(other: CatalogItemString): boolean {

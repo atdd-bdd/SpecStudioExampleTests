@@ -15,16 +15,21 @@ impl FandCString {
             notes: v.get(2).copied().unwrap_or("").to_string(),
         }
     }
+
+    /// Builds from the text form, e.g. Money as "25 USD".
+    pub fn from_text(text: &str) -> Self {
+        let parts = crate::common::tokens::require(text, 3, "FandC");
+        Self {
+            f: parts[0].clone(),
+            c: parts[1].clone(),
+            notes: parts[2].clone(),
+        }
+    }
 }
 
 impl std::fmt::Display for FandCString {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f,
-            "F={}, C={}, Notes={}",
-            self.f,
-            self.c,
-            self.notes
-        )
+        write!(f, "{}", [crate::common::tokens::token(&self.f), crate::common::tokens::token(&self.c), crate::common::tokens::token(&self.notes)].join(" "))
     }
 }
 

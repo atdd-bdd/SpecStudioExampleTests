@@ -9,8 +9,14 @@ public struct FilterValueString: CustomStringConvertible, Equatable {
         self.value = v.count > 0 ? v[0] : ""
     }
 
+    /// Builds from the text form, e.g. Money as "25 USD".
+    public static func fromText(_ text: String) -> FilterValueString {
+        let parts = Tokens.require(text, 1, "FilterValue")
+        return FilterValueString(value: parts[0])
+    }
+
     public var description: String {
-        return "Value=\(value)"
+        return Tokens.token(value)
     }
 
     public static let dncString = "?DNC?"

@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include "tokens.h"
 
 #ifndef SPECTABLE_DNC_STRING
 #define SPECTABLE_DNC_STRING
@@ -31,13 +32,23 @@ struct ValidValuesString {
         return obj;
     }
 
+    /// Builds from the text form, e.g. Money as "25 USD".
+    static ValidValuesString from_text(const std::string& text) {
+        const std::vector<std::string> parts = tokens::require(text, 3, "ValidValues");
+        ValidValuesString obj;
+        obj.value = parts[0];
+        obj.isvalid = parts[1];
+        obj.notes = parts[2];
+        return obj;
+    }
+
     std::string to_string() const {
         std::ostringstream ss;
-        ss << "Value=" << value;
-        ss << ", ";
-        ss << "IsValid=" << isvalid;
-        ss << ", ";
-        ss << "Notes=" << notes;
+        ss << tokens::token(value);
+        ss << " ";
+        ss << tokens::token(isvalid);
+        ss << " ";
+        ss << tokens::token(notes);
         return ss.str();
     }
 

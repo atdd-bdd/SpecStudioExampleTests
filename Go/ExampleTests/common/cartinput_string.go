@@ -1,7 +1,5 @@
 package common
 
-import "fmt"
-
 type CartInputString struct {
 	TotalItems string
 	Shipping string
@@ -20,8 +18,20 @@ func NewCartInputStringFromSlice(v []string) CartInputString {
 	return s
 }
 
+// NewCartInputStringFromText builds from the text form, e.g. Money as "25 USD".
+func NewCartInputStringFromText(text string) CartInputString {
+	parts := RequireTokens(text, 5, "CartInput")
+	return CartInputString{
+		TotalItems: parts[0],
+		Shipping: parts[1],
+		Discount: parts[2],
+		TotalPrice: parts[3],
+		Notes: parts[4],
+	}
+}
+
 func (s CartInputString) String() string {
-	return fmt.Sprintf("TotalItems=%s, Shipping=%s, Discount=%s, Total Price=%s, Notes=%s", s.TotalItems, s.Shipping, s.Discount, s.TotalPrice, s.Notes)
+	return Token(s.TotalItems) + " " + Token(s.Shipping) + " " + Token(s.Discount) + " " + Token(s.TotalPrice) + " " + Token(s.Notes)
 }
 
 func (s CartInputString) Equals(o CartInputString) bool {

@@ -12,8 +12,14 @@ public struct IDValueString: CustomStringConvertible, Equatable {
         self.value = v.count > 1 ? v[1] : ""
     }
 
+    /// Builds from the text form, e.g. Money as "25 USD".
+    public static func fromText(_ text: String) -> IDValueString {
+        let parts = Tokens.require(text, 2, "IDValue")
+        return IDValueString(iD: parts[0], value: parts[1])
+    }
+
     public var description: String {
-        return "ID=\(iD), Value=\(value)"
+        return Tokens.token(iD) + " " + Tokens.token(value)
     }
 
     public static let dncString = "?DNC?"

@@ -26,7 +26,7 @@ export class ResultValueString {
   }
 
   toString(): string {
-    return `Sum=${this.sum}`;
+    return tokens.token(this.sum);
   }
 
   equals(other: ResultValueString): boolean {

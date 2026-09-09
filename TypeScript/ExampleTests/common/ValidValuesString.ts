@@ -34,7 +34,7 @@ export class ValidValuesString {
   }
 
   toString(): string {
-    return `Value=${this.value}, IsValid=${this.isValid}, Notes=${this.notes}`;
+    return tokens.token(this.value) + " " + tokens.token(this.isValid) + " " + tokens.token(this.notes);
   }
 
   equals(other: ValidValuesString): boolean {

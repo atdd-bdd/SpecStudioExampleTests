@@ -15,8 +15,14 @@ public struct ValidValuesString: CustomStringConvertible, Equatable {
         self.notes = v.count > 2 ? v[2] : ""
     }
 
+    /// Builds from the text form, e.g. Money as "25 USD".
+    public static func fromText(_ text: String) -> ValidValuesString {
+        let parts = Tokens.require(text, 3, "ValidValues")
+        return ValidValuesString(value: parts[0], isValid: parts[1], notes: parts[2])
+    }
+
     public var description: String {
-        return "Value=\(value), IsValid=\(isValid), Notes=\(notes)"
+        return Tokens.token(value) + " " + Tokens.token(isValid) + " " + Tokens.token(notes)
     }
 
     public static let dncString = "?DNC?"

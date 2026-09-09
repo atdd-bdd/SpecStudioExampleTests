@@ -24,8 +24,14 @@ public struct ShoppingCartString: CustomStringConvertible, Equatable {
         self.billingAddress = AddressString(fromArray: [])
     }
 
+    /// Builds from the text form, e.g. Money as "25 USD".
+    public static func fromText(_ text: String) -> ShoppingCartString {
+        let parts = Tokens.require(text, 6, "ShoppingCart")
+        return ShoppingCartString(items: parts[0], shipping: parts[1], discount: parts[2], totalPrice: parts[3], shippingAddress: AddressString.fromText(parts[4]), billingAddress: AddressString.fromText(parts[5]))
+    }
+
     public var description: String {
-        return "Items=\(items), Shipping=\(shipping), Discount=\(discount), TotalPrice=\(totalPrice), ShippingAddress=\(shippingAddress), BillingAddress=\(billingAddress)"
+        return Tokens.token(items) + " " + Tokens.token(shipping) + " " + Tokens.token(discount) + " " + Tokens.token(totalPrice) + " " + Tokens.nested(shippingAddress.description) + " " + Tokens.nested(billingAddress.description)
     }
 
     public static let dncString = "?DNC?"

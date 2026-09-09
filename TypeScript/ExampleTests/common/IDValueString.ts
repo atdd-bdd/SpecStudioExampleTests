@@ -30,7 +30,7 @@ export class IDValueString {
   }
 
   toString(): string {
-    return `ID=${this.iD}, Value=${this.value}`;
+    return tokens.token(this.iD) + " " + tokens.token(this.value);
   }
 
   equals(other: IDValueString): boolean {

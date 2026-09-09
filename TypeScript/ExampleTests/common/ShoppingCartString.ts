@@ -45,7 +45,7 @@ export class ShoppingCartString {
   }
 
   toString(): string {
-    return `Items=${this.items}, Shipping=${this.shipping}, Discount=${this.discount}, TotalPrice=${this.totalPrice}, ShippingAddress=${this.shippingAddress}, BillingAddress=${this.billingAddress}`;
+    return tokens.token(this.items) + " " + tokens.token(this.shipping) + " " + tokens.token(this.discount) + " " + tokens.token(this.totalPrice) + " " + tokens.nested(String(this.shippingAddress)) + " " + tokens.nested(String(this.billingAddress));
   }
 
   equals(other: ShoppingCartString): boolean {

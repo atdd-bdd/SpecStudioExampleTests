@@ -1,7 +1,5 @@
 package common
 
-import "fmt"
-
 type OrderItemString struct {
 	Name string
 	Quantity string
@@ -18,8 +16,19 @@ func NewOrderItemStringFromSlice(v []string) OrderItemString {
 	return s
 }
 
+// NewOrderItemStringFromText builds from the text form, e.g. Money as "25 USD".
+func NewOrderItemStringFromText(text string) OrderItemString {
+	parts := RequireTokens(text, 4, "OrderItem")
+	return OrderItemString{
+		Name: parts[0],
+		Quantity: parts[1],
+		Price: parts[2],
+		ItemTotal: parts[3],
+	}
+}
+
 func (s OrderItemString) String() string {
-	return fmt.Sprintf("Name=%s, Quantity=%s, Price=%s, ItemTotal=%s", s.Name, s.Quantity, s.Price, s.ItemTotal)
+	return Token(s.Name) + " " + Token(s.Quantity) + " " + Token(s.Price) + " " + Token(s.ItemTotal)
 }
 
 func (s OrderItemString) Equals(o OrderItemString) bool {

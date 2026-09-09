@@ -11,14 +11,19 @@ impl ItemPriceInputString {
             totalitems: v.get(0).copied().unwrap_or("").to_string(),
         }
     }
+
+    /// Builds from the text form, e.g. Money as "25 USD".
+    pub fn from_text(text: &str) -> Self {
+        let parts = crate::common::tokens::require(text, 1, "ItemPriceInput");
+        Self {
+            totalitems: parts[0].clone(),
+        }
+    }
 }
 
 impl std::fmt::Display for ItemPriceInputString {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f,
-            "TotalItems={}",
-            self.totalitems
-        )
+        write!(f, "{}", [crate::common::tokens::token(&self.totalitems)].join(" "))
     }
 }
 

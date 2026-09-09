@@ -15,8 +15,14 @@ public struct FandCString: CustomStringConvertible, Equatable {
         self.notes = v.count > 2 ? v[2] : ""
     }
 
+    /// Builds from the text form, e.g. Money as "25 USD".
+    public static func fromText(_ text: String) -> FandCString {
+        let parts = Tokens.require(text, 3, "FandC")
+        return FandCString(f: parts[0], c: parts[1], notes: parts[2])
+    }
+
     public var description: String {
-        return "F=\(f), C=\(c), Notes=\(notes)"
+        return Tokens.token(f) + " " + Tokens.token(c) + " " + Tokens.token(notes)
     }
 
     public static let dncString = "?DNC?"

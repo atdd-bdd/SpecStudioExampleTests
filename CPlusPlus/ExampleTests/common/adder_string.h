@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include "tokens.h"
 
 #ifndef SPECTABLE_DNC_STRING
 #define SPECTABLE_DNC_STRING
@@ -31,13 +32,23 @@ struct AdderString {
         return obj;
     }
 
+    /// Builds from the text form, e.g. Money as "25 USD".
+    static AdderString from_text(const std::string& text) {
+        const std::vector<std::string> parts = tokens::require(text, 3, "Adder");
+        AdderString obj;
+        obj.number1 = parts[0];
+        obj.number2 = parts[1];
+        obj.result = parts[2];
+        return obj;
+    }
+
     std::string to_string() const {
         std::ostringstream ss;
-        ss << "number1=" << number1;
-        ss << ", ";
-        ss << "number2=" << number2;
-        ss << ", ";
-        ss << "result=" << result;
+        ss << tokens::token(number1);
+        ss << " ";
+        ss << tokens::token(number2);
+        ss << " ";
+        ss << tokens::token(result);
         return ss.str();
     }
 

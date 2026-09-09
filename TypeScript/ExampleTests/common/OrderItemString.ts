@@ -38,7 +38,7 @@ export class OrderItemString {
   }
 
   toString(): string {
-    return `Name=${this.name}, Quantity=${this.quantity}, Price=${this.price}, ItemTotal=${this.itemTotal}`;
+    return tokens.token(this.name) + " " + tokens.token(this.quantity) + " " + tokens.token(this.price) + " " + tokens.token(this.itemTotal);
   }
 
   equals(other: OrderItemString): boolean {

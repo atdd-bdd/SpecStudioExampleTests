@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include "tokens.h"
 #include "address_string.h"
 
 #ifndef SPECTABLE_DNC_STRING
@@ -36,19 +37,32 @@ struct ShoppingCartString {
         return obj;
     }
 
+    /// Builds from the text form, e.g. Money as "25 USD".
+    static ShoppingCartString from_text(const std::string& text) {
+        const std::vector<std::string> parts = tokens::require(text, 6, "ShoppingCart");
+        ShoppingCartString obj;
+        obj.items = parts[0];
+        obj.shipping = parts[1];
+        obj.discount = parts[2];
+        obj.totalprice = parts[3];
+        obj.shippingaddress = AddressString::from_text(parts[4]);
+        obj.billingaddress = AddressString::from_text(parts[5]);
+        return obj;
+    }
+
     std::string to_string() const {
         std::ostringstream ss;
-        ss << "Items=" << items;
-        ss << ", ";
-        ss << "Shipping=" << shipping;
-        ss << ", ";
-        ss << "Discount=" << discount;
-        ss << ", ";
-        ss << "TotalPrice=" << totalprice;
-        ss << ", ";
-        ss << "ShippingAddress=" << shippingaddress.to_string();
-        ss << ", ";
-        ss << "BillingAddress=" << billingaddress.to_string();
+        ss << tokens::token(items);
+        ss << " ";
+        ss << tokens::token(shipping);
+        ss << " ";
+        ss << tokens::token(discount);
+        ss << " ";
+        ss << tokens::token(totalprice);
+        ss << " ";
+        ss << tokens::nested(shippingaddress.to_string());
+        ss << " ";
+        ss << tokens::nested(billingaddress.to_string());
         return ss.str();
     }
 

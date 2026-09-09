@@ -1,7 +1,5 @@
 package common
 
-import "fmt"
-
 type FandCString struct {
 	F string
 	C string
@@ -16,8 +14,18 @@ func NewFandCStringFromSlice(v []string) FandCString {
 	return s
 }
 
+// NewFandCStringFromText builds from the text form, e.g. Money as "25 USD".
+func NewFandCStringFromText(text string) FandCString {
+	parts := RequireTokens(text, 3, "FandC")
+	return FandCString{
+		F: parts[0],
+		C: parts[1],
+		Notes: parts[2],
+	}
+}
+
 func (s FandCString) String() string {
-	return fmt.Sprintf("F=%s, C=%s, Notes=%s", s.F, s.C, s.Notes)
+	return Token(s.F) + " " + Token(s.C) + " " + Token(s.Notes)
 }
 
 func (s FandCString) Equals(o FandCString) bool {

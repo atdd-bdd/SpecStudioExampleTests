@@ -30,7 +30,7 @@ export class SimpleClassString {
   }
 
   toString(): string {
-    return `anInt=${this.anInt}, aString=${this.aString}`;
+    return tokens.token(this.anInt) + " " + tokens.token(this.aString);
   }
 
   equals(other: SimpleClassString): boolean {

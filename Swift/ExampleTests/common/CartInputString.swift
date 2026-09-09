@@ -21,8 +21,14 @@ public struct CartInputString: CustomStringConvertible, Equatable {
         self.notes = v.count > 4 ? v[4] : ""
     }
 
+    /// Builds from the text form, e.g. Money as "25 USD".
+    public static func fromText(_ text: String) -> CartInputString {
+        let parts = Tokens.require(text, 5, "CartInput")
+        return CartInputString(totalItems: parts[0], shipping: parts[1], discount: parts[2], totalPrice: parts[3], notes: parts[4])
+    }
+
     public var description: String {
-        return "TotalItems=\(totalItems), Shipping=\(shipping), Discount=\(discount), Total Price=\(totalPrice), Notes=\(notes)"
+        return Tokens.token(totalItems) + " " + Tokens.token(shipping) + " " + Tokens.token(discount) + " " + Tokens.token(totalPrice) + " " + Tokens.token(notes)
     }
 
     public static let dncString = "?DNC?"

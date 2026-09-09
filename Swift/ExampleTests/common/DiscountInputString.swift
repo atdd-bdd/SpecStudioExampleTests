@@ -15,8 +15,14 @@ public struct DiscountInputString: CustomStringConvertible, Equatable {
         self.notes = v.count > 2 ? v[2] : ""
     }
 
+    /// Builds from the text form, e.g. Money as "25 USD".
+    public static func fromText(_ text: String) -> DiscountInputString {
+        let parts = Tokens.require(text, 3, "DiscountInput")
+        return DiscountInputString(totalPrice: parts[0], discount: parts[1], notes: parts[2])
+    }
+
     public var description: String {
-        return "Total Price=\(totalPrice), Discount=\(discount), Notes=\(notes)"
+        return Tokens.token(totalPrice) + " " + Tokens.token(discount) + " " + Tokens.token(notes)
     }
 
     public static let dncString = "?DNC?"

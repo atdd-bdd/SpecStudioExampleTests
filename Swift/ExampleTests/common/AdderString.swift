@@ -15,8 +15,14 @@ public struct AdderString: CustomStringConvertible, Equatable {
         self.result = v.count > 2 ? v[2] : ""
     }
 
+    /// Builds from the text form, e.g. Money as "25 USD".
+    public static func fromText(_ text: String) -> AdderString {
+        let parts = Tokens.require(text, 3, "Adder")
+        return AdderString(number1: parts[0], number2: parts[1], result: parts[2])
+    }
+
     public var description: String {
-        return "number1=\(number1), number2=\(number2), result=\(result)"
+        return Tokens.token(number1) + " " + Tokens.token(number2) + " " + Tokens.token(result)
     }
 
     public static let dncString = "?DNC?"
