@@ -1,4 +1,5 @@
 import { AddressString } from "./AddressString.js";
+import * as tokens from "./tokens.js";
 
 export class ShoppingCartString {
   static DNC_STRING = "?DNC?";
@@ -24,8 +25,21 @@ export class ShoppingCartString {
     );
   }
 
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text) {
+    const parts = tokens.require_(text, 6, "ShoppingCart");
+    return new ShoppingCartString(
+      parts[0],
+      parts[1],
+      parts[2],
+      parts[3],
+      AddressString.fromText(parts[4]),
+      AddressString.fromText(parts[5])
+    );
+  }
+
   toString() {
-    return `Items=${this.items}, Shipping=${this.shipping}, Discount=${this.discount}, TotalPrice=${this.totalPrice}, ShippingAddress=${this.shippingAddress}, BillingAddress=${this.billingAddress}`;
+    return tokens.token(this.items) + " " + tokens.token(this.shipping) + " " + tokens.token(this.discount) + " " + tokens.token(this.totalPrice) + " " + tokens.nested(String(this.shippingAddress)) + " " + tokens.nested(String(this.billingAddress));
   }
 
   equals(other) {

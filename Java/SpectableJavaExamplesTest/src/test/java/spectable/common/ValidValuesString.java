@@ -18,6 +18,19 @@ public class ValidValuesString {
         this.notes = notes;
     }
 
+    /** Builds from the text form, e.g. Money as "25 USD". */
+    public static ValidValuesString fromText(String text) {
+        java.util.List<String> parts = Tokens.require(text, 3, "ValidValues");
+        return new ValidValuesString(parts.get(0), parts.get(1), parts.get(2));
+    }
+
+    public ValidValuesString(String text) {
+        ValidValuesString parsed = fromText(text);
+        this.value = parsed.value;
+        this.isValid = parsed.isValid;
+        this.notes = parsed.notes;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -35,6 +48,6 @@ public class ValidValuesString {
 
     @Override
     public String toString() {
-        return "Value=" + value + ", " + "IsValid=" + isValid + ", " + "Notes=" + notes;
+        return Tokens.token(value) + " " + Tokens.token(isValid) + " " + Tokens.token(notes);
     }
 }

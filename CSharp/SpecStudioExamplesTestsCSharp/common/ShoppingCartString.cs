@@ -21,6 +21,24 @@ using production;
             this.billingAddress = billingAddress;
         }
 
+        /// <summary>Builds from the text form, e.g. Money as "25 USD".</summary>
+        public static ShoppingCartString FromText(string text)
+        {
+            var parts = Tokens.Require(text, 6, "ShoppingCart");
+            return new ShoppingCartString(parts[0], parts[1], parts[2], parts[3], AddressString.FromText(parts[4]), AddressString.FromText(parts[5]));
+        }
+
+        public ShoppingCartString(string text)
+        {
+            var parsed = FromText(text);
+            this.items = parsed.items;
+            this.shipping = parsed.shipping;
+            this.discount = parsed.discount;
+            this.totalPrice = parsed.totalPrice;
+            this.shippingAddress = parsed.shippingAddress;
+            this.billingAddress = parsed.billingAddress;
+        }
+
         public ShoppingCartTyped ToShoppingCartTyped()
         {
             return new ShoppingCartTyped(
@@ -35,7 +53,7 @@ using production;
 
         public override string ToString()
         {
-            return $"Items={items}, Shipping={shipping}, Discount={discount}, TotalPrice={totalPrice}, ShippingAddress={shippingAddress}, BillingAddress={billingAddress}";
+            return Tokens.Token(items) + " " + Tokens.Token(shipping) + " " + Tokens.Token(discount) + " " + Tokens.Token(totalPrice) + " " + Tokens.Nested(shippingAddress == null ? "" : shippingAddress.ToString()) + " " + Tokens.Nested(billingAddress == null ? "" : billingAddress.ToString());
         }
 
         const string DNCString = "?DNC?";

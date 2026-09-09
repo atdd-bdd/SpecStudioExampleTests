@@ -17,6 +17,22 @@ using production;
             this.itemTotal = itemTotal;
         }
 
+        /// <summary>Builds from the text form, e.g. Money as "25 USD".</summary>
+        public static OrderItemString FromText(string text)
+        {
+            var parts = Tokens.Require(text, 4, "OrderItem");
+            return new OrderItemString(parts[0], parts[1], parts[2], parts[3]);
+        }
+
+        public OrderItemString(string text)
+        {
+            var parsed = FromText(text);
+            this.name = parsed.name;
+            this.quantity = parsed.quantity;
+            this.price = parsed.price;
+            this.itemTotal = parsed.itemTotal;
+        }
+
         public OrderItemTyped ToOrderItemTyped()
         {
             return new OrderItemTyped(
@@ -29,7 +45,7 @@ using production;
 
         public override string ToString()
         {
-            return $"Name={name}, Quantity={quantity}, Price={price}, ItemTotal={itemTotal}";
+            return Tokens.Token(name) + " " + Tokens.Token(quantity) + " " + Tokens.Token(price) + " " + Tokens.Token(itemTotal);
         }
 
         const string DNCString = "?DNC?";

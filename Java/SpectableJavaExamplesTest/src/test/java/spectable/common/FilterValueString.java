@@ -14,6 +14,12 @@ public class FilterValueString {
         this.value = value;
     }
 
+    /** Builds from the text form, e.g. Money as "25 USD". */
+    public static FilterValueString fromText(String text) {
+        java.util.List<String> parts = Tokens.require(text, 1, "FilterValue");
+        return new FilterValueString(parts.get(0));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -29,6 +35,6 @@ public class FilterValueString {
 
     @Override
     public String toString() {
-        return "Value=" + value;
+        return Tokens.token(value);
     }
 }

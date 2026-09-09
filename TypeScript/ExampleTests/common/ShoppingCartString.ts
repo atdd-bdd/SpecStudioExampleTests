@@ -1,5 +1,7 @@
 import { AddressString } from "./AddressString.js";
 
+import * as tokens from "./tokens.js";
+
 export class ShoppingCartString {
   static readonly DNC_STRING = "?DNC?";
 
@@ -17,6 +19,19 @@ export class ShoppingCartString {
     this.totalPrice = totalPrice;
     this.shippingAddress = shippingAddress;
     this.billingAddress = billingAddress;
+  }
+
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text: string): ShoppingCartString {
+    const parts = tokens.require_(text, 6, "ShoppingCart");
+    return new ShoppingCartString(
+      parts[0],
+      parts[1],
+      parts[2],
+      parts[3],
+      AddressString.fromText(parts[4]),
+      AddressString.fromText(parts[5])
+    );
   }
 
   static fromList(values: Iterable<string>): ShoppingCartString {

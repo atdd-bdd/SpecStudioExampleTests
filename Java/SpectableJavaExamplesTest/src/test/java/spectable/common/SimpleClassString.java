@@ -16,6 +16,18 @@ public class SimpleClassString {
         this.aString = aString;
     }
 
+    /** Builds from the text form, e.g. Money as "25 USD". */
+    public static SimpleClassString fromText(String text) {
+        java.util.List<String> parts = Tokens.require(text, 2, "SimpleClass");
+        return new SimpleClassString(parts.get(0), parts.get(1));
+    }
+
+    public SimpleClassString(String text) {
+        SimpleClassString parsed = fromText(text);
+        this.anInt = parsed.anInt;
+        this.aString = parsed.aString;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -32,6 +44,6 @@ public class SimpleClassString {
 
     @Override
     public String toString() {
-        return "anInt=" + anInt + ", " + "aString=" + aString;
+        return Tokens.token(anInt) + " " + Tokens.token(aString);
     }
 }

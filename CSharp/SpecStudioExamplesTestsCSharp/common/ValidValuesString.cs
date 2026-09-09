@@ -15,6 +15,21 @@ using production;
             this.notes = notes;
         }
 
+        /// <summary>Builds from the text form, e.g. Money as "25 USD".</summary>
+        public static ValidValuesString FromText(string text)
+        {
+            var parts = Tokens.Require(text, 3, "ValidValues");
+            return new ValidValuesString(parts[0], parts[1], parts[2]);
+        }
+
+        public ValidValuesString(string text)
+        {
+            var parsed = FromText(text);
+            this.value = parsed.value;
+            this.isValid = parsed.isValid;
+            this.notes = parsed.notes;
+        }
+
         public ValidValuesTyped ToValidValuesTyped()
         {
             return new ValidValuesTyped(
@@ -26,7 +41,7 @@ using production;
 
         public override string ToString()
         {
-            return $"Value={value}, IsValid={isValid}, Notes={notes}";
+            return Tokens.Token(value) + " " + Tokens.Token(isValid) + " " + Tokens.Token(notes);
         }
 
         const string DNCString = "?DNC?";

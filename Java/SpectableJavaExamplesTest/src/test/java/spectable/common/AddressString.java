@@ -20,6 +20,20 @@ public class AddressString {
         this.zIP = zIP;
     }
 
+    /** Builds from the text form, e.g. Money as "25 USD". */
+    public static AddressString fromText(String text) {
+        java.util.List<String> parts = Tokens.require(text, 4, "Address");
+        return new AddressString(parts.get(0), parts.get(1), parts.get(2), parts.get(3));
+    }
+
+    public AddressString(String text) {
+        AddressString parsed = fromText(text);
+        this.street = parsed.street;
+        this.city = parsed.city;
+        this.state = parsed.state;
+        this.zIP = parsed.zIP;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -38,6 +52,6 @@ public class AddressString {
 
     @Override
     public String toString() {
-        return "Street=" + street + ", " + "City=" + city + ", " + "State=" + state + ", " + "ZIP=" + zIP;
+        return Tokens.token(street) + " " + Tokens.token(city) + " " + Tokens.token(state) + " " + Tokens.token(zIP);
     }
 }

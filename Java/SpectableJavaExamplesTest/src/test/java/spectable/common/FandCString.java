@@ -18,6 +18,19 @@ public class FandCString {
         this.notes = notes;
     }
 
+    /** Builds from the text form, e.g. Money as "25 USD". */
+    public static FandCString fromText(String text) {
+        java.util.List<String> parts = Tokens.require(text, 3, "FandC");
+        return new FandCString(parts.get(0), parts.get(1), parts.get(2));
+    }
+
+    public FandCString(String text) {
+        FandCString parsed = fromText(text);
+        this.f = parsed.f;
+        this.c = parsed.c;
+        this.notes = parsed.notes;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -35,6 +48,6 @@ public class FandCString {
 
     @Override
     public String toString() {
-        return "F=" + f + ", " + "C=" + c + ", " + "Notes=" + notes;
+        return Tokens.token(f) + " " + Tokens.token(c) + " " + Tokens.token(notes);
     }
 }

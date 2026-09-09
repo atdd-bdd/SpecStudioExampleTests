@@ -1,4 +1,6 @@
 
+import * as tokens from "./tokens.js";
+
 export class FilterValueString {
   static readonly DNC_STRING = "?DNC?";
 
@@ -6,6 +8,14 @@ export class FilterValueString {
 
   constructor(value: string = "") {
     this.value = value;
+  }
+
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text: string): FilterValueString {
+    const parts = tokens.require_(text, 1, "FilterValue");
+    return new FilterValueString(
+      parts[0]
+    );
   }
 
   static fromList(values: Iterable<string>): FilterValueString {

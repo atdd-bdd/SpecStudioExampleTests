@@ -1,3 +1,4 @@
+import * as tokens from "./tokens.js";
 
 export class AdderString {
   static DNC_STRING = "?DNC?";
@@ -17,8 +18,18 @@ export class AdderString {
     );
   }
 
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text) {
+    const parts = tokens.require_(text, 3, "Adder");
+    return new AdderString(
+      parts[0],
+      parts[1],
+      parts[2]
+    );
+  }
+
   toString() {
-    return `number1=${this.number1}, number2=${this.number2}, result=${this.result}`;
+    return tokens.token(this.number1) + " " + tokens.token(this.number2) + " " + tokens.token(this.result);
   }
 
   equals(other) {

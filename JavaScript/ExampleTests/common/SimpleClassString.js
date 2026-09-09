@@ -1,3 +1,4 @@
+import * as tokens from "./tokens.js";
 
 export class SimpleClassString {
   static DNC_STRING = "?DNC?";
@@ -15,8 +16,17 @@ export class SimpleClassString {
     );
   }
 
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text) {
+    const parts = tokens.require_(text, 2, "SimpleClass");
+    return new SimpleClassString(
+      parts[0],
+      parts[1]
+    );
+  }
+
   toString() {
-    return `anInt=${this.anInt}, aString=${this.aString}`;
+    return tokens.token(this.anInt) + " " + tokens.token(this.aString);
   }
 
   equals(other) {

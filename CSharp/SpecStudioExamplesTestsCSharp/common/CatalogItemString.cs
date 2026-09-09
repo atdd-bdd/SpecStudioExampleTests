@@ -13,6 +13,20 @@ using production;
             this.price = price;
         }
 
+        /// <summary>Builds from the text form, e.g. Money as "25 USD".</summary>
+        public static CatalogItemString FromText(string text)
+        {
+            var parts = Tokens.Require(text, 2, "CatalogItem");
+            return new CatalogItemString(parts[0], parts[1]);
+        }
+
+        public CatalogItemString(string text)
+        {
+            var parsed = FromText(text);
+            this.name = parsed.name;
+            this.price = parsed.price;
+        }
+
         public CatalogItemTyped ToCatalogItemTyped()
         {
             return new CatalogItemTyped(
@@ -23,7 +37,7 @@ using production;
 
         public override string ToString()
         {
-            return $"Name={name}, Price={price}";
+            return Tokens.Token(name) + " " + Tokens.Token(price);
         }
 
         const string DNCString = "?DNC?";

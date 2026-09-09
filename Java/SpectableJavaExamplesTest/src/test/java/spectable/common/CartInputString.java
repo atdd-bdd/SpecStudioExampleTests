@@ -22,6 +22,21 @@ public class CartInputString {
         this.notes = notes;
     }
 
+    /** Builds from the text form, e.g. Money as "25 USD". */
+    public static CartInputString fromText(String text) {
+        java.util.List<String> parts = Tokens.require(text, 5, "CartInput");
+        return new CartInputString(parts.get(0), parts.get(1), parts.get(2), parts.get(3), parts.get(4));
+    }
+
+    public CartInputString(String text) {
+        CartInputString parsed = fromText(text);
+        this.totalItems = parsed.totalItems;
+        this.shipping = parsed.shipping;
+        this.discount = parsed.discount;
+        this.totalPrice = parsed.totalPrice;
+        this.notes = parsed.notes;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -41,6 +56,6 @@ public class CartInputString {
 
     @Override
     public String toString() {
-        return "TotalItems=" + totalItems + ", " + "Shipping=" + shipping + ", " + "Discount=" + discount + ", " + "Total Price=" + totalPrice + ", " + "Notes=" + notes;
+        return Tokens.token(totalItems) + " " + Tokens.token(shipping) + " " + Tokens.token(discount) + " " + Tokens.token(totalPrice) + " " + Tokens.token(notes);
     }
 }

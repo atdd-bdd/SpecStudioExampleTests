@@ -16,6 +16,18 @@ public class IDValueString {
         this.value = value;
     }
 
+    /** Builds from the text form, e.g. Money as "25 USD". */
+    public static IDValueString fromText(String text) {
+        java.util.List<String> parts = Tokens.require(text, 2, "IDValue");
+        return new IDValueString(parts.get(0), parts.get(1));
+    }
+
+    public IDValueString(String text) {
+        IDValueString parsed = fromText(text);
+        this.iD = parsed.iD;
+        this.value = parsed.value;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -32,6 +44,6 @@ public class IDValueString {
 
     @Override
     public String toString() {
-        return "ID=" + iD + ", " + "Value=" + value;
+        return Tokens.token(iD) + " " + Tokens.token(value);
     }
 }

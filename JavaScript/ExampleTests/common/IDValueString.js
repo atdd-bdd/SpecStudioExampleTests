@@ -1,3 +1,4 @@
+import * as tokens from "./tokens.js";
 
 export class IDValueString {
   static DNC_STRING = "?DNC?";
@@ -15,8 +16,17 @@ export class IDValueString {
     );
   }
 
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text) {
+    const parts = tokens.require_(text, 2, "IDValue");
+    return new IDValueString(
+      parts[0],
+      parts[1]
+    );
+  }
+
   toString() {
-    return `ID=${this.iD}, Value=${this.value}`;
+    return tokens.token(this.iD) + " " + tokens.token(this.value);
   }
 
   equals(other) {

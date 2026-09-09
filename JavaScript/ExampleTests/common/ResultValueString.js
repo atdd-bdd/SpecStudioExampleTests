@@ -1,3 +1,4 @@
+import * as tokens from "./tokens.js";
 
 export class ResultValueString {
   static DNC_STRING = "?DNC?";
@@ -13,8 +14,16 @@ export class ResultValueString {
     );
   }
 
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text) {
+    const parts = tokens.require_(text, 1, "ResultValue");
+    return new ResultValueString(
+      parts[0]
+    );
+  }
+
   toString() {
-    return `Sum=${this.sum}`;
+    return tokens.token(this.sum);
   }
 
   equals(other) {

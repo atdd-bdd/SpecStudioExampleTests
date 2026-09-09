@@ -28,6 +28,24 @@ public class MatchString {
         this.zip = zip;
     }
 
+    /** Builds from the text form, e.g. Money as "25 USD". */
+    public static MatchString fromText(String text) {
+        java.util.List<String> parts = Tokens.require(text, 8, "Match");
+        return new MatchString(parts.get(0), parts.get(1), parts.get(2), parts.get(3), parts.get(4), parts.get(5), parts.get(6), parts.get(7));
+    }
+
+    public MatchString(String text) {
+        MatchString parsed = fromText(text);
+        this.matchedAddress = parsed.matchedAddress;
+        this.preDirection = parsed.preDirection;
+        this.streetName = parsed.streetName;
+        this.suffixType = parsed.suffixType;
+        this.suffixDirection = parsed.suffixDirection;
+        this.city = parsed.city;
+        this.state = parsed.state;
+        this.zip = parsed.zip;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -50,6 +68,6 @@ public class MatchString {
 
     @Override
     public String toString() {
-        return "MatchedAddress=" + matchedAddress + ", " + "PreDirection=" + preDirection + ", " + "StreetName=" + streetName + ", " + "SuffixType=" + suffixType + ", " + "SuffixDirection=" + suffixDirection + ", " + "City=" + city + ", " + "State=" + state + ", " + "Zip=" + zip;
+        return Tokens.token(matchedAddress) + " " + Tokens.token(preDirection) + " " + Tokens.token(streetName) + " " + Tokens.token(suffixType) + " " + Tokens.token(suffixDirection) + " " + Tokens.token(city) + " " + Tokens.token(state) + " " + Tokens.token(zip);
     }
 }

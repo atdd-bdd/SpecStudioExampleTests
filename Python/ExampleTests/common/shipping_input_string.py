@@ -1,3 +1,4 @@
+from . import tokens
 DNC_STRING = '?DNC?'
 
 
@@ -16,10 +17,20 @@ class ShippingInputString:
             v[2] if len(v) > 2 else ''
         )
 
+    @classmethod
+    def from_text(cls, text):
+        """Builds from the text form, e.g. Money as '25 USD'."""
+        parts = tokens.require(text, 3, 'ShippingInput')
+        return cls(
+            parts[0],
+            parts[1],
+            parts[2]
+        )
+
     def __str__(self):
-        return (f'Total Price={self.total_price}' + ', ' +
-                f'Shipping Cost={self.shipping_cost}' + ', ' +
-                f'Notes={self.notes}')
+        return (tokens.token(self.total_price) + ' ' +
+                tokens.token(self.shipping_cost) + ' ' +
+                tokens.token(self.notes))
 
     def _key(self):
         return (self.total_price, self.shipping_cost, self.notes)

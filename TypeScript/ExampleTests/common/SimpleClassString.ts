@@ -1,4 +1,6 @@
 
+import * as tokens from "./tokens.js";
+
 export class SimpleClassString {
   static readonly DNC_STRING = "?DNC?";
 
@@ -8,6 +10,15 @@ export class SimpleClassString {
   constructor(anInt: string = "", aString: string = "") {
     this.anInt = anInt;
     this.aString = aString;
+  }
+
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text: string): SimpleClassString {
+    const parts = tokens.require_(text, 2, "SimpleClass");
+    return new SimpleClassString(
+      parts[0],
+      parts[1]
+    );
   }
 
   static fromList(values: Iterable<string>): SimpleClassString {

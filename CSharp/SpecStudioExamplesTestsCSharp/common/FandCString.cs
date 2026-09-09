@@ -15,6 +15,21 @@ using production;
             this.notes = notes;
         }
 
+        /// <summary>Builds from the text form, e.g. Money as "25 USD".</summary>
+        public static FandCString FromText(string text)
+        {
+            var parts = Tokens.Require(text, 3, "FandC");
+            return new FandCString(parts[0], parts[1], parts[2]);
+        }
+
+        public FandCString(string text)
+        {
+            var parsed = FromText(text);
+            this.f = parsed.f;
+            this.c = parsed.c;
+            this.notes = parsed.notes;
+        }
+
         public FandCTyped ToFandCTyped()
         {
             return new FandCTyped(
@@ -26,7 +41,7 @@ using production;
 
         public override string ToString()
         {
-            return $"F={f}, C={c}, Notes={notes}";
+            return Tokens.Token(f) + " " + Tokens.Token(c) + " " + Tokens.Token(notes);
         }
 
         const string DNCString = "?DNC?";

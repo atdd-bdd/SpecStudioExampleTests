@@ -20,6 +20,20 @@ public class OrderItemString {
         this.itemTotal = itemTotal;
     }
 
+    /** Builds from the text form, e.g. Money as "25 USD". */
+    public static OrderItemString fromText(String text) {
+        java.util.List<String> parts = Tokens.require(text, 4, "OrderItem");
+        return new OrderItemString(parts.get(0), parts.get(1), parts.get(2), parts.get(3));
+    }
+
+    public OrderItemString(String text) {
+        OrderItemString parsed = fromText(text);
+        this.name = parsed.name;
+        this.quantity = parsed.quantity;
+        this.price = parsed.price;
+        this.itemTotal = parsed.itemTotal;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -38,6 +52,6 @@ public class OrderItemString {
 
     @Override
     public String toString() {
-        return "Name=" + name + ", " + "Quantity=" + quantity + ", " + "Price=" + price + ", " + "ItemTotal=" + itemTotal;
+        return Tokens.token(name) + " " + Tokens.token(quantity) + " " + Tokens.token(price) + " " + Tokens.token(itemTotal);
     }
 }

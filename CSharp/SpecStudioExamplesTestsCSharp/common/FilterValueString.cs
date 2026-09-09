@@ -11,6 +11,13 @@ using production;
             this.value = value;
         }
 
+        /// <summary>Builds from the text form, e.g. Money as "25 USD".</summary>
+        public static FilterValueString FromText(string text)
+        {
+            var parts = Tokens.Require(text, 1, "FilterValue");
+            return new FilterValueString(parts[0]);
+        }
+
         public FilterValueTyped ToFilterValueTyped()
         {
             return new FilterValueTyped(
@@ -20,7 +27,7 @@ using production;
 
         public override string ToString()
         {
-            return $"Value={value}";
+            return Tokens.Token(value);
         }
 
         const string DNCString = "?DNC?";

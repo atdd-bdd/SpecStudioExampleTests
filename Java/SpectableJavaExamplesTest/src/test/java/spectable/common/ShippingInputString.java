@@ -18,6 +18,19 @@ public class ShippingInputString {
         this.notes = notes;
     }
 
+    /** Builds from the text form, e.g. Money as "25 USD". */
+    public static ShippingInputString fromText(String text) {
+        java.util.List<String> parts = Tokens.require(text, 3, "ShippingInput");
+        return new ShippingInputString(parts.get(0), parts.get(1), parts.get(2));
+    }
+
+    public ShippingInputString(String text) {
+        ShippingInputString parsed = fromText(text);
+        this.totalPrice = parsed.totalPrice;
+        this.shippingCost = parsed.shippingCost;
+        this.notes = parsed.notes;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -35,6 +48,6 @@ public class ShippingInputString {
 
     @Override
     public String toString() {
-        return "Total Price=" + totalPrice + ", " + "Shipping Cost=" + shippingCost + ", " + "Notes=" + notes;
+        return Tokens.token(totalPrice) + " " + Tokens.token(shippingCost) + " " + Tokens.token(notes);
     }
 }

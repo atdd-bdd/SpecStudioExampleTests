@@ -1,4 +1,6 @@
 
+import * as tokens from "./tokens.js";
+
 export class AdderString {
   static readonly DNC_STRING = "?DNC?";
 
@@ -10,6 +12,16 @@ export class AdderString {
     this.number1 = number1;
     this.number2 = number2;
     this.result = result;
+  }
+
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text: string): AdderString {
+    const parts = tokens.require_(text, 3, "Adder");
+    return new AdderString(
+      parts[0],
+      parts[1],
+      parts[2]
+    );
   }
 
   static fromList(values: Iterable<string>): AdderString {

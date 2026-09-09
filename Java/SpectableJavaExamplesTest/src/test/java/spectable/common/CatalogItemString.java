@@ -16,6 +16,18 @@ public class CatalogItemString {
         this.price = price;
     }
 
+    /** Builds from the text form, e.g. Money as "25 USD". */
+    public static CatalogItemString fromText(String text) {
+        java.util.List<String> parts = Tokens.require(text, 2, "CatalogItem");
+        return new CatalogItemString(parts.get(0), parts.get(1));
+    }
+
+    public CatalogItemString(String text) {
+        CatalogItemString parsed = fromText(text);
+        this.name = parsed.name;
+        this.price = parsed.price;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -32,6 +44,6 @@ public class CatalogItemString {
 
     @Override
     public String toString() {
-        return "Name=" + name + ", " + "Price=" + price;
+        return Tokens.token(name) + " " + Tokens.token(price);
     }
 }

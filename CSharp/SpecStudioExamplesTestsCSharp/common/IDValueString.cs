@@ -13,6 +13,20 @@ using production;
             this.value = value;
         }
 
+        /// <summary>Builds from the text form, e.g. Money as "25 USD".</summary>
+        public static IDValueString FromText(string text)
+        {
+            var parts = Tokens.Require(text, 2, "IDValue");
+            return new IDValueString(parts[0], parts[1]);
+        }
+
+        public IDValueString(string text)
+        {
+            var parsed = FromText(text);
+            this.iD = parsed.iD;
+            this.value = parsed.value;
+        }
+
         public IDValueTyped ToIDValueTyped()
         {
             return new IDValueTyped(
@@ -23,7 +37,7 @@ using production;
 
         public override string ToString()
         {
-            return $"ID={iD}, Value={value}";
+            return Tokens.Token(iD) + " " + Tokens.Token(value);
         }
 
         const string DNCString = "?DNC?";

@@ -1,3 +1,4 @@
+import * as tokens from "./tokens.js";
 
 export class ValidValuesString {
   static DNC_STRING = "?DNC?";
@@ -17,8 +18,18 @@ export class ValidValuesString {
     );
   }
 
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text) {
+    const parts = tokens.require_(text, 3, "ValidValues");
+    return new ValidValuesString(
+      parts[0],
+      parts[1],
+      parts[2]
+    );
+  }
+
   toString() {
-    return `Value=${this.value}, IsValid=${this.isValid}, Notes=${this.notes}`;
+    return tokens.token(this.value) + " " + tokens.token(this.isValid) + " " + tokens.token(this.notes);
   }
 
   equals(other) {

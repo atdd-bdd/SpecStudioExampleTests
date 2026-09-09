@@ -17,6 +17,22 @@ using production;
             this.zIP = zIP;
         }
 
+        /// <summary>Builds from the text form, e.g. Money as "25 USD".</summary>
+        public static AddressString FromText(string text)
+        {
+            var parts = Tokens.Require(text, 4, "Address");
+            return new AddressString(parts[0], parts[1], parts[2], parts[3]);
+        }
+
+        public AddressString(string text)
+        {
+            var parsed = FromText(text);
+            this.street = parsed.street;
+            this.city = parsed.city;
+            this.state = parsed.state;
+            this.zIP = parsed.zIP;
+        }
+
         public AddressTyped ToAddressTyped()
         {
             return new AddressTyped(
@@ -29,7 +45,7 @@ using production;
 
         public override string ToString()
         {
-            return $"Street={street}, City={city}, State={state}, ZIP={zIP}";
+            return Tokens.Token(street) + " " + Tokens.Token(city) + " " + Tokens.Token(state) + " " + Tokens.Token(zIP);
         }
 
         const string DNCString = "?DNC?";

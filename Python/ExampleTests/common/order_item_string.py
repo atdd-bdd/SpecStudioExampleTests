@@ -1,3 +1,4 @@
+from . import tokens
 DNC_STRING = '?DNC?'
 
 
@@ -18,11 +19,22 @@ class OrderItemString:
             v[3] if len(v) > 3 else ''
         )
 
+    @classmethod
+    def from_text(cls, text):
+        """Builds from the text form, e.g. Money as '25 USD'."""
+        parts = tokens.require(text, 4, 'OrderItem')
+        return cls(
+            parts[0],
+            parts[1],
+            parts[2],
+            parts[3]
+        )
+
     def __str__(self):
-        return (f'Name={self.name}' + ', ' +
-                f'Quantity={self.quantity}' + ', ' +
-                f'Price={self.price}' + ', ' +
-                f'ItemTotal={self.item_total}')
+        return (tokens.token(self.name) + ' ' +
+                tokens.token(self.quantity) + ' ' +
+                tokens.token(self.price) + ' ' +
+                tokens.token(self.item_total))
 
     def _key(self):
         return (self.name, self.quantity, self.price, self.item_total)

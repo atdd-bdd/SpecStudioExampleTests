@@ -15,6 +15,21 @@ using production;
             this.notes = notes;
         }
 
+        /// <summary>Builds from the text form, e.g. Money as "25 USD".</summary>
+        public static DiscountInputString FromText(string text)
+        {
+            var parts = Tokens.Require(text, 3, "DiscountInput");
+            return new DiscountInputString(parts[0], parts[1], parts[2]);
+        }
+
+        public DiscountInputString(string text)
+        {
+            var parsed = FromText(text);
+            this.totalPrice = parsed.totalPrice;
+            this.discount = parsed.discount;
+            this.notes = parsed.notes;
+        }
+
         public DiscountInputTyped ToDiscountInputTyped()
         {
             return new DiscountInputTyped(
@@ -26,7 +41,7 @@ using production;
 
         public override string ToString()
         {
-            return $"Total Price={totalPrice}, Discount={discount}, Notes={notes}";
+            return Tokens.Token(totalPrice) + " " + Tokens.Token(discount) + " " + Tokens.Token(notes);
         }
 
         const string DNCString = "?DNC?";

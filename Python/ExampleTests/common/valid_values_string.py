@@ -1,3 +1,4 @@
+from . import tokens
 DNC_STRING = '?DNC?'
 
 
@@ -16,10 +17,20 @@ class ValidValuesString:
             v[2] if len(v) > 2 else ''
         )
 
+    @classmethod
+    def from_text(cls, text):
+        """Builds from the text form, e.g. Money as '25 USD'."""
+        parts = tokens.require(text, 3, 'ValidValues')
+        return cls(
+            parts[0],
+            parts[1],
+            parts[2]
+        )
+
     def __str__(self):
-        return (f'Value={self.value}' + ', ' +
-                f'IsValid={self.is_valid}' + ', ' +
-                f'Notes={self.notes}')
+        return (tokens.token(self.value) + ' ' +
+                tokens.token(self.is_valid) + ' ' +
+                tokens.token(self.notes))
 
     def _key(self):
         return (self.value, self.is_valid, self.notes)

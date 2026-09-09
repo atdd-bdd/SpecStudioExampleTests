@@ -1,4 +1,6 @@
 
+import * as tokens from "./tokens.js";
+
 export class CatalogItemString {
   static readonly DNC_STRING = "?DNC?";
 
@@ -8,6 +10,15 @@ export class CatalogItemString {
   constructor(name: string = "", price: string = "") {
     this.name = name;
     this.price = price;
+  }
+
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text: string): CatalogItemString {
+    const parts = tokens.require_(text, 2, "CatalogItem");
+    return new CatalogItemString(
+      parts[0],
+      parts[1]
+    );
   }
 
   static fromList(values: Iterable<string>): CatalogItemString {

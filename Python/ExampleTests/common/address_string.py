@@ -1,3 +1,4 @@
+from . import tokens
 DNC_STRING = '?DNC?'
 
 
@@ -18,11 +19,22 @@ class AddressString:
             v[3] if len(v) > 3 else ''
         )
 
+    @classmethod
+    def from_text(cls, text):
+        """Builds from the text form, e.g. Money as '25 USD'."""
+        parts = tokens.require(text, 4, 'Address')
+        return cls(
+            parts[0],
+            parts[1],
+            parts[2],
+            parts[3]
+        )
+
     def __str__(self):
-        return (f'Street={self.street}' + ', ' +
-                f'City={self.city}' + ', ' +
-                f'State={self.state}' + ', ' +
-                f'ZIP={self.zip}')
+        return (tokens.token(self.street) + ' ' +
+                tokens.token(self.city) + ' ' +
+                tokens.token(self.state) + ' ' +
+                tokens.token(self.zip))
 
     def _key(self):
         return (self.street, self.city, self.state, self.zip)

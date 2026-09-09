@@ -18,6 +18,19 @@ public class AdderString {
         this.result = result;
     }
 
+    /** Builds from the text form, e.g. Money as "25 USD". */
+    public static AdderString fromText(String text) {
+        java.util.List<String> parts = Tokens.require(text, 3, "Adder");
+        return new AdderString(parts.get(0), parts.get(1), parts.get(2));
+    }
+
+    public AdderString(String text) {
+        AdderString parsed = fromText(text);
+        this.number1 = parsed.number1;
+        this.number2 = parsed.number2;
+        this.result = parsed.result;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -35,6 +48,6 @@ public class AdderString {
 
     @Override
     public String toString() {
-        return "number1=" + number1 + ", " + "number2=" + number2 + ", " + "result=" + result;
+        return Tokens.token(number1) + " " + Tokens.token(number2) + " " + Tokens.token(result);
     }
 }

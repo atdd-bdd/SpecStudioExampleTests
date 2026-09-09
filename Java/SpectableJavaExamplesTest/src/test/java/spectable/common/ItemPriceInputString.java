@@ -14,6 +14,12 @@ public class ItemPriceInputString {
         this.totalItems = totalItems;
     }
 
+    /** Builds from the text form, e.g. Money as "25 USD". */
+    public static ItemPriceInputString fromText(String text) {
+        java.util.List<String> parts = Tokens.require(text, 1, "ItemPriceInput");
+        return new ItemPriceInputString(parts.get(0));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -29,6 +35,6 @@ public class ItemPriceInputString {
 
     @Override
     public String toString() {
-        return "TotalItems=" + totalItems;
+        return Tokens.token(totalItems);
     }
 }

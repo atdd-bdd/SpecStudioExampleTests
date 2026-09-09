@@ -14,6 +14,12 @@ public class ResultString {
         this.matchCount = matchCount;
     }
 
+    /** Builds from the text form, e.g. Money as "25 USD". */
+    public static ResultString fromText(String text) {
+        java.util.List<String> parts = Tokens.require(text, 1, "Result");
+        return new ResultString(parts.get(0));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -29,6 +35,6 @@ public class ResultString {
 
     @Override
     public String toString() {
-        return "MatchCount=" + matchCount;
+        return Tokens.token(matchCount);
     }
 }

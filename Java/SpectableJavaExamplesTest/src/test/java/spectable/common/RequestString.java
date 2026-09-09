@@ -22,6 +22,21 @@ public class RequestString {
         this.format = format;
     }
 
+    /** Builds from the text form, e.g. Money as "25 USD". */
+    public static RequestString fromText(String text) {
+        java.util.List<String> parts = Tokens.require(text, 5, "Request");
+        return new RequestString(parts.get(0), parts.get(1), parts.get(2), parts.get(3), parts.get(4));
+    }
+
+    public RequestString(String text) {
+        RequestString parsed = fromText(text);
+        this.method = parsed.method;
+        this.page = parsed.page;
+        this.address = parsed.address;
+        this.benchmark = parsed.benchmark;
+        this.format = parsed.format;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -41,6 +56,6 @@ public class RequestString {
 
     @Override
     public String toString() {
-        return "Method=" + method + ", " + "Page=" + page + ", " + "Address=" + address + ", " + "Benchmark=" + benchmark + ", " + "Format=" + format;
+        return Tokens.token(method) + " " + Tokens.token(page) + " " + Tokens.token(address) + " " + Tokens.token(benchmark) + " " + Tokens.token(format);
     }
 }

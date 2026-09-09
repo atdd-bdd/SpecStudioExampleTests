@@ -19,6 +19,23 @@ using production;
             this.notes = notes;
         }
 
+        /// <summary>Builds from the text form, e.g. Money as "25 USD".</summary>
+        public static CartInputString FromText(string text)
+        {
+            var parts = Tokens.Require(text, 5, "CartInput");
+            return new CartInputString(parts[0], parts[1], parts[2], parts[3], parts[4]);
+        }
+
+        public CartInputString(string text)
+        {
+            var parsed = FromText(text);
+            this.totalItems = parsed.totalItems;
+            this.shipping = parsed.shipping;
+            this.discount = parsed.discount;
+            this.totalPrice = parsed.totalPrice;
+            this.notes = parsed.notes;
+        }
+
         public CartInputTyped ToCartInputTyped()
         {
             return new CartInputTyped(
@@ -32,7 +49,7 @@ using production;
 
         public override string ToString()
         {
-            return $"TotalItems={totalItems}, Shipping={shipping}, Discount={discount}, Total Price={totalPrice}, Notes={notes}";
+            return Tokens.Token(totalItems) + " " + Tokens.Token(shipping) + " " + Tokens.Token(discount) + " " + Tokens.Token(totalPrice) + " " + Tokens.Token(notes);
         }
 
         const string DNCString = "?DNC?";

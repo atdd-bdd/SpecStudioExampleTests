@@ -15,6 +15,21 @@ using production;
             this.result = result;
         }
 
+        /// <summary>Builds from the text form, e.g. Money as "25 USD".</summary>
+        public static AdderString FromText(string text)
+        {
+            var parts = Tokens.Require(text, 3, "Adder");
+            return new AdderString(parts[0], parts[1], parts[2]);
+        }
+
+        public AdderString(string text)
+        {
+            var parsed = FromText(text);
+            this.number1 = parsed.number1;
+            this.number2 = parsed.number2;
+            this.result = parsed.result;
+        }
+
         public AdderTyped ToAdderTyped()
         {
             return new AdderTyped(
@@ -26,7 +41,7 @@ using production;
 
         public override string ToString()
         {
-            return $"number1={number1}, number2={number2}, result={result}";
+            return Tokens.Token(number1) + " " + Tokens.Token(number2) + " " + Tokens.Token(result);
         }
 
         const string DNCString = "?DNC?";

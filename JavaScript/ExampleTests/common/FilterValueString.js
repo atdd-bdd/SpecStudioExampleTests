@@ -1,3 +1,4 @@
+import * as tokens from "./tokens.js";
 
 export class FilterValueString {
   static DNC_STRING = "?DNC?";
@@ -13,8 +14,16 @@ export class FilterValueString {
     );
   }
 
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text) {
+    const parts = tokens.require_(text, 1, "FilterValue");
+    return new FilterValueString(
+      parts[0]
+    );
+  }
+
   toString() {
-    return `Value=${this.value}`;
+    return tokens.token(this.value);
   }
 
   equals(other) {

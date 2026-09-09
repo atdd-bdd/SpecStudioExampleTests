@@ -13,6 +13,20 @@ using production;
             this.aString = aString;
         }
 
+        /// <summary>Builds from the text form, e.g. Money as "25 USD".</summary>
+        public static SimpleClassString FromText(string text)
+        {
+            var parts = Tokens.Require(text, 2, "SimpleClass");
+            return new SimpleClassString(parts[0], parts[1]);
+        }
+
+        public SimpleClassString(string text)
+        {
+            var parsed = FromText(text);
+            this.anInt = parsed.anInt;
+            this.aString = parsed.aString;
+        }
+
         public SimpleClassTyped ToSimpleClassTyped()
         {
             return new SimpleClassTyped(
@@ -23,7 +37,7 @@ using production;
 
         public override string ToString()
         {
-            return $"anInt={anInt}, aString={aString}";
+            return Tokens.Token(anInt) + " " + Tokens.Token(aString);
         }
 
         const string DNCString = "?DNC?";

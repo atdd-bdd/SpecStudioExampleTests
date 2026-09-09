@@ -1,4 +1,6 @@
 
+import * as tokens from "./tokens.js";
+
 export class DiscountInputString {
   static readonly DNC_STRING = "?DNC?";
 
@@ -10,6 +12,16 @@ export class DiscountInputString {
     this.totalPrice = totalPrice;
     this.discount = discount;
     this.notes = notes;
+  }
+
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text: string): DiscountInputString {
+    const parts = tokens.require_(text, 3, "DiscountInput");
+    return new DiscountInputString(
+      parts[0],
+      parts[1],
+      parts[2]
+    );
   }
 
   static fromList(values: Iterable<string>): DiscountInputString {

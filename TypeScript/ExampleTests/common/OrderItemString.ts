@@ -1,4 +1,6 @@
 
+import * as tokens from "./tokens.js";
+
 export class OrderItemString {
   static readonly DNC_STRING = "?DNC?";
 
@@ -12,6 +14,17 @@ export class OrderItemString {
     this.quantity = quantity;
     this.price = price;
     this.itemTotal = itemTotal;
+  }
+
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text: string): OrderItemString {
+    const parts = tokens.require_(text, 4, "OrderItem");
+    return new OrderItemString(
+      parts[0],
+      parts[1],
+      parts[2],
+      parts[3]
+    );
   }
 
   static fromList(values: Iterable<string>): OrderItemString {

@@ -1,3 +1,4 @@
+from . import tokens
 DNC_STRING = '?DNC?'
 
 
@@ -16,10 +17,20 @@ class FandCString:
             v[2] if len(v) > 2 else ''
         )
 
+    @classmethod
+    def from_text(cls, text):
+        """Builds from the text form, e.g. Money as '25 USD'."""
+        parts = tokens.require(text, 3, 'FandC')
+        return cls(
+            parts[0],
+            parts[1],
+            parts[2]
+        )
+
     def __str__(self):
-        return (f'F={self.f}' + ', ' +
-                f'C={self.c}' + ', ' +
-                f'Notes={self.notes}')
+        return (tokens.token(self.f) + ' ' +
+                tokens.token(self.c) + ' ' +
+                tokens.token(self.notes))
 
     def _key(self):
         return (self.f, self.c, self.notes)

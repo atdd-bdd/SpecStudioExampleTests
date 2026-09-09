@@ -1,3 +1,4 @@
+from . import tokens
 DNC_STRING = '?DNC?'
 
 
@@ -12,8 +13,16 @@ class ResultValueString:
             v[0] if len(v) > 0 else ''
         )
 
+    @classmethod
+    def from_text(cls, text):
+        """Builds from the text form, e.g. Money as '25 USD'."""
+        parts = tokens.require(text, 1, 'ResultValue')
+        return cls(
+            parts[0]
+        )
+
     def __str__(self):
-        return (f'Sum={self.sum}')
+        return (tokens.token(self.sum))
 
     def _key(self):
         return (self.sum,)

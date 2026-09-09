@@ -1,3 +1,4 @@
+from . import tokens
 DNC_STRING = '?DNC?'
 
 
@@ -12,8 +13,16 @@ class FilterValueString:
             v[0] if len(v) > 0 else ''
         )
 
+    @classmethod
+    def from_text(cls, text):
+        """Builds from the text form, e.g. Money as '25 USD'."""
+        parts = tokens.require(text, 1, 'FilterValue')
+        return cls(
+            parts[0]
+        )
+
     def __str__(self):
-        return (f'Value={self.value}')
+        return (tokens.token(self.value))
 
     def _key(self):
         return (self.value,)

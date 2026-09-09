@@ -1,3 +1,4 @@
+import * as tokens from "./tokens.js";
 
 export class AddressString {
   static DNC_STRING = "?DNC?";
@@ -19,8 +20,19 @@ export class AddressString {
     );
   }
 
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text) {
+    const parts = tokens.require_(text, 4, "Address");
+    return new AddressString(
+      parts[0],
+      parts[1],
+      parts[2],
+      parts[3]
+    );
+  }
+
   toString() {
-    return `Street=${this.street}, City=${this.city}, State=${this.state}, ZIP=${this.zIP}`;
+    return tokens.token(this.street) + " " + tokens.token(this.city) + " " + tokens.token(this.state) + " " + tokens.token(this.zIP);
   }
 
   equals(other) {

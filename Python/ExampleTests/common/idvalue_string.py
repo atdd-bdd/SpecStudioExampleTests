@@ -1,3 +1,4 @@
+from . import tokens
 DNC_STRING = '?DNC?'
 
 
@@ -14,9 +15,18 @@ class IDValueString:
             v[1] if len(v) > 1 else ''
         )
 
+    @classmethod
+    def from_text(cls, text):
+        """Builds from the text form, e.g. Money as '25 USD'."""
+        parts = tokens.require(text, 2, 'IDValue')
+        return cls(
+            parts[0],
+            parts[1]
+        )
+
     def __str__(self):
-        return (f'ID={self.id}' + ', ' +
-                f'Value={self.value}')
+        return (tokens.token(self.id) + ' ' +
+                tokens.token(self.value))
 
     def _key(self):
         return (self.id, self.value)

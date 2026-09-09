@@ -1,3 +1,4 @@
+from . import tokens
 DNC_STRING = '?DNC?'
 
 
@@ -14,9 +15,18 @@ class SimpleClassString:
             v[1] if len(v) > 1 else ''
         )
 
+    @classmethod
+    def from_text(cls, text):
+        """Builds from the text form, e.g. Money as '25 USD'."""
+        parts = tokens.require(text, 2, 'SimpleClass')
+        return cls(
+            parts[0],
+            parts[1]
+        )
+
     def __str__(self):
-        return (f'anInt={self.an_int}' + ', ' +
-                f'aString={self.a_string}')
+        return (tokens.token(self.an_int) + ' ' +
+                tokens.token(self.a_string))
 
     def _key(self):
         return (self.an_int, self.a_string)

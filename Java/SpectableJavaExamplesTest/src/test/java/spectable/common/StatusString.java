@@ -14,6 +14,12 @@ public class StatusString {
         this.code = code;
     }
 
+    /** Builds from the text form, e.g. Money as "25 USD". */
+    public static StatusString fromText(String text) {
+        java.util.List<String> parts = Tokens.require(text, 1, "Status");
+        return new StatusString(parts.get(0));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -29,6 +35,6 @@ public class StatusString {
 
     @Override
     public String toString() {
-        return "Code=" + code;
+        return Tokens.token(code);
     }
 }

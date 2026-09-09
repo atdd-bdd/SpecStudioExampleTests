@@ -24,6 +24,22 @@ public class ShoppingCartString {
         this.billingAddress = billingAddress;
     }
 
+    /** Builds from the text form, e.g. Money as "25 USD". */
+    public static ShoppingCartString fromText(String text) {
+        java.util.List<String> parts = Tokens.require(text, 6, "ShoppingCart");
+        return new ShoppingCartString(parts.get(0), parts.get(1), parts.get(2), parts.get(3), AddressString.fromText(parts.get(4)), AddressString.fromText(parts.get(5)));
+    }
+
+    public ShoppingCartString(String text) {
+        ShoppingCartString parsed = fromText(text);
+        this.items = parsed.items;
+        this.shipping = parsed.shipping;
+        this.discount = parsed.discount;
+        this.totalPrice = parsed.totalPrice;
+        this.shippingAddress = parsed.shippingAddress;
+        this.billingAddress = parsed.billingAddress;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -44,6 +60,6 @@ public class ShoppingCartString {
 
     @Override
     public String toString() {
-        return "Items=" + items + ", " + "Shipping=" + shipping + ", " + "Discount=" + discount + ", " + "TotalPrice=" + totalPrice + ", " + "ShippingAddress=" + shippingAddress + ", " + "BillingAddress=" + billingAddress;
+        return Tokens.token(items) + " " + Tokens.token(shipping) + " " + Tokens.token(discount) + " " + Tokens.token(totalPrice) + " " + Tokens.nested(String.valueOf(shippingAddress)) + " " + Tokens.nested(String.valueOf(billingAddress));
     }
 }

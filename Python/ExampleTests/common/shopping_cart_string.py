@@ -1,5 +1,6 @@
 from .address_string import AddressString
 from .address_string import AddressString
+from . import tokens
 DNC_STRING = '?DNC?'
 
 
@@ -24,13 +25,26 @@ class ShoppingCartString:
             v[5] if len(v) > 5 else ''
         )
 
+    @classmethod
+    def from_text(cls, text):
+        """Builds from the text form, e.g. Money as '25 USD'."""
+        parts = tokens.require(text, 6, 'ShoppingCart')
+        return cls(
+            parts[0],
+            parts[1],
+            parts[2],
+            parts[3],
+            AddressString.from_text(parts[4]),
+            AddressString.from_text(parts[5])
+        )
+
     def __str__(self):
-        return (f'Items={self.items}' + ', ' +
-                f'Shipping={self.shipping}' + ', ' +
-                f'Discount={self.discount}' + ', ' +
-                f'TotalPrice={self.total_price}' + ', ' +
-                f'ShippingAddress={self.shipping_address}' + ', ' +
-                f'BillingAddress={self.billing_address}')
+        return (tokens.token(self.items) + ' ' +
+                tokens.token(self.shipping) + ' ' +
+                tokens.token(self.discount) + ' ' +
+                tokens.token(self.total_price) + ' ' +
+                tokens.nested(str(self.shipping_address)) + ' ' +
+                tokens.nested(str(self.billing_address)))
 
     def _key(self):
         return (self.items, self.shipping, self.discount, self.total_price, self.shipping_address, self.billing_address)

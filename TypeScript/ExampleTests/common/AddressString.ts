@@ -1,4 +1,6 @@
 
+import * as tokens from "./tokens.js";
+
 export class AddressString {
   static readonly DNC_STRING = "?DNC?";
 
@@ -12,6 +14,17 @@ export class AddressString {
     this.city = city;
     this.state = state;
     this.zIP = zIP;
+  }
+
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text: string): AddressString {
+    const parts = tokens.require_(text, 4, "Address");
+    return new AddressString(
+      parts[0],
+      parts[1],
+      parts[2],
+      parts[3]
+    );
   }
 
   static fromList(values: Iterable<string>): AddressString {

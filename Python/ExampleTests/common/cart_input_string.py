@@ -1,3 +1,4 @@
+from . import tokens
 DNC_STRING = '?DNC?'
 
 
@@ -20,12 +21,24 @@ class CartInputString:
             v[4] if len(v) > 4 else ''
         )
 
+    @classmethod
+    def from_text(cls, text):
+        """Builds from the text form, e.g. Money as '25 USD'."""
+        parts = tokens.require(text, 5, 'CartInput')
+        return cls(
+            parts[0],
+            parts[1],
+            parts[2],
+            parts[3],
+            parts[4]
+        )
+
     def __str__(self):
-        return (f'TotalItems={self.total_items}' + ', ' +
-                f'Shipping={self.shipping}' + ', ' +
-                f'Discount={self.discount}' + ', ' +
-                f'Total Price={self.total_price}' + ', ' +
-                f'Notes={self.notes}')
+        return (tokens.token(self.total_items) + ' ' +
+                tokens.token(self.shipping) + ' ' +
+                tokens.token(self.discount) + ' ' +
+                tokens.token(self.total_price) + ' ' +
+                tokens.token(self.notes))
 
     def _key(self):
         return (self.total_items, self.shipping, self.discount, self.total_price, self.notes)

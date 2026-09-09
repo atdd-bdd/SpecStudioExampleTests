@@ -1,4 +1,6 @@
 
+import * as tokens from "./tokens.js";
+
 export class CartInputString {
   static readonly DNC_STRING = "?DNC?";
 
@@ -14,6 +16,18 @@ export class CartInputString {
     this.discount = discount;
     this.totalPrice = totalPrice;
     this.notes = notes;
+  }
+
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text: string): CartInputString {
+    const parts = tokens.require_(text, 5, "CartInput");
+    return new CartInputString(
+      parts[0],
+      parts[1],
+      parts[2],
+      parts[3],
+      parts[4]
+    );
   }
 
   static fromList(values: Iterable<string>): CartInputString {

@@ -1,4 +1,6 @@
 
+import * as tokens from "./tokens.js";
+
 export class ResultValueString {
   static readonly DNC_STRING = "?DNC?";
 
@@ -6,6 +8,14 @@ export class ResultValueString {
 
   constructor(sum: string = "") {
     this.sum = sum;
+  }
+
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text: string): ResultValueString {
+    const parts = tokens.require_(text, 1, "ResultValue");
+    return new ResultValueString(
+      parts[0]
+    );
   }
 
   static fromList(values: Iterable<string>): ResultValueString {

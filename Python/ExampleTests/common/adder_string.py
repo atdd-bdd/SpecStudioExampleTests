@@ -1,3 +1,4 @@
+from . import tokens
 DNC_STRING = '?DNC?'
 
 
@@ -16,10 +17,20 @@ class AdderString:
             v[2] if len(v) > 2 else ''
         )
 
+    @classmethod
+    def from_text(cls, text):
+        """Builds from the text form, e.g. Money as '25 USD'."""
+        parts = tokens.require(text, 3, 'Adder')
+        return cls(
+            parts[0],
+            parts[1],
+            parts[2]
+        )
+
     def __str__(self):
-        return (f'number1={self.number1}' + ', ' +
-                f'number2={self.number2}' + ', ' +
-                f'result={self.result}')
+        return (tokens.token(self.number1) + ' ' +
+                tokens.token(self.number2) + ' ' +
+                tokens.token(self.result))
 
     def _key(self):
         return (self.number1, self.number2, self.result)

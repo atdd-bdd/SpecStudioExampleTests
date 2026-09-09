@@ -1,3 +1,4 @@
+import * as tokens from "./tokens.js";
 
 export class FandCString {
   static DNC_STRING = "?DNC?";
@@ -17,8 +18,18 @@ export class FandCString {
     );
   }
 
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text) {
+    const parts = tokens.require_(text, 3, "FandC");
+    return new FandCString(
+      parts[0],
+      parts[1],
+      parts[2]
+    );
+  }
+
   toString() {
-    return `F=${this.f}, C=${this.c}, Notes=${this.notes}`;
+    return tokens.token(this.f) + " " + tokens.token(this.c) + " " + tokens.token(this.notes);
   }
 
   equals(other) {

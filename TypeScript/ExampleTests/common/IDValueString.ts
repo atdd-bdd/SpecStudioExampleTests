@@ -1,4 +1,6 @@
 
+import * as tokens from "./tokens.js";
+
 export class IDValueString {
   static readonly DNC_STRING = "?DNC?";
 
@@ -8,6 +10,15 @@ export class IDValueString {
   constructor(iD: string = "", value: string = "") {
     this.iD = iD;
     this.value = value;
+  }
+
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text: string): IDValueString {
+    const parts = tokens.require_(text, 2, "IDValue");
+    return new IDValueString(
+      parts[0],
+      parts[1]
+    );
   }
 
   static fromList(values: Iterable<string>): IDValueString {

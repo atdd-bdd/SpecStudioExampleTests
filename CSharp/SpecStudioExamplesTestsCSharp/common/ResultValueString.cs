@@ -11,6 +11,13 @@ using production;
             this.sum = sum;
         }
 
+        /// <summary>Builds from the text form, e.g. Money as "25 USD".</summary>
+        public static ResultValueString FromText(string text)
+        {
+            var parts = Tokens.Require(text, 1, "ResultValue");
+            return new ResultValueString(parts[0]);
+        }
+
         public ResultValueTyped ToResultValueTyped()
         {
             return new ResultValueTyped(
@@ -20,7 +27,7 @@ using production;
 
         public override string ToString()
         {
-            return $"Sum={sum}";
+            return Tokens.Token(sum);
         }
 
         const string DNCString = "?DNC?";

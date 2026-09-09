@@ -14,6 +14,12 @@ public class ResultValueString {
         this.sum = sum;
     }
 
+    /** Builds from the text form, e.g. Money as "25 USD". */
+    public static ResultValueString fromText(String text) {
+        java.util.List<String> parts = Tokens.require(text, 1, "ResultValue");
+        return new ResultValueString(parts.get(0));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -29,6 +35,6 @@ public class ResultValueString {
 
     @Override
     public String toString() {
-        return "Sum=" + sum;
+        return Tokens.token(sum);
     }
 }

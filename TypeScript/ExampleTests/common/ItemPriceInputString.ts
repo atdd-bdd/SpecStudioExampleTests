@@ -1,4 +1,6 @@
 
+import * as tokens from "./tokens.js";
+
 export class ItemPriceInputString {
   static readonly DNC_STRING = "?DNC?";
 
@@ -6,6 +8,14 @@ export class ItemPriceInputString {
 
   constructor(totalItems: string = "") {
     this.totalItems = totalItems;
+  }
+
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text: string): ItemPriceInputString {
+    const parts = tokens.require_(text, 1, "ItemPriceInput");
+    return new ItemPriceInputString(
+      parts[0]
+    );
   }
 
   static fromList(values: Iterable<string>): ItemPriceInputString {

@@ -1,3 +1,4 @@
+import * as tokens from "./tokens.js";
 
 export class DiscountInputString {
   static DNC_STRING = "?DNC?";
@@ -17,8 +18,18 @@ export class DiscountInputString {
     );
   }
 
+  /** Builds from the text form, e.g. Money as "25 USD". */
+  static fromText(text) {
+    const parts = tokens.require_(text, 3, "DiscountInput");
+    return new DiscountInputString(
+      parts[0],
+      parts[1],
+      parts[2]
+    );
+  }
+
   toString() {
-    return `Total Price=${this.totalPrice}, Discount=${this.discount}, Notes=${this.notes}`;
+    return tokens.token(this.totalPrice) + " " + tokens.token(this.discount) + " " + tokens.token(this.notes);
   }
 
   equals(other) {

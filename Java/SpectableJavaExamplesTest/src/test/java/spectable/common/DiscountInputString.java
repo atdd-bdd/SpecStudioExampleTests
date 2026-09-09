@@ -18,6 +18,19 @@ public class DiscountInputString {
         this.notes = notes;
     }
 
+    /** Builds from the text form, e.g. Money as "25 USD". */
+    public static DiscountInputString fromText(String text) {
+        java.util.List<String> parts = Tokens.require(text, 3, "DiscountInput");
+        return new DiscountInputString(parts.get(0), parts.get(1), parts.get(2));
+    }
+
+    public DiscountInputString(String text) {
+        DiscountInputString parsed = fromText(text);
+        this.totalPrice = parsed.totalPrice;
+        this.discount = parsed.discount;
+        this.notes = parsed.notes;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -35,6 +48,6 @@ public class DiscountInputString {
 
     @Override
     public String toString() {
-        return "Total Price=" + totalPrice + ", " + "Discount=" + discount + ", " + "Notes=" + notes;
+        return Tokens.token(totalPrice) + " " + Tokens.token(discount) + " " + Tokens.token(notes);
     }
 }
