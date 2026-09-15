@@ -15,10 +15,29 @@ struct CatalogItemTyped {
         return t;
     }
 
+    CatalogItemString to_string_struct() const {
+        CatalogItemString s;
+        s.name = name;
+        s.price = price;
+        return s;
+    }
+
+    static std::vector<CatalogItemString> to_string_list(const std::vector<CatalogItemTyped>& list) {
+        std::vector<CatalogItemString> result;
+        for (const auto& t : list) result.push_back(t.to_string_struct());
+        return result;
+    }
+
+    static std::vector<CatalogItemTyped> from_string_list(const std::vector<CatalogItemString>& list) {
+        std::vector<CatalogItemTyped> result;
+        for (const auto& s : list) result.push_back(from_string_struct(s));
+        return result;
+    }
+
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("name", json::Convert<std::string>::to_json(name));
-        m.emplace_back("price", json::Convert<std::string>::to_json(price));
+        m.emplace_back("Name", json::Convert<std::string>::to_json(name));
+        m.emplace_back("Price", json::Convert<std::string>::to_json(price));
         return json::Value::make_object(std::move(m));
     }
 
@@ -26,8 +45,8 @@ struct CatalogItemTyped {
 
     static CatalogItemTyped from_json_value(const json::Value& v) {
         CatalogItemTyped t;
-        t.name = json::Convert<std::string>::from_json(json::require(v, "name"), "name");
-        t.price = json::Convert<std::string>::from_json(json::require(v, "price"), "price");
+        t.name = json::Convert<std::string>::from_json(json::require(v, "Name"), "Name");
+        t.price = json::Convert<std::string>::from_json(json::require(v, "Price"), "Price");
         return t;
     }
 

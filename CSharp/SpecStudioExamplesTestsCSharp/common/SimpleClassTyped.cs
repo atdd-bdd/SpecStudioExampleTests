@@ -19,6 +19,28 @@ using production;
             this.aString = aString;
         }
 
+        public SimpleClassString ToSimpleClassString()
+        {
+            return new SimpleClassString(
+                Json.ToText(this.anInt),
+                Json.ToText(this.aString)
+            );
+        }
+
+        public static List<SimpleClassString> ToStringList(List<SimpleClassTyped> list)
+        {
+            var result = new List<SimpleClassString>();
+            foreach (var t in list) result.Add(t.ToSimpleClassString());
+            return result;
+        }
+
+        public static List<SimpleClassTyped> FromStringList(List<SimpleClassString> list)
+        {
+            var result = new List<SimpleClassTyped>();
+            foreach (var s in list) result.Add(s.ToSimpleClassTyped());
+            return result;
+        }
+
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();

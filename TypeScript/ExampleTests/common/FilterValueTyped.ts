@@ -14,6 +14,20 @@ export class FilterValueTyped {
     );
   }
 
+  toStringObj(): FilterValueString {
+    return new FilterValueString(
+      String(this.value)
+    );
+  }
+
+  static toStringList(list: FilterValueTyped[]): FilterValueString[] {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list: FilterValueString[]): FilterValueTyped[] {
+    return list.map(s => FilterValueTyped.fromStringObj(s));
+  }
+
   toJsonValue(): Record<string, unknown> {
     return {
       value: this.value,

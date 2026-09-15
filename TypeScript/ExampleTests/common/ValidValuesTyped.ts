@@ -20,6 +20,22 @@ export class ValidValuesTyped {
     );
   }
 
+  toStringObj(): ValidValuesString {
+    return new ValidValuesString(
+      String(this.value),
+      String(this.isValid),
+      String(this.notes)
+    );
+  }
+
+  static toStringList(list: ValidValuesTyped[]): ValidValuesString[] {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list: ValidValuesString[]): ValidValuesTyped[] {
+    return list.map(s => ValidValuesTyped.fromStringObj(s));
+  }
+
   toJsonValue(): Record<string, unknown> {
     return {
       value: this.value,

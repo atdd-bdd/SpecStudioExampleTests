@@ -21,12 +21,29 @@ impl AddressTyped {
         }
     }
 
+    pub fn to_str_struct(&self) -> AddressString {
+        AddressString {
+            street: self.street.clone(),
+            city: self.city.clone(),
+            state: self.state.clone(),
+            zip: self.zip.clone(),
+        }
+    }
+
+    pub fn to_string_list(list: &[AddressTyped]) -> Vec<AddressString> {
+        list.iter().map(|t| t.to_str_struct()).collect()
+    }
+
+    pub fn from_string_list(list: &[AddressString]) -> Vec<AddressTyped> {
+        list.iter().map(AddressTyped::from_str_struct).collect()
+    }
+
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("street".to_string(), json::Value::Str(self.street.clone())),
-            ("city".to_string(), json::Value::Str(self.city.clone())),
-            ("state".to_string(), json::Value::Str(self.state.clone())),
-            ("zip".to_string(), json::Value::Str(self.zip.clone())),
+            ("Street".to_string(), json::Value::Str(self.street.clone())),
+            ("City".to_string(), json::Value::Str(self.city.clone())),
+            ("State".to_string(), json::Value::Str(self.state.clone())),
+            ("ZIP".to_string(), json::Value::Str(self.zip.clone())),
         ])
     }
 
@@ -36,10 +53,10 @@ impl AddressTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            street: json::as_string(json::require(v, "street")?, "street")?,
-            city: json::as_string(json::require(v, "city")?, "city")?,
-            state: json::as_string(json::require(v, "state")?, "state")?,
-            zip: json::as_string(json::require(v, "zip")?, "zip")?,
+            street: json::as_string(json::require(v, "Street")?, "Street")?,
+            city: json::as_string(json::require(v, "City")?, "City")?,
+            state: json::as_string(json::require(v, "State")?, "State")?,
+            zip: json::as_string(json::require(v, "ZIP")?, "ZIP")?,
         })
     }
 

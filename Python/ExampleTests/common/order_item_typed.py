@@ -17,12 +17,28 @@ class OrderItemTyped:
             s.item_total
         )
 
+    def to_string_obj(self) -> OrderItemString:
+        return OrderItemString(
+            str(self.name),
+            str(self.quantity),
+            str(self.price),
+            str(self.item_total)
+        )
+
+    @staticmethod
+    def to_string_list(items) -> list:
+        return [t.to_string_obj() for t in items]
+
+    @staticmethod
+    def from_string_list(items) -> list:
+        return [OrderItemTyped.from_string_obj(s) for s in items]
+
     def to_json_value(self) -> dict:
         return {
-            'name': self.name,
-            'quantity': self.quantity,
-            'price': self.price,
-            'item_total': self.item_total,
+            'Name': self.name,
+            'Quantity': self.quantity,
+            'Price': self.price,
+            'ItemTotal': self.item_total,
         }
 
     def to_json(self) -> str:
@@ -31,10 +47,10 @@ class OrderItemTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'OrderItemTyped':
         return cls(
-            _json.as_str(_json.require(m, 'name'), 'name'),
-            _json.as_int(_json.require(m, 'quantity'), 'quantity'),
-            _json.as_str(_json.require(m, 'price'), 'price'),
-            _json.as_str(_json.require(m, 'item_total'), 'item_total')
+            _json.as_str(_json.require(m, 'Name'), 'Name'),
+            _json.as_int(_json.require(m, 'Quantity'), 'Quantity'),
+            _json.as_str(_json.require(m, 'Price'), 'Price'),
+            _json.as_str(_json.require(m, 'ItemTotal'), 'ItemTotal')
         )
 
     @classmethod

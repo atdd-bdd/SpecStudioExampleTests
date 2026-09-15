@@ -18,6 +18,23 @@ public struct AddressTyped: Equatable, CustomStringConvertible {
         self.zIP = s.zIP
     }
 
+    public func toStringStruct() -> AddressString {
+        return AddressString(
+            street: String(describing: street),
+            city: String(describing: city),
+            state: String(describing: state),
+            zIP: String(describing: zIP)
+        )
+    }
+
+    public static func toStringList(_ list: [AddressTyped]) -> [AddressString] {
+        return list.map { $0.toStringStruct() }
+    }
+
+    public static func fromStringList(_ list: [AddressString]) -> [AddressTyped] {
+        return list.map { AddressTyped(from: $0) }
+    }
+
     public func toJSONValue() -> [String: Any] {
         return [
             "street": street,

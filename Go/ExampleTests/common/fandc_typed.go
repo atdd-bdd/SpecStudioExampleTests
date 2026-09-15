@@ -16,12 +16,35 @@ func NewFandCTypedFromString(s FandCString) FandCTyped {
 	return t
 }
 
+// ToFandCString converts this FandCTyped back to the string form a table compares.
+func (t FandCTyped) ToFandCString() FandCString {
+	s := FandCString{}
+	s.F = strconv.Itoa(t.F)
+	s.C = strconv.Itoa(t.C)
+	s.Notes = t.Notes
+	return s
+}
+
+// FandCTypedToStringList converts a slice of FandCTyped to its string form.
+func FandCTypedToStringList(list []FandCTyped) []FandCString {
+	result := make([]FandCString, 0, len(list))
+	for _, t := range list { result = append(result, t.ToFandCString()) }
+	return result
+}
+
+// FandCTypedFromStringList converts a slice of FandCString to its typed form.
+func FandCTypedFromStringList(list []FandCString) []FandCTyped {
+	result := make([]FandCTyped, 0, len(list))
+	for _, s := range list { result = append(result, NewFandCTypedFromString(s)) }
+	return result
+}
+
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t FandCTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"f": t.F,
-		"c": t.C,
-		"notes": t.Notes,
+		"F": t.F,
+		"C": t.C,
+		"Notes": t.Notes,
 	}
 }
 
@@ -31,29 +54,29 @@ func (t FandCTyped) ToJSON() (string, error) {
 
 func NewFandCTypedFromJSONValue(m map[string]interface{}) (FandCTyped, error) {
 	t := FandCTyped{}
-	rawF, err := JSONRequire(m, "f")
+	rawF, err := JSONRequire(m, "F")
 	if err != nil {
 		return t, err
 	}
-	valF, err := JSONAsInt(rawF, "f")
+	valF, err := JSONAsInt(rawF, "F")
 	if err != nil {
 		return t, err
 	}
 	t.F = valF
-	rawC, err := JSONRequire(m, "c")
+	rawC, err := JSONRequire(m, "C")
 	if err != nil {
 		return t, err
 	}
-	valC, err := JSONAsInt(rawC, "c")
+	valC, err := JSONAsInt(rawC, "C")
 	if err != nil {
 		return t, err
 	}
 	t.C = valC
-	rawNotes, err := JSONRequire(m, "notes")
+	rawNotes, err := JSONRequire(m, "Notes")
 	if err != nil {
 		return t, err
 	}
-	valNotes, err := JSONAsString(rawNotes, "notes")
+	valNotes, err := JSONAsString(rawNotes, "Notes")
 	if err != nil {
 		return t, err
 	}

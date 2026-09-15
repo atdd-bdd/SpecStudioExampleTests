@@ -11,9 +11,22 @@ class ResultValueTyped:
             int(s.sum) if s.sum else 0
         )
 
+    def to_string_obj(self) -> ResultValueString:
+        return ResultValueString(
+            str(self.sum)
+        )
+
+    @staticmethod
+    def to_string_list(items) -> list:
+        return [t.to_string_obj() for t in items]
+
+    @staticmethod
+    def from_string_list(items) -> list:
+        return [ResultValueTyped.from_string_obj(s) for s in items]
+
     def to_json_value(self) -> dict:
         return {
-            'sum': self.sum,
+            'Sum': self.sum,
         }
 
     def to_json(self) -> str:
@@ -22,7 +35,7 @@ class ResultValueTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'ResultValueTyped':
         return cls(
-            _json.as_int(_json.require(m, 'sum'), 'sum')
+            _json.as_int(_json.require(m, 'Sum'), 'Sum')
         )
 
     @classmethod

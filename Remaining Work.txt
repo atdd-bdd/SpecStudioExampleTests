@@ -1,46 +1,12 @@
 Remaining Work -- SpecStudioExampleTests
 ========================================
 
-## AddressCorrection is generated into Java only
+Nothing is outstanding in this tree. AddressCorrection runs in all nine
+languages, and the two entries that used to sit here -- the Collection gap and
+the hand-maintained TableHelper -- are fixed and recorded under Done.
 
-Added 2026-09-08. Five scenarios, 0 failures, over HTTP against the US Census
-Bureau geocoder. The other eight languages are outstanding: each needs its own
-transport (the equivalent of RestCall.java) and its own JSON navigation before
-it can run, because the service answers with result.addressMatches nested two
-levels down and a table is flat.
-
-Nothing else in this repository makes a network call, so this is also the first
-example whose tests fail when the machine is offline. They fail naming the URL
-that could not be reached -- the transport saying so, rather than an assertion
-failing -- which is the distinction RestCall exists to preserve.
-
-
-## TableHelper.java is hand-maintained here too
-
-The generator writes common/TableHelper.java per .spectable and **replaces**
-whatever was there, so only the last specification generated keeps its grid
-converters. Generating AddressCorrection alone threw away toListListIDForm and
-toListListInteger, which RecordFilterExample and Calculator need, and left only
-toListListString.
-
-The file on disk is now the union of all three, merged by hand:
-
-    *** Build > Project or Build > Solution will overwrite it and the module
-    *** will stop compiling.
-
-Two further things worth knowing, both found the same day:
-
-  - A specification with no grid step writes **nothing at all** --
-    genTableHelperClass returns empty and the caller skips the write. So
-    deleting TableHelper.java and rebuilding a single file does not bring it
-    back if that file has no grid step.
-  - The pre-build clean deliberately does not delete TableHelper
-    (AppController.cpp names it), so a project build leaves whatever the last
-    grid-using specification wrote.
-
-The fix belongs in the generator -- merge with the file already on disk instead
-of replacing it -- and is filed in specstudio's Remaining Work.txt. The same
-stopgap and the same warning apply in SpecStudioVariousTests.
+What follows is the one thing still worth knowing before running anything, and
+then the history.
 
 
 ## Generate through the IDE, or pass the .specconfig options
@@ -56,3 +22,85 @@ Java.specconfig's imports and production settings correspond to:
     --import "import records.*;" --import "import calculator.*;"
 
 The IDE passes these; a bare command line does not.
+
+
+## AddressCorrection needs the network
+
+Five scenarios per language, over HTTP against the US Census Bureau geocoder,
+which is public and needs no key. Nothing else in this repository makes a
+network call, so this is the only example whose tests fail when the machine is
+offline. They fail naming the URL that could not be reached -- the transport
+saying so, rather than an assertion failing -- which is the distinction RestCall
+exists to preserve.
+
+
+## --- Done ---
+
+[x] AddressCorrection runs in all nine languages (2026-09-15). It ran in Java
+    alone for a week, and the reason was not what this file used to say. The
+    transport was never the obstacle: a RestCall already existed in all nine in
+    SpecStudioVariousTests, written for API.spectable, and porting one is a copy
+    plus the query-string clause -- a parameter beginning with '?' is appended
+    as it stands rather than joined with a slash, because the geocoder takes
+    ?address=...&benchmark=...&format=json where jsonplaceholder takes posts/1.
+
+    The obstacle was the Collection gap below. Each language now has its own
+    RestCall beside the glue and about eighty-five lines of glue that builds the
+    query, hands the body to the generated fromJSON, and compares the matches as
+    a set so that a reordered reply does not fail.
+
+    Rust, C++ and both JavaScripts percent-encode the query by hand rather than
+    take a dependency, for the same reason their transports shell out to curl or
+    spawn a child node: nothing a reader has to fetch before the tests will run.
+
+[x] A Collection as a field type is a list in all nine (specstudio, 2026-09-15).
+    It was a list in Java and C# and a plain string everywhere else:
+
+        AddressMatches string                            // Go
+        pub addressmatches: String,                      // Rust
+        public let addressMatches: String                // Swift
+        addressMatches: string;                          // TypeScript
+        addressMatches = ""                              // JavaScript
+        std::string addressmatches;                      // C++
+        address_matches: str = ''                        // Python
+
+    So from_json could not read the nested array and the glue had no way to
+    reach the matches at all. Five touch points per generator: the field type,
+    the String-to-Typed and Typed-to-String conversions, and the JSON reader and
+    writer. Go and Swift also needed an array helper that did not exist --
+    JSONAsArray and Json.asArray -- and both treat a null or absent field as an
+    empty collection, because a service that found nothing may legitimately send
+    null and that is not a malformed reply.
+
+    The ripple this was expected to cause did not happen. ShoppingCart declares
+    | Items | ItemCollection |, so its hand-written glue in seven languages was
+    written against the old string, and that glue was expected to need
+    revisiting. It did not: Shopping Cart stayed green in every language.
+
+[x] JavaScript could not read a nested block from JSON (found the same day, by
+    accident, while fixing the above). Its JSON reader emitted
+
+        new Result(_json.asString(_json.require(m, "result"), "result"))
+
+    for a nested Attributes block. A production class is written for an Entity
+    and a DataType and not for an Attributes block, so Result named a class
+    nothing writes and the reply was unreadable. Nested blocks are now written
+    and read as nested objects, which is what the other eight already did.
+
+[x] TableHelper.java is no longer hand-maintained. The generator wrote
+    common/TableHelper.java per .spectable and replaced whatever was there, so
+    only the last specification generated kept its grid converters: generating
+    AddressCorrection alone threw away toListListIDForm and toListListInteger,
+    which RecordFilterExample and Calculator need. The file here was the union of
+    all three, merged by hand, and this document used to warn that Build >
+    Project or Build > Solution would overwrite it and stop the module
+    compiling.
+
+    Fixed in specstudio c4d9f3c, which merges the file instead of replacing it.
+    Verified here: a full nine-language regeneration leaves TableHelper.java
+    byte-identical, so the hand-merged union survived the very operation that
+    used to destroy it.
+
+    The same commit fixed ProductionHelper.java, which had the same hole in a
+    quieter form -- created only if absent, so whichever specification was
+    converted first wrote it and it was never updated again.

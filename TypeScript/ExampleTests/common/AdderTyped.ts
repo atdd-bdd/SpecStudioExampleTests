@@ -20,6 +20,22 @@ export class AdderTyped {
     );
   }
 
+  toStringObj(): AdderString {
+    return new AdderString(
+      String(this.number1),
+      String(this.number2),
+      String(this.result)
+    );
+  }
+
+  static toStringList(list: AdderTyped[]): AdderString[] {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list: AdderString[]): AdderTyped[] {
+    return list.map(s => AdderTyped.fromStringObj(s));
+  }
+
   toJsonValue(): Record<string, unknown> {
     return {
       number1: this.number1,

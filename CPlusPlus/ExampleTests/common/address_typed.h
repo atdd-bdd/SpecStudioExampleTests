@@ -19,12 +19,33 @@ struct AddressTyped {
         return t;
     }
 
+    AddressString to_string_struct() const {
+        AddressString s;
+        s.street = street;
+        s.city = city;
+        s.state = state;
+        s.zip = zip;
+        return s;
+    }
+
+    static std::vector<AddressString> to_string_list(const std::vector<AddressTyped>& list) {
+        std::vector<AddressString> result;
+        for (const auto& t : list) result.push_back(t.to_string_struct());
+        return result;
+    }
+
+    static std::vector<AddressTyped> from_string_list(const std::vector<AddressString>& list) {
+        std::vector<AddressTyped> result;
+        for (const auto& s : list) result.push_back(from_string_struct(s));
+        return result;
+    }
+
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("street", json::Convert<std::string>::to_json(street));
-        m.emplace_back("city", json::Convert<std::string>::to_json(city));
-        m.emplace_back("state", json::Convert<std::string>::to_json(state));
-        m.emplace_back("zip", json::Convert<std::string>::to_json(zip));
+        m.emplace_back("Street", json::Convert<std::string>::to_json(street));
+        m.emplace_back("City", json::Convert<std::string>::to_json(city));
+        m.emplace_back("State", json::Convert<std::string>::to_json(state));
+        m.emplace_back("ZIP", json::Convert<std::string>::to_json(zip));
         return json::Value::make_object(std::move(m));
     }
 
@@ -32,10 +53,10 @@ struct AddressTyped {
 
     static AddressTyped from_json_value(const json::Value& v) {
         AddressTyped t;
-        t.street = json::Convert<std::string>::from_json(json::require(v, "street"), "street");
-        t.city = json::Convert<std::string>::from_json(json::require(v, "city"), "city");
-        t.state = json::Convert<std::string>::from_json(json::require(v, "state"), "state");
-        t.zip = json::Convert<std::string>::from_json(json::require(v, "zip"), "zip");
+        t.street = json::Convert<std::string>::from_json(json::require(v, "Street"), "Street");
+        t.city = json::Convert<std::string>::from_json(json::require(v, "City"), "City");
+        t.state = json::Convert<std::string>::from_json(json::require(v, "State"), "State");
+        t.zip = json::Convert<std::string>::from_json(json::require(v, "ZIP"), "ZIP");
         return t;
     }
 

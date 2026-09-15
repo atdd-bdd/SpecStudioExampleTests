@@ -19,12 +19,33 @@ struct OrderItemTyped {
         return t;
     }
 
+    OrderItemString to_string_struct() const {
+        OrderItemString s;
+        s.name = name;
+        s.quantity = std::to_string(quantity);
+        s.price = price;
+        s.itemtotal = itemtotal;
+        return s;
+    }
+
+    static std::vector<OrderItemString> to_string_list(const std::vector<OrderItemTyped>& list) {
+        std::vector<OrderItemString> result;
+        for (const auto& t : list) result.push_back(t.to_string_struct());
+        return result;
+    }
+
+    static std::vector<OrderItemTyped> from_string_list(const std::vector<OrderItemString>& list) {
+        std::vector<OrderItemTyped> result;
+        for (const auto& s : list) result.push_back(from_string_struct(s));
+        return result;
+    }
+
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("name", json::Convert<std::string>::to_json(name));
-        m.emplace_back("quantity", json::Convert<int>::to_json(quantity));
-        m.emplace_back("price", json::Convert<std::string>::to_json(price));
-        m.emplace_back("itemtotal", json::Convert<std::string>::to_json(itemtotal));
+        m.emplace_back("Name", json::Convert<std::string>::to_json(name));
+        m.emplace_back("Quantity", json::Convert<int>::to_json(quantity));
+        m.emplace_back("Price", json::Convert<std::string>::to_json(price));
+        m.emplace_back("ItemTotal", json::Convert<std::string>::to_json(itemtotal));
         return json::Value::make_object(std::move(m));
     }
 
@@ -32,10 +53,10 @@ struct OrderItemTyped {
 
     static OrderItemTyped from_json_value(const json::Value& v) {
         OrderItemTyped t;
-        t.name = json::Convert<std::string>::from_json(json::require(v, "name"), "name");
-        t.quantity = json::Convert<int>::from_json(json::require(v, "quantity"), "quantity");
-        t.price = json::Convert<std::string>::from_json(json::require(v, "price"), "price");
-        t.itemtotal = json::Convert<std::string>::from_json(json::require(v, "itemtotal"), "itemtotal");
+        t.name = json::Convert<std::string>::from_json(json::require(v, "Name"), "Name");
+        t.quantity = json::Convert<int>::from_json(json::require(v, "Quantity"), "Quantity");
+        t.price = json::Convert<std::string>::from_json(json::require(v, "Price"), "Price");
+        t.itemtotal = json::Convert<std::string>::from_json(json::require(v, "ItemTotal"), "ItemTotal");
         return t;
     }
 

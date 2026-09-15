@@ -16,13 +16,37 @@ func NewAddressTypedFromString(s AddressString) AddressTyped {
 	return t
 }
 
+// ToAddressString converts this AddressTyped back to the string form a table compares.
+func (t AddressTyped) ToAddressString() AddressString {
+	s := AddressString{}
+	s.Street = t.Street
+	s.City = t.City
+	s.State = t.State
+	s.ZIP = t.ZIP
+	return s
+}
+
+// AddressTypedToStringList converts a slice of AddressTyped to its string form.
+func AddressTypedToStringList(list []AddressTyped) []AddressString {
+	result := make([]AddressString, 0, len(list))
+	for _, t := range list { result = append(result, t.ToAddressString()) }
+	return result
+}
+
+// AddressTypedFromStringList converts a slice of AddressString to its typed form.
+func AddressTypedFromStringList(list []AddressString) []AddressTyped {
+	result := make([]AddressTyped, 0, len(list))
+	for _, s := range list { result = append(result, NewAddressTypedFromString(s)) }
+	return result
+}
+
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t AddressTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"street": t.Street,
-		"city": t.City,
-		"state": t.State,
-		"zip": t.ZIP,
+		"Street": t.Street,
+		"City": t.City,
+		"State": t.State,
+		"ZIP": t.ZIP,
 	}
 }
 
@@ -32,38 +56,38 @@ func (t AddressTyped) ToJSON() (string, error) {
 
 func NewAddressTypedFromJSONValue(m map[string]interface{}) (AddressTyped, error) {
 	t := AddressTyped{}
-	rawStreet, err := JSONRequire(m, "street")
+	rawStreet, err := JSONRequire(m, "Street")
 	if err != nil {
 		return t, err
 	}
-	valStreet, err := JSONAsString(rawStreet, "street")
+	valStreet, err := JSONAsString(rawStreet, "Street")
 	if err != nil {
 		return t, err
 	}
 	t.Street = valStreet
-	rawCity, err := JSONRequire(m, "city")
+	rawCity, err := JSONRequire(m, "City")
 	if err != nil {
 		return t, err
 	}
-	valCity, err := JSONAsString(rawCity, "city")
+	valCity, err := JSONAsString(rawCity, "City")
 	if err != nil {
 		return t, err
 	}
 	t.City = valCity
-	rawState, err := JSONRequire(m, "state")
+	rawState, err := JSONRequire(m, "State")
 	if err != nil {
 		return t, err
 	}
-	valState, err := JSONAsString(rawState, "state")
+	valState, err := JSONAsString(rawState, "State")
 	if err != nil {
 		return t, err
 	}
 	t.State = valState
-	rawZIP, err := JSONRequire(m, "zip")
+	rawZIP, err := JSONRequire(m, "ZIP")
 	if err != nil {
 		return t, err
 	}
-	valZIP, err := JSONAsString(rawZIP, "zip")
+	valZIP, err := JSONAsString(rawZIP, "ZIP")
 	if err != nil {
 		return t, err
 	}

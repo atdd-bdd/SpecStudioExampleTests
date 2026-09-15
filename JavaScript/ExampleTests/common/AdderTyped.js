@@ -16,6 +16,22 @@ export class AdderTyped {
     );
   }
 
+  toStringObj() {
+    return new AdderString(
+      String(this.number1),
+      String(this.number2),
+      String(this.result)
+    );
+  }
+
+  static toStringList(list) {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list) {
+    return list.map(s => AdderTyped.fromStringObj(s));
+  }
+
   toJsonValue() {
     return {
       number1: this.number1,

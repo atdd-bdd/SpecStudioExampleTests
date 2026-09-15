@@ -17,12 +17,28 @@ class AddressTyped:
             s.zip
         )
 
+    def to_string_obj(self) -> AddressString:
+        return AddressString(
+            str(self.street),
+            str(self.city),
+            str(self.state),
+            str(self.zip)
+        )
+
+    @staticmethod
+    def to_string_list(items) -> list:
+        return [t.to_string_obj() for t in items]
+
+    @staticmethod
+    def from_string_list(items) -> list:
+        return [AddressTyped.from_string_obj(s) for s in items]
+
     def to_json_value(self) -> dict:
         return {
-            'street': self.street,
-            'city': self.city,
-            'state': self.state,
-            'zip': self.zip,
+            'Street': self.street,
+            'City': self.city,
+            'State': self.state,
+            'ZIP': self.zip,
         }
 
     def to_json(self) -> str:
@@ -31,10 +47,10 @@ class AddressTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'AddressTyped':
         return cls(
-            _json.as_str(_json.require(m, 'street'), 'street'),
-            _json.as_str(_json.require(m, 'city'), 'city'),
-            _json.as_str(_json.require(m, 'state'), 'state'),
-            _json.as_str(_json.require(m, 'zip'), 'zip')
+            _json.as_str(_json.require(m, 'Street'), 'Street'),
+            _json.as_str(_json.require(m, 'City'), 'City'),
+            _json.as_str(_json.require(m, 'State'), 'State'),
+            _json.as_str(_json.require(m, 'ZIP'), 'ZIP')
         )
 
     @classmethod

@@ -9,6 +9,20 @@ public struct FilterValueTyped: Equatable, CustomStringConvertible {
         self.value = s.value
     }
 
+    public func toStringStruct() -> FilterValueString {
+        return FilterValueString(
+            value: String(describing: value)
+        )
+    }
+
+    public static func toStringList(_ list: [FilterValueTyped]) -> [FilterValueString] {
+        return list.map { $0.toStringStruct() }
+    }
+
+    public static func fromStringList(_ list: [FilterValueString]) -> [FilterValueTyped] {
+        return list.map { FilterValueTyped(from: $0) }
+    }
+
     public func toJSONValue() -> [String: Any] {
         return [
             "value": value,

@@ -10,10 +10,31 @@ func NewItemPriceInputTypedFromString(s ItemPriceInputString) ItemPriceInputType
 	return t
 }
 
+// ToItemPriceInputString converts this ItemPriceInputTyped back to the string form a table compares.
+func (t ItemPriceInputTyped) ToItemPriceInputString() ItemPriceInputString {
+	s := ItemPriceInputString{}
+	s.TotalItems = t.TotalItems
+	return s
+}
+
+// ItemPriceInputTypedToStringList converts a slice of ItemPriceInputTyped to its string form.
+func ItemPriceInputTypedToStringList(list []ItemPriceInputTyped) []ItemPriceInputString {
+	result := make([]ItemPriceInputString, 0, len(list))
+	for _, t := range list { result = append(result, t.ToItemPriceInputString()) }
+	return result
+}
+
+// ItemPriceInputTypedFromStringList converts a slice of ItemPriceInputString to its typed form.
+func ItemPriceInputTypedFromStringList(list []ItemPriceInputString) []ItemPriceInputTyped {
+	result := make([]ItemPriceInputTyped, 0, len(list))
+	for _, s := range list { result = append(result, NewItemPriceInputTypedFromString(s)) }
+	return result
+}
+
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t ItemPriceInputTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"totalitems": t.TotalItems,
+		"TotalItems": t.TotalItems,
 	}
 }
 
@@ -23,11 +44,11 @@ func (t ItemPriceInputTyped) ToJSON() (string, error) {
 
 func NewItemPriceInputTypedFromJSONValue(m map[string]interface{}) (ItemPriceInputTyped, error) {
 	t := ItemPriceInputTyped{}
-	rawTotalItems, err := JSONRequire(m, "totalitems")
+	rawTotalItems, err := JSONRequire(m, "TotalItems")
 	if err != nil {
 		return t, err
 	}
-	valTotalItems, err := JSONAsString(rawTotalItems, "totalitems")
+	valTotalItems, err := JSONAsString(rawTotalItems, "TotalItems")
 	if err != nil {
 		return t, err
 	}

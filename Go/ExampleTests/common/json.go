@@ -187,3 +187,17 @@ func JSONAsObject(v interface{}, ctx string) (map[string]interface{}, error) {
 	}
 	return m, nil
 }
+
+// JSONAsArray reads a field that holds a Collection. A missing or null field is
+// an empty collection rather than an error: a service that found nothing may
+// omit the array or send null, and neither is a malformed reply.
+func JSONAsArray(v interface{}, ctx string) ([]interface{}, error) {
+	if v == nil {
+		return nil, nil
+	}
+	a, ok := v.([]interface{})
+	if !ok {
+		return nil, jsonTypeError(ctx, "an array", v)
+	}
+	return a, nil
+}

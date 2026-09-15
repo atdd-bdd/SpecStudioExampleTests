@@ -20,6 +20,22 @@ export class DiscountInputTyped {
     );
   }
 
+  toStringObj(): DiscountInputString {
+    return new DiscountInputString(
+      String(this.totalPrice),
+      String(this.discount),
+      String(this.notes)
+    );
+  }
+
+  static toStringList(list: DiscountInputTyped[]): DiscountInputString[] {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list: DiscountInputString[]): DiscountInputTyped[] {
+    return list.map(s => DiscountInputTyped.fromStringObj(s));
+  }
+
   toJsonValue(): Record<string, unknown> {
     return {
       totalPrice: this.totalPrice,

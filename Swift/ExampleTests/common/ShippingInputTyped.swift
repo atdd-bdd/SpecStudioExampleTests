@@ -15,6 +15,22 @@ public struct ShippingInputTyped: Equatable, CustomStringConvertible {
         self.notes = s.notes
     }
 
+    public func toStringStruct() -> ShippingInputString {
+        return ShippingInputString(
+            totalPrice: String(describing: totalPrice),
+            shippingCost: String(describing: shippingCost),
+            notes: String(describing: notes)
+        )
+    }
+
+    public static func toStringList(_ list: [ShippingInputTyped]) -> [ShippingInputString] {
+        return list.map { $0.toStringStruct() }
+    }
+
+    public static func fromStringList(_ list: [ShippingInputString]) -> [ShippingInputTyped] {
+        return list.map { ShippingInputTyped(from: $0) }
+    }
+
     public func toJSONValue() -> [String: Any] {
         return [
             "totalPrice": totalPrice,

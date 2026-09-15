@@ -21,6 +21,24 @@ public struct CartInputTyped: Equatable, CustomStringConvertible {
         self.notes = s.notes
     }
 
+    public func toStringStruct() -> CartInputString {
+        return CartInputString(
+            totalItems: String(describing: totalItems),
+            shipping: String(describing: shipping),
+            discount: String(describing: discount),
+            totalPrice: String(describing: totalPrice),
+            notes: String(describing: notes)
+        )
+    }
+
+    public static func toStringList(_ list: [CartInputTyped]) -> [CartInputString] {
+        return list.map { $0.toStringStruct() }
+    }
+
+    public static func fromStringList(_ list: [CartInputString]) -> [CartInputTyped] {
+        return list.map { CartInputTyped(from: $0) }
+    }
+
     public func toJSONValue() -> [String: Any] {
         return [
             "totalItems": totalItems,

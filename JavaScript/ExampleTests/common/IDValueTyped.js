@@ -14,6 +14,21 @@ export class IDValueTyped {
     );
   }
 
+  toStringObj() {
+    return new IDValueString(
+      String(this.iD),
+      String(this.value)
+    );
+  }
+
+  static toStringList(list) {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list) {
+    return list.map(s => IDValueTyped.fromStringObj(s));
+  }
+
   toJsonValue() {
     return {
       iD: this.iD == null ? null : String(this.iD),

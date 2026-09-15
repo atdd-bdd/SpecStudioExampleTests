@@ -14,6 +14,20 @@ export class ResultValueTyped {
     );
   }
 
+  toStringObj(): ResultValueString {
+    return new ResultValueString(
+      String(this.sum)
+    );
+  }
+
+  static toStringList(list: ResultValueTyped[]): ResultValueString[] {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list: ResultValueString[]): ResultValueTyped[] {
+    return list.map(s => ResultValueTyped.fromStringObj(s));
+  }
+
   toJsonValue(): Record<string, unknown> {
     return {
       sum: this.sum,

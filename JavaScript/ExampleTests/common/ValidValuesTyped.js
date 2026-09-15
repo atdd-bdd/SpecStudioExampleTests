@@ -16,6 +16,22 @@ export class ValidValuesTyped {
     );
   }
 
+  toStringObj() {
+    return new ValidValuesString(
+      String(this.value),
+      String(this.isValid),
+      String(this.notes)
+    );
+  }
+
+  static toStringList(list) {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list) {
+    return list.map(s => ValidValuesTyped.fromStringObj(s));
+  }
+
   toJsonValue() {
     return {
       value: this.value,

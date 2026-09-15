@@ -23,6 +23,23 @@ export class OrderItemTyped {
     );
   }
 
+  toStringObj(): OrderItemString {
+    return new OrderItemString(
+      String(this.name),
+      String(this.quantity),
+      String(this.price),
+      String(this.itemTotal)
+    );
+  }
+
+  static toStringList(list: OrderItemTyped[]): OrderItemString[] {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list: OrderItemString[]): OrderItemTyped[] {
+    return list.map(s => OrderItemTyped.fromStringObj(s));
+  }
+
   toJsonValue(): Record<string, unknown> {
     return {
       name: this.name,

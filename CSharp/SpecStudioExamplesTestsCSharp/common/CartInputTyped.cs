@@ -25,6 +25,31 @@ using production;
             this.notes = notes;
         }
 
+        public CartInputString ToCartInputString()
+        {
+            return new CartInputString(
+                Json.ToText(this.totalItems),
+                Json.ToText(this.shipping),
+                Json.ToText(this.discount),
+                Json.ToText(this.totalPrice),
+                Json.ToText(this.notes)
+            );
+        }
+
+        public static List<CartInputString> ToStringList(List<CartInputTyped> list)
+        {
+            var result = new List<CartInputString>();
+            foreach (var t in list) result.Add(t.ToCartInputString());
+            return result;
+        }
+
+        public static List<CartInputTyped> FromStringList(List<CartInputString> list)
+        {
+            var result = new List<CartInputTyped>();
+            foreach (var s in list) result.Add(s.ToCartInputTyped());
+            return result;
+        }
+
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();

@@ -17,6 +17,26 @@ struct AdderTyped {
         return t;
     }
 
+    AdderString to_string_struct() const {
+        AdderString s;
+        s.number1 = std::to_string(number1);
+        s.number2 = std::to_string(number2);
+        s.result = std::to_string(result);
+        return s;
+    }
+
+    static std::vector<AdderString> to_string_list(const std::vector<AdderTyped>& list) {
+        std::vector<AdderString> result;
+        for (const auto& t : list) result.push_back(t.to_string_struct());
+        return result;
+    }
+
+    static std::vector<AdderTyped> from_string_list(const std::vector<AdderString>& list) {
+        std::vector<AdderTyped> result;
+        for (const auto& s : list) result.push_back(from_string_struct(s));
+        return result;
+    }
+
     json::Value to_json_value() const {
         json::Members m;
         m.emplace_back("number1", json::Convert<int>::to_json(number1));

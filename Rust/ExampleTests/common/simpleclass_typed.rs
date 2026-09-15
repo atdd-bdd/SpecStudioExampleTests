@@ -17,10 +17,25 @@ impl SimpleClassTyped {
         }
     }
 
+    pub fn to_str_struct(&self) -> SimpleClassString {
+        SimpleClassString {
+            anint: self.anint.to_string(),
+            astring: self.astring.clone(),
+        }
+    }
+
+    pub fn to_string_list(list: &[SimpleClassTyped]) -> Vec<SimpleClassString> {
+        list.iter().map(|t| t.to_str_struct()).collect()
+    }
+
+    pub fn from_string_list(list: &[SimpleClassString]) -> Vec<SimpleClassTyped> {
+        list.iter().map(SimpleClassTyped::from_str_struct).collect()
+    }
+
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("anint".to_string(), json::Value::number_from_i64(self.anint as i64)),
-            ("astring".to_string(), json::Value::Str(self.astring.clone())),
+            ("anInt".to_string(), json::Value::number_from_i64(self.anint as i64)),
+            ("aString".to_string(), json::Value::Str(self.astring.clone())),
         ])
     }
 
@@ -30,8 +45,8 @@ impl SimpleClassTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            anint: json::as_i32(json::require(v, "anint")?, "anint")?,
-            astring: json::as_string(json::require(v, "astring")?, "astring")?,
+            anint: json::as_i32(json::require(v, "anInt")?, "anInt")?,
+            astring: json::as_string(json::require(v, "aString")?, "aString")?,
         })
     }
 

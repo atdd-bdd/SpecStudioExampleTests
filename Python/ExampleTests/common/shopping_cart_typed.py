@@ -1,11 +1,12 @@
 from . import json_util as _json
 from .shopping_cart_string import ShoppingCartString
+from .order_item_typed import OrderItemTyped
 from .address_typed import AddressTyped
 from .address_typed import AddressTyped
 
 class ShoppingCartTyped:
-    def __init__(self, items: str = '', shipping: str = '', discount: str = '', total_price: str = '', shipping_address: 'AddressTyped' = None, billing_address: 'AddressTyped' = None):
-        self.items = items
+    def __init__(self, items: list = None, shipping: str = '', discount: str = '', total_price: str = '', shipping_address: 'AddressTyped' = None, billing_address: 'AddressTyped' = None):
+        self.items = items if items is not None else []
         self.shipping = shipping
         self.discount = discount
         self.total_price = total_price
@@ -15,7 +16,7 @@ class ShoppingCartTyped:
     @classmethod
     def from_string_obj(cls, s: ShoppingCartString) -> 'ShoppingCartTyped':
         return cls(
-            s.items,
+            [],
             s.shipping,
             s.discount,
             s.total_price,
@@ -23,14 +24,32 @@ class ShoppingCartTyped:
             AddressTyped.from_string_obj(s.billing_address)
         )
 
+    def to_string_obj(self) -> ShoppingCartString:
+        return ShoppingCartString(
+            '',
+            str(self.shipping),
+            str(self.discount),
+            str(self.total_price),
+            self.shipping_address.to_string_obj(),
+            self.billing_address.to_string_obj()
+        )
+
+    @staticmethod
+    def to_string_list(items) -> list:
+        return [t.to_string_obj() for t in items]
+
+    @staticmethod
+    def from_string_list(items) -> list:
+        return [ShoppingCartTyped.from_string_obj(s) for s in items]
+
     def to_json_value(self) -> dict:
         return {
-            'items': self.items,
-            'shipping': self.shipping,
-            'discount': self.discount,
-            'total_price': self.total_price,
-            'shipping_address': self.shipping_address.to_json_value() if self.shipping_address else None,
-            'billing_address': self.billing_address.to_json_value() if self.billing_address else None,
+            'Items': [e.to_json_value() for e in self.items],
+            'Shipping': self.shipping,
+            'Discount': self.discount,
+            'TotalPrice': self.total_price,
+            'ShippingAddress': self.shipping_address.to_json_value() if self.shipping_address else None,
+            'BillingAddress': self.billing_address.to_json_value() if self.billing_address else None,
         }
 
     def to_json(self) -> str:
@@ -39,12 +58,12 @@ class ShoppingCartTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'ShoppingCartTyped':
         return cls(
-            _json.as_str(_json.require(m, 'items'), 'items'),
-            _json.as_str(_json.require(m, 'shipping'), 'shipping'),
-            _json.as_str(_json.require(m, 'discount'), 'discount'),
-            _json.as_str(_json.require(m, 'total_price'), 'total_price'),
-            AddressTyped.from_json_value(_json.require(m, 'shipping_address')),
-            AddressTyped.from_json_value(_json.require(m, 'billing_address'))
+            [OrderItemTyped.from_json_value(e) for e in _json.as_list(_json.require(m, 'Items'), 'Items')],
+            _json.as_str(_json.require(m, 'Shipping'), 'Shipping'),
+            _json.as_str(_json.require(m, 'Discount'), 'Discount'),
+            _json.as_str(_json.require(m, 'TotalPrice'), 'TotalPrice'),
+            AddressTyped.from_json_value(_json.require(m, 'ShippingAddress')),
+            AddressTyped.from_json_value(_json.require(m, 'BillingAddress'))
         )
 
     @classmethod

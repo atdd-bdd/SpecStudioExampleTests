@@ -18,6 +18,23 @@ export class AddressTyped {
     );
   }
 
+  toStringObj() {
+    return new AddressString(
+      String(this.street),
+      String(this.city),
+      String(this.state),
+      String(this.zIP)
+    );
+  }
+
+  static toStringList(list) {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list) {
+    return list.map(s => AddressTyped.fromStringObj(s));
+  }
+
   toJsonValue() {
     return {
       street: this.street == null ? null : String(this.street),

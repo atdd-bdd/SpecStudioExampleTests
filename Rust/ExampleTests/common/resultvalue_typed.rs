@@ -15,9 +15,23 @@ impl ResultValueTyped {
         }
     }
 
+    pub fn to_str_struct(&self) -> ResultValueString {
+        ResultValueString {
+            sum: self.sum.to_string(),
+        }
+    }
+
+    pub fn to_string_list(list: &[ResultValueTyped]) -> Vec<ResultValueString> {
+        list.iter().map(|t| t.to_str_struct()).collect()
+    }
+
+    pub fn from_string_list(list: &[ResultValueString]) -> Vec<ResultValueTyped> {
+        list.iter().map(ResultValueTyped::from_str_struct).collect()
+    }
+
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("sum".to_string(), json::Value::number_from_i64(self.sum as i64)),
+            ("Sum".to_string(), json::Value::number_from_i64(self.sum as i64)),
         ])
     }
 
@@ -27,7 +41,7 @@ impl ResultValueTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            sum: json::as_i32(json::require(v, "sum")?, "sum")?,
+            sum: json::as_i32(json::require(v, "Sum")?, "Sum")?,
         })
     }
 

@@ -16,6 +16,22 @@ export class ShippingInputTyped {
     );
   }
 
+  toStringObj() {
+    return new ShippingInputString(
+      String(this.totalPrice),
+      String(this.shippingCost),
+      String(this.notes)
+    );
+  }
+
+  static toStringList(list) {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list) {
+    return list.map(s => ShippingInputTyped.fromStringObj(s));
+  }
+
   toJsonValue() {
     return {
       totalPrice: this.totalPrice == null ? null : String(this.totalPrice),

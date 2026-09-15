@@ -13,10 +13,24 @@ class IDValueTyped:
             int(s.value) if s.value else 0
         )
 
+    def to_string_obj(self) -> IDValueString:
+        return IDValueString(
+            str(self.id),
+            str(self.value)
+        )
+
+    @staticmethod
+    def to_string_list(items) -> list:
+        return [t.to_string_obj() for t in items]
+
+    @staticmethod
+    def from_string_list(items) -> list:
+        return [IDValueTyped.from_string_obj(s) for s in items]
+
     def to_json_value(self) -> dict:
         return {
-            'id': self.id,
-            'value': self.value,
+            'ID': self.id,
+            'Value': self.value,
         }
 
     def to_json(self) -> str:
@@ -25,8 +39,8 @@ class IDValueTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'IDValueTyped':
         return cls(
-            _json.as_str(_json.require(m, 'id'), 'id'),
-            _json.as_int(_json.require(m, 'value'), 'value')
+            _json.as_str(_json.require(m, 'ID'), 'ID'),
+            _json.as_int(_json.require(m, 'Value'), 'Value')
         )
 
     @classmethod

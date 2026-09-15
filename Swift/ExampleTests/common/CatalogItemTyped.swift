@@ -12,6 +12,21 @@ public struct CatalogItemTyped: Equatable, CustomStringConvertible {
         self.price = s.price
     }
 
+    public func toStringStruct() -> CatalogItemString {
+        return CatalogItemString(
+            name: String(describing: name),
+            price: String(describing: price)
+        )
+    }
+
+    public static func toStringList(_ list: [CatalogItemTyped]) -> [CatalogItemString] {
+        return list.map { $0.toStringStruct() }
+    }
+
+    public static func fromStringList(_ list: [CatalogItemString]) -> [CatalogItemTyped] {
+        return list.map { CatalogItemTyped(from: $0) }
+    }
+
     public func toJSONValue() -> [String: Any] {
         return [
             "name": name,

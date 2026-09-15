@@ -17,10 +17,25 @@ impl IDValueTyped {
         }
     }
 
+    pub fn to_str_struct(&self) -> IDValueString {
+        IDValueString {
+            id: self.id.clone(),
+            value: self.value.to_string(),
+        }
+    }
+
+    pub fn to_string_list(list: &[IDValueTyped]) -> Vec<IDValueString> {
+        list.iter().map(|t| t.to_str_struct()).collect()
+    }
+
+    pub fn from_string_list(list: &[IDValueString]) -> Vec<IDValueTyped> {
+        list.iter().map(IDValueTyped::from_str_struct).collect()
+    }
+
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("id".to_string(), json::Value::Str(self.id.clone())),
-            ("value".to_string(), json::Value::number_from_i64(self.value as i64)),
+            ("ID".to_string(), json::Value::Str(self.id.clone())),
+            ("Value".to_string(), json::Value::number_from_i64(self.value as i64)),
         ])
     }
 
@@ -30,8 +45,8 @@ impl IDValueTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            id: json::as_string(json::require(v, "id")?, "id")?,
-            value: json::as_i32(json::require(v, "value")?, "value")?,
+            id: json::as_string(json::require(v, "ID")?, "ID")?,
+            value: json::as_i32(json::require(v, "Value")?, "Value")?,
         })
     }
 

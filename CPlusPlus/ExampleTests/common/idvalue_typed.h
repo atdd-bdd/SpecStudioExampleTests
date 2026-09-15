@@ -15,10 +15,29 @@ struct IDValueTyped {
         return t;
     }
 
+    IDValueString to_string_struct() const {
+        IDValueString s;
+        s.id = id;
+        s.value = std::to_string(value);
+        return s;
+    }
+
+    static std::vector<IDValueString> to_string_list(const std::vector<IDValueTyped>& list) {
+        std::vector<IDValueString> result;
+        for (const auto& t : list) result.push_back(t.to_string_struct());
+        return result;
+    }
+
+    static std::vector<IDValueTyped> from_string_list(const std::vector<IDValueString>& list) {
+        std::vector<IDValueTyped> result;
+        for (const auto& s : list) result.push_back(from_string_struct(s));
+        return result;
+    }
+
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("id", json::Convert<std::string>::to_json(id));
-        m.emplace_back("value", json::Convert<int>::to_json(value));
+        m.emplace_back("ID", json::Convert<std::string>::to_json(id));
+        m.emplace_back("Value", json::Convert<int>::to_json(value));
         return json::Value::make_object(std::move(m));
     }
 
@@ -26,8 +45,8 @@ struct IDValueTyped {
 
     static IDValueTyped from_json_value(const json::Value& v) {
         IDValueTyped t;
-        t.id = json::Convert<std::string>::from_json(json::require(v, "id"), "id");
-        t.value = json::Convert<int>::from_json(json::require(v, "value"), "value");
+        t.id = json::Convert<std::string>::from_json(json::require(v, "ID"), "ID");
+        t.value = json::Convert<int>::from_json(json::require(v, "Value"), "Value");
         return t;
     }
 

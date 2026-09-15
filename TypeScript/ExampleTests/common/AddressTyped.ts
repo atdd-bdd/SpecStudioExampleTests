@@ -23,6 +23,23 @@ export class AddressTyped {
     );
   }
 
+  toStringObj(): AddressString {
+    return new AddressString(
+      String(this.street),
+      String(this.city),
+      String(this.state),
+      String(this.zIP)
+    );
+  }
+
+  static toStringList(list: AddressTyped[]): AddressString[] {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list: AddressString[]): AddressTyped[] {
+    return list.map(s => AddressTyped.fromStringObj(s));
+  }
+
   toJsonValue(): Record<string, unknown> {
     return {
       street: this.street,

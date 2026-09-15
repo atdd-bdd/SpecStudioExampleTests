@@ -14,12 +14,35 @@ func NewShippingInputTypedFromString(s ShippingInputString) ShippingInputTyped {
 	return t
 }
 
+// ToShippingInputString converts this ShippingInputTyped back to the string form a table compares.
+func (t ShippingInputTyped) ToShippingInputString() ShippingInputString {
+	s := ShippingInputString{}
+	s.TotalPrice = t.TotalPrice
+	s.ShippingCost = t.ShippingCost
+	s.Notes = t.Notes
+	return s
+}
+
+// ShippingInputTypedToStringList converts a slice of ShippingInputTyped to its string form.
+func ShippingInputTypedToStringList(list []ShippingInputTyped) []ShippingInputString {
+	result := make([]ShippingInputString, 0, len(list))
+	for _, t := range list { result = append(result, t.ToShippingInputString()) }
+	return result
+}
+
+// ShippingInputTypedFromStringList converts a slice of ShippingInputString to its typed form.
+func ShippingInputTypedFromStringList(list []ShippingInputString) []ShippingInputTyped {
+	result := make([]ShippingInputTyped, 0, len(list))
+	for _, s := range list { result = append(result, NewShippingInputTypedFromString(s)) }
+	return result
+}
+
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t ShippingInputTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"total_price": t.TotalPrice,
-		"shipping_cost": t.ShippingCost,
-		"notes": t.Notes,
+		"Total Price": t.TotalPrice,
+		"Shipping Cost": t.ShippingCost,
+		"Notes": t.Notes,
 	}
 }
 
@@ -29,29 +52,29 @@ func (t ShippingInputTyped) ToJSON() (string, error) {
 
 func NewShippingInputTypedFromJSONValue(m map[string]interface{}) (ShippingInputTyped, error) {
 	t := ShippingInputTyped{}
-	rawTotalPrice, err := JSONRequire(m, "total_price")
+	rawTotalPrice, err := JSONRequire(m, "Total Price")
 	if err != nil {
 		return t, err
 	}
-	valTotalPrice, err := JSONAsString(rawTotalPrice, "total_price")
+	valTotalPrice, err := JSONAsString(rawTotalPrice, "Total Price")
 	if err != nil {
 		return t, err
 	}
 	t.TotalPrice = valTotalPrice
-	rawShippingCost, err := JSONRequire(m, "shipping_cost")
+	rawShippingCost, err := JSONRequire(m, "Shipping Cost")
 	if err != nil {
 		return t, err
 	}
-	valShippingCost, err := JSONAsString(rawShippingCost, "shipping_cost")
+	valShippingCost, err := JSONAsString(rawShippingCost, "Shipping Cost")
 	if err != nil {
 		return t, err
 	}
 	t.ShippingCost = valShippingCost
-	rawNotes, err := JSONRequire(m, "notes")
+	rawNotes, err := JSONRequire(m, "Notes")
 	if err != nil {
 		return t, err
 	}
-	valNotes, err := JSONAsString(rawNotes, "notes")
+	valNotes, err := JSONAsString(rawNotes, "Notes")
 	if err != nil {
 		return t, err
 	}

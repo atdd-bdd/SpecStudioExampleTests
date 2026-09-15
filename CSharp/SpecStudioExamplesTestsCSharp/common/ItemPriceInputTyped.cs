@@ -17,6 +17,27 @@ using production;
             this.totalItems = totalItems;
         }
 
+        public ItemPriceInputString ToItemPriceInputString()
+        {
+            return new ItemPriceInputString(
+                Json.ToText(this.totalItems)
+            );
+        }
+
+        public static List<ItemPriceInputString> ToStringList(List<ItemPriceInputTyped> list)
+        {
+            var result = new List<ItemPriceInputString>();
+            foreach (var t in list) result.Add(t.ToItemPriceInputString());
+            return result;
+        }
+
+        public static List<ItemPriceInputTyped> FromStringList(List<ItemPriceInputString> list)
+        {
+            var result = new List<ItemPriceInputTyped>();
+            foreach (var s in list) result.Add(s.ToItemPriceInputTyped());
+            return result;
+        }
+
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();

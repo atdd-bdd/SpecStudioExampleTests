@@ -13,10 +13,24 @@ class SimpleClassTyped:
             s.a_string
         )
 
+    def to_string_obj(self) -> SimpleClassString:
+        return SimpleClassString(
+            str(self.an_int),
+            str(self.a_string)
+        )
+
+    @staticmethod
+    def to_string_list(items) -> list:
+        return [t.to_string_obj() for t in items]
+
+    @staticmethod
+    def from_string_list(items) -> list:
+        return [SimpleClassTyped.from_string_obj(s) for s in items]
+
     def to_json_value(self) -> dict:
         return {
-            'an_int': self.an_int,
-            'a_string': self.a_string,
+            'anInt': self.an_int,
+            'aString': self.a_string,
         }
 
     def to_json(self) -> str:
@@ -25,8 +39,8 @@ class SimpleClassTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'SimpleClassTyped':
         return cls(
-            _json.as_int(_json.require(m, 'an_int'), 'an_int'),
-            _json.as_str(_json.require(m, 'a_string'), 'a_string')
+            _json.as_int(_json.require(m, 'anInt'), 'anInt'),
+            _json.as_str(_json.require(m, 'aString'), 'aString')
         )
 
     @classmethod

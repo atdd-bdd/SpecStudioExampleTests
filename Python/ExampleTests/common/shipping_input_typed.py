@@ -15,11 +15,26 @@ class ShippingInputTyped:
             s.notes
         )
 
+    def to_string_obj(self) -> ShippingInputString:
+        return ShippingInputString(
+            str(self.total_price),
+            str(self.shipping_cost),
+            str(self.notes)
+        )
+
+    @staticmethod
+    def to_string_list(items) -> list:
+        return [t.to_string_obj() for t in items]
+
+    @staticmethod
+    def from_string_list(items) -> list:
+        return [ShippingInputTyped.from_string_obj(s) for s in items]
+
     def to_json_value(self) -> dict:
         return {
-            'total_price': self.total_price,
-            'shipping_cost': self.shipping_cost,
-            'notes': self.notes,
+            'Total Price': self.total_price,
+            'Shipping Cost': self.shipping_cost,
+            'Notes': self.notes,
         }
 
     def to_json(self) -> str:
@@ -28,9 +43,9 @@ class ShippingInputTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'ShippingInputTyped':
         return cls(
-            _json.as_str(_json.require(m, 'total_price'), 'total_price'),
-            _json.as_str(_json.require(m, 'shipping_cost'), 'shipping_cost'),
-            _json.as_str(_json.require(m, 'notes'), 'notes')
+            _json.as_str(_json.require(m, 'Total Price'), 'Total Price'),
+            _json.as_str(_json.require(m, 'Shipping Cost'), 'Shipping Cost'),
+            _json.as_str(_json.require(m, 'Notes'), 'Notes')
         )
 
     @classmethod

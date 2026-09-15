@@ -14,6 +14,21 @@ export class CatalogItemTyped {
     );
   }
 
+  toStringObj() {
+    return new CatalogItemString(
+      String(this.name),
+      String(this.price)
+    );
+  }
+
+  static toStringList(list) {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list) {
+    return list.map(s => CatalogItemTyped.fromStringObj(s));
+  }
+
   toJsonValue() {
     return {
       name: this.name == null ? null : String(this.name),

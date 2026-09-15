@@ -17,6 +17,21 @@ export class CatalogItemTyped {
     );
   }
 
+  toStringObj(): CatalogItemString {
+    return new CatalogItemString(
+      String(this.name),
+      String(this.price)
+    );
+  }
+
+  static toStringList(list: CatalogItemTyped[]): CatalogItemString[] {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list: CatalogItemString[]): CatalogItemTyped[] {
+    return list.map(s => CatalogItemTyped.fromStringObj(s));
+  }
+
   toJsonValue(): Record<string, unknown> {
     return {
       name: this.name,

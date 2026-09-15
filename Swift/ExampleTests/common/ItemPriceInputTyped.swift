@@ -9,6 +9,20 @@ public struct ItemPriceInputTyped: Equatable, CustomStringConvertible {
         self.totalItems = s.totalItems
     }
 
+    public func toStringStruct() -> ItemPriceInputString {
+        return ItemPriceInputString(
+            totalItems: String(describing: totalItems)
+        )
+    }
+
+    public static func toStringList(_ list: [ItemPriceInputTyped]) -> [ItemPriceInputString] {
+        return list.map { $0.toStringStruct() }
+    }
+
+    public static func fromStringList(_ list: [ItemPriceInputString]) -> [ItemPriceInputTyped] {
+        return list.map { ItemPriceInputTyped(from: $0) }
+    }
+
     public func toJSONValue() -> [String: Any] {
         return [
             "totalItems": totalItems,

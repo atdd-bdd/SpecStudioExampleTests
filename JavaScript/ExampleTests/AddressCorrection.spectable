@@ -1,0 +1,153 @@
+Specification AddressCorrection
+Description Standardizes US street addresses through the Census Bureau geocoder
+
+# Testing a live API. There are no production classes: the service is the thing
+# under test, so the glue is all there is -- and there is very little of it.
+#
+# The service is the US Census Bureau's address geocoder, which is public and
+# needs no API key:
+#
+#   https://geocoding.geo.census.gov/geocoder/locations/onelineaddress
+#
+# The attribute sets below mirror the shape of the JSON it answers with, so the
+# generated Response.fromJSON reads the whole reply on its own. The glue never
+# touches the JSON: it calls the service, hands the body to fromJSON, and
+# compares. If glue is ever seen navigating a reply, the specification is not
+# describing that reply honestly.
+#
+# Declaring a field means it must be present in the reply. Fields of the reply
+# that are not declared are simply not read, which is why tigerLine and
+# coordinates are absent here -- nothing is asserted about them.
+#
+# The service answers with the same data every time, so every expected value is
+# a real one.
+
+Background
+Given base Page is : String
+| https://geocoding.geo.census.gov |
+
+# ============================================================
+# A complete address comes back standardized
+# ============================================================
+
+Scenario Standardize an address that is already complete
+When sending request : Request Vertical
+| Address | 1600 pennsylvania ave nw, washington, dc |
+Then response status is : Status Vertical
+| Code | 200 |
+And the matched addresses are : Match
+| matchedAddress                                  | addressComponents                          |
+| 1600 PENNSYLVANIA AVE NW, WASHINGTON, DC, 20500 | 20500 PENNSYLVANIA WASHINGTON "" NW DC AVE |
+
+# One row means one match. The count is the table, not a separate claim.
+#
+# addressComponents is a nested block, so its cell holds that block's text form:
+# the values space separated, in the order the attributes are declared, with an
+# empty one written "". The caller typed the address in lower case and left the
+# ZIP off; case, and a ZIP that was never supplied, are what the service is for.
+
+# ============================================================
+# A spelled out street name becomes its numeral
+# ============================================================
+
+Scenario Correct a spelled out ordinal
+When sending request : Request Vertical
+| Address | 350 fifth ave, new york, ny |
+Then response status is : Status Vertical
+| Code | 200 |
+And the matched addresses are : Match CompareOnly
+| matchedAddress                   |
+| 350 5TH AVE, NEW YORK, NY, 10118 |
+
+# "fifth" became "5TH" -- the reason anyone calls an address corrector.
+#
+# CompareOnly limits equality to the columns shown, so addressComponents is
+# filled with the do-not-care marker all the way down and nothing inside it is
+# compared. A step takes one modifier, so a CompareOnly table cannot also be
+# Vertical.
+
+# ============================================================
+# Ambiguity returns every candidate
+# ============================================================
+
+Scenario Return every candidate for an ambiguous address
+When sending request : Request Vertical
+| Address | 1600 pennsylvania ave, washington, dc |
+Then response status is : Status Vertical
+| Code | 200 |
+And the matched addresses are : Match CompareOnly
+| matchedAddress                                  |
+| 1600 PENNSYLVANIA AVE SE, WASHINGTON, DC, 20003 |
+| 1600 PENNSYLVANIA AVE NW, WASHINGTON, DC, 20500 |
+
+# Drop the directional and the corrector cannot choose between the two
+# Pennsylvania Avenues, so it returns both rather than guessing. Two rows means
+# two matches: a third would fail on the count without anything being said
+# about counting.
+
+# ============================================================
+# An address that does not exist
+# ============================================================
+
+Scenario Report an address that cannot be corrected
+When sending request : Request Vertical
+| Address | 99999 nonexistent rd, nowhere, zz 00000 |
+Then response status is : Status Vertical
+| Code | 200 |
+And there are no matched addresses
+
+# A failure to correct is still a 200. The call succeeded; the address did not
+# exist. Checking the status separately from the body is what keeps those apart
+# -- a 404 here would be a defect in the service, not an unknown address.
+
+Attributes Request
+| Attribute | Type   | Default                            | Notes                                         |
+| Method    | String | GET                                |                                               |
+| Page      | String | geocoder/locations/onelineaddress  | Appended to the base Page from the Background |
+| Address   | String |                                    | As the caller typed it                        |
+| Benchmark | String | Public_AR_Current                  | Which edition of the address ranges           |
+| Format    | String | json                               |                                               |
+
+# Everything but Address has a default, so a scenario states only what is
+# peculiar to it. The glue turns these into the query string.
+
+Attributes Status
+| Attribute | Type    | Default | Notes            |
+| Code      | Integer | 200     | HTTP status code |
+
+# ---- the shape of the reply -------------------------------------------------
+# {"result": {"addressMatches": [ {"matchedAddress": ...,
+#                                  "addressComponents": { ... }} ]}}
+
+Attributes Response
+| Attribute | Type   | Default | Notes                   |
+| result    | Result |         | The one top level field |
+
+Attributes Result
+| Attribute      | Type            | Default | Notes                        |
+| addressMatches | MatchCollection |         | Empty when nothing was found |
+
+Collection MatchCollection
+| DataType | Minimum | Maximum | Notes                         |
+| Match    | 0       | 10000   | One per address the API found |
+
+Entity Match
+| Attribute         | Type              | Default | Notes                          |
+| matchedAddress    | String            |         | The standardized address       |
+| addressComponents | AddressComponents |         | The same address, in its parts |
+
+Entity AddressComponents
+| Attribute       | Type   | Default | Notes                              |
+| zip             | String |         | Five digits                        |
+| streetName      | String |         |                                    |
+| city            | String |         |                                    |
+| preDirection    | String |         | N, S, E, W before the street name  |
+| suffixDirection | String |         | NW, SE and so on, after the suffix |
+| state           | String |         | Two letters                        |
+| suffixType      | String |         | ST, AVE, RD, LN                    |
+
+# The names are the JSON's own. The generator camelCases an attribute name to
+# get the key it reads, and the Census keys are already camelCase, so these line
+# up exactly. The five components not declared -- preType, fromAddress,
+# toAddress, suffixQualifier, preQualifier -- are present in the reply and are
+# simply not read.

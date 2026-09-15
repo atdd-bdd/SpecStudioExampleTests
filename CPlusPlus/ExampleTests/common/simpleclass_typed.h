@@ -15,10 +15,29 @@ struct SimpleClassTyped {
         return t;
     }
 
+    SimpleClassString to_string_struct() const {
+        SimpleClassString s;
+        s.anint = std::to_string(anint);
+        s.astring = astring;
+        return s;
+    }
+
+    static std::vector<SimpleClassString> to_string_list(const std::vector<SimpleClassTyped>& list) {
+        std::vector<SimpleClassString> result;
+        for (const auto& t : list) result.push_back(t.to_string_struct());
+        return result;
+    }
+
+    static std::vector<SimpleClassTyped> from_string_list(const std::vector<SimpleClassString>& list) {
+        std::vector<SimpleClassTyped> result;
+        for (const auto& s : list) result.push_back(from_string_struct(s));
+        return result;
+    }
+
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("anint", json::Convert<int>::to_json(anint));
-        m.emplace_back("astring", json::Convert<std::string>::to_json(astring));
+        m.emplace_back("anInt", json::Convert<int>::to_json(anint));
+        m.emplace_back("aString", json::Convert<std::string>::to_json(astring));
         return json::Value::make_object(std::move(m));
     }
 
@@ -26,8 +45,8 @@ struct SimpleClassTyped {
 
     static SimpleClassTyped from_json_value(const json::Value& v) {
         SimpleClassTyped t;
-        t.anint = json::Convert<int>::from_json(json::require(v, "anint"), "anint");
-        t.astring = json::Convert<std::string>::from_json(json::require(v, "astring"), "astring");
+        t.anint = json::Convert<int>::from_json(json::require(v, "anInt"), "anInt");
+        t.astring = json::Convert<std::string>::from_json(json::require(v, "aString"), "aString");
         return t;
     }
 

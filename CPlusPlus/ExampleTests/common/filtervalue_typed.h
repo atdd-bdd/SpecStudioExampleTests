@@ -13,9 +13,27 @@ struct FilterValueTyped {
         return t;
     }
 
+    FilterValueString to_string_struct() const {
+        FilterValueString s;
+        s.value = value;
+        return s;
+    }
+
+    static std::vector<FilterValueString> to_string_list(const std::vector<FilterValueTyped>& list) {
+        std::vector<FilterValueString> result;
+        for (const auto& t : list) result.push_back(t.to_string_struct());
+        return result;
+    }
+
+    static std::vector<FilterValueTyped> from_string_list(const std::vector<FilterValueString>& list) {
+        std::vector<FilterValueTyped> result;
+        for (const auto& s : list) result.push_back(from_string_struct(s));
+        return result;
+    }
+
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("value", json::Convert<std::string>::to_json(value));
+        m.emplace_back("Value", json::Convert<std::string>::to_json(value));
         return json::Value::make_object(std::move(m));
     }
 
@@ -23,7 +41,7 @@ struct FilterValueTyped {
 
     static FilterValueTyped from_json_value(const json::Value& v) {
         FilterValueTyped t;
-        t.value = json::Convert<std::string>::from_json(json::require(v, "value"), "value");
+        t.value = json::Convert<std::string>::from_json(json::require(v, "Value"), "Value");
         return t;
     }
 

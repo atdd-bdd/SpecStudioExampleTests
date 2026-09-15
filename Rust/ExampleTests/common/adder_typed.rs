@@ -19,6 +19,22 @@ impl AdderTyped {
         }
     }
 
+    pub fn to_str_struct(&self) -> AdderString {
+        AdderString {
+            number1: self.number1.to_string(),
+            number2: self.number2.to_string(),
+            result: self.result.to_string(),
+        }
+    }
+
+    pub fn to_string_list(list: &[AdderTyped]) -> Vec<AdderString> {
+        list.iter().map(|t| t.to_str_struct()).collect()
+    }
+
+    pub fn from_string_list(list: &[AdderString]) -> Vec<AdderTyped> {
+        list.iter().map(AdderTyped::from_str_struct).collect()
+    }
+
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
             ("number1".to_string(), json::Value::number_from_i64(self.number1 as i64)),

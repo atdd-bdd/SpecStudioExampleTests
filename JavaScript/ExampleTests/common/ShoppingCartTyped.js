@@ -1,9 +1,10 @@
 import { ShoppingCartString } from "./ShoppingCartString.js";
 import * as _json from "./json.js";
+import { OrderItemTyped } from "./OrderItemTyped.js";
 import { AddressTyped } from "./AddressTyped.js";
 
 export class ShoppingCartTyped {
-  constructor(items = "", shipping = "", discount = "", totalPrice = "", shippingAddress = "", billingAddress = "") {
+  constructor(items = [], shipping = "", discount = "", totalPrice = "", shippingAddress = "", billingAddress = "") {
     this.items = items;
     this.shipping = shipping;
     this.discount = discount;
@@ -14,7 +15,7 @@ export class ShoppingCartTyped {
 
   static fromStringObj(s) {
     return new ShoppingCartTyped(
-      s.items,
+      [],
       s.shipping,
       s.discount,
       s.totalPrice,
@@ -23,14 +24,33 @@ export class ShoppingCartTyped {
     );
   }
 
+  toStringObj() {
+    return new ShoppingCartString(
+      "",
+      String(this.shipping),
+      String(this.discount),
+      String(this.totalPrice),
+      this.shippingAddress.toStringObj(),
+      this.billingAddress.toStringObj()
+    );
+  }
+
+  static toStringList(list) {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list) {
+    return list.map(s => ShoppingCartTyped.fromStringObj(s));
+  }
+
   toJsonValue() {
     return {
-      items: this.items == null ? null : String(this.items),
+      items: this.items.map((e) => e.toJsonValue()),
       shipping: this.shipping == null ? null : String(this.shipping),
       discount: this.discount == null ? null : String(this.discount),
       totalPrice: this.totalPrice == null ? null : String(this.totalPrice),
-      shippingAddress: this.shippingAddress == null ? null : String(this.shippingAddress),
-      billingAddress: this.billingAddress == null ? null : String(this.billingAddress),
+      shippingAddress: this.shippingAddress.toJsonValue(),
+      billingAddress: this.billingAddress.toJsonValue(),
     };
   }
 
@@ -38,12 +58,12 @@ export class ShoppingCartTyped {
 
   static fromJsonValue(m) {
     return new ShoppingCartTyped(
-      new OrderItemCollection(_json.asString(_json.require(m, "items"), "items")),
+      (_json.asArray(_json.require(m, "items"), "items") ?? []).map((e) => OrderItemTyped.fromJsonValue(e)),
       new Dollar(_json.asString(_json.require(m, "shipping"), "shipping")),
       new Dollar(_json.asString(_json.require(m, "discount"), "discount")),
       new Dollar(_json.asString(_json.require(m, "totalPrice"), "totalPrice")),
-      new Address(_json.asString(_json.require(m, "shippingAddress"), "shippingAddress")),
-      new Address(_json.asString(_json.require(m, "billingAddress"), "billingAddress"))
+      AddressTyped.fromJsonValue(_json.require(m, "shippingAddress")),
+      AddressTyped.fromJsonValue(_json.require(m, "billingAddress"))
     );
   }
 

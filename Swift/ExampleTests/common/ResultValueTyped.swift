@@ -9,6 +9,20 @@ public struct ResultValueTyped: Equatable, CustomStringConvertible {
         self.sum = Int(s.sum) ?? 0
     }
 
+    public func toStringStruct() -> ResultValueString {
+        return ResultValueString(
+            sum: String(describing: sum)
+        )
+    }
+
+    public static func toStringList(_ list: [ResultValueTyped]) -> [ResultValueString] {
+        return list.map { $0.toStringStruct() }
+    }
+
+    public static func fromStringList(_ list: [ResultValueString]) -> [ResultValueTyped] {
+        return list.map { ResultValueTyped(from: $0) }
+    }
+
     public func toJSONValue() -> [String: Any] {
         return [
             "sum": sum,

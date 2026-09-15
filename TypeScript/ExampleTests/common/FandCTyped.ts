@@ -20,6 +20,22 @@ export class FandCTyped {
     );
   }
 
+  toStringObj(): FandCString {
+    return new FandCString(
+      String(this.f),
+      String(this.c),
+      String(this.notes)
+    );
+  }
+
+  static toStringList(list: FandCTyped[]): FandCString[] {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list: FandCString[]): FandCTyped[] {
+    return list.map(s => FandCTyped.fromStringObj(s));
+  }
+
   toJsonValue(): Record<string, unknown> {
     return {
       f: this.f,

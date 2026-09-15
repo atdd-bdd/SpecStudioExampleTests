@@ -17,6 +17,27 @@ using production;
             this.value = value;
         }
 
+        public FilterValueString ToFilterValueString()
+        {
+            return new FilterValueString(
+                Json.ToText(this.value)
+            );
+        }
+
+        public static List<FilterValueString> ToStringList(List<FilterValueTyped> list)
+        {
+            var result = new List<FilterValueString>();
+            foreach (var t in list) result.Add(t.ToFilterValueString());
+            return result;
+        }
+
+        public static List<FilterValueTyped> FromStringList(List<FilterValueString> list)
+        {
+            var result = new List<FilterValueTyped>();
+            foreach (var s in list) result.Add(s.ToFilterValueTyped());
+            return result;
+        }
+
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();

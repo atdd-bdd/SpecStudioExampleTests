@@ -17,6 +17,27 @@ using production;
             this.sum = sum;
         }
 
+        public ResultValueString ToResultValueString()
+        {
+            return new ResultValueString(
+                Json.ToText(this.sum)
+            );
+        }
+
+        public static List<ResultValueString> ToStringList(List<ResultValueTyped> list)
+        {
+            var result = new List<ResultValueString>();
+            foreach (var t in list) result.Add(t.ToResultValueString());
+            return result;
+        }
+
+        public static List<ResultValueTyped> FromStringList(List<ResultValueString> list)
+        {
+            var result = new List<ResultValueTyped>();
+            foreach (var s in list) result.Add(s.ToResultValueTyped());
+            return result;
+        }
+
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();

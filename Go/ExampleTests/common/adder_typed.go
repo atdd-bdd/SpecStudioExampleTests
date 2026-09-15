@@ -16,6 +16,29 @@ func NewAdderTypedFromString(s AdderString) AdderTyped {
 	return t
 }
 
+// ToAdderString converts this AdderTyped back to the string form a table compares.
+func (t AdderTyped) ToAdderString() AdderString {
+	s := AdderString{}
+	s.Number1 = strconv.Itoa(t.Number1)
+	s.Number2 = strconv.Itoa(t.Number2)
+	s.Result = strconv.Itoa(t.Result)
+	return s
+}
+
+// AdderTypedToStringList converts a slice of AdderTyped to its string form.
+func AdderTypedToStringList(list []AdderTyped) []AdderString {
+	result := make([]AdderString, 0, len(list))
+	for _, t := range list { result = append(result, t.ToAdderString()) }
+	return result
+}
+
+// AdderTypedFromStringList converts a slice of AdderString to its typed form.
+func AdderTypedFromStringList(list []AdderString) []AdderTyped {
+	result := make([]AdderTyped, 0, len(list))
+	for _, s := range list { result = append(result, NewAdderTypedFromString(s)) }
+	return result
+}
+
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t AdderTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{

@@ -15,6 +15,22 @@ public struct ValidValuesTyped: Equatable, CustomStringConvertible {
         self.notes = s.notes
     }
 
+    public func toStringStruct() -> ValidValuesString {
+        return ValidValuesString(
+            value: String(describing: value),
+            isValid: String(describing: isValid),
+            notes: String(describing: notes)
+        )
+    }
+
+    public static func toStringList(_ list: [ValidValuesTyped]) -> [ValidValuesString] {
+        return list.map { $0.toStringStruct() }
+    }
+
+    public static func fromStringList(_ list: [ValidValuesString]) -> [ValidValuesTyped] {
+        return list.map { ValidValuesTyped(from: $0) }
+    }
+
     public func toJSONValue() -> [String: Any] {
         return [
             "value": value,

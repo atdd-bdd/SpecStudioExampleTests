@@ -12,6 +12,20 @@ export class ItemPriceInputTyped {
     );
   }
 
+  toStringObj() {
+    return new ItemPriceInputString(
+      String(this.totalItems)
+    );
+  }
+
+  static toStringList(list) {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list) {
+    return list.map(s => ItemPriceInputTyped.fromStringObj(s));
+  }
+
   toJsonValue() {
     return {
       totalItems: this.totalItems == null ? null : String(this.totalItems),

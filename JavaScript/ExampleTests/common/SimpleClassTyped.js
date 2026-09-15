@@ -14,6 +14,21 @@ export class SimpleClassTyped {
     );
   }
 
+  toStringObj() {
+    return new SimpleClassString(
+      String(this.anInt),
+      String(this.aString)
+    );
+  }
+
+  static toStringList(list) {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list) {
+    return list.map(s => SimpleClassTyped.fromStringObj(s));
+  }
+
   toJsonValue() {
     return {
       anInt: this.anInt,

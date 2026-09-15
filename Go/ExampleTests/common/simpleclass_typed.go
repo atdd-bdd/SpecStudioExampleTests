@@ -14,11 +14,33 @@ func NewSimpleClassTypedFromString(s SimpleClassString) SimpleClassTyped {
 	return t
 }
 
+// ToSimpleClassString converts this SimpleClassTyped back to the string form a table compares.
+func (t SimpleClassTyped) ToSimpleClassString() SimpleClassString {
+	s := SimpleClassString{}
+	s.AnInt = strconv.Itoa(t.AnInt)
+	s.AString = t.AString
+	return s
+}
+
+// SimpleClassTypedToStringList converts a slice of SimpleClassTyped to its string form.
+func SimpleClassTypedToStringList(list []SimpleClassTyped) []SimpleClassString {
+	result := make([]SimpleClassString, 0, len(list))
+	for _, t := range list { result = append(result, t.ToSimpleClassString()) }
+	return result
+}
+
+// SimpleClassTypedFromStringList converts a slice of SimpleClassString to its typed form.
+func SimpleClassTypedFromStringList(list []SimpleClassString) []SimpleClassTyped {
+	result := make([]SimpleClassTyped, 0, len(list))
+	for _, s := range list { result = append(result, NewSimpleClassTypedFromString(s)) }
+	return result
+}
+
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t SimpleClassTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"anint": t.AnInt,
-		"astring": t.AString,
+		"anInt": t.AnInt,
+		"aString": t.AString,
 	}
 }
 
@@ -28,20 +50,20 @@ func (t SimpleClassTyped) ToJSON() (string, error) {
 
 func NewSimpleClassTypedFromJSONValue(m map[string]interface{}) (SimpleClassTyped, error) {
 	t := SimpleClassTyped{}
-	rawAnInt, err := JSONRequire(m, "anint")
+	rawAnInt, err := JSONRequire(m, "anInt")
 	if err != nil {
 		return t, err
 	}
-	valAnInt, err := JSONAsInt(rawAnInt, "anint")
+	valAnInt, err := JSONAsInt(rawAnInt, "anInt")
 	if err != nil {
 		return t, err
 	}
 	t.AnInt = valAnInt
-	rawAString, err := JSONRequire(m, "astring")
+	rawAString, err := JSONRequire(m, "aString")
 	if err != nil {
 		return t, err
 	}
-	valAString, err := JSONAsString(rawAString, "astring")
+	valAString, err := JSONAsString(rawAString, "aString")
 	if err != nil {
 		return t, err
 	}

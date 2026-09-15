@@ -15,6 +15,22 @@ public struct DiscountInputTyped: Equatable, CustomStringConvertible {
         self.notes = s.notes
     }
 
+    public func toStringStruct() -> DiscountInputString {
+        return DiscountInputString(
+            totalPrice: String(describing: totalPrice),
+            discount: String(describing: discount),
+            notes: String(describing: notes)
+        )
+    }
+
+    public static func toStringList(_ list: [DiscountInputTyped]) -> [DiscountInputString] {
+        return list.map { $0.toStringStruct() }
+    }
+
+    public static func fromStringList(_ list: [DiscountInputString]) -> [DiscountInputTyped] {
+        return list.map { DiscountInputTyped(from: $0) }
+    }
+
     public func toJSONValue() -> [String: Any] {
         return [
             "totalPrice": totalPrice,

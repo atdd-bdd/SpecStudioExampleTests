@@ -21,6 +21,29 @@ using production;
             this.notes = notes;
         }
 
+        public DiscountInputString ToDiscountInputString()
+        {
+            return new DiscountInputString(
+                Json.ToText(this.totalPrice),
+                Json.ToText(this.discount),
+                Json.ToText(this.notes)
+            );
+        }
+
+        public static List<DiscountInputString> ToStringList(List<DiscountInputTyped> list)
+        {
+            var result = new List<DiscountInputString>();
+            foreach (var t in list) result.Add(t.ToDiscountInputString());
+            return result;
+        }
+
+        public static List<DiscountInputTyped> FromStringList(List<DiscountInputString> list)
+        {
+            var result = new List<DiscountInputTyped>();
+            foreach (var s in list) result.Add(s.ToDiscountInputTyped());
+            return result;
+        }
+
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();

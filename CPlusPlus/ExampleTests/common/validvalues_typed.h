@@ -17,11 +17,31 @@ struct ValidValuesTyped {
         return t;
     }
 
+    ValidValuesString to_string_struct() const {
+        ValidValuesString s;
+        s.value = value;
+        s.isvalid = (isvalid ? "true" : "false");
+        s.notes = notes;
+        return s;
+    }
+
+    static std::vector<ValidValuesString> to_string_list(const std::vector<ValidValuesTyped>& list) {
+        std::vector<ValidValuesString> result;
+        for (const auto& t : list) result.push_back(t.to_string_struct());
+        return result;
+    }
+
+    static std::vector<ValidValuesTyped> from_string_list(const std::vector<ValidValuesString>& list) {
+        std::vector<ValidValuesTyped> result;
+        for (const auto& s : list) result.push_back(from_string_struct(s));
+        return result;
+    }
+
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("value", json::Convert<std::string>::to_json(value));
-        m.emplace_back("isvalid", json::Convert<bool>::to_json(isvalid));
-        m.emplace_back("notes", json::Convert<std::string>::to_json(notes));
+        m.emplace_back("Value", json::Convert<std::string>::to_json(value));
+        m.emplace_back("IsValid", json::Convert<bool>::to_json(isvalid));
+        m.emplace_back("Notes", json::Convert<std::string>::to_json(notes));
         return json::Value::make_object(std::move(m));
     }
 
@@ -29,9 +49,9 @@ struct ValidValuesTyped {
 
     static ValidValuesTyped from_json_value(const json::Value& v) {
         ValidValuesTyped t;
-        t.value = json::Convert<std::string>::from_json(json::require(v, "value"), "value");
-        t.isvalid = json::Convert<bool>::from_json(json::require(v, "isvalid"), "isvalid");
-        t.notes = json::Convert<std::string>::from_json(json::require(v, "notes"), "notes");
+        t.value = json::Convert<std::string>::from_json(json::require(v, "Value"), "Value");
+        t.isvalid = json::Convert<bool>::from_json(json::require(v, "IsValid"), "IsValid");
+        t.notes = json::Convert<std::string>::from_json(json::require(v, "Notes"), "Notes");
         return t;
     }
 

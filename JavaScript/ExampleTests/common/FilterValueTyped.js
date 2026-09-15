@@ -12,6 +12,20 @@ export class FilterValueTyped {
     );
   }
 
+  toStringObj() {
+    return new FilterValueString(
+      String(this.value)
+    );
+  }
+
+  static toStringList(list) {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list) {
+    return list.map(s => FilterValueTyped.fromStringObj(s));
+  }
+
   toJsonValue() {
     return {
       value: this.value == null ? null : String(this.value),

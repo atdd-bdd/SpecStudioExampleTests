@@ -15,9 +15,23 @@ impl ItemPriceInputTyped {
         }
     }
 
+    pub fn to_str_struct(&self) -> ItemPriceInputString {
+        ItemPriceInputString {
+            totalitems: self.totalitems.clone(),
+        }
+    }
+
+    pub fn to_string_list(list: &[ItemPriceInputTyped]) -> Vec<ItemPriceInputString> {
+        list.iter().map(|t| t.to_str_struct()).collect()
+    }
+
+    pub fn from_string_list(list: &[ItemPriceInputString]) -> Vec<ItemPriceInputTyped> {
+        list.iter().map(ItemPriceInputTyped::from_str_struct).collect()
+    }
+
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("totalitems".to_string(), json::Value::Str(self.totalitems.clone())),
+            ("TotalItems".to_string(), json::Value::Str(self.totalitems.clone())),
         ])
     }
 
@@ -27,7 +41,7 @@ impl ItemPriceInputTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            totalitems: json::as_string(json::require(v, "totalitems")?, "totalitems")?,
+            totalitems: json::as_string(json::require(v, "TotalItems")?, "TotalItems")?,
         })
     }
 

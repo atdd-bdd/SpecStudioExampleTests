@@ -13,10 +13,24 @@ class CatalogItemTyped:
             s.price
         )
 
+    def to_string_obj(self) -> CatalogItemString:
+        return CatalogItemString(
+            str(self.name),
+            str(self.price)
+        )
+
+    @staticmethod
+    def to_string_list(items) -> list:
+        return [t.to_string_obj() for t in items]
+
+    @staticmethod
+    def from_string_list(items) -> list:
+        return [CatalogItemTyped.from_string_obj(s) for s in items]
+
     def to_json_value(self) -> dict:
         return {
-            'name': self.name,
-            'price': self.price,
+            'Name': self.name,
+            'Price': self.price,
         }
 
     def to_json(self) -> str:
@@ -25,8 +39,8 @@ class CatalogItemTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'CatalogItemTyped':
         return cls(
-            _json.as_str(_json.require(m, 'name'), 'name'),
-            _json.as_str(_json.require(m, 'price'), 'price')
+            _json.as_str(_json.require(m, 'Name'), 'Name'),
+            _json.as_str(_json.require(m, 'Price'), 'Price')
         )
 
     @classmethod

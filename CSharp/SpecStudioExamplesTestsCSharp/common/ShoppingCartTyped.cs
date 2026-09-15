@@ -27,6 +27,32 @@ using production;
             this.billingAddress = billingAddress;
         }
 
+        public ShoppingCartString ToShoppingCartString()
+        {
+            return new ShoppingCartString(
+                Json.ToText(this.items),
+                Json.ToText(this.shipping),
+                Json.ToText(this.discount),
+                Json.ToText(this.totalPrice),
+                this.shippingAddress.ToAddressString(),
+                this.billingAddress.ToAddressString()
+            );
+        }
+
+        public static List<ShoppingCartString> ToStringList(List<ShoppingCartTyped> list)
+        {
+            var result = new List<ShoppingCartString>();
+            foreach (var t in list) result.Add(t.ToShoppingCartString());
+            return result;
+        }
+
+        public static List<ShoppingCartTyped> FromStringList(List<ShoppingCartString> list)
+        {
+            var result = new List<ShoppingCartTyped>();
+            foreach (var s in list) result.Add(s.ToShoppingCartTyped());
+            return result;
+        }
+
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();

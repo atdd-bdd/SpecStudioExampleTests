@@ -15,11 +15,26 @@ class DiscountInputTyped:
             s.notes
         )
 
+    def to_string_obj(self) -> DiscountInputString:
+        return DiscountInputString(
+            str(self.total_price),
+            str(self.discount),
+            str(self.notes)
+        )
+
+    @staticmethod
+    def to_string_list(items) -> list:
+        return [t.to_string_obj() for t in items]
+
+    @staticmethod
+    def from_string_list(items) -> list:
+        return [DiscountInputTyped.from_string_obj(s) for s in items]
+
     def to_json_value(self) -> dict:
         return {
-            'total_price': self.total_price,
-            'discount': self.discount,
-            'notes': self.notes,
+            'Total Price': self.total_price,
+            'Discount': self.discount,
+            'Notes': self.notes,
         }
 
     def to_json(self) -> str:
@@ -28,9 +43,9 @@ class DiscountInputTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'DiscountInputTyped':
         return cls(
-            _json.as_str(_json.require(m, 'total_price'), 'total_price'),
-            _json.as_str(_json.require(m, 'discount'), 'discount'),
-            _json.as_str(_json.require(m, 'notes'), 'notes')
+            _json.as_str(_json.require(m, 'Total Price'), 'Total Price'),
+            _json.as_str(_json.require(m, 'Discount'), 'Discount'),
+            _json.as_str(_json.require(m, 'Notes'), 'Notes')
         )
 
     @classmethod

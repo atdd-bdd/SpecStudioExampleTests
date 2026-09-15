@@ -23,6 +23,30 @@ using production;
             this.zIP = zIP;
         }
 
+        public AddressString ToAddressString()
+        {
+            return new AddressString(
+                Json.ToText(this.street),
+                Json.ToText(this.city),
+                Json.ToText(this.state),
+                Json.ToText(this.zIP)
+            );
+        }
+
+        public static List<AddressString> ToStringList(List<AddressTyped> list)
+        {
+            var result = new List<AddressString>();
+            foreach (var t in list) result.Add(t.ToAddressString());
+            return result;
+        }
+
+        public static List<AddressTyped> FromStringList(List<AddressString> list)
+        {
+            var result = new List<AddressTyped>();
+            foreach (var s in list) result.Add(s.ToAddressTyped());
+            return result;
+        }
+
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();

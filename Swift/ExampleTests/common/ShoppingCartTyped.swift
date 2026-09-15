@@ -1,12 +1,12 @@
 public struct ShoppingCartTyped: Equatable, CustomStringConvertible {
-    public let items: String
+    public let items: [OrderItemTyped]
     public let shipping: String
     public let discount: String
     public let totalPrice: String
     public let shippingAddress: AddressTyped
     public let billingAddress: AddressTyped
 
-    public init(items: String, shipping: String, discount: String, totalPrice: String, shippingAddress: AddressTyped, billingAddress: AddressTyped) {
+    public init(items: [OrderItemTyped], shipping: String, discount: String, totalPrice: String, shippingAddress: AddressTyped, billingAddress: AddressTyped) {
         self.items = items
         self.shipping = shipping
         self.discount = discount
@@ -16,7 +16,7 @@ public struct ShoppingCartTyped: Equatable, CustomStringConvertible {
     }
 
     public init(from s: ShoppingCartString) {
-        self.items = s.items
+        self.items = []
         self.shipping = s.shipping
         self.discount = s.discount
         self.totalPrice = s.totalPrice
@@ -24,9 +24,28 @@ public struct ShoppingCartTyped: Equatable, CustomStringConvertible {
         self.billingAddress = AddressTyped(from: s.billingAddress)
     }
 
+    public func toStringStruct() -> ShoppingCartString {
+        return ShoppingCartString(
+            items: "",
+            shipping: String(describing: shipping),
+            discount: String(describing: discount),
+            totalPrice: String(describing: totalPrice),
+            shippingAddress: shippingAddress.toStringStruct(),
+            billingAddress: billingAddress.toStringStruct()
+        )
+    }
+
+    public static func toStringList(_ list: [ShoppingCartTyped]) -> [ShoppingCartString] {
+        return list.map { $0.toStringStruct() }
+    }
+
+    public static func fromStringList(_ list: [ShoppingCartString]) -> [ShoppingCartTyped] {
+        return list.map { ShoppingCartTyped(from: $0) }
+    }
+
     public func toJSONValue() -> [String: Any] {
         return [
-            "items": items,
+            "items": items.map { $0.toJSONValue() },
             "shipping": shipping,
             "discount": discount,
             "totalPrice": totalPrice,
@@ -40,7 +59,7 @@ public struct ShoppingCartTyped: Equatable, CustomStringConvertible {
     }
 
     public init(fromJSONValue m: [String: Any]) throws {
-        self.items = try Json.asString(Json.require(m, "items"), "items")
+        self.items = try Json.asArray(Json.require(m, "items"), "items").map { try OrderItemTyped(fromJSONValue: Json.asObject($0, "items")) }
         self.shipping = try Json.asString(Json.require(m, "shipping"), "shipping")
         self.discount = try Json.asString(Json.require(m, "discount"), "discount")
         self.totalPrice = try Json.asString(Json.require(m, "totalPrice"), "totalPrice")

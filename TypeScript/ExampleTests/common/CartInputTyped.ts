@@ -26,6 +26,24 @@ export class CartInputTyped {
     );
   }
 
+  toStringObj(): CartInputString {
+    return new CartInputString(
+      String(this.totalItems),
+      String(this.shipping),
+      String(this.discount),
+      String(this.totalPrice),
+      String(this.notes)
+    );
+  }
+
+  static toStringList(list: CartInputTyped[]): CartInputString[] {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list: CartInputString[]): CartInputTyped[] {
+    return list.map(s => CartInputTyped.fromStringObj(s));
+  }
+
   toJsonValue(): Record<string, unknown> {
     return {
       totalItems: this.totalItems,

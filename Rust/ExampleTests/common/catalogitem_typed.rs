@@ -17,10 +17,25 @@ impl CatalogItemTyped {
         }
     }
 
+    pub fn to_str_struct(&self) -> CatalogItemString {
+        CatalogItemString {
+            name: self.name.clone(),
+            price: self.price.clone(),
+        }
+    }
+
+    pub fn to_string_list(list: &[CatalogItemTyped]) -> Vec<CatalogItemString> {
+        list.iter().map(|t| t.to_str_struct()).collect()
+    }
+
+    pub fn from_string_list(list: &[CatalogItemString]) -> Vec<CatalogItemTyped> {
+        list.iter().map(CatalogItemTyped::from_str_struct).collect()
+    }
+
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("name".to_string(), json::Value::Str(self.name.clone())),
-            ("price".to_string(), json::Value::Str(self.price.clone())),
+            ("Name".to_string(), json::Value::Str(self.name.clone())),
+            ("Price".to_string(), json::Value::Str(self.price.clone())),
         ])
     }
 
@@ -30,8 +45,8 @@ impl CatalogItemTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            name: json::as_string(json::require(v, "name")?, "name")?,
-            price: json::as_string(json::require(v, "price")?, "price")?,
+            name: json::as_string(json::require(v, "Name")?, "Name")?,
+            price: json::as_string(json::require(v, "Price")?, "Price")?,
         })
     }
 

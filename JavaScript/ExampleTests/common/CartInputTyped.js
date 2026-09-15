@@ -20,6 +20,24 @@ export class CartInputTyped {
     );
   }
 
+  toStringObj() {
+    return new CartInputString(
+      String(this.totalItems),
+      String(this.shipping),
+      String(this.discount),
+      String(this.totalPrice),
+      String(this.notes)
+    );
+  }
+
+  static toStringList(list) {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list) {
+    return list.map(s => CartInputTyped.fromStringObj(s));
+  }
+
   toJsonValue() {
     return {
       totalItems: this.totalItems == null ? null : String(this.totalItems),

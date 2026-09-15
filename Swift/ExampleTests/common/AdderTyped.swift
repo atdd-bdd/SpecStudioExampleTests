@@ -15,6 +15,22 @@ public struct AdderTyped: Equatable, CustomStringConvertible {
         self.result = Int(s.result) ?? 0
     }
 
+    public func toStringStruct() -> AdderString {
+        return AdderString(
+            number1: String(describing: number1),
+            number2: String(describing: number2),
+            result: String(describing: result)
+        )
+    }
+
+    public static func toStringList(_ list: [AdderTyped]) -> [AdderString] {
+        return list.map { $0.toStringStruct() }
+    }
+
+    public static func fromStringList(_ list: [AdderString]) -> [AdderTyped] {
+        return list.map { AdderTyped(from: $0) }
+    }
+
     public func toJSONValue() -> [String: Any] {
         return [
             "number1": number1,

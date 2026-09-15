@@ -15,6 +15,21 @@ class AdderTyped:
             int(s.result) if s.result else 0
         )
 
+    def to_string_obj(self) -> AdderString:
+        return AdderString(
+            str(self.number1),
+            str(self.number2),
+            str(self.result)
+        )
+
+    @staticmethod
+    def to_string_list(items) -> list:
+        return [t.to_string_obj() for t in items]
+
+    @staticmethod
+    def from_string_list(items) -> list:
+        return [AdderTyped.from_string_obj(s) for s in items]
+
     def to_json_value(self) -> dict:
         return {
             'number1': self.number1,

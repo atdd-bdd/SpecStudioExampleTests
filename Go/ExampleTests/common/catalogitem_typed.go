@@ -12,11 +12,33 @@ func NewCatalogItemTypedFromString(s CatalogItemString) CatalogItemTyped {
 	return t
 }
 
+// ToCatalogItemString converts this CatalogItemTyped back to the string form a table compares.
+func (t CatalogItemTyped) ToCatalogItemString() CatalogItemString {
+	s := CatalogItemString{}
+	s.Name = t.Name
+	s.Price = t.Price
+	return s
+}
+
+// CatalogItemTypedToStringList converts a slice of CatalogItemTyped to its string form.
+func CatalogItemTypedToStringList(list []CatalogItemTyped) []CatalogItemString {
+	result := make([]CatalogItemString, 0, len(list))
+	for _, t := range list { result = append(result, t.ToCatalogItemString()) }
+	return result
+}
+
+// CatalogItemTypedFromStringList converts a slice of CatalogItemString to its typed form.
+func CatalogItemTypedFromStringList(list []CatalogItemString) []CatalogItemTyped {
+	result := make([]CatalogItemTyped, 0, len(list))
+	for _, s := range list { result = append(result, NewCatalogItemTypedFromString(s)) }
+	return result
+}
+
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t CatalogItemTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"name": t.Name,
-		"price": t.Price,
+		"Name": t.Name,
+		"Price": t.Price,
 	}
 }
 
@@ -26,20 +48,20 @@ func (t CatalogItemTyped) ToJSON() (string, error) {
 
 func NewCatalogItemTypedFromJSONValue(m map[string]interface{}) (CatalogItemTyped, error) {
 	t := CatalogItemTyped{}
-	rawName, err := JSONRequire(m, "name")
+	rawName, err := JSONRequire(m, "Name")
 	if err != nil {
 		return t, err
 	}
-	valName, err := JSONAsString(rawName, "name")
+	valName, err := JSONAsString(rawName, "Name")
 	if err != nil {
 		return t, err
 	}
 	t.Name = valName
-	rawPrice, err := JSONRequire(m, "price")
+	rawPrice, err := JSONRequire(m, "Price")
 	if err != nil {
 		return t, err
 	}
-	valPrice, err := JSONAsString(rawPrice, "price")
+	valPrice, err := JSONAsString(rawPrice, "Price")
 	if err != nil {
 		return t, err
 	}

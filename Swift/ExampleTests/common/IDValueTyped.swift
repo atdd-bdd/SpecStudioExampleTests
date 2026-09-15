@@ -12,6 +12,21 @@ public struct IDValueTyped: Equatable, CustomStringConvertible {
         self.value = Int(s.value) ?? 0
     }
 
+    public func toStringStruct() -> IDValueString {
+        return IDValueString(
+            iD: String(describing: iD),
+            value: String(describing: value)
+        )
+    }
+
+    public static func toStringList(_ list: [IDValueTyped]) -> [IDValueString] {
+        return list.map { $0.toStringStruct() }
+    }
+
+    public static func fromStringList(_ list: [IDValueString]) -> [IDValueTyped] {
+        return list.map { IDValueTyped(from: $0) }
+    }
+
     public func toJSONValue() -> [String: Any] {
         return [
             "iD": iD,

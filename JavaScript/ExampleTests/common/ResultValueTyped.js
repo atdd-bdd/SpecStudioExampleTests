@@ -12,6 +12,20 @@ export class ResultValueTyped {
     );
   }
 
+  toStringObj() {
+    return new ResultValueString(
+      String(this.sum)
+    );
+  }
+
+  static toStringList(list) {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list) {
+    return list.map(s => ResultValueTyped.fromStringObj(s));
+  }
+
   toJsonValue() {
     return {
       sum: this.sum,

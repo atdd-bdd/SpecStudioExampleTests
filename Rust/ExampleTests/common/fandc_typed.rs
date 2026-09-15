@@ -19,11 +19,27 @@ impl FandCTyped {
         }
     }
 
+    pub fn to_str_struct(&self) -> FandCString {
+        FandCString {
+            f: self.f.to_string(),
+            c: self.c.to_string(),
+            notes: self.notes.clone(),
+        }
+    }
+
+    pub fn to_string_list(list: &[FandCTyped]) -> Vec<FandCString> {
+        list.iter().map(|t| t.to_str_struct()).collect()
+    }
+
+    pub fn from_string_list(list: &[FandCString]) -> Vec<FandCTyped> {
+        list.iter().map(FandCTyped::from_str_struct).collect()
+    }
+
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("f".to_string(), json::Value::number_from_i64(self.f as i64)),
-            ("c".to_string(), json::Value::number_from_i64(self.c as i64)),
-            ("notes".to_string(), json::Value::Str(self.notes.clone())),
+            ("F".to_string(), json::Value::number_from_i64(self.f as i64)),
+            ("C".to_string(), json::Value::number_from_i64(self.c as i64)),
+            ("Notes".to_string(), json::Value::Str(self.notes.clone())),
         ])
     }
 
@@ -33,9 +49,9 @@ impl FandCTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            f: json::as_i32(json::require(v, "f")?, "f")?,
-            c: json::as_i32(json::require(v, "c")?, "c")?,
-            notes: json::as_string(json::require(v, "notes")?, "notes")?,
+            f: json::as_i32(json::require(v, "F")?, "F")?,
+            c: json::as_i32(json::require(v, "C")?, "C")?,
+            notes: json::as_string(json::require(v, "Notes")?, "Notes")?,
         })
     }
 

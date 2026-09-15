@@ -1,12 +1,15 @@
 #![allow(non_snake_case, unused_imports, dead_code)]
 
 pub mod address;
+pub mod addresscomponents;
 pub mod calculator;
 pub mod catalog;
 pub mod catalogitem;
 pub mod dollar;
 pub mod idform;
 pub mod idvalue;
+pub mod match_;
+pub mod matchcollection;
 pub mod orderitem;
 pub mod orderitemcollection;
 pub mod percentage;
@@ -16,12 +19,15 @@ pub mod simple_json;
 pub mod simpletext;
 pub mod temperature_converter;
 pub use address::*;
+pub use addresscomponents::*;
 pub use calculator::*;
 pub use catalog::*;
 pub use catalogitem::*;
 pub use dollar::*;
 pub use idform::*;
 pub use idvalue::*;
+pub use match_::*;
+pub use matchcollection::*;
 pub use orderitem::*;
 pub use orderitemcollection::*;
 pub use percentage::*;

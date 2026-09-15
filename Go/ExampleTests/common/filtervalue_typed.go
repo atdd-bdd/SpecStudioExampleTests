@@ -10,10 +10,31 @@ func NewFilterValueTypedFromString(s FilterValueString) FilterValueTyped {
 	return t
 }
 
+// ToFilterValueString converts this FilterValueTyped back to the string form a table compares.
+func (t FilterValueTyped) ToFilterValueString() FilterValueString {
+	s := FilterValueString{}
+	s.Value = t.Value
+	return s
+}
+
+// FilterValueTypedToStringList converts a slice of FilterValueTyped to its string form.
+func FilterValueTypedToStringList(list []FilterValueTyped) []FilterValueString {
+	result := make([]FilterValueString, 0, len(list))
+	for _, t := range list { result = append(result, t.ToFilterValueString()) }
+	return result
+}
+
+// FilterValueTypedFromStringList converts a slice of FilterValueString to its typed form.
+func FilterValueTypedFromStringList(list []FilterValueString) []FilterValueTyped {
+	result := make([]FilterValueTyped, 0, len(list))
+	for _, s := range list { result = append(result, NewFilterValueTypedFromString(s)) }
+	return result
+}
+
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t FilterValueTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"value": t.Value,
+		"Value": t.Value,
 	}
 }
 
@@ -23,11 +44,11 @@ func (t FilterValueTyped) ToJSON() (string, error) {
 
 func NewFilterValueTypedFromJSONValue(m map[string]interface{}) (FilterValueTyped, error) {
 	t := FilterValueTyped{}
-	rawValue, err := JSONRequire(m, "value")
+	rawValue, err := JSONRequire(m, "Value")
 	if err != nil {
 		return t, err
 	}
-	valValue, err := JSONAsString(rawValue, "value")
+	valValue, err := JSONAsString(rawValue, "Value")
 	if err != nil {
 		return t, err
 	}

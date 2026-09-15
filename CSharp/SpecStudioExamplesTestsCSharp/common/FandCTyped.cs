@@ -21,6 +21,29 @@ using production;
             this.notes = notes;
         }
 
+        public FandCString ToFandCString()
+        {
+            return new FandCString(
+                Json.ToText(this.f),
+                Json.ToText(this.c),
+                Json.ToText(this.notes)
+            );
+        }
+
+        public static List<FandCString> ToStringList(List<FandCTyped> list)
+        {
+            var result = new List<FandCString>();
+            foreach (var t in list) result.Add(t.ToFandCString());
+            return result;
+        }
+
+        public static List<FandCTyped> FromStringList(List<FandCString> list)
+        {
+            var result = new List<FandCTyped>();
+            foreach (var s in list) result.Add(s.ToFandCTyped());
+            return result;
+        }
+
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();

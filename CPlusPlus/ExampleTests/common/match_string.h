@@ -1,0 +1,55 @@
+#pragma once
+#include <cctype>
+#include <string>
+#include <vector>
+#include <sstream>
+#include "tokens.h"
+#include "addresscomponents_string.h"
+
+#ifndef SPECTABLE_DNC_STRING
+#define SPECTABLE_DNC_STRING
+inline const std::string DNCString = "?DNC?";
+inline bool dnc_equal(const std::string& a, const std::string& b) {
+    return a == b || a == DNCString || b == DNCString;
+}
+// Reads the Yes/No/True/False text a spec cell may hold, in any casing.
+inline bool parse_bool_cell(const std::string& v) {
+    std::string t;
+    for (char c : v) t += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+    return t == "true" || t == "t" || t == "yes" || t == "y" || t == "1";
+}
+#endif
+
+struct MatchString {
+    std::string matchedaddress;
+    AddressComponentsString addresscomponents;
+
+    static MatchString from_vec(const std::vector<std::string>& v) {
+        MatchString obj;
+        if (v.size() > 0) obj.matchedaddress = v[0];
+        return obj;
+    }
+
+    /// Builds from the text form, e.g. Money as "25 USD".
+    static MatchString from_text(const std::string& text) {
+        const std::vector<std::string> parts = tokens::require(text, 2, "Match");
+        MatchString obj;
+        obj.matchedaddress = parts[0];
+        obj.addresscomponents = AddressComponentsString::from_text(parts[1]);
+        return obj;
+    }
+
+    std::string to_string() const {
+        std::ostringstream ss;
+        ss << tokens::token(matchedaddress);
+        ss << " ";
+        ss << tokens::nested(addresscomponents.to_string());
+        return ss.str();
+    }
+
+    bool operator==(const MatchString& o) const {
+        return dnc_equal(matchedaddress, o.matchedaddress)
+            && addresscomponents == o.addresscomponents;
+    }
+    bool operator!=(const MatchString& o) const { return !(*this == o); }
+};

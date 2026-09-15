@@ -19,6 +19,28 @@ using production;
             this.value = value;
         }
 
+        public IDValueString ToIDValueString()
+        {
+            return new IDValueString(
+                Json.ToText(this.iD),
+                Json.ToText(this.value)
+            );
+        }
+
+        public static List<IDValueString> ToStringList(List<IDValueTyped> list)
+        {
+            var result = new List<IDValueString>();
+            foreach (var t in list) result.Add(t.ToIDValueString());
+            return result;
+        }
+
+        public static List<IDValueTyped> FromStringList(List<IDValueString> list)
+        {
+            var result = new List<IDValueTyped>();
+            foreach (var s in list) result.Add(s.ToIDValueTyped());
+            return result;
+        }
+
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();

@@ -19,11 +19,27 @@ impl ValidValuesTyped {
         }
     }
 
+    pub fn to_str_struct(&self) -> ValidValuesString {
+        ValidValuesString {
+            value: self.value.clone(),
+            isvalid: self.isvalid.to_string(),
+            notes: self.notes.clone(),
+        }
+    }
+
+    pub fn to_string_list(list: &[ValidValuesTyped]) -> Vec<ValidValuesString> {
+        list.iter().map(|t| t.to_str_struct()).collect()
+    }
+
+    pub fn from_string_list(list: &[ValidValuesString]) -> Vec<ValidValuesTyped> {
+        list.iter().map(ValidValuesTyped::from_str_struct).collect()
+    }
+
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("value".to_string(), json::Value::Str(self.value.clone())),
-            ("isvalid".to_string(), json::Value::Bool(self.isvalid)),
-            ("notes".to_string(), json::Value::Str(self.notes.clone())),
+            ("Value".to_string(), json::Value::Str(self.value.clone())),
+            ("IsValid".to_string(), json::Value::Bool(self.isvalid)),
+            ("Notes".to_string(), json::Value::Str(self.notes.clone())),
         ])
     }
 
@@ -33,9 +49,9 @@ impl ValidValuesTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            value: json::as_string(json::require(v, "value")?, "value")?,
-            isvalid: json::as_bool(json::require(v, "isvalid")?, "isvalid")?,
-            notes: json::as_string(json::require(v, "notes")?, "notes")?,
+            value: json::as_string(json::require(v, "Value")?, "Value")?,
+            isvalid: json::as_bool(json::require(v, "IsValid")?, "IsValid")?,
+            notes: json::as_string(json::require(v, "Notes")?, "Notes")?,
         })
     }
 

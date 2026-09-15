@@ -15,11 +15,26 @@ class FandCTyped:
             s.notes
         )
 
+    def to_string_obj(self) -> FandCString:
+        return FandCString(
+            str(self.f),
+            str(self.c),
+            str(self.notes)
+        )
+
+    @staticmethod
+    def to_string_list(items) -> list:
+        return [t.to_string_obj() for t in items]
+
+    @staticmethod
+    def from_string_list(items) -> list:
+        return [FandCTyped.from_string_obj(s) for s in items]
+
     def to_json_value(self) -> dict:
         return {
-            'f': self.f,
-            'c': self.c,
-            'notes': self.notes,
+            'F': self.f,
+            'C': self.c,
+            'Notes': self.notes,
         }
 
     def to_json(self) -> str:
@@ -28,9 +43,9 @@ class FandCTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'FandCTyped':
         return cls(
-            _json.as_int(_json.require(m, 'f'), 'f'),
-            _json.as_int(_json.require(m, 'c'), 'c'),
-            _json.as_str(_json.require(m, 'notes'), 'notes')
+            _json.as_int(_json.require(m, 'F'), 'F'),
+            _json.as_int(_json.require(m, 'C'), 'C'),
+            _json.as_str(_json.require(m, 'Notes'), 'Notes')
         )
 
     @classmethod

@@ -11,9 +11,22 @@ class ItemPriceInputTyped:
             s.total_items
         )
 
+    def to_string_obj(self) -> ItemPriceInputString:
+        return ItemPriceInputString(
+            str(self.total_items)
+        )
+
+    @staticmethod
+    def to_string_list(items) -> list:
+        return [t.to_string_obj() for t in items]
+
+    @staticmethod
+    def from_string_list(items) -> list:
+        return [ItemPriceInputTyped.from_string_obj(s) for s in items]
+
     def to_json_value(self) -> dict:
         return {
-            'total_items': self.total_items,
+            'TotalItems': self.total_items,
         }
 
     def to_json(self) -> str:
@@ -22,7 +35,7 @@ class ItemPriceInputTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'ItemPriceInputTyped':
         return cls(
-            _json.as_str(_json.require(m, 'total_items'), 'total_items')
+            _json.as_str(_json.require(m, 'TotalItems'), 'TotalItems')
         )
 
     @classmethod

@@ -165,4 +165,15 @@ public enum Json {
         }
         return object
     }
+
+    /// Reads a field that holds a Collection. A null field is an empty
+    /// collection rather than an error: a service that found nothing may send
+    /// null, and that is not a malformed reply.
+    public static func asArray(_ value: Any?, _ ctx: String) throws -> [Any] {
+        if value == nil || value is NSNull { return [] }
+        guard let array = value as? [Any] else {
+            throw typeError(ctx, "an array", value)
+        }
+        return array
+    }
 }

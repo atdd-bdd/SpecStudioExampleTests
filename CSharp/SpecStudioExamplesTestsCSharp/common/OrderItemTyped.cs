@@ -23,6 +23,30 @@ using production;
             this.itemTotal = itemTotal;
         }
 
+        public OrderItemString ToOrderItemString()
+        {
+            return new OrderItemString(
+                Json.ToText(this.name),
+                Json.ToText(this.quantity),
+                Json.ToText(this.price),
+                Json.ToText(this.itemTotal)
+            );
+        }
+
+        public static List<OrderItemString> ToStringList(List<OrderItemTyped> list)
+        {
+            var result = new List<OrderItemString>();
+            foreach (var t in list) result.Add(t.ToOrderItemString());
+            return result;
+        }
+
+        public static List<OrderItemTyped> FromStringList(List<OrderItemString> list)
+        {
+            var result = new List<OrderItemTyped>();
+            foreach (var s in list) result.Add(s.ToOrderItemTyped());
+            return result;
+        }
+
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();

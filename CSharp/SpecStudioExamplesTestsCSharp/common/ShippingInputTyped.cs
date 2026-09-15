@@ -21,6 +21,29 @@ using production;
             this.notes = notes;
         }
 
+        public ShippingInputString ToShippingInputString()
+        {
+            return new ShippingInputString(
+                Json.ToText(this.totalPrice),
+                Json.ToText(this.shippingCost),
+                Json.ToText(this.notes)
+            );
+        }
+
+        public static List<ShippingInputString> ToStringList(List<ShippingInputTyped> list)
+        {
+            var result = new List<ShippingInputString>();
+            foreach (var t in list) result.Add(t.ToShippingInputString());
+            return result;
+        }
+
+        public static List<ShippingInputTyped> FromStringList(List<ShippingInputString> list)
+        {
+            var result = new List<ShippingInputTyped>();
+            foreach (var s in list) result.Add(s.ToShippingInputTyped());
+            return result;
+        }
+
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();

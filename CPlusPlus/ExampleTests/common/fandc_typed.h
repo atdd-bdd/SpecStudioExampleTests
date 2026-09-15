@@ -17,11 +17,31 @@ struct FandCTyped {
         return t;
     }
 
+    FandCString to_string_struct() const {
+        FandCString s;
+        s.f = std::to_string(f);
+        s.c = std::to_string(c);
+        s.notes = notes;
+        return s;
+    }
+
+    static std::vector<FandCString> to_string_list(const std::vector<FandCTyped>& list) {
+        std::vector<FandCString> result;
+        for (const auto& t : list) result.push_back(t.to_string_struct());
+        return result;
+    }
+
+    static std::vector<FandCTyped> from_string_list(const std::vector<FandCString>& list) {
+        std::vector<FandCTyped> result;
+        for (const auto& s : list) result.push_back(from_string_struct(s));
+        return result;
+    }
+
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("f", json::Convert<int>::to_json(f));
-        m.emplace_back("c", json::Convert<int>::to_json(c));
-        m.emplace_back("notes", json::Convert<std::string>::to_json(notes));
+        m.emplace_back("F", json::Convert<int>::to_json(f));
+        m.emplace_back("C", json::Convert<int>::to_json(c));
+        m.emplace_back("Notes", json::Convert<std::string>::to_json(notes));
         return json::Value::make_object(std::move(m));
     }
 
@@ -29,9 +49,9 @@ struct FandCTyped {
 
     static FandCTyped from_json_value(const json::Value& v) {
         FandCTyped t;
-        t.f = json::Convert<int>::from_json(json::require(v, "f"), "f");
-        t.c = json::Convert<int>::from_json(json::require(v, "c"), "c");
-        t.notes = json::Convert<std::string>::from_json(json::require(v, "notes"), "notes");
+        t.f = json::Convert<int>::from_json(json::require(v, "F"), "F");
+        t.c = json::Convert<int>::from_json(json::require(v, "C"), "C");
+        t.notes = json::Convert<std::string>::from_json(json::require(v, "Notes"), "Notes");
         return t;
     }
 

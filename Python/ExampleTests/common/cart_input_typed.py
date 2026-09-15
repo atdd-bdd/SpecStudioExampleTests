@@ -19,13 +19,30 @@ class CartInputTyped:
             s.notes
         )
 
+    def to_string_obj(self) -> CartInputString:
+        return CartInputString(
+            str(self.total_items),
+            str(self.shipping),
+            str(self.discount),
+            str(self.total_price),
+            str(self.notes)
+        )
+
+    @staticmethod
+    def to_string_list(items) -> list:
+        return [t.to_string_obj() for t in items]
+
+    @staticmethod
+    def from_string_list(items) -> list:
+        return [CartInputTyped.from_string_obj(s) for s in items]
+
     def to_json_value(self) -> dict:
         return {
-            'total_items': self.total_items,
-            'shipping': self.shipping,
-            'discount': self.discount,
-            'total_price': self.total_price,
-            'notes': self.notes,
+            'TotalItems': self.total_items,
+            'Shipping': self.shipping,
+            'Discount': self.discount,
+            'Total Price': self.total_price,
+            'Notes': self.notes,
         }
 
     def to_json(self) -> str:
@@ -34,11 +51,11 @@ class CartInputTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'CartInputTyped':
         return cls(
-            _json.as_str(_json.require(m, 'total_items'), 'total_items'),
-            _json.as_str(_json.require(m, 'shipping'), 'shipping'),
-            _json.as_str(_json.require(m, 'discount'), 'discount'),
-            _json.as_str(_json.require(m, 'total_price'), 'total_price'),
-            _json.as_str(_json.require(m, 'notes'), 'notes')
+            _json.as_str(_json.require(m, 'TotalItems'), 'TotalItems'),
+            _json.as_str(_json.require(m, 'Shipping'), 'Shipping'),
+            _json.as_str(_json.require(m, 'Discount'), 'Discount'),
+            _json.as_str(_json.require(m, 'Total Price'), 'Total Price'),
+            _json.as_str(_json.require(m, 'Notes'), 'Notes')
         )
 
     @classmethod

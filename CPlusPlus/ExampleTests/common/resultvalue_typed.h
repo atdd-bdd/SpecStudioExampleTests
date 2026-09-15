@@ -13,9 +13,27 @@ struct ResultValueTyped {
         return t;
     }
 
+    ResultValueString to_string_struct() const {
+        ResultValueString s;
+        s.sum = std::to_string(sum);
+        return s;
+    }
+
+    static std::vector<ResultValueString> to_string_list(const std::vector<ResultValueTyped>& list) {
+        std::vector<ResultValueString> result;
+        for (const auto& t : list) result.push_back(t.to_string_struct());
+        return result;
+    }
+
+    static std::vector<ResultValueTyped> from_string_list(const std::vector<ResultValueString>& list) {
+        std::vector<ResultValueTyped> result;
+        for (const auto& s : list) result.push_back(from_string_struct(s));
+        return result;
+    }
+
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("sum", json::Convert<int>::to_json(sum));
+        m.emplace_back("Sum", json::Convert<int>::to_json(sum));
         return json::Value::make_object(std::move(m));
     }
 
@@ -23,7 +41,7 @@ struct ResultValueTyped {
 
     static ResultValueTyped from_json_value(const json::Value& v) {
         ResultValueTyped t;
-        t.sum = json::Convert<int>::from_json(json::require(v, "sum"), "sum");
+        t.sum = json::Convert<int>::from_json(json::require(v, "Sum"), "Sum");
         return t;
     }
 

@@ -12,10 +12,31 @@ func NewResultValueTypedFromString(s ResultValueString) ResultValueTyped {
 	return t
 }
 
+// ToResultValueString converts this ResultValueTyped back to the string form a table compares.
+func (t ResultValueTyped) ToResultValueString() ResultValueString {
+	s := ResultValueString{}
+	s.Sum = strconv.Itoa(t.Sum)
+	return s
+}
+
+// ResultValueTypedToStringList converts a slice of ResultValueTyped to its string form.
+func ResultValueTypedToStringList(list []ResultValueTyped) []ResultValueString {
+	result := make([]ResultValueString, 0, len(list))
+	for _, t := range list { result = append(result, t.ToResultValueString()) }
+	return result
+}
+
+// ResultValueTypedFromStringList converts a slice of ResultValueString to its typed form.
+func ResultValueTypedFromStringList(list []ResultValueString) []ResultValueTyped {
+	result := make([]ResultValueTyped, 0, len(list))
+	for _, s := range list { result = append(result, NewResultValueTypedFromString(s)) }
+	return result
+}
+
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t ResultValueTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"sum": t.Sum,
+		"Sum": t.Sum,
 	}
 }
 
@@ -25,11 +46,11 @@ func (t ResultValueTyped) ToJSON() (string, error) {
 
 func NewResultValueTypedFromJSONValue(m map[string]interface{}) (ResultValueTyped, error) {
 	t := ResultValueTyped{}
-	rawSum, err := JSONRequire(m, "sum")
+	rawSum, err := JSONRequire(m, "Sum")
 	if err != nil {
 		return t, err
 	}
-	valSum, err := JSONAsInt(rawSum, "sum")
+	valSum, err := JSONAsInt(rawSum, "Sum")
 	if err != nil {
 		return t, err
 	}

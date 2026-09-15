@@ -15,9 +15,23 @@ impl FilterValueTyped {
         }
     }
 
+    pub fn to_str_struct(&self) -> FilterValueString {
+        FilterValueString {
+            value: self.value.clone(),
+        }
+    }
+
+    pub fn to_string_list(list: &[FilterValueTyped]) -> Vec<FilterValueString> {
+        list.iter().map(|t| t.to_str_struct()).collect()
+    }
+
+    pub fn from_string_list(list: &[FilterValueString]) -> Vec<FilterValueTyped> {
+        list.iter().map(FilterValueTyped::from_str_struct).collect()
+    }
+
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("value".to_string(), json::Value::Str(self.value.clone())),
+            ("Value".to_string(), json::Value::Str(self.value.clone())),
         ])
     }
 
@@ -27,7 +41,7 @@ impl FilterValueTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            value: json::as_string(json::require(v, "value")?, "value")?,
+            value: json::as_string(json::require(v, "Value")?, "Value")?,
         })
     }
 

@@ -21,6 +21,29 @@ using production;
             this.notes = notes;
         }
 
+        public ValidValuesString ToValidValuesString()
+        {
+            return new ValidValuesString(
+                Json.ToText(this.value),
+                Json.ToText(this.isValid),
+                Json.ToText(this.notes)
+            );
+        }
+
+        public static List<ValidValuesString> ToStringList(List<ValidValuesTyped> list)
+        {
+            var result = new List<ValidValuesString>();
+            foreach (var t in list) result.Add(t.ToValidValuesString());
+            return result;
+        }
+
+        public static List<ValidValuesTyped> FromStringList(List<ValidValuesString> list)
+        {
+            var result = new List<ValidValuesTyped>();
+            foreach (var s in list) result.Add(s.ToValidValuesTyped());
+            return result;
+        }
+
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();

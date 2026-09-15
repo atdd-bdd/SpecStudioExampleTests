@@ -18,6 +18,23 @@ export class OrderItemTyped {
     );
   }
 
+  toStringObj() {
+    return new OrderItemString(
+      String(this.name),
+      String(this.quantity),
+      String(this.price),
+      String(this.itemTotal)
+    );
+  }
+
+  static toStringList(list) {
+    return list.map(t => t.toStringObj());
+  }
+
+  static fromStringList(list) {
+    return list.map(s => OrderItemTyped.fromStringObj(s));
+  }
+
   toJsonValue() {
     return {
       name: this.name == null ? null : String(this.name),

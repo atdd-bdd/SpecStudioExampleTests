@@ -14,12 +14,35 @@ func NewDiscountInputTypedFromString(s DiscountInputString) DiscountInputTyped {
 	return t
 }
 
+// ToDiscountInputString converts this DiscountInputTyped back to the string form a table compares.
+func (t DiscountInputTyped) ToDiscountInputString() DiscountInputString {
+	s := DiscountInputString{}
+	s.TotalPrice = t.TotalPrice
+	s.Discount = t.Discount
+	s.Notes = t.Notes
+	return s
+}
+
+// DiscountInputTypedToStringList converts a slice of DiscountInputTyped to its string form.
+func DiscountInputTypedToStringList(list []DiscountInputTyped) []DiscountInputString {
+	result := make([]DiscountInputString, 0, len(list))
+	for _, t := range list { result = append(result, t.ToDiscountInputString()) }
+	return result
+}
+
+// DiscountInputTypedFromStringList converts a slice of DiscountInputString to its typed form.
+func DiscountInputTypedFromStringList(list []DiscountInputString) []DiscountInputTyped {
+	result := make([]DiscountInputTyped, 0, len(list))
+	for _, s := range list { result = append(result, NewDiscountInputTypedFromString(s)) }
+	return result
+}
+
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t DiscountInputTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"total_price": t.TotalPrice,
-		"discount": t.Discount,
-		"notes": t.Notes,
+		"Total Price": t.TotalPrice,
+		"Discount": t.Discount,
+		"Notes": t.Notes,
 	}
 }
 
@@ -29,29 +52,29 @@ func (t DiscountInputTyped) ToJSON() (string, error) {
 
 func NewDiscountInputTypedFromJSONValue(m map[string]interface{}) (DiscountInputTyped, error) {
 	t := DiscountInputTyped{}
-	rawTotalPrice, err := JSONRequire(m, "total_price")
+	rawTotalPrice, err := JSONRequire(m, "Total Price")
 	if err != nil {
 		return t, err
 	}
-	valTotalPrice, err := JSONAsString(rawTotalPrice, "total_price")
+	valTotalPrice, err := JSONAsString(rawTotalPrice, "Total Price")
 	if err != nil {
 		return t, err
 	}
 	t.TotalPrice = valTotalPrice
-	rawDiscount, err := JSONRequire(m, "discount")
+	rawDiscount, err := JSONRequire(m, "Discount")
 	if err != nil {
 		return t, err
 	}
-	valDiscount, err := JSONAsString(rawDiscount, "discount")
+	valDiscount, err := JSONAsString(rawDiscount, "Discount")
 	if err != nil {
 		return t, err
 	}
 	t.Discount = valDiscount
-	rawNotes, err := JSONRequire(m, "notes")
+	rawNotes, err := JSONRequire(m, "Notes")
 	if err != nil {
 		return t, err
 	}
-	valNotes, err := JSONAsString(rawNotes, "notes")
+	valNotes, err := JSONAsString(rawNotes, "Notes")
 	if err != nil {
 		return t, err
 	}

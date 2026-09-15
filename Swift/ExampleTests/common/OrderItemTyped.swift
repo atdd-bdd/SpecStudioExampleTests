@@ -18,6 +18,23 @@ public struct OrderItemTyped: Equatable, CustomStringConvertible {
         self.itemTotal = s.itemTotal
     }
 
+    public func toStringStruct() -> OrderItemString {
+        return OrderItemString(
+            name: String(describing: name),
+            quantity: String(describing: quantity),
+            price: String(describing: price),
+            itemTotal: String(describing: itemTotal)
+        )
+    }
+
+    public static func toStringList(_ list: [OrderItemTyped]) -> [OrderItemString] {
+        return list.map { $0.toStringStruct() }
+    }
+
+    public static func fromStringList(_ list: [OrderItemString]) -> [OrderItemTyped] {
+        return list.map { OrderItemTyped(from: $0) }
+    }
+
     public func toJSONValue() -> [String: Any] {
         return [
             "name": name,

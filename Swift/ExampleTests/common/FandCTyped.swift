@@ -15,6 +15,22 @@ public struct FandCTyped: Equatable, CustomStringConvertible {
         self.notes = s.notes
     }
 
+    public func toStringStruct() -> FandCString {
+        return FandCString(
+            f: String(describing: f),
+            c: String(describing: c),
+            notes: String(describing: notes)
+        )
+    }
+
+    public static func toStringList(_ list: [FandCTyped]) -> [FandCString] {
+        return list.map { $0.toStringStruct() }
+    }
+
+    public static func fromStringList(_ list: [FandCString]) -> [FandCTyped] {
+        return list.map { FandCTyped(from: $0) }
+    }
+
     public func toJSONValue() -> [String: Any] {
         return [
             "f": f,

@@ -19,11 +19,27 @@ impl ShippingInputTyped {
         }
     }
 
+    pub fn to_str_struct(&self) -> ShippingInputString {
+        ShippingInputString {
+            total_price: self.total_price.clone(),
+            shipping_cost: self.shipping_cost.clone(),
+            notes: self.notes.clone(),
+        }
+    }
+
+    pub fn to_string_list(list: &[ShippingInputTyped]) -> Vec<ShippingInputString> {
+        list.iter().map(|t| t.to_str_struct()).collect()
+    }
+
+    pub fn from_string_list(list: &[ShippingInputString]) -> Vec<ShippingInputTyped> {
+        list.iter().map(ShippingInputTyped::from_str_struct).collect()
+    }
+
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("total_price".to_string(), json::Value::Str(self.total_price.clone())),
-            ("shipping_cost".to_string(), json::Value::Str(self.shipping_cost.clone())),
-            ("notes".to_string(), json::Value::Str(self.notes.clone())),
+            ("Total Price".to_string(), json::Value::Str(self.total_price.clone())),
+            ("Shipping Cost".to_string(), json::Value::Str(self.shipping_cost.clone())),
+            ("Notes".to_string(), json::Value::Str(self.notes.clone())),
         ])
     }
 
@@ -33,9 +49,9 @@ impl ShippingInputTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            total_price: json::as_string(json::require(v, "total_price")?, "total_price")?,
-            shipping_cost: json::as_string(json::require(v, "shipping_cost")?, "shipping_cost")?,
-            notes: json::as_string(json::require(v, "notes")?, "notes")?,
+            total_price: json::as_string(json::require(v, "Total Price")?, "Total Price")?,
+            shipping_cost: json::as_string(json::require(v, "Shipping Cost")?, "Shipping Cost")?,
+            notes: json::as_string(json::require(v, "Notes")?, "Notes")?,
         })
     }
 

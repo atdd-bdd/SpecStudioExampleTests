@@ -19,6 +19,28 @@ using production;
             this.price = price;
         }
 
+        public CatalogItemString ToCatalogItemString()
+        {
+            return new CatalogItemString(
+                Json.ToText(this.name),
+                Json.ToText(this.price)
+            );
+        }
+
+        public static List<CatalogItemString> ToStringList(List<CatalogItemTyped> list)
+        {
+            var result = new List<CatalogItemString>();
+            foreach (var t in list) result.Add(t.ToCatalogItemString());
+            return result;
+        }
+
+        public static List<CatalogItemTyped> FromStringList(List<CatalogItemString> list)
+        {
+            var result = new List<CatalogItemTyped>();
+            foreach (var s in list) result.Add(s.ToCatalogItemTyped());
+            return result;
+        }
+
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();

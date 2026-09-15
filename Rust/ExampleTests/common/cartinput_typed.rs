@@ -23,13 +23,31 @@ impl CartInputTyped {
         }
     }
 
+    pub fn to_str_struct(&self) -> CartInputString {
+        CartInputString {
+            totalitems: self.totalitems.clone(),
+            shipping: self.shipping.clone(),
+            discount: self.discount.clone(),
+            total_price: self.total_price.clone(),
+            notes: self.notes.clone(),
+        }
+    }
+
+    pub fn to_string_list(list: &[CartInputTyped]) -> Vec<CartInputString> {
+        list.iter().map(|t| t.to_str_struct()).collect()
+    }
+
+    pub fn from_string_list(list: &[CartInputString]) -> Vec<CartInputTyped> {
+        list.iter().map(CartInputTyped::from_str_struct).collect()
+    }
+
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("totalitems".to_string(), json::Value::Str(self.totalitems.clone())),
-            ("shipping".to_string(), json::Value::Str(self.shipping.clone())),
-            ("discount".to_string(), json::Value::Str(self.discount.clone())),
-            ("total_price".to_string(), json::Value::Str(self.total_price.clone())),
-            ("notes".to_string(), json::Value::Str(self.notes.clone())),
+            ("TotalItems".to_string(), json::Value::Str(self.totalitems.clone())),
+            ("Shipping".to_string(), json::Value::Str(self.shipping.clone())),
+            ("Discount".to_string(), json::Value::Str(self.discount.clone())),
+            ("Total Price".to_string(), json::Value::Str(self.total_price.clone())),
+            ("Notes".to_string(), json::Value::Str(self.notes.clone())),
         ])
     }
 
@@ -39,11 +57,11 @@ impl CartInputTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            totalitems: json::as_string(json::require(v, "totalitems")?, "totalitems")?,
-            shipping: json::as_string(json::require(v, "shipping")?, "shipping")?,
-            discount: json::as_string(json::require(v, "discount")?, "discount")?,
-            total_price: json::as_string(json::require(v, "total_price")?, "total_price")?,
-            notes: json::as_string(json::require(v, "notes")?, "notes")?,
+            totalitems: json::as_string(json::require(v, "TotalItems")?, "TotalItems")?,
+            shipping: json::as_string(json::require(v, "Shipping")?, "Shipping")?,
+            discount: json::as_string(json::require(v, "Discount")?, "Discount")?,
+            total_price: json::as_string(json::require(v, "Total Price")?, "Total Price")?,
+            notes: json::as_string(json::require(v, "Notes")?, "Notes")?,
         })
     }
 

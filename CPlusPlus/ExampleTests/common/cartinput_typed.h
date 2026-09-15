@@ -21,13 +21,35 @@ struct CartInputTyped {
         return t;
     }
 
+    CartInputString to_string_struct() const {
+        CartInputString s;
+        s.totalitems = totalitems;
+        s.shipping = shipping;
+        s.discount = discount;
+        s.total_price = total_price;
+        s.notes = notes;
+        return s;
+    }
+
+    static std::vector<CartInputString> to_string_list(const std::vector<CartInputTyped>& list) {
+        std::vector<CartInputString> result;
+        for (const auto& t : list) result.push_back(t.to_string_struct());
+        return result;
+    }
+
+    static std::vector<CartInputTyped> from_string_list(const std::vector<CartInputString>& list) {
+        std::vector<CartInputTyped> result;
+        for (const auto& s : list) result.push_back(from_string_struct(s));
+        return result;
+    }
+
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("totalitems", json::Convert<std::string>::to_json(totalitems));
-        m.emplace_back("shipping", json::Convert<std::string>::to_json(shipping));
-        m.emplace_back("discount", json::Convert<std::string>::to_json(discount));
-        m.emplace_back("total_price", json::Convert<std::string>::to_json(total_price));
-        m.emplace_back("notes", json::Convert<std::string>::to_json(notes));
+        m.emplace_back("TotalItems", json::Convert<std::string>::to_json(totalitems));
+        m.emplace_back("Shipping", json::Convert<std::string>::to_json(shipping));
+        m.emplace_back("Discount", json::Convert<std::string>::to_json(discount));
+        m.emplace_back("Total Price", json::Convert<std::string>::to_json(total_price));
+        m.emplace_back("Notes", json::Convert<std::string>::to_json(notes));
         return json::Value::make_object(std::move(m));
     }
 
@@ -35,11 +57,11 @@ struct CartInputTyped {
 
     static CartInputTyped from_json_value(const json::Value& v) {
         CartInputTyped t;
-        t.totalitems = json::Convert<std::string>::from_json(json::require(v, "totalitems"), "totalitems");
-        t.shipping = json::Convert<std::string>::from_json(json::require(v, "shipping"), "shipping");
-        t.discount = json::Convert<std::string>::from_json(json::require(v, "discount"), "discount");
-        t.total_price = json::Convert<std::string>::from_json(json::require(v, "total_price"), "total_price");
-        t.notes = json::Convert<std::string>::from_json(json::require(v, "notes"), "notes");
+        t.totalitems = json::Convert<std::string>::from_json(json::require(v, "TotalItems"), "TotalItems");
+        t.shipping = json::Convert<std::string>::from_json(json::require(v, "Shipping"), "Shipping");
+        t.discount = json::Convert<std::string>::from_json(json::require(v, "Discount"), "Discount");
+        t.total_price = json::Convert<std::string>::from_json(json::require(v, "Total Price"), "Total Price");
+        t.notes = json::Convert<std::string>::from_json(json::require(v, "Notes"), "Notes");
         return t;
     }
 

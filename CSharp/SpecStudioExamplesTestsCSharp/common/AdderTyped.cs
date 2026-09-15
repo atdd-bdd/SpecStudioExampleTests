@@ -21,6 +21,29 @@ using production;
             this.result = result;
         }
 
+        public AdderString ToAdderString()
+        {
+            return new AdderString(
+                Json.ToText(this.number1),
+                Json.ToText(this.number2),
+                Json.ToText(this.result)
+            );
+        }
+
+        public static List<AdderString> ToStringList(List<AdderTyped> list)
+        {
+            var result = new List<AdderString>();
+            foreach (var t in list) result.Add(t.ToAdderString());
+            return result;
+        }
+
+        public static List<AdderTyped> FromStringList(List<AdderString> list)
+        {
+            var result = new List<AdderTyped>();
+            foreach (var s in list) result.Add(s.ToAdderTyped());
+            return result;
+        }
+
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();

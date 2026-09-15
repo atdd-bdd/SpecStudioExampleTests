@@ -12,6 +12,21 @@ public struct SimpleClassTyped: Equatable, CustomStringConvertible {
         self.aString = s.aString
     }
 
+    public func toStringStruct() -> SimpleClassString {
+        return SimpleClassString(
+            anInt: String(describing: anInt),
+            aString: String(describing: aString)
+        )
+    }
+
+    public static func toStringList(_ list: [SimpleClassTyped]) -> [SimpleClassString] {
+        return list.map { $0.toStringStruct() }
+    }
+
+    public static func fromStringList(_ list: [SimpleClassString]) -> [SimpleClassTyped] {
+        return list.map { SimpleClassTyped(from: $0) }
+    }
+
     public func toJSONValue() -> [String: Any] {
         return [
             "anInt": anInt,

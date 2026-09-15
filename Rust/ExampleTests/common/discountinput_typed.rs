@@ -19,11 +19,27 @@ impl DiscountInputTyped {
         }
     }
 
+    pub fn to_str_struct(&self) -> DiscountInputString {
+        DiscountInputString {
+            total_price: self.total_price.clone(),
+            discount: self.discount.clone(),
+            notes: self.notes.clone(),
+        }
+    }
+
+    pub fn to_string_list(list: &[DiscountInputTyped]) -> Vec<DiscountInputString> {
+        list.iter().map(|t| t.to_str_struct()).collect()
+    }
+
+    pub fn from_string_list(list: &[DiscountInputString]) -> Vec<DiscountInputTyped> {
+        list.iter().map(DiscountInputTyped::from_str_struct).collect()
+    }
+
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("total_price".to_string(), json::Value::Str(self.total_price.clone())),
-            ("discount".to_string(), json::Value::Str(self.discount.clone())),
-            ("notes".to_string(), json::Value::Str(self.notes.clone())),
+            ("Total Price".to_string(), json::Value::Str(self.total_price.clone())),
+            ("Discount".to_string(), json::Value::Str(self.discount.clone())),
+            ("Notes".to_string(), json::Value::Str(self.notes.clone())),
         ])
     }
 
@@ -33,9 +49,9 @@ impl DiscountInputTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            total_price: json::as_string(json::require(v, "total_price")?, "total_price")?,
-            discount: json::as_string(json::require(v, "discount")?, "discount")?,
-            notes: json::as_string(json::require(v, "notes")?, "notes")?,
+            total_price: json::as_string(json::require(v, "Total Price")?, "Total Price")?,
+            discount: json::as_string(json::require(v, "Discount")?, "Discount")?,
+            notes: json::as_string(json::require(v, "Notes")?, "Notes")?,
         })
     }
 

@@ -15,11 +15,26 @@ class ValidValuesTyped:
             s.notes
         )
 
+    def to_string_obj(self) -> ValidValuesString:
+        return ValidValuesString(
+            str(self.value),
+            str(self.is_valid),
+            str(self.notes)
+        )
+
+    @staticmethod
+    def to_string_list(items) -> list:
+        return [t.to_string_obj() for t in items]
+
+    @staticmethod
+    def from_string_list(items) -> list:
+        return [ValidValuesTyped.from_string_obj(s) for s in items]
+
     def to_json_value(self) -> dict:
         return {
-            'value': self.value,
-            'is_valid': self.is_valid,
-            'notes': self.notes,
+            'Value': self.value,
+            'IsValid': self.is_valid,
+            'Notes': self.notes,
         }
 
     def to_json(self) -> str:
@@ -28,9 +43,9 @@ class ValidValuesTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'ValidValuesTyped':
         return cls(
-            _json.as_str(_json.require(m, 'value'), 'value'),
-            _json.as_bool(_json.require(m, 'is_valid'), 'is_valid'),
-            _json.as_str(_json.require(m, 'notes'), 'notes')
+            _json.as_str(_json.require(m, 'Value'), 'Value'),
+            _json.as_bool(_json.require(m, 'IsValid'), 'IsValid'),
+            _json.as_str(_json.require(m, 'Notes'), 'Notes')
         )
 
     @classmethod
