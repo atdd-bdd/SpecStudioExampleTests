@@ -63,8 +63,9 @@ And the matched addresses are : Match CompareOnly
 #
 # CompareOnly limits equality to the columns shown, so addressComponents is
 # filled with the do-not-care marker all the way down and nothing inside it is
-# compared. A step takes one modifier, so a CompareOnly table cannot also be
-# Vertical.
+# compared. This table is horizontal because two candidates are checked below
+# and several rows need a row each; a step may carry Vertical and CompareOnly
+# together when one instance is being checked on its own.
 
 # ============================================================
 # Ambiguity returns every candidate
