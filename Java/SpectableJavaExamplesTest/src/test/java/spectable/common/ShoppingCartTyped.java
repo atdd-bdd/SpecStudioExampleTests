@@ -77,9 +77,9 @@ public class ShoppingCartTyped {
         if (items != null)
             for (OrderItemTyped e : items) json_items.add(e == null ? null : e.toJsonValue());
         m.put("items", items == null ? null : json_items);
-        m.put("shipping", shipping == null ? null : shipping.value);
-        m.put("discount", discount == null ? null : discount.value);
-        m.put("totalPrice", totalPrice == null ? null : totalPrice.value);
+        m.put("shipping", shipping == null ? null : shipping.toString());
+        m.put("discount", discount == null ? null : discount.toString());
+        m.put("totalPrice", totalPrice == null ? null : totalPrice.toString());
         m.put("shippingAddress", shippingAddress == null ? null : shippingAddress.toJsonValue());
         m.put("billingAddress", billingAddress == null ? null : billingAddress.toJsonValue());
         return m;

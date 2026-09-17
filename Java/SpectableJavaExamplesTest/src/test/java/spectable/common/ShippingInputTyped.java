@@ -60,8 +60,8 @@ public class ShippingInputTyped {
     /** Internal plumbing for {@link Json}; use toJSON() for JSON text. */
     public Map<String, Object> toJsonValue() {
         Map<String, Object> m = new LinkedHashMap<String, Object>();
-        m.put("totalPrice", totalPrice == null ? null : totalPrice.value);
-        m.put("shippingCost", shippingCost == null ? null : shippingCost.value);
+        m.put("totalPrice", totalPrice == null ? null : totalPrice.toString());
+        m.put("shippingCost", shippingCost == null ? null : shippingCost.toString());
         m.put("notes", notes);
         return m;
     }

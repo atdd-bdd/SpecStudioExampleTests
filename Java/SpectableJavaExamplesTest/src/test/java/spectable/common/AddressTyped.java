@@ -64,10 +64,10 @@ public class AddressTyped {
     /** Internal plumbing for {@link Json}; use toJSON() for JSON text. */
     public Map<String, Object> toJsonValue() {
         Map<String, Object> m = new LinkedHashMap<String, Object>();
-        m.put("street", street == null ? null : street.value);
-        m.put("city", city == null ? null : city.value);
-        m.put("state", state == null ? null : state.value);
-        m.put("zIP", zIP == null ? null : zIP.value);
+        m.put("street", street == null ? null : street.toString());
+        m.put("city", city == null ? null : city.toString());
+        m.put("state", state == null ? null : state.toString());
+        m.put("zIP", zIP == null ? null : zIP.toString());
         return m;
     }
 

@@ -52,7 +52,7 @@ public class FilterValueTyped {
     /** Internal plumbing for {@link Json}; use toJSON() for JSON text. */
     public Map<String, Object> toJsonValue() {
         Map<String, Object> m = new LinkedHashMap<String, Object>();
-        m.put("value", value == null ? null : value.value);
+        m.put("value", value == null ? null : value.toString());
         return m;
     }
 

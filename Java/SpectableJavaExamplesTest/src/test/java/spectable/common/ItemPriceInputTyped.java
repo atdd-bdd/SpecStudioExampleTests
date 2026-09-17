@@ -52,7 +52,7 @@ public class ItemPriceInputTyped {
     /** Internal plumbing for {@link Json}; use toJSON() for JSON text. */
     public Map<String, Object> toJsonValue() {
         Map<String, Object> m = new LinkedHashMap<String, Object>();
-        m.put("totalItems", totalItems == null ? null : totalItems.value);
+        m.put("totalItems", totalItems == null ? null : totalItems.toString());
         return m;
     }
 

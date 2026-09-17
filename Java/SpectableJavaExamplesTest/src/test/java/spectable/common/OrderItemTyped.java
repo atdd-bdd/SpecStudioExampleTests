@@ -64,10 +64,10 @@ public class OrderItemTyped {
     /** Internal plumbing for {@link Json}; use toJSON() for JSON text. */
     public Map<String, Object> toJsonValue() {
         Map<String, Object> m = new LinkedHashMap<String, Object>();
-        m.put("name", name == null ? null : name.value);
+        m.put("name", name == null ? null : name.toString());
         m.put("quantity", quantity);
-        m.put("price", price == null ? null : price.value);
-        m.put("itemTotal", itemTotal == null ? null : itemTotal.value);
+        m.put("price", price == null ? null : price.toString());
+        m.put("itemTotal", itemTotal == null ? null : itemTotal.toString());
         return m;
     }
 

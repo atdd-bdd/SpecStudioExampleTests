@@ -56,8 +56,8 @@ public class CatalogItemTyped {
     /** Internal plumbing for {@link Json}; use toJSON() for JSON text. */
     public Map<String, Object> toJsonValue() {
         Map<String, Object> m = new LinkedHashMap<String, Object>();
-        m.put("name", name == null ? null : name.value);
-        m.put("price", price == null ? null : price.value);
+        m.put("name", name == null ? null : name.toString());
+        m.put("price", price == null ? null : price.toString());
         return m;
     }
 

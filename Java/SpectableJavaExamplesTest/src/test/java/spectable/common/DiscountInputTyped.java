@@ -60,8 +60,8 @@ public class DiscountInputTyped {
     /** Internal plumbing for {@link Json}; use toJSON() for JSON text. */
     public Map<String, Object> toJsonValue() {
         Map<String, Object> m = new LinkedHashMap<String, Object>();
-        m.put("totalPrice", totalPrice == null ? null : totalPrice.value);
-        m.put("discount", discount == null ? null : discount.value);
+        m.put("totalPrice", totalPrice == null ? null : totalPrice.toString());
+        m.put("discount", discount == null ? null : discount.toString());
         m.put("notes", notes);
         return m;
     }

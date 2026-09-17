@@ -68,10 +68,10 @@ public class CartInputTyped {
     /** Internal plumbing for {@link Json}; use toJSON() for JSON text. */
     public Map<String, Object> toJsonValue() {
         Map<String, Object> m = new LinkedHashMap<String, Object>();
-        m.put("totalItems", totalItems == null ? null : totalItems.value);
-        m.put("shipping", shipping == null ? null : shipping.value);
-        m.put("discount", discount == null ? null : discount.value);
-        m.put("totalPrice", totalPrice == null ? null : totalPrice.value);
+        m.put("totalItems", totalItems == null ? null : totalItems.toString());
+        m.put("shipping", shipping == null ? null : shipping.toString());
+        m.put("discount", discount == null ? null : discount.toString());
+        m.put("totalPrice", totalPrice == null ? null : totalPrice.toString());
         m.put("notes", notes);
         return m;
     }

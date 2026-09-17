@@ -56,7 +56,7 @@ public class IDValueTyped {
     /** Internal plumbing for {@link Json}; use toJSON() for JSON text. */
     public Map<String, Object> toJsonValue() {
         Map<String, Object> m = new LinkedHashMap<String, Object>();
-        m.put("iD", iD == null ? null : iD.value);
+        m.put("iD", iD == null ? null : iD.toString());
         m.put("value", value);
         return m;
     }
