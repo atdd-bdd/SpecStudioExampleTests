@@ -1,6 +1,7 @@
 #![allow(non_snake_case, unused_imports, dead_code)]
 
 pub mod address;
+pub mod bowlinggame;
 pub mod addresscomponents;
 pub mod calculator;
 pub mod catalog;
@@ -13,12 +14,15 @@ pub mod matchcollection;
 pub mod orderitem;
 pub mod orderitemcollection;
 pub mod percentage;
+pub mod pins;
 pub mod recordfilter;
+pub mod score;
 pub mod shoppingcart;
 pub mod simple_json;
 pub mod simpletext;
 pub mod temperature_converter;
 pub use address::*;
+pub use bowlinggame::*;
 pub use addresscomponents::*;
 pub use calculator::*;
 pub use catalog::*;
@@ -31,7 +35,9 @@ pub use matchcollection::*;
 pub use orderitem::*;
 pub use orderitemcollection::*;
 pub use percentage::*;
+pub use pins::*;
 pub use recordfilter::*;
+pub use score::*;
 pub use shoppingcart::*;
 pub use simpletext::*;
 pub use temperature_converter::*;

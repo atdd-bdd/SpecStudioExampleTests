@@ -24,15 +24,22 @@ commit you to.
 | `Shopping Cart.spectable` | The full picture: four `Entity`s, two `Collection`s, a `DataType`, three `BusinessRule`s, four `Scenario`s, a `Background`, and five `Define`s keeping long tables out of the scenarios. |
 | `json.spectable` | Converting an object and a table to and from JSON, all four directions, with the expected JSON given as a docstring. |
 | `AddressCorrection.spectable` | Testing a **live API** rather than a class. No production code at all: the US Census address geocoder is the thing under test, and the glue only builds the call, flattens the answer and compares. Shows `CompareOnly`, a set comparison over several returned rows, and why every expected value is a real one. |
+| `API.spectable` | The other shape of API testing: six scenarios driving a REST service through every verb -- GET, POST, PUT, PATCH, DELETE -- against jsonplaceholder, with a docstring `Define` holding a multi-line body and a Typed-to-Typed comparison of the reply. No `Vertical` anywhere: every table's orientation is inferred. |
+| `Bowling.spectable` | A game scored frame by frame: two `DataType`s with one reserved value each (`=TBR`, `=TBS`, declared once in a `Define` table), a `Vertical` ten-frame table, `DomainTerm`, and production classes in all nine languages that keep an integer and speak in text. The example of a specification that grew up alongside its implementation. |
 
 They live in `StandardExamplesTests/`, alongside one `.specconfig` per language.
 
-**`AddressCorrection.spectable` is generated into Java only so far.** It is the
-one example that calls a network service, and each language needs its own
-transport and JSON navigation written before it can join in; the other eight are
-outstanding. It also needs the internet — with no connection its five tests fail
-naming the URL they could not reach, which is the transport saying so rather
-than an assertion failing.
+**`AddressCorrection.spectable` and `API.spectable` need the internet.** They
+are the two examples that call a network service (in all nine languages, with
+one `RestCall` transport per language beside the glue); with no connection
+their tests fail naming the URL they could not reach, which is the transport
+saying so rather than an assertion failing. A run of 39 that reports 28 is the
+network, not the code.
+
+`Bowling.spectable` and `API.spectable` moved here from SpecStudioVariousTests
+on 2026-09-18, with their glue and production classes; API's `Request` and
+`Status` became `ApiRequest` and `ApiStatus` on the way, since
+`AddressCorrection` declares a different `Request`.
 
 ## Layout
 
@@ -63,7 +70,7 @@ This matters if you edit anything here.
 | `*_Test.*`, `*Tests.*`, `test_*.*` | **Generated.** Overwritten on every build. |
 | `common/` | **Generated** — the `*String` and `*Typed` classes, `Json`, table helpers. |
 | `*_glue.*` | **Hand written.** New steps are appended; nothing is rewritten. |
-| `RestCall.java` | **Hand written.** The transport for `AddressCorrection`. It sits beside the glue rather than in `common/`, which every build rewrites. |
+| `RestCall.java` | **Hand written.** The transport for `AddressCorrection` and `API`. It sits beside the glue rather than in `common/`, which every build rewrites. |
 | `production/` | **Hand written.** A stub is written only if the type is not found. |
 | copied `*.spectable` | Generated copy, placed beside the tests for reference. |
 

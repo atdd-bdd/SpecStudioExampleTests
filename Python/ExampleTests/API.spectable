@@ -1,0 +1,189 @@
+Specification API
+Description Demonstrates GET, POST, PUT, PATCH, DELETE operations
+
+Background
+Given base Page is : String
+| https://jsonplaceholder.typicode.com |
+
+# The URL is built from three parts: the base Page above, the scenario's Page,
+# and its Parameter. posts/1 is Page "posts" with Parameter "1".
+#
+# The status and the returned object are checked separately, because they come
+# from different places -- the status is the HTTP status code and the body is
+# the JSON the API sent back.
+#
+# jsonplaceholder returns the same data on every call, so every expected value
+# is the actual one. Nothing here states a type in place of a value: a cell that
+# said "string" would pass whatever the service returned, which is the one thing
+# a test must not do.
+#
+# The body of post 1 is four lines, and a table cell holds one line, so it is
+# written as the docstring Define PostOneBody at the foot of this file and
+# referred to as =PostOneBody. The array scenario checks the number of posts
+# rather than their contents, because one row cannot state a hundred distinct
+# ones.
+
+# ============================================================
+# GET /posts/1
+# ============================================================
+
+Scenario Retrieve a single post
+When sending request : ApiRequest
+| Method    | GET   |
+| Page      | posts |
+| Parameter | 1     |
+| Body      |       |
+Then response status is : ApiStatus
+| Code | 200 |
+And response body is : Post
+| userId | 1                                                                          |
+| id     | 1                                                                          |
+| title  | sunt aut facere repellat provident occaecati excepturi optio reprehenderit |
+| body   | =PostOneBody                                                               |
+
+# ============================================================
+# GET /posts
+# ============================================================
+
+Scenario Retrieve all posts
+When sending request : ApiRequest
+| Method    | GET   |
+| Page      | posts |
+| Parameter |       |
+| Body      |       |
+Then response status is : ApiStatus
+| Code | 200 |
+# A hundred posts with a hundred distinct ids and titles: the count is what one
+# row can state about them.
+And response array contains this many items : Integer 
+| 100 |
+
+# ============================================================
+# POST /posts
+# ============================================================
+
+Scenario Create a new post
+Given new post data : NewPost
+| title  | AlignThree Demo |
+| body   | Testing POST    |
+| userId | 7               |
+When sending request : ApiRequest
+| Method    | POST    |
+| Page      | posts   |
+| Parameter |         |
+| Body      | NewPost |
+Then response status is : ApiStatus
+| Code | 201 |
+# The service does not really store anything: it echoes the post back and always
+# allocates 101, one past the 100 it serves.
+And response body is : Post
+| id     | 101             |
+| title  | AlignThree Demo |
+| body   | Testing POST    |
+| userId | 7               |
+
+# ============================================================
+# PUT /posts/1
+# ============================================================
+
+Scenario Replace an existing post
+Given replacement data : ReplacePost
+| id     | 1              |
+| userId | 1              |
+| title  | Replaced Title |
+| body   | Replaced Body  |
+When sending request : ApiRequest
+| Method    | PUT         |
+| Page      | posts       |
+| Parameter | 1           |
+| Body      | ReplacePost |
+Then response status is : ApiStatus
+| Code | 200 |
+And response body is : Post
+| id     | 1              |
+| userId | 1              |
+| title  | Replaced Title |
+| body   | Replaced Body  |
+
+# ============================================================
+# PATCH /posts/1
+# ============================================================
+
+Scenario Update a post title
+Given patch data : PatchTitle
+| title | Patched Title |
+When sending request : ApiRequest
+| Method    | PATCH      |
+| Page      | posts      |
+| Parameter | 1          |
+| Body      | PatchTitle |
+Then response status is : ApiStatus
+| Code | 200 |
+# PATCH replaces only the title; userId and body come back as post 1 already had
+# them, so the body is the same four lines as the GET above.
+And response body is : Post
+| id     | 1             |
+| userId | 1             |
+| title  | Patched Title |
+| body   | =PostOneBody  |
+
+# ============================================================
+# DELETE /posts/1
+# ============================================================
+
+# The response body is the empty JSON object {}, so there is nothing to check
+# beyond the status.
+Scenario Delete a post
+When sending request : ApiRequest
+| Method    | DELETE |
+| Page      | posts  |
+| Parameter | 1      |
+| Body      |        |
+Then response status is : ApiStatus
+| Code | 200 |
+
+Attributes ApiRequest
+| Attribute | Type   | Default | Notes                                         |
+| Method    | String |         | GET, POST, PUT, PATCH, DELETE                 |
+| Page      | String |         | Appended to the base Page from the Background |
+| Parameter | String |         | Appended after the Page, such as an id        |
+| Body      | String |         | Name of the attribute set holding the body    |
+
+Attributes ApiStatus
+| Attribute | Type    | Default | Notes            |
+| Code      | Integer | 200     | HTTP status code |
+
+Attributes Post
+| Attribute | Type    | Default | Notes |
+| userId    | Integer |         |       |
+| id        | Integer |         |       |
+| title     | String  |         |       |
+| body      | String  |         |       |
+
+Attributes NewPost
+| Attribute | Type    | Default | Notes |
+| title     | String  |         |       |
+| body      | String  |         |       |
+| userId    | Integer |         |       |
+
+Attributes ReplacePost
+| Attribute | Type    | Default | Notes |
+| id        | Integer |         |       |
+| userId    | Integer |         |       |
+| title     | String  |         |       |
+| body      | String  |         |       |
+
+Attributes PatchTitle
+| Attribute | Type   | Default | Notes |
+| title     | String |         |       |
+
+# The body of post 1, exactly as the service returns it. Four lines, so it
+# cannot be written in a cell; a docstring Define can hold it and =PostOneBody
+# puts it in one.
+Define PostOneBody
+"""
+quia et suscipit
+suscipit recusandae consequuntur expedita et cum
+reprehenderit molestiae ut ut quas totam
+nostrum rerum est autem sunt rem eveniet architecto
+"""

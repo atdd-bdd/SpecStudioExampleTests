@@ -1,6 +1,8 @@
 #![allow(non_snake_case, unused_imports, dead_code)]
 
 pub mod addresscorrection_glue;
+pub mod api_glue;
+pub mod bowling_glue;
 pub mod calculator_glue;
 pub mod common;
 pub mod json_glue;
@@ -9,6 +11,8 @@ pub mod record_filter_example_glue;
 pub mod rest_call;
 pub mod shopping_cart_glue;
 pub mod test_addresscorrection;
+pub mod test_api;
+pub mod test_bowling;
 pub mod test_calculator;
 pub mod test_json;
 pub mod test_record_filter_example;

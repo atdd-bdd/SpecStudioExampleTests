@@ -1,0 +1,81 @@
+from . import json_util as _json
+from .new_post_string import NewPostString
+
+class NewPostTyped:
+    def __init__(self, title: str = '', body: str = '', user_id: int = 0):
+        self.title = title
+        self.body = body
+        self.user_id = user_id
+
+    @classmethod
+    def from_string_obj(cls, s: NewPostString) -> 'NewPostTyped':
+        return cls(
+            s.title,
+            s.body,
+            int(s.user_id) if s.user_id else 0
+        )
+
+    def to_string_obj(self) -> NewPostString:
+        return NewPostString(
+            str(self.title),
+            str(self.body),
+            str(self.user_id)
+        )
+
+    @staticmethod
+    def to_string_list(items) -> list:
+        return [t.to_string_obj() for t in items]
+
+    @staticmethod
+    def from_string_list(items) -> list:
+        return [NewPostTyped.from_string_obj(s) for s in items]
+
+    def to_json_value(self) -> dict:
+        return {
+            'title': self.title,
+            'body': self.body,
+            'userId': self.user_id,
+        }
+
+    def to_json(self) -> str:
+        return _json.dumps(self.to_json_value())
+
+    @classmethod
+    def from_json_value(cls, m: dict) -> 'NewPostTyped':
+        return cls(
+            _json.as_str(_json.require(m, 'title'), 'title'),
+            _json.as_str(_json.require(m, 'body'), 'body'),
+            _json.as_int(_json.require(m, 'userId'), 'userId')
+        )
+
+    @classmethod
+    def from_json(cls, text: str) -> 'NewPostTyped':
+        return cls.from_json_value(_json.loads(text))
+
+    @staticmethod
+    def to_json_list(items) -> str:
+        return _json.dumps([item.to_json_value() for item in items])
+
+    @classmethod
+    def from_json_list(cls, text: str) -> list:
+        raw = _json.as_list(_json.loads(text), 'NewPostTyped')
+        return [cls.from_json_value(e) for e in raw]
+
+    def __str__(self):
+        return (f'title={self.title}' + ', ' +
+                f'body={self.body}' + ', ' +
+                f'userId={self.user_id}')
+
+    def _key(self):
+        return (self.title, self.body, self.user_id)
+
+    def __eq__(self, other):
+        if not isinstance(other, NewPostTyped):
+            return NotImplemented
+        return self._key() == other._key()
+
+    def __hash__(self):
+        return hash(self._key())
+
+    def __repr__(self):
+        return f'NewPostTyped({self})'
