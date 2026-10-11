@@ -24,16 +24,16 @@ namespace SpecStudioExamplesTestsCSharp.Record_Filter_Example
             }
         }
 
-        public void When_filtered_by_ID_with_value(List<List<string>> values)
+        public void When_filtered_by_ID_with_value(List<IDForm> values)
         {
-            if (values.Count > 0 && values[0].Count > 0)
-                computedSum = recordFilter.SumByLabel(new IDForm(values[0][0]));
+            if (values.Count > 0)
+                computedSum = recordFilter.SumByLabel(values[0]);
         }
 
-        public void Then_sum_is(List<List<string>> values)
+        public void Then_sum_is(List<int> values)
         {
-            if (values.Count > 0 && values[0].Count > 0)
-                Assert.AreEqual(int.Parse(values[0][0].Trim()), computedSum, "Sum");
+            if (values.Count > 0)
+                Assert.AreEqual(values[0], computedSum, "Sum");
         }
 
         public void When_filtered_by(List<FilterValueString> values)

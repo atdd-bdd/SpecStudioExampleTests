@@ -30,9 +30,9 @@ namespace SpecStudioExamplesTestsCSharp.AddressCorrection
         private string _baseUrl;
         private RestCall _response;
 
-        public void Given_base_Page_is(List<List<string>> values)
+        public void Given_base_Page_is(List<string> values)
         {
-            _baseUrl = values[0][0];
+            _baseUrl = values[0];
         }
 
         public void When_sending_request(List<RequestString> values)

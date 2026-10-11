@@ -11,20 +11,11 @@ public class Bowling{
 public void Test_Scenario_Adding_a_roll(){
      Bowling_glue bowling_glue_object = new Bowling_glue();
 
-         List<List<string>> stringListList1 = new List<List<string>>{
-            new List<string>{ "5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10" },
-         };
-         bowling_glue_object.Given_rolls_are(stringListList1);
+         bowling_glue_object.Given_rolls_are(new List<Pins>{ new Pins("5"), new Pins("5"), new Pins("4"), new Pins("5"), new Pins("8"), new Pins("2"), new Pins("10"), new Pins("0"), new Pins("10"), new Pins("10"), new Pins("6"), new Pins("2"), new Pins("10"), new Pins("4"), new Pins("6"), new Pins("10") });
 
-         List<List<string>> stringListList2 = new List<List<string>>{
-            new List<string>{ "10" },
-         };
-         bowling_glue_object.When_roll_is(stringListList2);
+         bowling_glue_object.When_roll_is(new List<Pins>{ new Pins("10") });
 
-         List<List<string>> stringListList3 = new List<List<string>>{
-            new List<string>{ "5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10" },
-         };
-         bowling_glue_object.Then_rolls_become(stringListList3);
+         bowling_glue_object.Then_rolls_become(new List<Pins>{ new Pins("5"), new Pins("5"), new Pins("4"), new Pins("5"), new Pins("8"), new Pins("2"), new Pins("10"), new Pins("0"), new Pins("10"), new Pins("10"), new Pins("6"), new Pins("2"), new Pins("10"), new Pins("4"), new Pins("6"), new Pins("10"), new Pins("10") });
 
 }
 
@@ -32,10 +23,7 @@ public void Test_Scenario_Adding_a_roll(){
 public void Test_Scenario_Full_Game_Compute_and_Display(){
      Bowling_glue bowling_glue_object = new Bowling_glue();
 
-         List<List<string>> stringListList4 = new List<List<string>>{
-            new List<string>{ "5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10" },
-         };
-         bowling_glue_object.Given_rolls_are(stringListList4);
+         bowling_glue_object.Given_rolls_are(new List<Pins>{ new Pins("5"), new Pins("5"), new Pins("4"), new Pins("5"), new Pins("8"), new Pins("2"), new Pins("10"), new Pins("0"), new Pins("10"), new Pins("10"), new Pins("6"), new Pins("2"), new Pins("10"), new Pins("4"), new Pins("6"), new Pins("10"), new Pins("10") });
 
          bowling_glue_object.When_scored();
 
@@ -47,10 +35,7 @@ public void Test_Scenario_Full_Game_Compute_and_Display(){
 public void Test_Scenario_A_Game_in_Steps(){
      Bowling_glue bowling_glue_object = new Bowling_glue();
 
-         List<List<string>> stringListList5 = new List<List<string>>{
-            new List<string>{ "5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10" },
-         };
-         bowling_glue_object.Given_rolls_are(stringListList5);
+         bowling_glue_object.Given_rolls_are(new List<Pins>{ new Pins("5"), new Pins("5"), new Pins("4"), new Pins("5"), new Pins("8"), new Pins("2"), new Pins("10"), new Pins("0"), new Pins("10"), new Pins("10"), new Pins("6"), new Pins("2"), new Pins("10"), new Pins("4"), new Pins("6"), new Pins("10"), new Pins("10") });
 
          bowling_glue_object.When_scored();
 
@@ -84,10 +69,7 @@ public void Test_Scenario_A_Game_in_Steps(){
          };
          bowling_glue_object.Then_display_values_are(objectList7);
 
-         List<List<string>> stringListList8 = new List<List<string>>{
-            new List<string>{ "false" },
-         };
-         bowling_glue_object.Then_game_complete_is(stringListList8);
+         bowling_glue_object.Then_game_complete_is(new List<bool>{ bool.Parse("false") });
 
          List<InputControlValuesString> objectList9 = new List<InputControlValuesString>{
              new InputControlValuesString("10","3","10"),
@@ -100,17 +82,11 @@ public void Test_Scenario_A_Game_in_Steps(){
 public void Test_Scenario_Check_for_Game_Complete(){
      Bowling_glue bowling_glue_object = new Bowling_glue();
 
-         List<List<string>> stringListList10 = new List<List<string>>{
-            new List<string>{ "5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10", "10" },
-         };
-         bowling_glue_object.Given_rolls_are(stringListList10);
+         bowling_glue_object.Given_rolls_are(new List<Pins>{ new Pins("5"), new Pins("5"), new Pins("4"), new Pins("5"), new Pins("8"), new Pins("2"), new Pins("10"), new Pins("0"), new Pins("10"), new Pins("10"), new Pins("6"), new Pins("2"), new Pins("10"), new Pins("4"), new Pins("6"), new Pins("10"), new Pins("10"), new Pins("10") });
 
          bowling_glue_object.When_scored();
 
-         List<List<string>> stringListList11 = new List<List<string>>{
-            new List<string>{ "true" },
-         };
-         bowling_glue_object.Then_game_complete_is(stringListList11);
+         bowling_glue_object.Then_game_complete_is(new List<bool>{ bool.Parse("true") });
 
 }
 
@@ -118,10 +94,7 @@ public void Test_Scenario_Check_for_Game_Complete(){
 public void Test_Scenario_Values_for_Tenth_Frame(){
      Bowling_glue bowling_glue_object = new Bowling_glue();
 
-         List<List<string>> stringListList12 = new List<List<string>>{
-            new List<string>{ "10", "10" },
-         };
-         bowling_glue_object.Given_rolls_for_tenth_frame_are(stringListList12);
+         bowling_glue_object.Given_rolls_for_tenth_frame_are(new List<Pins>{ new Pins("10"), new Pins("10") });
 
          bowling_glue_object.When_scored();
 
@@ -136,10 +109,7 @@ public void Test_Scenario_Values_for_Tenth_Frame(){
 public void Test_Scenario_Input_Control_Should_Be_For_Next_Frame(){
      Bowling_glue bowling_glue_object = new Bowling_glue();
 
-         List<List<string>> stringListList14 = new List<List<string>>{
-            new List<string>{ "10" },
-         };
-         bowling_glue_object.Given_rolls_are(stringListList14);
+         bowling_glue_object.Given_rolls_are(new List<Pins>{ new Pins("10") });
 
          bowling_glue_object.When_scored();
 
@@ -154,22 +124,13 @@ public void Test_Scenario_Input_Control_Should_Be_For_Next_Frame(){
 public void Test_Scenario_Try_to_add_invalid_roll(){
      Bowling_glue bowling_glue_object = new Bowling_glue();
 
-         List<List<string>> stringListList16 = new List<List<string>>{
-            new List<string>{ "5" },
-         };
-         bowling_glue_object.Given_rolls_are(stringListList16);
+         bowling_glue_object.Given_rolls_are(new List<Pins>{ new Pins("5") });
 
          bowling_glue_object.When_scored();
 
-         List<List<string>> stringListList17 = new List<List<string>>{
-            new List<string>{ "6" },
-         };
-         bowling_glue_object.When_roll_is(stringListList17);
+         bowling_glue_object.When_roll_is(new List<Pins>{ new Pins("6") });
 
-         List<List<string>> stringListList18 = new List<List<string>>{
-            new List<string>{ "5" },
-         };
-         bowling_glue_object.Then_rolls_become(stringListList18);
+         bowling_glue_object.Then_rolls_become(new List<Pins>{ new Pins("5") });
 
 }
 

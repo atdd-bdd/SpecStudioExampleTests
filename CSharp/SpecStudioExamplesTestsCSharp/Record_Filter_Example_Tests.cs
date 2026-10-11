@@ -18,15 +18,9 @@ public void Test_Scenario_Filter_Data_by_ID(){
          };
          record_Filter_Example_glue_object.Given_list_of_numbers(objectList1);
 
-         List<List<string>> stringListList2 = new List<List<string>>{
-            new List<string>{ "Q1234" },
-         };
-         record_Filter_Example_glue_object.When_filtered_by_ID_with_value(stringListList2);
+         record_Filter_Example_glue_object.When_filtered_by_ID_with_value(new List<IDForm>{ new IDForm("Q1234") });
 
-         List<List<string>> stringListList3 = new List<List<string>>{
-            new List<string>{ "4" },
-         };
-         record_Filter_Example_glue_object.Then_sum_is(stringListList3);
+         record_Filter_Example_glue_object.Then_sum_is(new List<int>{ int.Parse("4") });
 
 }
 

@@ -11,10 +11,7 @@ public class API{
 public void Test_Scenario_Retrieve_a_single_post(){
      API_glue aPI_glue_object = new API_glue();
 
-         List<List<string>> stringListList1 = new List<List<string>>{
-            new List<string>{ "https://jsonplaceholder.typicode.com" },
-         };
-         aPI_glue_object.Given_base_Page_is(stringListList1);
+         aPI_glue_object.Given_base_Page_is(new List<string>{ "https://jsonplaceholder.typicode.com" });
 
          List<ApiRequestString> objectList2 = new List<ApiRequestString>{
              new ApiRequestString("GET","posts","1",""),
@@ -37,10 +34,7 @@ public void Test_Scenario_Retrieve_a_single_post(){
 public void Test_Scenario_Retrieve_all_posts(){
      API_glue aPI_glue_object = new API_glue();
 
-         List<List<string>> stringListList5 = new List<List<string>>{
-            new List<string>{ "https://jsonplaceholder.typicode.com" },
-         };
-         aPI_glue_object.Given_base_Page_is(stringListList5);
+         aPI_glue_object.Given_base_Page_is(new List<string>{ "https://jsonplaceholder.typicode.com" });
 
          List<ApiRequestString> objectList6 = new List<ApiRequestString>{
              new ApiRequestString("GET","posts","",""),
@@ -52,10 +46,7 @@ public void Test_Scenario_Retrieve_all_posts(){
          };
          aPI_glue_object.Then_response_status_is(objectList7);
 
-         List<List<string>> stringListList8 = new List<List<string>>{
-            new List<string>{ "100" },
-         };
-         aPI_glue_object.Then_response_array_contains_this_many_items(stringListList8);
+         aPI_glue_object.Then_response_array_contains_this_many_items(new List<int>{ int.Parse("100") });
 
 }
 
@@ -63,10 +54,7 @@ public void Test_Scenario_Retrieve_all_posts(){
 public void Test_Scenario_Create_a_new_post(){
      API_glue aPI_glue_object = new API_glue();
 
-         List<List<string>> stringListList9 = new List<List<string>>{
-            new List<string>{ "https://jsonplaceholder.typicode.com" },
-         };
-         aPI_glue_object.Given_base_Page_is(stringListList9);
+         aPI_glue_object.Given_base_Page_is(new List<string>{ "https://jsonplaceholder.typicode.com" });
 
          List<NewPostString> objectList10 = new List<NewPostString>{
              new NewPostString("AlignThree Demo","Testing POST","7"),
@@ -94,10 +82,7 @@ public void Test_Scenario_Create_a_new_post(){
 public void Test_Scenario_Replace_an_existing_post(){
      API_glue aPI_glue_object = new API_glue();
 
-         List<List<string>> stringListList14 = new List<List<string>>{
-            new List<string>{ "https://jsonplaceholder.typicode.com" },
-         };
-         aPI_glue_object.Given_base_Page_is(stringListList14);
+         aPI_glue_object.Given_base_Page_is(new List<string>{ "https://jsonplaceholder.typicode.com" });
 
          List<ReplacePostString> objectList15 = new List<ReplacePostString>{
              new ReplacePostString("1","1","Replaced Title","Replaced Body"),
@@ -125,10 +110,7 @@ public void Test_Scenario_Replace_an_existing_post(){
 public void Test_Scenario_Update_a_post_title(){
      API_glue aPI_glue_object = new API_glue();
 
-         List<List<string>> stringListList19 = new List<List<string>>{
-            new List<string>{ "https://jsonplaceholder.typicode.com" },
-         };
-         aPI_glue_object.Given_base_Page_is(stringListList19);
+         aPI_glue_object.Given_base_Page_is(new List<string>{ "https://jsonplaceholder.typicode.com" });
 
          List<PatchTitleString> objectList20 = new List<PatchTitleString>{
              new PatchTitleString("Patched Title"),
@@ -156,10 +138,7 @@ public void Test_Scenario_Update_a_post_title(){
 public void Test_Scenario_Delete_a_post(){
      API_glue aPI_glue_object = new API_glue();
 
-         List<List<string>> stringListList24 = new List<List<string>>{
-            new List<string>{ "https://jsonplaceholder.typicode.com" },
-         };
-         aPI_glue_object.Given_base_Page_is(stringListList24);
+         aPI_glue_object.Given_base_Page_is(new List<string>{ "https://jsonplaceholder.typicode.com" });
 
          List<ApiRequestString> objectList25 = new List<ApiRequestString>{
              new ApiRequestString("DELETE","posts","1",""),

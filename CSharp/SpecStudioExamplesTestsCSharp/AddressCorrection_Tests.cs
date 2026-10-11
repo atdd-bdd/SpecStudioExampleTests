@@ -11,10 +11,7 @@ public class AddressCorrection{
 public void Test_Scenario_Standardize_an_address_that_is_already_complete(){
      AddressCorrection_glue addressCorrection_glue_object = new AddressCorrection_glue();
 
-         List<List<string>> stringListList1 = new List<List<string>>{
-            new List<string>{ "https://geocoding.geo.census.gov" },
-         };
-         addressCorrection_glue_object.Given_base_Page_is(stringListList1);
+         addressCorrection_glue_object.Given_base_Page_is(new List<string>{ "https://geocoding.geo.census.gov" });
 
          List<RequestString> objectList2 = new List<RequestString>{
              new RequestString("GET","geocoder/locations/onelineaddress","1600 pennsylvania ave nw, washington, dc","Public_AR_Current","json"),
@@ -37,10 +34,7 @@ public void Test_Scenario_Standardize_an_address_that_is_already_complete(){
 public void Test_Scenario_Correct_a_spelled_out_ordinal(){
      AddressCorrection_glue addressCorrection_glue_object = new AddressCorrection_glue();
 
-         List<List<string>> stringListList5 = new List<List<string>>{
-            new List<string>{ "https://geocoding.geo.census.gov" },
-         };
-         addressCorrection_glue_object.Given_base_Page_is(stringListList5);
+         addressCorrection_glue_object.Given_base_Page_is(new List<string>{ "https://geocoding.geo.census.gov" });
 
          List<RequestString> objectList6 = new List<RequestString>{
              new RequestString("GET","geocoder/locations/onelineaddress","350 fifth ave, new york, ny","Public_AR_Current","json"),
@@ -63,10 +57,7 @@ public void Test_Scenario_Correct_a_spelled_out_ordinal(){
 public void Test_Scenario_Return_every_candidate_for_an_ambiguous_address(){
      AddressCorrection_glue addressCorrection_glue_object = new AddressCorrection_glue();
 
-         List<List<string>> stringListList9 = new List<List<string>>{
-            new List<string>{ "https://geocoding.geo.census.gov" },
-         };
-         addressCorrection_glue_object.Given_base_Page_is(stringListList9);
+         addressCorrection_glue_object.Given_base_Page_is(new List<string>{ "https://geocoding.geo.census.gov" });
 
          List<RequestString> objectList10 = new List<RequestString>{
              new RequestString("GET","geocoder/locations/onelineaddress","1600 pennsylvania ave, washington, dc","Public_AR_Current","json"),
@@ -90,10 +81,7 @@ public void Test_Scenario_Return_every_candidate_for_an_ambiguous_address(){
 public void Test_Scenario_Report_an_address_that_cannot_be_corrected(){
      AddressCorrection_glue addressCorrection_glue_object = new AddressCorrection_glue();
 
-         List<List<string>> stringListList13 = new List<List<string>>{
-            new List<string>{ "https://geocoding.geo.census.gov" },
-         };
-         addressCorrection_glue_object.Given_base_Page_is(stringListList13);
+         addressCorrection_glue_object.Given_base_Page_is(new List<string>{ "https://geocoding.geo.census.gov" });
 
          List<RequestString> objectList14 = new List<RequestString>{
              new RequestString("GET","geocoder/locations/onelineaddress","99999 nonexistent rd, nowhere, zz 00000","Public_AR_Current","json"),

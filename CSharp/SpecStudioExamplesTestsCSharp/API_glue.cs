@@ -46,11 +46,10 @@ namespace SpecStudioExamplesTestsCSharp.API
 
         // ---- given -----------------------------------------------------------
 
-        public void Given_base_Page_is(List<List<string>> values)
+        public void Given_base_Page_is(List<string> values)
         {
-            foreach (var row in values)
-                foreach (var cell in row)
-                    if (cell.Trim().Length > 0) _basePage = cell.Trim();
+            foreach (var cell in values)
+                if (cell.Trim().Length > 0) _basePage = cell.Trim();
 
             IsTrue(_basePage.Length > 0, "no base Page given");
         }
@@ -124,11 +123,11 @@ namespace SpecStudioExamplesTestsCSharp.API
                 ComparePost("", expected, actual);
         }
 
-        public void Then_response_array_contains_this_many_items(List<List<string>> values)
+        public void Then_response_array_contains_this_many_items(List<int> values)
         {
             IsNotNull(_call, "no request was sent");
 
-            var expected = int.Parse(values[0][0].Trim(), CultureInfo.InvariantCulture);
+            var expected = values[0];
 
             AreEqual(expected, PostTyped.FromJSONList(_call.Body).Count,
                      "number of items returned by " + _call.Url);

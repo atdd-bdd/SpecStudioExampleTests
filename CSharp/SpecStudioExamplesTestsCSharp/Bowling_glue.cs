@@ -23,12 +23,12 @@ namespace SpecStudioExamplesTestsCSharp.Bowling
 
         // ---- given ----------------------------------------------------------
 
-        public void Given_rolls_are(List<List<string>> values)
+        public void Given_rolls_are(List<Pins> values)
         {
             _game.SetRolls(PinCounts(values));
         }
 
-        public void Given_rolls_for_tenth_frame_are(List<List<string>> values)
+        public void Given_rolls_for_tenth_frame_are(List<Pins> values)
         {
             _game.SetTenthFrameRolls(PinCounts(values));
         }
@@ -41,7 +41,7 @@ namespace SpecStudioExamplesTestsCSharp.Bowling
 
         // ---- when -----------------------------------------------------------
 
-        public void When_roll_is(List<List<string>> values)
+        public void When_roll_is(List<Pins> values)
         {
             foreach (var pinCount in PinCounts(values))
                 _game.AddRoll(pinCount);
@@ -54,7 +54,7 @@ namespace SpecStudioExamplesTestsCSharp.Bowling
 
         // ---- then -----------------------------------------------------------
 
-        public void Then_rolls_become(List<List<string>> values)
+        public void Then_rolls_become(List<Pins> values)
         {
             var expected = PinCounts(values);
             var actual = _game.Rolls();
@@ -100,13 +100,10 @@ namespace SpecStudioExamplesTestsCSharp.Bowling
             }
         }
 
-        public void Then_game_complete_is(List<List<string>> values)
+        public void Then_game_complete_is(List<bool> values)
         {
-            foreach (var row in values)
-                foreach (var expected in row)
-                    AreEqual(expected.Trim(),
-                             _game.IsComplete().ToString().ToLowerInvariant(),
-                             "game complete");
+            foreach (var expected in values)
+                AreEqual(expected, _game.IsComplete(), "game complete");
         }
 
         public void Then_input_control_is(List<InputControlValuesString> values)
@@ -150,16 +147,15 @@ namespace SpecStudioExamplesTestsCSharp.Bowling
         // ---- helpers ---------------------------------------------------------
 
         /// <summary>Flattens the step's table into the pin counts it lists, in order.</summary>
-        private static List<int> PinCounts(List<List<string>> values)
+        // The counts the step lists, in order. It used to parse the text
+        // itself; the table says ": Pins", so the generated test builds a Pins
+        // per cell and a cell the DataType refuses fails there. What is left is
+        // unwrapping.
+        private static List<int> PinCounts(List<Pins> values)
         {
             var result = new List<int>();
-            foreach (var row in values)
-                foreach (var cell in row)
-                {
-                    var text = cell.Trim();
-                    if (text.Length > 0)
-                        result.Add(int.Parse(text, CultureInfo.InvariantCulture));
-                }
+            foreach (var pins in values)
+                result.Add(pins.Value);
             return result;
         }
 
