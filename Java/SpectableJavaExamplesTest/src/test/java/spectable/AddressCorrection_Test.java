@@ -18,9 +18,7 @@ public class AddressCorrection_Test {
     public void Scenario_Standardize_an_address_that_is_already_complete() {
         AddressCorrection_glue glue = new AddressCorrection_glue();
 
-        List<List<String>> objectList1 = new ArrayList<>();
-        objectList1.add(List.of("https://geocoding.geo.census.gov"));
-        glue.Given_base_Page_is(objectList1);
+        glue.Given_base_Page_is(TableHelper.toListString(List.of("https://geocoding.geo.census.gov")));
 
         List<RequestString> objectList2 = new ArrayList<>();
         objectList2.add(new RequestString("GET", "geocoder/locations/onelineaddress", "1600 pennsylvania ave nw, washington, dc", "Public_AR_Current", "json"));
@@ -42,9 +40,7 @@ public class AddressCorrection_Test {
     public void Scenario_Correct_a_spelled_out_ordinal() {
         AddressCorrection_glue glue = new AddressCorrection_glue();
 
-        List<List<String>> objectList5 = new ArrayList<>();
-        objectList5.add(List.of("https://geocoding.geo.census.gov"));
-        glue.Given_base_Page_is(objectList5);
+        glue.Given_base_Page_is(TableHelper.toListString(List.of("https://geocoding.geo.census.gov")));
 
         List<RequestString> objectList6 = new ArrayList<>();
         objectList6.add(new RequestString("GET", "geocoder/locations/onelineaddress", "350 fifth ave, new york, ny", "Public_AR_Current", "json"));
@@ -66,9 +62,7 @@ public class AddressCorrection_Test {
     public void Scenario_Return_every_candidate_for_an_ambiguous_address() {
         AddressCorrection_glue glue = new AddressCorrection_glue();
 
-        List<List<String>> objectList9 = new ArrayList<>();
-        objectList9.add(List.of("https://geocoding.geo.census.gov"));
-        glue.Given_base_Page_is(objectList9);
+        glue.Given_base_Page_is(TableHelper.toListString(List.of("https://geocoding.geo.census.gov")));
 
         List<RequestString> objectList10 = new ArrayList<>();
         objectList10.add(new RequestString("GET", "geocoder/locations/onelineaddress", "1600 pennsylvania ave, washington, dc", "Public_AR_Current", "json"));
@@ -93,9 +87,7 @@ public class AddressCorrection_Test {
     public void Scenario_Report_an_address_that_cannot_be_corrected() {
         AddressCorrection_glue glue = new AddressCorrection_glue();
 
-        List<List<String>> objectList13 = new ArrayList<>();
-        objectList13.add(List.of("https://geocoding.geo.census.gov"));
-        glue.Given_base_Page_is(objectList13);
+        glue.Given_base_Page_is(TableHelper.toListString(List.of("https://geocoding.geo.census.gov")));
 
         List<RequestString> objectList14 = new ArrayList<>();
         objectList14.add(new RequestString("GET", "geocoder/locations/onelineaddress", "99999 nonexistent rd, nowhere, zz 00000", "Public_AR_Current", "json"));

@@ -22,11 +22,11 @@ public class Bowling_glue {
 
     // ---- given --------------------------------------------------------------
 
-    public void Given_rolls_are(List<List<String>> values) {
+    public void Given_rolls_are(List<Pins> values) {
         game.setRolls(pinCounts(values));
     }
 
-    public void Given_rolls_for_tenth_frame_are(List<List<String>> values) {
+    public void Given_rolls_for_tenth_frame_are(List<Pins> values) {
         game.setTenthFrameRolls(pinCounts(values));
     }
 
@@ -37,7 +37,7 @@ public class Bowling_glue {
 
     // ---- when ---------------------------------------------------------------
 
-    public void When_roll_is(List<List<String>> values) {
+    public void When_roll_is(List<Pins> values) {
         for (int pinCount : pinCounts(values))
             game.addRoll(pinCount);
     }
@@ -48,7 +48,7 @@ public class Bowling_glue {
 
     // ---- then ---------------------------------------------------------------
 
-    public void Then_rolls_become(List<List<String>> values) {
+    public void Then_rolls_become(List<Pins> values) {
         List<Integer> expected = pinCounts(values);
         List<Integer> actual = game.rolls();
         assertEquals(expected.size(), actual.size(), "number of rolls " + actual);
@@ -87,10 +87,9 @@ public class Bowling_glue {
         }
     }
 
-    public void Then_game_complete_is(List<List<String>> values) {
-        for (List<String> row : values)
-            for (String expected : row)
-                assertEquals(expected.trim(), String.valueOf(game.isComplete()), "game complete");
+    public void Then_game_complete_is(List<Boolean> values) {
+        for (Boolean expected : values)
+            assertEquals(expected, game.isComplete(), "game complete");
     }
 
     public void Then_input_control_is(List<InputControlValuesString> values) {
@@ -134,15 +133,17 @@ public class Bowling_glue {
 
     // ---- helpers ------------------------------------------------------------
 
-    /** Flattens the step's table into the pin counts it lists, in order. */
-    private static List<Integer> pinCounts(List<List<String>> values) {
+    /**
+     * The counts the step lists, in order.
+     *
+     * This used to parse the text itself, because the step handed over a grid
+     * of strings. It no longer does: the table says ": Pins", so the generated
+     * test builds a Pins per cell and a cell the DataType refuses fails there.
+     * What is left is unwrapping, which is all a glue method should be doing.
+     */
+    private static List<Integer> pinCounts(List<Pins> values) {
         List<Integer> result = new ArrayList<>();
-        for (List<String> row : values)
-            for (String cell : row) {
-                String text = cell.trim();
-                if (!text.isEmpty())
-                    result.add(Integer.parseInt(text));
-            }
+        for (Pins p : values) result.add(p.value);
         return result;
     }
 

@@ -18,17 +18,11 @@ public class Bowling_Test {
     public void Scenario_Adding_a_roll() {
         Bowling_glue glue = new Bowling_glue();
 
-        List<List<String>> objectList1 = new ArrayList<>();
-        objectList1.add(List.of("5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10"));
-        glue.Given_rolls_are(objectList1);
+        glue.Given_rolls_are(TableHelper.toListPins(List.of("5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10")));
 
-        List<List<String>> objectList2 = new ArrayList<>();
-        objectList2.add(List.of("10"));
-        glue.When_roll_is(objectList2);
+        glue.When_roll_is(TableHelper.toListPins(List.of("10")));
 
-        List<List<String>> objectList3 = new ArrayList<>();
-        objectList3.add(List.of("5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10"));
-        glue.Then_rolls_become(objectList3);
+        glue.Then_rolls_become(TableHelper.toListPins(List.of("5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10")));
 
     }
 
@@ -36,9 +30,7 @@ public class Bowling_Test {
     public void Scenario_Full_Game_Compute_and_Display() {
         Bowling_glue glue = new Bowling_glue();
 
-        List<List<String>> objectList4 = new ArrayList<>();
-        objectList4.add(List.of("5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10"));
-        glue.Given_rolls_are(objectList4);
+        glue.Given_rolls_are(TableHelper.toListPins(List.of("5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10")));
 
         glue.When_scored();
 
@@ -53,9 +45,7 @@ public class Bowling_Test {
     public void Scenario_A_Game_in_Steps() {
         Bowling_glue glue = new Bowling_glue();
 
-        List<List<String>> objectList5 = new ArrayList<>();
-        objectList5.add(List.of("5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10"));
-        glue.Given_rolls_are(objectList5);
+        glue.Given_rolls_are(TableHelper.toListPins(List.of("5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10")));
 
         glue.When_scored();
 
@@ -87,9 +77,7 @@ public class Bowling_Test {
         objectList7.add(new FrameDisplayString("10", "X", "X", "", ""));
         glue.Then_display_values_are(objectList7);
 
-        List<List<String>> objectList8 = new ArrayList<>();
-        objectList8.add(List.of("false"));
-        glue.Then_game_complete_is(objectList8);
+        glue.Then_game_complete_is(TableHelper.toListBoolean(List.of("false")));
 
         List<InputControlValuesString> objectList9 = new ArrayList<>();
         objectList9.add(new InputControlValuesString("10", "3", "10"));
@@ -101,15 +89,11 @@ public class Bowling_Test {
     public void Scenario_Check_for_Game_Complete() {
         Bowling_glue glue = new Bowling_glue();
 
-        List<List<String>> objectList10 = new ArrayList<>();
-        objectList10.add(List.of("5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10", "10"));
-        glue.Given_rolls_are(objectList10);
+        glue.Given_rolls_are(TableHelper.toListPins(List.of("5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10", "10")));
 
         glue.When_scored();
 
-        List<List<String>> objectList11 = new ArrayList<>();
-        objectList11.add(List.of("true"));
-        glue.Then_game_complete_is(objectList11);
+        glue.Then_game_complete_is(TableHelper.toListBoolean(List.of("true")));
 
     }
 
@@ -117,9 +101,7 @@ public class Bowling_Test {
     public void Scenario_Values_for_Tenth_Frame() {
         Bowling_glue glue = new Bowling_glue();
 
-        List<List<String>> objectList12 = new ArrayList<>();
-        objectList12.add(List.of("10", "10"));
-        glue.Given_rolls_for_tenth_frame_are(objectList12);
+        glue.Given_rolls_for_tenth_frame_are(TableHelper.toListPins(List.of("10", "10")));
 
         glue.When_scored();
 
@@ -133,9 +115,7 @@ public class Bowling_Test {
     public void Scenario_Input_Control_Should_Be_For_Next_Frame() {
         Bowling_glue glue = new Bowling_glue();
 
-        List<List<String>> objectList14 = new ArrayList<>();
-        objectList14.add(List.of("10"));
-        glue.Given_rolls_are(objectList14);
+        glue.Given_rolls_are(TableHelper.toListPins(List.of("10")));
 
         glue.When_scored();
 
@@ -149,19 +129,13 @@ public class Bowling_Test {
     public void Scenario_Try_to_add_invalid_roll() {
         Bowling_glue glue = new Bowling_glue();
 
-        List<List<String>> objectList16 = new ArrayList<>();
-        objectList16.add(List.of("5"));
-        glue.Given_rolls_are(objectList16);
+        glue.Given_rolls_are(TableHelper.toListPins(List.of("5")));
 
         glue.When_scored();
 
-        List<List<String>> objectList17 = new ArrayList<>();
-        objectList17.add(List.of("6"));
-        glue.When_roll_is(objectList17);
+        glue.When_roll_is(TableHelper.toListPins(List.of("6")));
 
-        List<List<String>> objectList18 = new ArrayList<>();
-        objectList18.add(List.of("5"));
-        glue.Then_rolls_become(objectList18);
+        glue.Then_rolls_become(TableHelper.toListPins(List.of("5")));
 
     }
 

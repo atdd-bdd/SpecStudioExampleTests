@@ -18,9 +18,7 @@ public class API_Test {
     public void Scenario_Retrieve_a_single_post() {
         API_glue glue = new API_glue();
 
-        List<List<String>> objectList1 = new ArrayList<>();
-        objectList1.add(List.of("https://jsonplaceholder.typicode.com"));
-        glue.Given_base_Page_is(objectList1);
+        glue.Given_base_Page_is(TableHelper.toListString(List.of("https://jsonplaceholder.typicode.com")));
 
         List<ApiRequestString> objectList2 = new ArrayList<>();
         objectList2.add(new ApiRequestString("GET", "posts", "1", ""));
@@ -40,9 +38,7 @@ public class API_Test {
     public void Scenario_Retrieve_all_posts() {
         API_glue glue = new API_glue();
 
-        List<List<String>> objectList5 = new ArrayList<>();
-        objectList5.add(List.of("https://jsonplaceholder.typicode.com"));
-        glue.Given_base_Page_is(objectList5);
+        glue.Given_base_Page_is(TableHelper.toListString(List.of("https://jsonplaceholder.typicode.com")));
 
         List<ApiRequestString> objectList6 = new ArrayList<>();
         objectList6.add(new ApiRequestString("GET", "posts", "", ""));
@@ -52,9 +48,7 @@ public class API_Test {
         objectList7.add(new ApiStatusString("200"));
         glue.Then_response_status_is(objectList7);
 
-        List<List<String>> objectList8 = new ArrayList<>();
-        objectList8.add(List.of("100"));
-        glue.Then_response_array_contains_this_many_items(objectList8);
+        glue.Then_response_array_contains_this_many_items(TableHelper.toListInteger(List.of("100")));
 
     }
 
@@ -62,9 +56,7 @@ public class API_Test {
     public void Scenario_Create_a_new_post() {
         API_glue glue = new API_glue();
 
-        List<List<String>> objectList9 = new ArrayList<>();
-        objectList9.add(List.of("https://jsonplaceholder.typicode.com"));
-        glue.Given_base_Page_is(objectList9);
+        glue.Given_base_Page_is(TableHelper.toListString(List.of("https://jsonplaceholder.typicode.com")));
 
         List<NewPostString> objectList10 = new ArrayList<>();
         objectList10.add(new NewPostString("AlignThree Demo", "Testing POST", "7"));
@@ -88,9 +80,7 @@ public class API_Test {
     public void Scenario_Replace_an_existing_post() {
         API_glue glue = new API_glue();
 
-        List<List<String>> objectList14 = new ArrayList<>();
-        objectList14.add(List.of("https://jsonplaceholder.typicode.com"));
-        glue.Given_base_Page_is(objectList14);
+        glue.Given_base_Page_is(TableHelper.toListString(List.of("https://jsonplaceholder.typicode.com")));
 
         List<ReplacePostString> objectList15 = new ArrayList<>();
         objectList15.add(new ReplacePostString("1", "1", "Replaced Title", "Replaced Body"));
@@ -114,9 +104,7 @@ public class API_Test {
     public void Scenario_Update_a_post_title() {
         API_glue glue = new API_glue();
 
-        List<List<String>> objectList19 = new ArrayList<>();
-        objectList19.add(List.of("https://jsonplaceholder.typicode.com"));
-        glue.Given_base_Page_is(objectList19);
+        glue.Given_base_Page_is(TableHelper.toListString(List.of("https://jsonplaceholder.typicode.com")));
 
         List<PatchTitleString> objectList20 = new ArrayList<>();
         objectList20.add(new PatchTitleString("Patched Title"));
@@ -140,9 +128,7 @@ public class API_Test {
     public void Scenario_Delete_a_post() {
         API_glue glue = new API_glue();
 
-        List<List<String>> objectList24 = new ArrayList<>();
-        objectList24.add(List.of("https://jsonplaceholder.typicode.com"));
-        glue.Given_base_Page_is(objectList24);
+        glue.Given_base_Page_is(TableHelper.toListString(List.of("https://jsonplaceholder.typicode.com")));
 
         List<ApiRequestString> objectList25 = new ArrayList<>();
         objectList25.add(new ApiRequestString("DELETE", "posts", "1", ""));

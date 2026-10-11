@@ -50,11 +50,10 @@ public class API_glue {
 
     // ---- given --------------------------------------------------------------
 
-    public void Given_base_Page_is(List<List<String>> values) {
-        for (List<String> row : values)
-            for (String cell : row)
-                if (!cell.trim().isEmpty())
-                    basePage = cell.trim();
+    public void Given_base_Page_is(List<String> values) {
+        for (String cell : values)
+            if (!cell.trim().isEmpty())
+                basePage = cell.trim();
         assertTrue(!basePage.isEmpty(), "no base Page given");
     }
 
@@ -113,9 +112,9 @@ public class API_glue {
             comparePost("", expected, actual);
     }
 
-    public void Then_response_array_contains_this_many_items(List<List<String>> values) {
+    public void Then_response_array_contains_this_many_items(List<Integer> values) {
         assertNotNull(call, "no request was sent");
-        final int expected = TableHelper.toListListInteger(values).get(0).get(0);
+        final int expected = values.get(0);
         assertEquals(expected, PostTyped.fromJSONList(call.getBody()).size(),
                      "number of items returned by " + call.getUrl());
     }

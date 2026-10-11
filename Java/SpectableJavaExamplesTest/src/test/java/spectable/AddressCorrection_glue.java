@@ -27,8 +27,8 @@ public class AddressCorrection_glue {
     private String baseUrl;
     private RestCall response;
 
-    public void Given_base_Page_is(List<List<String>> values) {
-        baseUrl = values.get(0).get(0);
+    public void Given_base_Page_is(List<String> values) {
+        baseUrl = values.get(0);
     }
 
     public void When_sending_request(List<RequestString> values) {

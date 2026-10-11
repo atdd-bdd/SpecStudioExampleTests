@@ -22,16 +22,16 @@ public class Record_Filter_Example_glue {
         }
     }
 
-    public void When_filtered_by_ID_with_value(List<List<String>> values) {
-        if (!values.isEmpty() && !values.get(0).isEmpty()) {
-            IDForm id = new IDForm(values.get(0).get(0));
+    public void When_filtered_by_ID_with_value(List<IDForm> values) {
+        if (!values.isEmpty()) {
+            IDForm id = values.get(0);
             computedSum = recordFilter.sumByLabel(id);
         }
     }
 
-    public void Then_sum_is(List<List<String>> values) {
-        if (!values.isEmpty() && !values.get(0).isEmpty()) {
-            int expected = Integer.parseInt(values.get(0).get(0));
+    public void Then_sum_is(List<Integer> values) {
+        if (!values.isEmpty()) {
+            int expected = values.get(0);
             assertEquals("Sum", expected, computedSum);
         }
     }

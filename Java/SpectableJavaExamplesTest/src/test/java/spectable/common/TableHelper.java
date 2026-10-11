@@ -8,6 +8,36 @@ import calculator.*;
 
 public class TableHelper {
 
+    public static Boolean toBoolean(String cell) {
+        return Boolean.parseBoolean(cell);
+    }
+
+    public static IDForm toIDForm(String cell) {
+        return new IDForm(cell);
+    }
+
+    public static Integer toInteger(String cell) {
+        return Integer.parseInt(cell);
+    }
+
+    public static List<Boolean> toListBoolean(List<String> values) {
+        List<Boolean> result = new ArrayList<>();
+        for (String cell : values) { result.add(Boolean.parseBoolean(cell)); }
+        return result;
+    }
+
+    public static List<IDForm> toListIDForm(List<String> values) {
+        List<IDForm> result = new ArrayList<>();
+        for (String cell : values) { result.add(new IDForm(cell)); }
+        return result;
+    }
+
+    public static List<Integer> toListInteger(List<String> values) {
+        List<Integer> result = new ArrayList<>();
+        for (String cell : values) { result.add(Integer.parseInt(cell)); }
+        return result;
+    }
+
     public static List<List<Boolean>> toListListBoolean(List<List<String>> values) {
         List<List<Boolean>> result = new ArrayList<>();
         for (List<String> row : values) {
@@ -56,5 +86,25 @@ public class TableHelper {
             result.add(typedRow);
         }
         return result;
+    }
+
+    public static List<Pins> toListPins(List<String> values) {
+        List<Pins> result = new ArrayList<>();
+        for (String cell : values) { result.add(new Pins(cell)); }
+        return result;
+    }
+
+    public static List<String> toListString(List<String> values) {
+        List<String> result = new ArrayList<>();
+        for (String cell : values) { result.add(cell); }
+        return result;
+    }
+
+    public static Pins toPins(String cell) {
+        return new Pins(cell);
+    }
+
+    public static String toString(String cell) {
+        return cell;
     }
 }

@@ -24,13 +24,9 @@ public class Record_Filter_Example_Test {
         objectList1.add(new IDValueString("Q1234", "3"));
         glue.Given_list_of_numbers(objectList1);
 
-        List<List<String>> objectList2 = new ArrayList<>();
-        objectList2.add(List.of("Q1234"));
-        glue.When_filtered_by_ID_with_value(objectList2);
+        glue.When_filtered_by_ID_with_value(TableHelper.toListIDForm(List.of("Q1234")));
 
-        List<List<String>> objectList3 = new ArrayList<>();
-        objectList3.add(List.of("4"));
-        glue.Then_sum_is(objectList3);
+        glue.Then_sum_is(TableHelper.toListInteger(List.of("4")));
 
     }
 
