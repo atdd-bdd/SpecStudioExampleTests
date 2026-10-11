@@ -13,7 +13,9 @@ import java.util.List;
 public class BowlingGame {
     private static final int FRAMES = 10;
 
-    private final List<Integer> rolls = new ArrayList<>();
+    // Pins, not int. A roll is the DataType the specification declares, so a
+    // count outside 0..10 cannot be constructed, let alone handed to the game.
+    private final List<Pins> rolls = new ArrayList<>();
 
     /**
      * True when the game was seeded with the tenth frame's rolls alone, so the
@@ -23,19 +25,19 @@ public class BowlingGame {
      */
     private boolean tenthFrameOnly = false;
 
-    public List<Integer> rolls() {
+    public List<Pins> rolls() {
         return new ArrayList<>(rolls);
     }
 
     /** Replaces the rolls outright. Setup, not play — no validation. */
-    public void setRolls(List<Integer> pinCounts) {
+    public void setRolls(List<Pins> pinCounts) {
         rolls.clear();
         rolls.addAll(pinCounts);
         tenthFrameOnly = false;
     }
 
     /** Seeds only the tenth frame; frames 1..9 are left unbowled. */
-    public void setTenthFrameRolls(List<Integer> pinCounts) {
+    public void setTenthFrameRolls(List<Pins> pinCounts) {
         rolls.clear();
         rolls.addAll(pinCounts);
         tenthFrameOnly = true;
@@ -45,14 +47,17 @@ public class BowlingGame {
      * Bowls one roll. Returns false and changes nothing when the roll is
      * impossible — more pins than are standing, or a game already over.
      */
-    public boolean addRoll(int pinCount) {
-        if (pinCount < 0 || pinCount > Pins.MAX)
+    public boolean addRoll(Pins pins) {
+        // A count outside 0..10 cannot reach here: Pins refuses to hold one.
+        // What is left to refuse is a roll that has not happened (TBR), a game
+        // already over, and more pins than are standing.
+        if (pins == null || !pins.isRolled())
             return false;
         if (isComplete())
             return false;
-        if (pinCount > inputControl().remaining)
+        if (pins.count() > inputControl().remaining)
             return false;
-        rolls.add(pinCount);
+        rolls.add(pins);
         return true;
     }
 
@@ -235,7 +240,7 @@ public class BowlingGame {
         int index = 0;
         for (int f = 1; f < FRAMES; f++) {
             starts[f] = index;
-            index += (index < rolls.size() && rolls.get(index) == Pins.MAX) ? 1 : 2;
+            index += (index < rolls.size() && rolls.get(index).isStrike()) ? 1 : 2;
         }
         starts[FRAMES] = index;
         return starts;
@@ -244,7 +249,7 @@ public class BowlingGame {
     private Pins pinsAt(int index) {
         if (index < 0 || index >= rolls.size())
             return Pins.TBR;
-        return new Pins(rolls.get(index));
+        return rolls.get(index);
     }
 
     private boolean allRolled(int start, int count) {
