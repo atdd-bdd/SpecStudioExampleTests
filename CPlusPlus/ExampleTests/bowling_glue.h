@@ -20,11 +20,11 @@ public:
 
     // ---- given -------------------------------------------------------------
 
-    void given_rolls_are(const std::vector<std::vector<std::string>>& values) {
+    void given_rolls_are(const std::vector<Pins>& values) {
         game_.set_rolls(pin_counts(values));
     }
 
-    void given_rolls_for_tenth_frame_are(const std::vector<std::vector<std::string>>& values) {
+    void given_rolls_for_tenth_frame_are(const std::vector<Pins>& values) {
         game_.set_tenth_frame_rolls(pin_counts(values));
     }
 
@@ -35,7 +35,7 @@ public:
 
     // ---- when --------------------------------------------------------------
 
-    void when_roll_is(const std::vector<std::vector<std::string>>& values) {
+    void when_roll_is(const std::vector<Pins>& values) {
         for (int pin_count : pin_counts(values)) game_.add_roll(pin_count);
     }
 
@@ -45,7 +45,7 @@ public:
 
     // ---- then --------------------------------------------------------------
 
-    void then_rolls_become(const std::vector<std::vector<std::string>>& values) {
+    void then_rolls_become(const std::vector<Pins>& values) {
         const std::vector<int> expected = pin_counts(values);
         const std::vector<int> actual = game_.rolls();
 
@@ -87,11 +87,9 @@ public:
         }
     }
 
-    void then_game_complete_is(const std::vector<std::vector<std::string>>& values) {
-        for (const std::vector<std::string>& row : values)
-            for (const std::string& expected : row)
-                EXPECT_EQ(trim(expected), game_.is_complete() ? "true" : "false")
-                    << "game complete";
+    void then_game_complete_is(const std::vector<bool>& values) {
+        for (bool expected : values)
+            EXPECT_EQ(expected, game_.is_complete()) << "game complete";
     }
 
     void then_input_control_is(const std::vector<InputControlValuesString>& values) {
@@ -128,13 +126,12 @@ private:
     // ---- helpers -----------------------------------------------------------
 
     // Flattens the step's table into the pin counts it lists, in order.
-    static std::vector<int> pin_counts(const std::vector<std::vector<std::string>>& values) {
+    // The counts the step lists, in order. It used to parse the text itself;
+    // the table says ": Pins", so the generated test builds a Pins per cell
+    // and a cell the DataType refuses fails there. What is left is unwrapping.
+    static std::vector<int> pin_counts(const std::vector<Pins>& values) {
         std::vector<int> result;
-        for (const std::vector<std::string>& row : values)
-            for (const std::string& cell : row) {
-                const std::string text = trim(cell);
-                if (!text.empty()) result.push_back(std::stoi(text));
-            }
+        for (const Pins& p : values) result.push_back(p.count());
         return result;
     }
 

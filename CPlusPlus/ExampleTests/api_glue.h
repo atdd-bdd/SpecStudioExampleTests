@@ -26,10 +26,9 @@ public:
 
     // ---- given -------------------------------------------------------------
 
-    void given_base_page_is(const std::vector<std::vector<std::string>>& values) {
-        for (const std::vector<std::string>& row : values)
-            for (const std::string& cell : row)
-                if (!trim(cell).empty()) base_page_ = trim(cell);
+    void given_base_page_is(const std::vector<std::string>& values) {
+        for (const std::string& cell : values)
+            if (!trim(cell).empty()) base_page_ = trim(cell);
 
         EXPECT_FALSE(base_page_.empty()) << "no base Page given";
     }
@@ -103,10 +102,10 @@ public:
     }
 
     void then_response_array_contains_this_many_items(
-            const std::vector<std::vector<std::string>>& values) {
+            const std::vector<int>& values) {
         ASSERT_TRUE(sent_) << "no request was sent";
 
-        const std::size_t expected = static_cast<std::size_t>(std::stoi(trim(values[0][0])));
+        const std::size_t expected = static_cast<std::size_t>(values[0]);
         const json::Value items = json::parse(call_.body);
         json::require_array(items, "response array");
 

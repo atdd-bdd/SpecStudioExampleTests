@@ -16,14 +16,14 @@ public:
         }
     }
 
-    void when_filtered_by_id_with_value(const std::vector<std::vector<std::string>>& values) {
-        if (!values.empty() && !values[0].empty())
-            sum_ = filter_.sum_by_label(IDForm(values[0][0]));
+    void when_filtered_by_id_with_value(const std::vector<IDForm>& values) {
+        if (!values.empty())
+            sum_ = filter_.sum_by_label(values[0]);
     }
 
-    void then_sum_is(const std::vector<std::vector<std::string>>& values) {
-        if (!values.empty() && !values[0].empty())
-            EXPECT_EQ(std::stoi(values[0][0]), sum_) << "Sum";
+    void then_sum_is(const std::vector<int>& values) {
+        if (!values.empty())
+            EXPECT_EQ(values[0], sum_) << "Sum";
     }
 
     void when_filtered_by(const std::vector<FilterValueString>& values) {

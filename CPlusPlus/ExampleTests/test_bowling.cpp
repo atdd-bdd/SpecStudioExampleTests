@@ -5,29 +5,21 @@
 
 TEST(Bowling, Scenario_AddingARoll) {
     BowlingGlue glue;
-    std::vector<std::vector<std::string>> stringListList1 = {
-        {"5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10"},
-    };
-    glue.given_rolls_are(stringListList1);
+    std::vector<Pins> typedList1 = {Pins("5"), Pins("5"), Pins("4"), Pins("5"), Pins("8"), Pins("2"), Pins("10"), Pins("0"), Pins("10"), Pins("10"), Pins("6"), Pins("2"), Pins("10"), Pins("4"), Pins("6"), Pins("10")};
+    glue.given_rolls_are(typedList1);
 
-    std::vector<std::vector<std::string>> stringListList2 = {
-        {"10"},
-    };
-    glue.when_roll_is(stringListList2);
+    std::vector<Pins> typedList2 = {Pins("10")};
+    glue.when_roll_is(typedList2);
 
-    std::vector<std::vector<std::string>> stringListList3 = {
-        {"5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10"},
-    };
-    glue.then_rolls_become(stringListList3);
+    std::vector<Pins> typedList3 = {Pins("5"), Pins("5"), Pins("4"), Pins("5"), Pins("8"), Pins("2"), Pins("10"), Pins("0"), Pins("10"), Pins("10"), Pins("6"), Pins("2"), Pins("10"), Pins("4"), Pins("6"), Pins("10"), Pins("10")};
+    glue.then_rolls_become(typedList3);
 
 }
 
 TEST(Bowling, Scenario_FullGameComputeAndDisplay) {
     BowlingGlue glue;
-    std::vector<std::vector<std::string>> stringListList4 = {
-        {"5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10"},
-    };
-    glue.given_rolls_are(stringListList4);
+    std::vector<Pins> typedList4 = {Pins("5"), Pins("5"), Pins("4"), Pins("5"), Pins("8"), Pins("2"), Pins("10"), Pins("0"), Pins("10"), Pins("10"), Pins("6"), Pins("2"), Pins("10"), Pins("4"), Pins("6"), Pins("10"), Pins("10")};
+    glue.given_rolls_are(typedList4);
 
     glue.when_scored();
     glue.then_display_is("| 5/ | 45 | 8/ | X  | -/ | X   | 62  | X   | 4/  | XX |\n| 14 | 23 | 43 | 63 | 83 | 101 | 109 | 129 | 149 |    |");
@@ -35,10 +27,8 @@ TEST(Bowling, Scenario_FullGameComputeAndDisplay) {
 
 TEST(Bowling, Scenario_AGameInSteps) {
     BowlingGlue glue;
-    std::vector<std::vector<std::string>> stringListList5 = {
-        {"5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10"},
-    };
-    glue.given_rolls_are(stringListList5);
+    std::vector<Pins> typedList5 = {Pins("5"), Pins("5"), Pins("4"), Pins("5"), Pins("8"), Pins("2"), Pins("10"), Pins("0"), Pins("10"), Pins("10"), Pins("6"), Pins("2"), Pins("10"), Pins("4"), Pins("6"), Pins("10"), Pins("10")};
+    glue.given_rolls_are(typedList5);
 
     glue.when_scored();
     std::vector<FrameValuesString> objectList6 = {
@@ -70,10 +60,8 @@ TEST(Bowling, Scenario_AGameInSteps) {
     };
     glue.then_display_values_are(objectList7);
 
-    std::vector<std::vector<std::string>> stringListList8 = {
-        {"false"},
-    };
-    glue.then_game_complete_is(stringListList8);
+    std::vector<bool> typedList8 = {(std::string("false") == "true" || std::string("false") == "yes")};
+    glue.then_game_complete_is(typedList8);
 
     std::vector<InputControlValuesString> objectList9 = {
         InputControlValuesString::from_vec({"10", "3", "10"}),
@@ -84,25 +72,19 @@ TEST(Bowling, Scenario_AGameInSteps) {
 
 TEST(Bowling, Scenario_CheckForGameComplete) {
     BowlingGlue glue;
-    std::vector<std::vector<std::string>> stringListList10 = {
-        {"5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10", "10"},
-    };
-    glue.given_rolls_are(stringListList10);
+    std::vector<Pins> typedList10 = {Pins("5"), Pins("5"), Pins("4"), Pins("5"), Pins("8"), Pins("2"), Pins("10"), Pins("0"), Pins("10"), Pins("10"), Pins("6"), Pins("2"), Pins("10"), Pins("4"), Pins("6"), Pins("10"), Pins("10"), Pins("10")};
+    glue.given_rolls_are(typedList10);
 
     glue.when_scored();
-    std::vector<std::vector<std::string>> stringListList11 = {
-        {"true"},
-    };
-    glue.then_game_complete_is(stringListList11);
+    std::vector<bool> typedList11 = {(std::string("true") == "true" || std::string("true") == "yes")};
+    glue.then_game_complete_is(typedList11);
 
 }
 
 TEST(Bowling, Scenario_ValuesForTenthFrame) {
     BowlingGlue glue;
-    std::vector<std::vector<std::string>> stringListList12 = {
-        {"10", "10"},
-    };
-    glue.given_rolls_for_tenth_frame_are(stringListList12);
+    std::vector<Pins> typedList12 = {Pins("10"), Pins("10")};
+    glue.given_rolls_for_tenth_frame_are(typedList12);
 
     glue.when_scored();
     std::vector<FrameValuesString> objectList13 = {
@@ -114,10 +96,8 @@ TEST(Bowling, Scenario_ValuesForTenthFrame) {
 
 TEST(Bowling, Scenario_InputControlShouldBeForNextFrame) {
     BowlingGlue glue;
-    std::vector<std::vector<std::string>> stringListList14 = {
-        {"10"},
-    };
-    glue.given_rolls_are(stringListList14);
+    std::vector<Pins> typedList14 = {Pins("10")};
+    glue.given_rolls_are(typedList14);
 
     glue.when_scored();
     std::vector<InputControlValuesString> objectList15 = {
@@ -129,21 +109,15 @@ TEST(Bowling, Scenario_InputControlShouldBeForNextFrame) {
 
 TEST(Bowling, Scenario_TryToAddInvalidRoll) {
     BowlingGlue glue;
-    std::vector<std::vector<std::string>> stringListList16 = {
-        {"5"},
-    };
-    glue.given_rolls_are(stringListList16);
+    std::vector<Pins> typedList16 = {Pins("5")};
+    glue.given_rolls_are(typedList16);
 
     glue.when_scored();
-    std::vector<std::vector<std::string>> stringListList17 = {
-        {"6"},
-    };
-    glue.when_roll_is(stringListList17);
+    std::vector<Pins> typedList17 = {Pins("6")};
+    glue.when_roll_is(typedList17);
 
-    std::vector<std::vector<std::string>> stringListList18 = {
-        {"5"},
-    };
-    glue.then_rolls_become(stringListList18);
+    std::vector<Pins> typedList18 = {Pins("5")};
+    glue.then_rolls_become(typedList18);
 
 }
 

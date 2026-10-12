@@ -12,15 +12,11 @@ TEST(RecordFilterExample, Scenario_FilterDataByID) {
     };
     glue.given_list_of_numbers(objectList1);
 
-    std::vector<std::vector<std::string>> stringListList2 = {
-        {"Q1234"},
-    };
-    glue.when_filtered_by_id_with_value(stringListList2);
+    std::vector<IDForm> typedList2 = {IDForm("Q1234")};
+    glue.when_filtered_by_id_with_value(typedList2);
 
-    std::vector<std::vector<std::string>> stringListList3 = {
-        {"4"},
-    };
-    glue.then_sum_is(stringListList3);
+    std::vector<int> typedList3 = {std::stoi("4")};
+    glue.then_sum_is(typedList3);
 
 }
 

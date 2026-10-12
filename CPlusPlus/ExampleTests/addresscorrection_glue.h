@@ -23,8 +23,8 @@ class AddressCorrectionGlue {
 public:
     static constexpr const char* DNC_STRING = "?DNC?";
 
-    void given_base_page_is(const std::vector<std::vector<std::string>>& values) {
-        base_url_ = values[0][0];
+    void given_base_page_is(const std::vector<std::string>& values) {
+        base_url_ = values[0];
     }
 
     void when_sending_request(const std::vector<RequestString>& values) {

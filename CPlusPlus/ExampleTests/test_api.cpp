@@ -5,10 +5,8 @@
 
 TEST(API, Scenario_RetrieveASinglePost) {
     APIGlue glue;
-    std::vector<std::vector<std::string>> stringListList1 = {
-        {"https://jsonplaceholder.typicode.com"},
-    };
-    glue.given_base_page_is(stringListList1);
+    std::vector<std::string> typedList1 = {std::string("https://jsonplaceholder.typicode.com")};
+    glue.given_base_page_is(typedList1);
 
     std::vector<ApiRequestString> objectList2 = {
         ApiRequestString::from_vec({"GET", "posts", "1", ""}),
@@ -29,10 +27,8 @@ TEST(API, Scenario_RetrieveASinglePost) {
 
 TEST(API, Scenario_RetrieveAllPosts) {
     APIGlue glue;
-    std::vector<std::vector<std::string>> stringListList5 = {
-        {"https://jsonplaceholder.typicode.com"},
-    };
-    glue.given_base_page_is(stringListList5);
+    std::vector<std::string> typedList5 = {std::string("https://jsonplaceholder.typicode.com")};
+    glue.given_base_page_is(typedList5);
 
     std::vector<ApiRequestString> objectList6 = {
         ApiRequestString::from_vec({"GET", "posts", "", ""}),
@@ -44,19 +40,15 @@ TEST(API, Scenario_RetrieveAllPosts) {
     };
     glue.then_response_status_is(objectList7);
 
-    std::vector<std::vector<std::string>> stringListList8 = {
-        {"100"},
-    };
-    glue.then_response_array_contains_this_many_items(stringListList8);
+    std::vector<int> typedList8 = {std::stoi("100")};
+    glue.then_response_array_contains_this_many_items(typedList8);
 
 }
 
 TEST(API, Scenario_CreateANewPost) {
     APIGlue glue;
-    std::vector<std::vector<std::string>> stringListList9 = {
-        {"https://jsonplaceholder.typicode.com"},
-    };
-    glue.given_base_page_is(stringListList9);
+    std::vector<std::string> typedList9 = {std::string("https://jsonplaceholder.typicode.com")};
+    glue.given_base_page_is(typedList9);
 
     std::vector<NewPostString> objectList10 = {
         NewPostString::from_vec({"AlignThree Demo", "Testing POST", "7"}),
@@ -82,10 +74,8 @@ TEST(API, Scenario_CreateANewPost) {
 
 TEST(API, Scenario_ReplaceAnExistingPost) {
     APIGlue glue;
-    std::vector<std::vector<std::string>> stringListList14 = {
-        {"https://jsonplaceholder.typicode.com"},
-    };
-    glue.given_base_page_is(stringListList14);
+    std::vector<std::string> typedList14 = {std::string("https://jsonplaceholder.typicode.com")};
+    glue.given_base_page_is(typedList14);
 
     std::vector<ReplacePostString> objectList15 = {
         ReplacePostString::from_vec({"1", "1", "Replaced Title", "Replaced Body"}),
@@ -111,10 +101,8 @@ TEST(API, Scenario_ReplaceAnExistingPost) {
 
 TEST(API, Scenario_UpdateAPostTitle) {
     APIGlue glue;
-    std::vector<std::vector<std::string>> stringListList19 = {
-        {"https://jsonplaceholder.typicode.com"},
-    };
-    glue.given_base_page_is(stringListList19);
+    std::vector<std::string> typedList19 = {std::string("https://jsonplaceholder.typicode.com")};
+    glue.given_base_page_is(typedList19);
 
     std::vector<PatchTitleString> objectList20 = {
         PatchTitleString::from_vec({"Patched Title"}),
@@ -140,10 +128,8 @@ TEST(API, Scenario_UpdateAPostTitle) {
 
 TEST(API, Scenario_DeleteAPost) {
     APIGlue glue;
-    std::vector<std::vector<std::string>> stringListList24 = {
-        {"https://jsonplaceholder.typicode.com"},
-    };
-    glue.given_base_page_is(stringListList24);
+    std::vector<std::string> typedList24 = {std::string("https://jsonplaceholder.typicode.com")};
+    glue.given_base_page_is(typedList24);
 
     std::vector<ApiRequestString> objectList25 = {
         ApiRequestString::from_vec({"DELETE", "posts", "1", ""}),
