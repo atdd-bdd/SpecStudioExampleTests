@@ -5,10 +5,8 @@ from api_glue import APIGlue
 def test_Scenario_RetrieveASinglePost():
     glue = APIGlue()
 
-    string_list_list_1 = [
-        ['https://jsonplaceholder.typicode.com'],
-    ]
-    glue.given_base_page_is(string_list_list_1)
+    typed_list_1 = ['https://jsonplaceholder.typicode.com']
+    glue.given_base_page_is(typed_list_1)
 
     object_list_2 = [
         ApiRequestString('GET', 'posts', '1', ''),
@@ -29,10 +27,8 @@ def test_Scenario_RetrieveASinglePost():
 def test_Scenario_RetrieveAllPosts():
     glue = APIGlue()
 
-    string_list_list_5 = [
-        ['https://jsonplaceholder.typicode.com'],
-    ]
-    glue.given_base_page_is(string_list_list_5)
+    typed_list_5 = ['https://jsonplaceholder.typicode.com']
+    glue.given_base_page_is(typed_list_5)
 
     object_list_6 = [
         ApiRequestString('GET', 'posts', '', ''),
@@ -44,19 +40,15 @@ def test_Scenario_RetrieveAllPosts():
     ]
     glue.then_response_status_is(object_list_7)
 
-    string_list_list_8 = [
-        ['100'],
-    ]
-    glue.then_response_array_contains_this_many_items(string_list_list_8)
+    typed_list_8 = [int('100')]
+    glue.then_response_array_contains_this_many_items(typed_list_8)
 
 
 def test_Scenario_CreateANewPost():
     glue = APIGlue()
 
-    string_list_list_9 = [
-        ['https://jsonplaceholder.typicode.com'],
-    ]
-    glue.given_base_page_is(string_list_list_9)
+    typed_list_9 = ['https://jsonplaceholder.typicode.com']
+    glue.given_base_page_is(typed_list_9)
 
     object_list_10 = [
         NewPostString('AlignThree Demo', 'Testing POST', '7'),
@@ -82,10 +74,8 @@ def test_Scenario_CreateANewPost():
 def test_Scenario_ReplaceAnExistingPost():
     glue = APIGlue()
 
-    string_list_list_14 = [
-        ['https://jsonplaceholder.typicode.com'],
-    ]
-    glue.given_base_page_is(string_list_list_14)
+    typed_list_14 = ['https://jsonplaceholder.typicode.com']
+    glue.given_base_page_is(typed_list_14)
 
     object_list_15 = [
         ReplacePostString('1', '1', 'Replaced Title', 'Replaced Body'),
@@ -111,10 +101,8 @@ def test_Scenario_ReplaceAnExistingPost():
 def test_Scenario_UpdateAPostTitle():
     glue = APIGlue()
 
-    string_list_list_19 = [
-        ['https://jsonplaceholder.typicode.com'],
-    ]
-    glue.given_base_page_is(string_list_list_19)
+    typed_list_19 = ['https://jsonplaceholder.typicode.com']
+    glue.given_base_page_is(typed_list_19)
 
     object_list_20 = [
         PatchTitleString('Patched Title'),
@@ -140,10 +128,8 @@ def test_Scenario_UpdateAPostTitle():
 def test_Scenario_DeleteAPost():
     glue = APIGlue()
 
-    string_list_list_24 = [
-        ['https://jsonplaceholder.typicode.com'],
-    ]
-    glue.given_base_page_is(string_list_list_24)
+    typed_list_24 = ['https://jsonplaceholder.typicode.com']
+    glue.given_base_page_is(typed_list_24)
 
     object_list_25 = [
         ApiRequestString('DELETE', 'posts', '1', ''),

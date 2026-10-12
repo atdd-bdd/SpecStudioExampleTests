@@ -15,13 +15,13 @@ class RecordFilterExampleGlue:
             typed = IDValueTyped.from_string_obj(value)
             self.record_filter.add(IDValue(IDForm(typed.id), typed.value))
 
-    def when_filtered_by_id_with_value(self, values: list):
-        if values and values[0]:
-            self.computed_sum = self.record_filter.sum_by_label(IDForm(values[0][0]))
+    def when_filtered_by_id_with_value(self, values: list[IDForm]):
+        if values:
+            self.computed_sum = self.record_filter.sum_by_label(values[0])
 
-    def then_sum_is(self, values: list):
-        if values and values[0]:
-            assert int(values[0][0]) == self.computed_sum, 'Sum'
+    def then_sum_is(self, values: list[int]):
+        if values:
+            assert values[0] == self.computed_sum, 'Sum'
 
     def when_filtered_by(self, values: list):
         for value in values:

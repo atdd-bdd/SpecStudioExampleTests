@@ -21,8 +21,8 @@ class AddressCorrectionGlue:
         self.base_url = ''
         self.response = None
 
-    def given_base_page_is(self, values: list):
-        self.base_url = values[0][0]
+    def given_base_page_is(self, values: list[str]):
+        self.base_url = values[0]
 
     def when_sending_request(self, values: list):
         request = values[0]

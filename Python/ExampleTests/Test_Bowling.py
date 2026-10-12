@@ -1,33 +1,26 @@
 import pytest
 from common import *
+from production.Pins import Pins
 from bowling_glue import BowlingGlue
 
 def test_Scenario_AddingARoll():
     glue = BowlingGlue()
 
-    string_list_list_1 = [
-        ['5', '5', '4', '5', '8', '2', '10', '0', '10', '10', '6', '2', '10', '4', '6', '10'],
-    ]
-    glue.given_rolls_are(string_list_list_1)
+    typed_list_1 = [Pins('5'), Pins('5'), Pins('4'), Pins('5'), Pins('8'), Pins('2'), Pins('10'), Pins('0'), Pins('10'), Pins('10'), Pins('6'), Pins('2'), Pins('10'), Pins('4'), Pins('6'), Pins('10')]
+    glue.given_rolls_are(typed_list_1)
 
-    string_list_list_2 = [
-        ['10'],
-    ]
-    glue.when_roll_is(string_list_list_2)
+    typed_list_2 = [Pins('10')]
+    glue.when_roll_is(typed_list_2)
 
-    string_list_list_3 = [
-        ['5', '5', '4', '5', '8', '2', '10', '0', '10', '10', '6', '2', '10', '4', '6', '10', '10'],
-    ]
-    glue.then_rolls_become(string_list_list_3)
+    typed_list_3 = [Pins('5'), Pins('5'), Pins('4'), Pins('5'), Pins('8'), Pins('2'), Pins('10'), Pins('0'), Pins('10'), Pins('10'), Pins('6'), Pins('2'), Pins('10'), Pins('4'), Pins('6'), Pins('10'), Pins('10')]
+    glue.then_rolls_become(typed_list_3)
 
 
 def test_Scenario_FullGameComputeAndDisplay():
     glue = BowlingGlue()
 
-    string_list_list_4 = [
-        ['5', '5', '4', '5', '8', '2', '10', '0', '10', '10', '6', '2', '10', '4', '6', '10', '10'],
-    ]
-    glue.given_rolls_are(string_list_list_4)
+    typed_list_4 = [Pins('5'), Pins('5'), Pins('4'), Pins('5'), Pins('8'), Pins('2'), Pins('10'), Pins('0'), Pins('10'), Pins('10'), Pins('6'), Pins('2'), Pins('10'), Pins('4'), Pins('6'), Pins('10'), Pins('10')]
+    glue.given_rolls_are(typed_list_4)
 
     glue.when_scored()
 
@@ -37,10 +30,8 @@ def test_Scenario_FullGameComputeAndDisplay():
 def test_Scenario_AGameInSteps():
     glue = BowlingGlue()
 
-    string_list_list_5 = [
-        ['5', '5', '4', '5', '8', '2', '10', '0', '10', '10', '6', '2', '10', '4', '6', '10', '10'],
-    ]
-    glue.given_rolls_are(string_list_list_5)
+    typed_list_5 = [Pins('5'), Pins('5'), Pins('4'), Pins('5'), Pins('8'), Pins('2'), Pins('10'), Pins('0'), Pins('10'), Pins('10'), Pins('6'), Pins('2'), Pins('10'), Pins('4'), Pins('6'), Pins('10'), Pins('10')]
+    glue.given_rolls_are(typed_list_5)
 
     glue.when_scored()
 
@@ -74,10 +65,8 @@ def test_Scenario_AGameInSteps():
     ]
     glue.then_display_values_are(object_list_7)
 
-    string_list_list_8 = [
-        ['false'],
-    ]
-    glue.then_game_complete_is(string_list_list_8)
+    typed_list_8 = ['false'.lower() in ('true', 't', 'yes', 'y', '1')]
+    glue.then_game_complete_is(typed_list_8)
 
     object_list_9 = [
         InputControlValuesString('10', '3', '10'),
@@ -88,26 +77,20 @@ def test_Scenario_AGameInSteps():
 def test_Scenario_CheckForGameComplete():
     glue = BowlingGlue()
 
-    string_list_list_10 = [
-        ['5', '5', '4', '5', '8', '2', '10', '0', '10', '10', '6', '2', '10', '4', '6', '10', '10', '10'],
-    ]
-    glue.given_rolls_are(string_list_list_10)
+    typed_list_10 = [Pins('5'), Pins('5'), Pins('4'), Pins('5'), Pins('8'), Pins('2'), Pins('10'), Pins('0'), Pins('10'), Pins('10'), Pins('6'), Pins('2'), Pins('10'), Pins('4'), Pins('6'), Pins('10'), Pins('10'), Pins('10')]
+    glue.given_rolls_are(typed_list_10)
 
     glue.when_scored()
 
-    string_list_list_11 = [
-        ['true'],
-    ]
-    glue.then_game_complete_is(string_list_list_11)
+    typed_list_11 = ['true'.lower() in ('true', 't', 'yes', 'y', '1')]
+    glue.then_game_complete_is(typed_list_11)
 
 
 def test_Scenario_ValuesForTenthFrame():
     glue = BowlingGlue()
 
-    string_list_list_12 = [
-        ['10', '10'],
-    ]
-    glue.given_rolls_for_tenth_frame_are(string_list_list_12)
+    typed_list_12 = [Pins('10'), Pins('10')]
+    glue.given_rolls_for_tenth_frame_are(typed_list_12)
 
     glue.when_scored()
 
@@ -120,10 +103,8 @@ def test_Scenario_ValuesForTenthFrame():
 def test_Scenario_InputControlShouldBeForNextFrame():
     glue = BowlingGlue()
 
-    string_list_list_14 = [
-        ['10'],
-    ]
-    glue.given_rolls_are(string_list_list_14)
+    typed_list_14 = [Pins('10')]
+    glue.given_rolls_are(typed_list_14)
 
     glue.when_scored()
 
@@ -136,22 +117,16 @@ def test_Scenario_InputControlShouldBeForNextFrame():
 def test_Scenario_TryToAddInvalidRoll():
     glue = BowlingGlue()
 
-    string_list_list_16 = [
-        ['5'],
-    ]
-    glue.given_rolls_are(string_list_list_16)
+    typed_list_16 = [Pins('5')]
+    glue.given_rolls_are(typed_list_16)
 
     glue.when_scored()
 
-    string_list_list_17 = [
-        ['6'],
-    ]
-    glue.when_roll_is(string_list_list_17)
+    typed_list_17 = [Pins('6')]
+    glue.when_roll_is(typed_list_17)
 
-    string_list_list_18 = [
-        ['5'],
-    ]
-    glue.then_rolls_become(string_list_list_18)
+    typed_list_18 = [Pins('5')]
+    glue.then_rolls_become(typed_list_18)
 
 
 # --- DataType Tests ---

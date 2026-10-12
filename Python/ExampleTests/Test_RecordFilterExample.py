@@ -1,5 +1,6 @@
 import pytest
 from common import *
+from production.IDForm import IDForm
 from record_filter_example_glue import RecordFilterExampleGlue
 
 def test_Scenario_FilterDataByID():
@@ -12,15 +13,11 @@ def test_Scenario_FilterDataByID():
     ]
     glue.given_list_of_numbers(object_list_1)
 
-    string_list_list_2 = [
-        ['Q1234'],
-    ]
-    glue.when_filtered_by_id_with_value(string_list_list_2)
+    typed_list_2 = [IDForm('Q1234')]
+    glue.when_filtered_by_id_with_value(typed_list_2)
 
-    string_list_list_3 = [
-        ['4'],
-    ]
-    glue.then_sum_is(string_list_list_3)
+    typed_list_3 = [int('4')]
+    glue.then_sum_is(typed_list_3)
 
 
 def test_Scenario_FilterDataAnotherWay():

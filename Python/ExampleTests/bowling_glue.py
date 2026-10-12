@@ -20,11 +20,11 @@ class BowlingGlue:
 
     # ---- given -----------------------------------------------------------
 
-    def given_rolls_are(self, values: list):
-        self.game.set_rolls(self._pin_counts(values))
+    def given_rolls_are(self, values: list[Pins]):
+        self.game.set_rolls(values)
 
-    def given_rolls_for_tenth_frame_are(self, values: list):
-        self.game.set_tenth_frame_rolls(self._pin_counts(values))
+    def given_rolls_for_tenth_frame_are(self, values: list[Pins]):
+        self.game.set_tenth_frame_rolls(values)
 
     def given_frame_values_are_as_previous(self):
         """The frame values from the previous step are still on the same game."""
@@ -32,21 +32,20 @@ class BowlingGlue:
 
     # ---- when ------------------------------------------------------------
 
-    def when_roll_is(self, values: list):
-        for pin_count in self._pin_counts(values):
-            self.game.add_roll(pin_count)
+    def when_roll_is(self, values: list[Pins]):
+        for roll in values:
+            self.game.add_roll(roll)
 
     def when_scored(self):
         self.game.score()
 
     # ---- then ------------------------------------------------------------
 
-    def then_rolls_become(self, values: list):
-        expected = self._pin_counts(values)
+    def then_rolls_become(self, values: list[Pins]):
         actual = self.game.rolls()
 
-        assert len(expected) == len(actual), 'number of rolls %s' % actual
-        for i, want in enumerate(expected):
+        assert len(values) == len(actual), 'number of rolls %s' % actual
+        for i, want in enumerate(values):
             assert want == actual[i], 'roll %d' % (i + 1)
 
     def then_display_is(self, value: str):
@@ -74,11 +73,9 @@ class BowlingGlue:
             self._assert_field(where + 'Mark3', expected.mark3, frame.mark3)
             self._assert_field(where + 'TotalScore', expected.total_score, frame.total_score)
 
-    def then_game_complete_is(self, values: list):
-        for row in values:
-            for expected in row:
-                assert expected.strip() == str(self.game.is_complete()).lower(), \
-                    'game complete'
+    def then_game_complete_is(self, values: list[bool]):
+        for expected in values:
+            assert expected == self.game.is_complete(), 'game complete'
 
     def then_input_control_is(self, values: list):
         for expected in values:
@@ -109,16 +106,6 @@ class BowlingGlue:
             assert self._is_true(value.is_valid) == (not error), ' Value ' + value.value
 
     # ---- helpers ---------------------------------------------------------
-
-    @staticmethod
-    def _pin_counts(values: list) -> list:
-        """Flattens the step's table into the pin counts it lists, in order."""
-        result = []
-        for row in values:
-            for cell in row:
-                if cell.strip():
-                    result.append(int(cell.strip()))
-        return result
 
     def _assert_frame_equals(self, expected):
         frame = self._numbered_frame(expected.frame)

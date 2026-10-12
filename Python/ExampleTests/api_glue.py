@@ -41,11 +41,10 @@ class APIGlue:
 
     # ---- given -----------------------------------------------------------
 
-    def given_base_page_is(self, values: list):
-        for row in values:
-            for cell in row:
-                if cell.strip():
-                    self.base_page = cell.strip()
+    def given_base_page_is(self, values: list[str]):
+        for value in values:
+            if value.strip():
+                self.base_page = value.strip()
         assert self.base_page, 'no base Page given'
 
     def given_new_post_data(self, values: list):
@@ -94,9 +93,9 @@ class APIGlue:
         for expected in values:
             _compare_post('', expected, actual)
 
-    def then_response_array_contains_this_many_items(self, values: list):
+    def then_response_array_contains_this_many_items(self, values: list[int]):
         assert self.call is not None, 'no request was sent'
-        expected = int(values[0][0].strip())
+        expected = values[0]
         items = PostTyped.from_json_list(self.call.body)
         assert expected == len(items), \
             'number of items returned by %s: expected %d but was %d' % (

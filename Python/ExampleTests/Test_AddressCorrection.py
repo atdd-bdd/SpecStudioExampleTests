@@ -5,10 +5,8 @@ from address_correction_glue import AddressCorrectionGlue
 def test_Scenario_StandardizeAnAddressThatIsAlreadyComplete():
     glue = AddressCorrectionGlue()
 
-    string_list_list_1 = [
-        ['https://geocoding.geo.census.gov'],
-    ]
-    glue.given_base_page_is(string_list_list_1)
+    typed_list_1 = ['https://geocoding.geo.census.gov']
+    glue.given_base_page_is(typed_list_1)
 
     object_list_2 = [
         RequestString('GET', 'geocoder/locations/onelineaddress', '1600 pennsylvania ave nw, washington, dc', 'Public_AR_Current', 'json'),
@@ -29,10 +27,8 @@ def test_Scenario_StandardizeAnAddressThatIsAlreadyComplete():
 def test_Scenario_CorrectASpelledOutOrdinal():
     glue = AddressCorrectionGlue()
 
-    string_list_list_5 = [
-        ['https://geocoding.geo.census.gov'],
-    ]
-    glue.given_base_page_is(string_list_list_5)
+    typed_list_5 = ['https://geocoding.geo.census.gov']
+    glue.given_base_page_is(typed_list_5)
 
     object_list_6 = [
         RequestString('GET', 'geocoder/locations/onelineaddress', '350 fifth ave, new york, ny', 'Public_AR_Current', 'json'),
@@ -53,10 +49,8 @@ def test_Scenario_CorrectASpelledOutOrdinal():
 def test_Scenario_ReturnEveryCandidateForAnAmbiguousAddress():
     glue = AddressCorrectionGlue()
 
-    string_list_list_9 = [
-        ['https://geocoding.geo.census.gov'],
-    ]
-    glue.given_base_page_is(string_list_list_9)
+    typed_list_9 = ['https://geocoding.geo.census.gov']
+    glue.given_base_page_is(typed_list_9)
 
     object_list_10 = [
         RequestString('GET', 'geocoder/locations/onelineaddress', '1600 pennsylvania ave, washington, dc', 'Public_AR_Current', 'json'),
@@ -78,10 +72,8 @@ def test_Scenario_ReturnEveryCandidateForAnAmbiguousAddress():
 def test_Scenario_ReportAnAddressThatCannotBeCorrected():
     glue = AddressCorrectionGlue()
 
-    string_list_list_13 = [
-        ['https://geocoding.geo.census.gov'],
-    ]
-    glue.given_base_page_is(string_list_list_13)
+    typed_list_13 = ['https://geocoding.geo.census.gov']
+    glue.given_base_page_is(typed_list_13)
 
     object_list_14 = [
         RequestString('GET', 'geocoder/locations/onelineaddress', '99999 nonexistent rd, nowhere, zz 00000', 'Public_AR_Current', 'json'),

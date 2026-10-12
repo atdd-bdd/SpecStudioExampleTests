@@ -72,6 +72,8 @@ class BowlingGame:
     FRAMES = 10
 
     def __init__(self):
+        # Pins, not int. A roll is the DataType the specification declares, so a
+        # count outside 0..10 cannot be constructed, let alone handed to the game.
         self._rolls = []
         # True when the game was seeded with the tenth frame's rolls alone, so
         # the tenth frame can be examined without bowling the nine before it.
@@ -82,27 +84,31 @@ class BowlingGame:
     def rolls(self) -> list:
         return list(self._rolls)
 
-    def set_rolls(self, pin_counts):
+    def set_rolls(self, pins: list):
         """Replaces the rolls outright. Setup, not play -- no validation."""
-        self._rolls = list(pin_counts)
+        self._rolls = list(pins)
         self._tenth_frame_only = False
 
-    def set_tenth_frame_rolls(self, pin_counts):
+    def set_tenth_frame_rolls(self, pins: list):
         """Seeds only the tenth frame; frames 1..9 are left unbowled."""
-        self._rolls = list(pin_counts)
+        self._rolls = list(pins)
         self._tenth_frame_only = True
 
-    def add_roll(self, pin_count: int) -> bool:
+    def add_roll(self, pins: Pins) -> bool:
         """Bowls one roll. Returns False and changes nothing when the roll is
         impossible -- more pins than are standing, or a game already over.
+
+        A count outside 0..10 cannot reach here: Pins refuses to hold one. What
+        is left to refuse is a roll that has not happened (TBR), a game already
+        over, and more pins than are standing.
         """
-        if pin_count < 0 or pin_count > Pins.MAX:
+        if pins is None or not pins.is_rolled():
             return False
         if self.is_complete():
             return False
-        if pin_count > self.input_control().remaining:
+        if pins.count() > self.input_control().remaining:
             return False
-        self._rolls.append(pin_count)
+        self._rolls.append(pins)
         return True
 
     def score(self):
@@ -267,14 +273,15 @@ class BowlingGame:
         index = 0
         for f in range(1, self.FRAMES):
             starts[f] = index
-            index += 1 if (index < len(self._rolls) and self._rolls[index] == Pins.MAX) else 2
+            index += 1 if (index < len(self._rolls)
+                           and self._rolls[index].is_strike()) else 2
         starts[self.FRAMES] = index
         return starts
 
     def _pins_at(self, index: int) -> Pins:
         if index < 0 or index >= len(self._rolls):
             return Pins.TBR
-        return Pins(self._rolls[index])
+        return self._rolls[index]
 
     def _all_rolled(self, start: int, count: int) -> bool:
         return all(self._pins_at(start + i).is_rolled() for i in range(count))
