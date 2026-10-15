@@ -31,9 +31,8 @@ export class APIGlue {
   // ---- given -----------------------------------------------------------
 
   givenBasePageIs(values) {
-    for (const row of values)
-      for (const cell of row)
-        if (cell.trim() !== "") this.#basePage = cell.trim();
+    for (const value of values)
+      if (value.trim() !== "") this.#basePage = value.trim();
 
     expect(this.#basePage).not.toBe("");
   }
@@ -96,7 +95,7 @@ export class APIGlue {
   thenResponseArrayContainsThisManyItems(values) {
     this.#requireCall();
 
-    const expected = Number(values[0][0].trim());
+    const expected = values[0];
     const items = PostTyped.fromJSONList(this.#call.body);
 
     expect(`items from ${this.#call.url}: ${items.length}`)

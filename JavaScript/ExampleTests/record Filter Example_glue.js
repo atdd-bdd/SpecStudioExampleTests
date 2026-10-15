@@ -20,14 +20,14 @@ export class RecordFilterExampleGlue {
   }
 
   whenFilteredByIDWithValue(values) {
-    if (values.length > 0 && values[0].length > 0) {
-      this.computedSum = this.recordFilter.sumByLabel(new IDForm(values[0][0]));
+    if (values.length > 0) {
+      this.computedSum = this.recordFilter.sumByLabel(values[0]);
     }
   }
 
   thenSumIs(values) {
-    if (values.length > 0 && values[0].length > 0) {
-      expect(this.computedSum).toBe(parseInt(String(values[0][0]).trim(), 10));
+    if (values.length > 0) {
+      expect(this.computedSum).toBe(values[0]);
     }
   }
 

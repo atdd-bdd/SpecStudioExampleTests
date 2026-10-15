@@ -20,7 +20,7 @@ export class AddressCorrectionGlue {
   #response;
 
   givenBasePageIs(values) {
-    this.#baseUrl = values[0][0];
+    this.#baseUrl = values[0];
   }
 
   whenSendingRequest(values) {

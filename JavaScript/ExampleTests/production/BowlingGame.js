@@ -75,6 +75,9 @@ export class InputControl {
  * hand rolls in and read values out.
  */
 export class BowlingGame {
+  // Pins, not a number. A roll is the DataType the specification declares,
+  // so a count outside 0..10 cannot be constructed, let alone handed to the
+  // game.
   #rolls = [];
 
   // True when the game was seeded with the tenth frame's rolls alone, so the
@@ -88,14 +91,14 @@ export class BowlingGame {
   }
 
   /** Replaces the rolls outright. Setup, not play -- no validation. */
-  setRolls(pinCounts) {
-    this.#rolls = [...pinCounts];
+  setRolls(pins) {
+    this.#rolls = [...pins];
     this.#tenthFrameOnly = false;
   }
 
   /** Seeds only the tenth frame; frames 1..9 are left unbowled. */
-  setTenthFrameRolls(pinCounts) {
-    this.#rolls = [...pinCounts];
+  setTenthFrameRolls(pins) {
+    this.#rolls = [...pins];
     this.#tenthFrameOnly = true;
   }
 
@@ -103,12 +106,15 @@ export class BowlingGame {
    * Bowls one roll. Returns false and changes nothing when the roll is
    * impossible -- more pins than are standing, or a game already over.
    */
-  addRoll(pinCount) {
-    if (pinCount < 0 || pinCount > Pins.MAX) return false;
+  addRoll(pins) {
+    // A count outside 0..10 cannot reach here: Pins refuses to hold one.
+    // What is left to refuse is a roll that has not happened (TBR), a game
+    // already over, and more pins than are standing.
+    if (!pins.isRolled()) return false;
     if (this.isComplete()) return false;
-    if (pinCount > this.inputControl().remaining) return false;
+    if (pins.count() > this.inputControl().remaining) return false;
 
-    this.#rolls.push(pinCount);
+    this.#rolls.push(pins);
     return true;
   }
 
@@ -285,7 +291,8 @@ export class BowlingGame {
     let index = 0;
     for (let f = 1; f < FRAMES; ++f) {
       starts[f] = index;
-      index += (index < this.#rolls.length && this.#rolls[index] === Pins.MAX) ? 1 : 2;
+      index += (index < this.#rolls.length
+                && this.#rolls[index].isStrike()) ? 1 : 2;
     }
     starts[FRAMES] = index;
     return starts;
@@ -293,7 +300,7 @@ export class BowlingGame {
 
   #pinsAt(index) {
     if (index < 0 || index >= this.#rolls.length) return Pins.TBR;
-    return new Pins(this.#rolls[index]);
+    return this.#rolls[index];
   }
 
   #allRolled(start, count) {

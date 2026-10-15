@@ -17,11 +17,11 @@ export class BowlingGlue {
   // ---- given -----------------------------------------------------------
 
   givenRollsAre(values) {
-    this.#game.setRolls(BowlingGlue.#pinCounts(values));
+    this.#game.setRolls(values);
   }
 
   givenRollsForTenthFrameAre(values) {
-    this.#game.setTenthFrameRolls(BowlingGlue.#pinCounts(values));
+    this.#game.setTenthFrameRolls(values);
   }
 
   /** The frame values from the previous step are still on the same game. */
@@ -32,8 +32,8 @@ export class BowlingGlue {
   // ---- when ------------------------------------------------------------
 
   whenRollIs(values) {
-    for (const pinCount of BowlingGlue.#pinCounts(values))
-      this.#game.addRoll(pinCount);
+    for (const roll of values)
+      this.#game.addRoll(roll);
   }
 
   whenScored() {
@@ -43,7 +43,7 @@ export class BowlingGlue {
   // ---- then ------------------------------------------------------------
 
   thenRollsBecome(values) {
-    expect(this.#game.rolls()).toEqual(BowlingGlue.#pinCounts(values));
+    expect(this.#game.rolls()).toEqual([...values]);
   }
 
   thenDisplayIs(value) {
@@ -80,9 +80,8 @@ export class BowlingGlue {
   }
 
   thenGameCompleteIs(values) {
-    for (const row of values)
-      for (const expected of row)
-        expect(String(this.#game.isComplete())).toBe(expected.trim());
+    for (const expected of values)
+      expect(this.#game.isComplete()).toBe(expected);
   }
 
   thenInputControlIs(values) {
@@ -120,13 +119,7 @@ export class BowlingGlue {
   // ---- helpers ---------------------------------------------------------
 
   /** Flattens the step's table into the pin counts it lists, in order. */
-  static #pinCounts(values) {
-    const result = [];
-    for (const row of values)
-      for (const cell of row)
-        if (cell.trim() !== "") result.push(Number(cell.trim()));
-    return result;
-  }
+
 
   #assertFrameEquals(expected) {
     const frame = this.#game.frames().find((f) => String(f.number) === expected.frame.trim());

@@ -5,10 +5,8 @@ describe("API", () => {
 
   test("Scenario Retrieve a single post", () => {
     const glue = new APIGlue();
-    const stringListList1 = [
-      ["https://jsonplaceholder.typicode.com"],
-    ];
-    glue.givenBasePageIs(stringListList1);
+    const typedList1 = ["https://jsonplaceholder.typicode.com"];
+    glue.givenBasePageIs(typedList1);
     const objectList2 = [
       new ApiRequestString("GET", "posts", "1", ""),
     ];
@@ -25,10 +23,8 @@ describe("API", () => {
 
   test("Scenario Retrieve all posts", () => {
     const glue = new APIGlue();
-    const stringListList5 = [
-      ["https://jsonplaceholder.typicode.com"],
-    ];
-    glue.givenBasePageIs(stringListList5);
+    const typedList5 = ["https://jsonplaceholder.typicode.com"];
+    glue.givenBasePageIs(typedList5);
     const objectList6 = [
       new ApiRequestString("GET", "posts", "", ""),
     ];
@@ -37,18 +33,14 @@ describe("API", () => {
       new ApiStatusString("200"),
     ];
     glue.thenResponseStatusIs(objectList7);
-    const stringListList8 = [
-      ["100"],
-    ];
-    glue.thenResponseArrayContainsThisManyItems(stringListList8);
+    const typedList8 = [parseInt("100", 10)];
+    glue.thenResponseArrayContainsThisManyItems(typedList8);
   });
 
   test("Scenario Create a new post", () => {
     const glue = new APIGlue();
-    const stringListList9 = [
-      ["https://jsonplaceholder.typicode.com"],
-    ];
-    glue.givenBasePageIs(stringListList9);
+    const typedList9 = ["https://jsonplaceholder.typicode.com"];
+    glue.givenBasePageIs(typedList9);
     const objectList10 = [
       new NewPostString("AlignThree Demo", "Testing POST", "7"),
     ];
@@ -69,10 +61,8 @@ describe("API", () => {
 
   test("Scenario Replace an existing post", () => {
     const glue = new APIGlue();
-    const stringListList14 = [
-      ["https://jsonplaceholder.typicode.com"],
-    ];
-    glue.givenBasePageIs(stringListList14);
+    const typedList14 = ["https://jsonplaceholder.typicode.com"];
+    glue.givenBasePageIs(typedList14);
     const objectList15 = [
       new ReplacePostString("1", "1", "Replaced Title", "Replaced Body"),
     ];
@@ -93,10 +83,8 @@ describe("API", () => {
 
   test("Scenario Update a post title", () => {
     const glue = new APIGlue();
-    const stringListList19 = [
-      ["https://jsonplaceholder.typicode.com"],
-    ];
-    glue.givenBasePageIs(stringListList19);
+    const typedList19 = ["https://jsonplaceholder.typicode.com"];
+    glue.givenBasePageIs(typedList19);
     const objectList20 = [
       new PatchTitleString("Patched Title"),
     ];
@@ -117,10 +105,8 @@ describe("API", () => {
 
   test("Scenario Delete a post", () => {
     const glue = new APIGlue();
-    const stringListList24 = [
-      ["https://jsonplaceholder.typicode.com"],
-    ];
-    glue.givenBasePageIs(stringListList24);
+    const typedList24 = ["https://jsonplaceholder.typicode.com"];
+    glue.givenBasePageIs(typedList24);
     const objectList25 = [
       new ApiRequestString("DELETE", "posts", "1", ""),
     ];
