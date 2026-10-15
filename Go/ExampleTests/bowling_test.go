@@ -65,10 +65,8 @@ func TestBowling_Scenario_AGameInSteps(t *testing.T) {
 		common.NewFrameDisplayStringFromSlice([]string{"10", "X", "X", "", ""}),
 	}
 	glue.ThenDisplayValuesAre(t, objectList7)
-	stringListList8 := [][]string{
-		{"false"},
-	}
-	glue.ThenGameCompleteIs(t, stringListList8)
+	typedList8 := []bool{false}
+	glue.ThenGameCompleteIs(t, typedList8)
 	objectList9 := []common.InputControlValuesString{
 		common.NewInputControlValuesStringFromSlice([]string{"10", "3", "10"}),
 	}
@@ -82,10 +80,8 @@ func TestBowling_Scenario_CheckForGameComplete(t *testing.T) {
 	}
 	glue.GivenRollsAre(t, stringListList10)
 	glue.WhenScored(t)
-	stringListList11 := [][]string{
-		{"true"},
-	}
-	glue.ThenGameCompleteIs(t, stringListList11)
+	typedList11 := []bool{true}
+	glue.ThenGameCompleteIs(t, typedList11)
 }
 
 func TestBowling_Scenario_ValuesForTenthFrame(t *testing.T) {

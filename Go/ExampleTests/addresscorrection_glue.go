@@ -24,8 +24,8 @@ type AddressCorrectionGlue struct {
 
 func NewAddressCorrectionGlue() *AddressCorrectionGlue { return &AddressCorrectionGlue{} }
 
-func (g *AddressCorrectionGlue) GivenBasePageIs(t *testing.T, values [][]string) {
-	g.baseURL = values[0][0]
+func (g *AddressCorrectionGlue) GivenBasePageIs(t *testing.T, values []string) {
+	g.baseURL = values[0]
 }
 
 func (g *AddressCorrectionGlue) WhenSendingRequest(t *testing.T, values []common.RequestString) {

@@ -103,14 +103,10 @@ func (g *BowlingGlue) ThenDisplayValuesAre(t *testing.T, values []common.FrameDi
 	}
 }
 
-func (g *BowlingGlue) ThenGameCompleteIs(t *testing.T, values [][]string) {
-	for _, row := range values {
-		for _, expected := range row {
-			got := strconv.FormatBool(g.game.IsComplete())
-			if strings.TrimSpace(expected) != got {
-				t.Errorf("game complete: expected %s but was %s",
-					strings.TrimSpace(expected), got)
-			}
+func (g *BowlingGlue) ThenGameCompleteIs(t *testing.T, values []bool) {
+	for _, expected := range values {
+		if got := g.game.IsComplete(); expected != got {
+			t.Errorf("game complete: expected %v but was %v", expected, got)
 		}
 	}
 }

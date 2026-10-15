@@ -7,10 +7,8 @@ import (
 
 func TestAddressCorrection_Scenario_StandardizeAnAddressThatIsAlreadyComplete(t *testing.T) {
 	glue := NewAddressCorrectionGlue()
-	stringListList1 := [][]string{
-		{"https://geocoding.geo.census.gov"},
-	}
-	glue.GivenBasePageIs(t, stringListList1)
+	typedList1 := []string{"https://geocoding.geo.census.gov"}
+	glue.GivenBasePageIs(t, typedList1)
 	objectList2 := []common.RequestString{
 		common.NewRequestStringFromSlice([]string{"GET", "geocoder/locations/onelineaddress", "1600 pennsylvania ave nw, washington, dc", "Public_AR_Current", "json"}),
 	}
@@ -27,10 +25,8 @@ func TestAddressCorrection_Scenario_StandardizeAnAddressThatIsAlreadyComplete(t 
 
 func TestAddressCorrection_Scenario_CorrectASpelledOutOrdinal(t *testing.T) {
 	glue := NewAddressCorrectionGlue()
-	stringListList5 := [][]string{
-		{"https://geocoding.geo.census.gov"},
-	}
-	glue.GivenBasePageIs(t, stringListList5)
+	typedList5 := []string{"https://geocoding.geo.census.gov"}
+	glue.GivenBasePageIs(t, typedList5)
 	objectList6 := []common.RequestString{
 		common.NewRequestStringFromSlice([]string{"GET", "geocoder/locations/onelineaddress", "350 fifth ave, new york, ny", "Public_AR_Current", "json"}),
 	}
@@ -47,10 +43,8 @@ func TestAddressCorrection_Scenario_CorrectASpelledOutOrdinal(t *testing.T) {
 
 func TestAddressCorrection_Scenario_ReturnEveryCandidateForAnAmbiguousAddress(t *testing.T) {
 	glue := NewAddressCorrectionGlue()
-	stringListList9 := [][]string{
-		{"https://geocoding.geo.census.gov"},
-	}
-	glue.GivenBasePageIs(t, stringListList9)
+	typedList9 := []string{"https://geocoding.geo.census.gov"}
+	glue.GivenBasePageIs(t, typedList9)
 	objectList10 := []common.RequestString{
 		common.NewRequestStringFromSlice([]string{"GET", "geocoder/locations/onelineaddress", "1600 pennsylvania ave, washington, dc", "Public_AR_Current", "json"}),
 	}
@@ -68,10 +62,8 @@ func TestAddressCorrection_Scenario_ReturnEveryCandidateForAnAmbiguousAddress(t 
 
 func TestAddressCorrection_Scenario_ReportAnAddressThatCannotBeCorrected(t *testing.T) {
 	glue := NewAddressCorrectionGlue()
-	stringListList13 := [][]string{
-		{"https://geocoding.geo.census.gov"},
-	}
-	glue.GivenBasePageIs(t, stringListList13)
+	typedList13 := []string{"https://geocoding.geo.census.gov"}
+	glue.GivenBasePageIs(t, typedList13)
 	objectList14 := []common.RequestString{
 		common.NewRequestStringFromSlice([]string{"GET", "geocoder/locations/onelineaddress", "99999 nonexistent rd, nowhere, zz 00000", "Public_AR_Current", "json"}),
 	}

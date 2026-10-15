@@ -17,10 +17,8 @@ func TestRecordFilterExample_Scenario_FilterDataByID(t *testing.T) {
 		{"Q1234"},
 	}
 	glue.WhenFilteredByIDWithValue(t, stringListList2)
-	stringListList3 := [][]string{
-		{"4"},
-	}
-	glue.ThenSumIs(t, stringListList3)
+	typedList3 := []int{4}
+	glue.ThenSumIs(t, typedList3)
 }
 
 func TestRecordFilterExample_Scenario_FilterDataAnotherWay(t *testing.T) {

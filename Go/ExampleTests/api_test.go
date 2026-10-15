@@ -7,10 +7,8 @@ import (
 
 func TestAPI_Scenario_RetrieveASinglePost(t *testing.T) {
 	glue := NewAPIGlue()
-	stringListList1 := [][]string{
-		{"https://jsonplaceholder.typicode.com"},
-	}
-	glue.GivenBasePageIs(t, stringListList1)
+	typedList1 := []string{"https://jsonplaceholder.typicode.com"}
+	glue.GivenBasePageIs(t, typedList1)
 	objectList2 := []common.ApiRequestString{
 		common.NewApiRequestStringFromSlice([]string{"GET", "posts", "1", ""}),
 	}
@@ -27,10 +25,8 @@ func TestAPI_Scenario_RetrieveASinglePost(t *testing.T) {
 
 func TestAPI_Scenario_RetrieveAllPosts(t *testing.T) {
 	glue := NewAPIGlue()
-	stringListList5 := [][]string{
-		{"https://jsonplaceholder.typicode.com"},
-	}
-	glue.GivenBasePageIs(t, stringListList5)
+	typedList5 := []string{"https://jsonplaceholder.typicode.com"}
+	glue.GivenBasePageIs(t, typedList5)
 	objectList6 := []common.ApiRequestString{
 		common.NewApiRequestStringFromSlice([]string{"GET", "posts", "", ""}),
 	}
@@ -39,18 +35,14 @@ func TestAPI_Scenario_RetrieveAllPosts(t *testing.T) {
 		common.NewApiStatusStringFromSlice([]string{"200"}),
 	}
 	glue.ThenResponseStatusIs(t, objectList7)
-	stringListList8 := [][]string{
-		{"100"},
-	}
-	glue.ThenResponseArrayContainsThisManyItems(t, stringListList8)
+	typedList8 := []int{100}
+	glue.ThenResponseArrayContainsThisManyItems(t, typedList8)
 }
 
 func TestAPI_Scenario_CreateANewPost(t *testing.T) {
 	glue := NewAPIGlue()
-	stringListList9 := [][]string{
-		{"https://jsonplaceholder.typicode.com"},
-	}
-	glue.GivenBasePageIs(t, stringListList9)
+	typedList9 := []string{"https://jsonplaceholder.typicode.com"}
+	glue.GivenBasePageIs(t, typedList9)
 	objectList10 := []common.NewPostString{
 		common.NewNewPostStringFromSlice([]string{"AlignThree Demo", "Testing POST", "7"}),
 	}
@@ -71,10 +63,8 @@ func TestAPI_Scenario_CreateANewPost(t *testing.T) {
 
 func TestAPI_Scenario_ReplaceAnExistingPost(t *testing.T) {
 	glue := NewAPIGlue()
-	stringListList14 := [][]string{
-		{"https://jsonplaceholder.typicode.com"},
-	}
-	glue.GivenBasePageIs(t, stringListList14)
+	typedList14 := []string{"https://jsonplaceholder.typicode.com"}
+	glue.GivenBasePageIs(t, typedList14)
 	objectList15 := []common.ReplacePostString{
 		common.NewReplacePostStringFromSlice([]string{"1", "1", "Replaced Title", "Replaced Body"}),
 	}
@@ -95,10 +85,8 @@ func TestAPI_Scenario_ReplaceAnExistingPost(t *testing.T) {
 
 func TestAPI_Scenario_UpdateAPostTitle(t *testing.T) {
 	glue := NewAPIGlue()
-	stringListList19 := [][]string{
-		{"https://jsonplaceholder.typicode.com"},
-	}
-	glue.GivenBasePageIs(t, stringListList19)
+	typedList19 := []string{"https://jsonplaceholder.typicode.com"}
+	glue.GivenBasePageIs(t, typedList19)
 	objectList20 := []common.PatchTitleString{
 		common.NewPatchTitleStringFromSlice([]string{"Patched Title"}),
 	}
@@ -119,10 +107,8 @@ func TestAPI_Scenario_UpdateAPostTitle(t *testing.T) {
 
 func TestAPI_Scenario_DeleteAPost(t *testing.T) {
 	glue := NewAPIGlue()
-	stringListList24 := [][]string{
-		{"https://jsonplaceholder.typicode.com"},
-	}
-	glue.GivenBasePageIs(t, stringListList24)
+	typedList24 := []string{"https://jsonplaceholder.typicode.com"}
+	glue.GivenBasePageIs(t, typedList24)
 	objectList25 := []common.ApiRequestString{
 		common.NewApiRequestStringFromSlice([]string{"DELETE", "posts", "1", ""}),
 	}

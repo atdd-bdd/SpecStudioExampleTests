@@ -1,7 +1,6 @@
 package exampletests
 
 import (
-	"strconv"
 	"strings"
 	"testing"
 	"exampletests/common"
@@ -34,12 +33,10 @@ func NewAPIGlue() *APIGlue {
 
 // ---- given -----------------------------------------------------------------
 
-func (g *APIGlue) GivenBasePageIs(t *testing.T, values [][]string) {
-	for _, row := range values {
-		for _, cell := range row {
-			if strings.TrimSpace(cell) != "" {
-				g.basePage = strings.TrimSpace(cell)
-			}
+func (g *APIGlue) GivenBasePageIs(t *testing.T, values []string) {
+	for _, value := range values {
+		if strings.TrimSpace(value) != "" {
+			g.basePage = strings.TrimSpace(value)
 		}
 	}
 	if g.basePage == "" {
@@ -129,13 +126,10 @@ func (g *APIGlue) ThenResponseBodyIs(t *testing.T, values []common.PostString) {
 	}
 }
 
-func (g *APIGlue) ThenResponseArrayContainsThisManyItems(t *testing.T, values [][]string) {
+func (g *APIGlue) ThenResponseArrayContainsThisManyItems(t *testing.T, values []int) {
 	g.requireCall(t)
 
-	expected, err := strconv.Atoi(strings.TrimSpace(values[0][0]))
-	if err != nil {
-		t.Fatalf("not a count: %s", values[0][0])
-	}
+	expected := values[0]
 	items, err := common.PostTypedFromJSONList(g.call.Body)
 	if err != nil {
 		t.Fatal(err)

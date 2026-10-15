@@ -1,8 +1,6 @@
 package exampletests
 
 import (
-	"strconv"
-	"strings"
 	"testing"
 	"exampletests/common"
 	"exampletests/production"
@@ -39,14 +37,10 @@ func (g *RecordFilterExampleGlue) WhenFilteredByIDWithValue(t *testing.T, values
 	}
 }
 
-func (g *RecordFilterExampleGlue) ThenSumIs(t *testing.T, values [][]string) {
-	if len(values) > 0 && len(values[0]) > 0 {
-		expected, err := strconv.Atoi(strings.TrimSpace(values[0][0]))
-		if err != nil {
-			t.Fatalf("not a number: %s", values[0][0])
-		}
-		if expected != g.computedSum {
-			t.Errorf("Sum: expected %d, got %d", expected, g.computedSum)
+func (g *RecordFilterExampleGlue) ThenSumIs(t *testing.T, values []int) {
+	if len(values) > 0 {
+		if values[0] != g.computedSum {
+			t.Errorf("Sum: expected %d, got %d", values[0], g.computedSum)
 		}
 	}
 }
