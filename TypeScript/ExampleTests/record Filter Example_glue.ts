@@ -16,15 +16,15 @@ export class RecordFilterExampleGlue {
     });
   }
 
-  whenFilteredByIDWithValue(values: readonly (readonly string[])[]): void {
-    if (values.length > 0 && values[0]!.length > 0) {
-      this.computedSum = this.recordFilter.sumByLabel(new IDForm(values[0]![0]!));
+  whenFilteredByIDWithValue(values: readonly IDForm[]): void {
+    if (values.length > 0) {
+      this.computedSum = this.recordFilter.sumByLabel(values[0]!);
     }
   }
 
-  thenSumIs(values: readonly (readonly string[])[]): void {
-    if (values.length > 0 && values[0]!.length > 0) {
-      expect(this.computedSum).toBe(parseInt(String(values[0]![0]).trim(), 10));
+  thenSumIs(values: readonly number[]): void {
+    if (values.length > 0) {
+      expect(this.computedSum).toBe(values[0]!);
     }
   }
 

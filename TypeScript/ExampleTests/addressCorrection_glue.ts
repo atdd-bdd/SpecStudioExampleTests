@@ -20,8 +20,8 @@ export class AddressCorrectionGlue {
   #baseUrl = "";
   #response: RestCall | undefined;
 
-  givenBasePageIs(values: readonly (readonly string[])[]): void {
-    this.#baseUrl = values[0][0];
+  givenBasePageIs(values: readonly string[]): void {
+    this.#baseUrl = values[0]!;
   }
 
   whenSendingRequest(values: readonly RequestString[]): void {

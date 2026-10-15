@@ -75,7 +75,9 @@ export class InputControl {
  * hand rolls in and read values out.
  */
 export class BowlingGame {
-  private rollsMade: number[] = [];
+  // Pins, not number. A roll is the DataType the specification declares, so
+  // a count outside 0..10 cannot be constructed, let alone handed to the game.
+  private rollsMade: Pins[] = [];
 
   // True when the game was seeded with the tenth frame's rolls alone, so the
   // tenth frame can be examined without bowling the nine before it. The earlier
@@ -83,19 +85,19 @@ export class BowlingGame {
   // total -- stay TBS.
   private tenthFrameOnly = false;
 
-  rolls(): number[] {
+  rolls(): Pins[] {
     return [...this.rollsMade];
   }
 
   /** Replaces the rolls outright. Setup, not play -- no validation. */
-  setRolls(pinCounts: readonly number[]): void {
-    this.rollsMade = [...pinCounts];
+  setRolls(pins: readonly Pins[]): void {
+    this.rollsMade = [...pins];
     this.tenthFrameOnly = false;
   }
 
   /** Seeds only the tenth frame; frames 1..9 are left unbowled. */
-  setTenthFrameRolls(pinCounts: readonly number[]): void {
-    this.rollsMade = [...pinCounts];
+  setTenthFrameRolls(pins: readonly Pins[]): void {
+    this.rollsMade = [...pins];
     this.tenthFrameOnly = true;
   }
 
@@ -103,12 +105,15 @@ export class BowlingGame {
    * Bowls one roll. Returns false and changes nothing when the roll is
    * impossible -- more pins than are standing, or a game already over.
    */
-  addRoll(pinCount: number): boolean {
-    if (pinCount < 0 || pinCount > Pins.MAX) return false;
+  addRoll(pins: Pins): boolean {
+    // A count outside 0..10 cannot reach here: Pins refuses to hold one.
+    // What is left to refuse is a roll that has not happened (TBR), a game
+    // already over, and more pins than are standing.
+    if (!pins.isRolled()) return false;
     if (this.isComplete()) return false;
-    if (pinCount > this.inputControl().remaining) return false;
+    if (pins.count() > this.inputControl().remaining) return false;
 
-    this.rollsMade.push(pinCount);
+    this.rollsMade.push(pins);
     return true;
   }
 
@@ -285,7 +290,8 @@ export class BowlingGame {
     let index = 0;
     for (let f = 1; f < FRAMES; ++f) {
       starts[f] = index;
-      index += (index < this.rollsMade.length && this.rollsMade[index] === Pins.MAX) ? 1 : 2;
+      index += (index < this.rollsMade.length
+                && this.rollsMade[index]!.isStrike()) ? 1 : 2;
     }
     starts[FRAMES] = index;
     return starts;
@@ -293,7 +299,7 @@ export class BowlingGame {
 
   private pinsAt(index: number): Pins {
     if (index < 0 || index >= this.rollsMade.length) return Pins.TBR;
-    return new Pins(this.rollsMade[index]);
+    return this.rollsMade[index]!;
   }
 
   private allRolled(start: number, count: number): boolean {

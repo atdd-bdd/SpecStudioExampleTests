@@ -1,40 +1,31 @@
 import { AdderString, CartInputString, DiscountInputString, FandCString, FrameDisplayString, FrameValuesString, InputControlValuesString, ShippingInputString, ValidValuesString } from "./common/index.js";
+import { Pins } from "./production/index.js";
 import { BowlingGlue } from "./bowling_glue.js";
 
 describe("Bowling", () => {
 
   test("Scenario Adding a roll", () => {
     const glue = new BowlingGlue();
-    const stringListList1: string[][] = [
-      ["5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10"],
-    ];
-    glue.givenRollsAre(stringListList1);
-    const stringListList2: string[][] = [
-      ["10"],
-    ];
-    glue.whenRollIs(stringListList2);
-    const stringListList3: string[][] = [
-      ["5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10"],
-    ];
-    glue.thenRollsBecome(stringListList3);
+    const typedList1: Pins[] = [new Pins("5"), new Pins("5"), new Pins("4"), new Pins("5"), new Pins("8"), new Pins("2"), new Pins("10"), new Pins("0"), new Pins("10"), new Pins("10"), new Pins("6"), new Pins("2"), new Pins("10"), new Pins("4"), new Pins("6"), new Pins("10")];
+    glue.givenRollsAre(typedList1);
+    const typedList2: Pins[] = [new Pins("10")];
+    glue.whenRollIs(typedList2);
+    const typedList3: Pins[] = [new Pins("5"), new Pins("5"), new Pins("4"), new Pins("5"), new Pins("8"), new Pins("2"), new Pins("10"), new Pins("0"), new Pins("10"), new Pins("10"), new Pins("6"), new Pins("2"), new Pins("10"), new Pins("4"), new Pins("6"), new Pins("10"), new Pins("10")];
+    glue.thenRollsBecome(typedList3);
   });
 
   test("Scenario Full Game Compute and Display", () => {
     const glue = new BowlingGlue();
-    const stringListList4: string[][] = [
-      ["5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10"],
-    ];
-    glue.givenRollsAre(stringListList4);
+    const typedList4: Pins[] = [new Pins("5"), new Pins("5"), new Pins("4"), new Pins("5"), new Pins("8"), new Pins("2"), new Pins("10"), new Pins("0"), new Pins("10"), new Pins("10"), new Pins("6"), new Pins("2"), new Pins("10"), new Pins("4"), new Pins("6"), new Pins("10"), new Pins("10")];
+    glue.givenRollsAre(typedList4);
     glue.whenScored();
     glue.thenDisplayIs("| 5/ | 45 | 8/ | X  | -/ | X   | 62  | X   | 4/  | XX |\n| 14 | 23 | 43 | 63 | 83 | 101 | 109 | 129 | 149 |    |");
   });
 
   test("Scenario A Game in Steps", () => {
     const glue = new BowlingGlue();
-    const stringListList5: string[][] = [
-      ["5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10"],
-    ];
-    glue.givenRollsAre(stringListList5);
+    const typedList5: Pins[] = [new Pins("5"), new Pins("5"), new Pins("4"), new Pins("5"), new Pins("8"), new Pins("2"), new Pins("10"), new Pins("0"), new Pins("10"), new Pins("10"), new Pins("6"), new Pins("2"), new Pins("10"), new Pins("4"), new Pins("6"), new Pins("10"), new Pins("10")];
+    glue.givenRollsAre(typedList5);
     glue.whenScored();
     const objectList6: FrameValuesString[] = [
       new FrameValuesString("1", "5", "5", "4", "14", "14"),
@@ -63,10 +54,8 @@ describe("Bowling", () => {
       new FrameDisplayString("10", "X", "X", "", ""),
     ];
     glue.thenDisplayValuesAre(objectList7);
-    const stringListList8: string[][] = [
-      ["false"],
-    ];
-    glue.thenGameCompleteIs(stringListList8);
+    const typedList8: boolean[] = [["true", "yes", "y", "1"].includes("false".trim().toLowerCase())];
+    glue.thenGameCompleteIs(typedList8);
     const objectList9: InputControlValuesString[] = [
       new InputControlValuesString("10", "3", "10"),
     ];
@@ -75,23 +64,17 @@ describe("Bowling", () => {
 
   test("Scenario Check for Game Complete", () => {
     const glue = new BowlingGlue();
-    const stringListList10: string[][] = [
-      ["5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10", "10"],
-    ];
-    glue.givenRollsAre(stringListList10);
+    const typedList10: Pins[] = [new Pins("5"), new Pins("5"), new Pins("4"), new Pins("5"), new Pins("8"), new Pins("2"), new Pins("10"), new Pins("0"), new Pins("10"), new Pins("10"), new Pins("6"), new Pins("2"), new Pins("10"), new Pins("4"), new Pins("6"), new Pins("10"), new Pins("10"), new Pins("10")];
+    glue.givenRollsAre(typedList10);
     glue.whenScored();
-    const stringListList11: string[][] = [
-      ["true"],
-    ];
-    glue.thenGameCompleteIs(stringListList11);
+    const typedList11: boolean[] = [["true", "yes", "y", "1"].includes("true".trim().toLowerCase())];
+    glue.thenGameCompleteIs(typedList11);
   });
 
   test("Scenario Values for Tenth Frame", () => {
     const glue = new BowlingGlue();
-    const stringListList12: string[][] = [
-      ["10", "10"],
-    ];
-    glue.givenRollsForTenthFrameAre(stringListList12);
+    const typedList12: Pins[] = [new Pins("10"), new Pins("10")];
+    glue.givenRollsForTenthFrameAre(typedList12);
     glue.whenScored();
     const objectList13: FrameValuesString[] = [
       new FrameValuesString("10", "10", "10", "-1", "-1", "-1"),
@@ -101,10 +84,8 @@ describe("Bowling", () => {
 
   test("Scenario Input Control Should Be For Next Frame", () => {
     const glue = new BowlingGlue();
-    const stringListList14: string[][] = [
-      ["10"],
-    ];
-    glue.givenRollsAre(stringListList14);
+    const typedList14: Pins[] = [new Pins("10")];
+    glue.givenRollsAre(typedList14);
     glue.whenScored();
     const objectList15: InputControlValuesString[] = [
       new InputControlValuesString("2", "1", "10"),
@@ -114,19 +95,13 @@ describe("Bowling", () => {
 
   test("Scenario Try to add invalid roll", () => {
     const glue = new BowlingGlue();
-    const stringListList16: string[][] = [
-      ["5"],
-    ];
-    glue.givenRollsAre(stringListList16);
+    const typedList16: Pins[] = [new Pins("5")];
+    glue.givenRollsAre(typedList16);
     glue.whenScored();
-    const stringListList17: string[][] = [
-      ["6"],
-    ];
-    glue.whenRollIs(stringListList17);
-    const stringListList18: string[][] = [
-      ["5"],
-    ];
-    glue.thenRollsBecome(stringListList18);
+    const typedList17: Pins[] = [new Pins("6")];
+    glue.whenRollIs(typedList17);
+    const typedList18: Pins[] = [new Pins("5")];
+    glue.thenRollsBecome(typedList18);
   });
 
   test("DataType Pins", () => {

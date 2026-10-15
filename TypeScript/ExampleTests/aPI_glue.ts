@@ -30,10 +30,9 @@ export class APIGlue {
 
   // ---- given -----------------------------------------------------------
 
-  givenBasePageIs(values: readonly (readonly string[])[]): void {
-    for (const row of values)
-      for (const cell of row)
-        if (cell.trim() !== "") this.basePage = cell.trim();
+  givenBasePageIs(values: readonly string[]): void {
+    for (const value of values)
+      if (value.trim() !== "") this.basePage = value.trim();
 
     expect(this.basePage).not.toBe("");
   }
@@ -93,10 +92,10 @@ export class APIGlue {
     for (const expected of values) comparePost("", expected, actual);
   }
 
-  thenResponseArrayContainsThisManyItems(values: readonly (readonly string[])[]): void {
+  thenResponseArrayContainsThisManyItems(values: readonly number[]): void {
     const call = this.requireCall();
 
-    const expected = Number(values[0][0].trim());
+    const expected = values[0]!;
     const items = PostTyped.fromJSONList(call.body);
 
     expect(`items from ${call.url}: ${items.length}`)

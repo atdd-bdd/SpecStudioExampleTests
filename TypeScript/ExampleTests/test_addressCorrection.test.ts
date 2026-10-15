@@ -5,10 +5,8 @@ describe("AddressCorrection", () => {
 
   test("Scenario Standardize an address that is already complete", () => {
     const glue = new AddressCorrectionGlue();
-    const stringListList1: string[][] = [
-      ["https://geocoding.geo.census.gov"],
-    ];
-    glue.givenBasePageIs(stringListList1);
+    const typedList1: string[] = ["https://geocoding.geo.census.gov"];
+    glue.givenBasePageIs(typedList1);
     const objectList2: RequestString[] = [
       new RequestString("GET", "geocoder/locations/onelineaddress", "1600 pennsylvania ave nw, washington, dc", "Public_AR_Current", "json"),
     ];
@@ -25,10 +23,8 @@ describe("AddressCorrection", () => {
 
   test("Scenario Correct a spelled out ordinal", () => {
     const glue = new AddressCorrectionGlue();
-    const stringListList5: string[][] = [
-      ["https://geocoding.geo.census.gov"],
-    ];
-    glue.givenBasePageIs(stringListList5);
+    const typedList5: string[] = ["https://geocoding.geo.census.gov"];
+    glue.givenBasePageIs(typedList5);
     const objectList6: RequestString[] = [
       new RequestString("GET", "geocoder/locations/onelineaddress", "350 fifth ave, new york, ny", "Public_AR_Current", "json"),
     ];
@@ -45,10 +41,8 @@ describe("AddressCorrection", () => {
 
   test("Scenario Return every candidate for an ambiguous address", () => {
     const glue = new AddressCorrectionGlue();
-    const stringListList9: string[][] = [
-      ["https://geocoding.geo.census.gov"],
-    ];
-    glue.givenBasePageIs(stringListList9);
+    const typedList9: string[] = ["https://geocoding.geo.census.gov"];
+    glue.givenBasePageIs(typedList9);
     const objectList10: RequestString[] = [
       new RequestString("GET", "geocoder/locations/onelineaddress", "1600 pennsylvania ave, washington, dc", "Public_AR_Current", "json"),
     ];
@@ -66,10 +60,8 @@ describe("AddressCorrection", () => {
 
   test("Scenario Report an address that cannot be corrected", () => {
     const glue = new AddressCorrectionGlue();
-    const stringListList13: string[][] = [
-      ["https://geocoding.geo.census.gov"],
-    ];
-    glue.givenBasePageIs(stringListList13);
+    const typedList13: string[] = ["https://geocoding.geo.census.gov"];
+    glue.givenBasePageIs(typedList13);
     const objectList14: RequestString[] = [
       new RequestString("GET", "geocoder/locations/onelineaddress", "99999 nonexistent rd, nowhere, zz 00000", "Public_AR_Current", "json"),
     ];

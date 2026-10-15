@@ -17,12 +17,12 @@ export class BowlingGlue {
 
   // ---- given -----------------------------------------------------------
 
-  givenRollsAre(values: readonly (readonly string[])[]): void {
-    this.game.setRolls(BowlingGlue.pinCounts(values));
+  givenRollsAre(values: readonly Pins[]): void {
+    this.game.setRolls(values);
   }
 
-  givenRollsForTenthFrameAre(values: readonly (readonly string[])[]): void {
-    this.game.setTenthFrameRolls(BowlingGlue.pinCounts(values));
+  givenRollsForTenthFrameAre(values: readonly Pins[]): void {
+    this.game.setTenthFrameRolls(values);
   }
 
   /** The frame values from the previous step are still on the same game. */
@@ -32,9 +32,9 @@ export class BowlingGlue {
 
   // ---- when ------------------------------------------------------------
 
-  whenRollIs(values: readonly (readonly string[])[]): void {
-    for (const pinCount of BowlingGlue.pinCounts(values))
-      this.game.addRoll(pinCount);
+  whenRollIs(values: readonly Pins[]): void {
+    for (const roll of values)
+      this.game.addRoll(roll);
   }
 
   whenScored(): void {
@@ -43,8 +43,8 @@ export class BowlingGlue {
 
   // ---- then ------------------------------------------------------------
 
-  thenRollsBecome(values: readonly (readonly string[])[]): void {
-    expect(this.game.rolls()).toEqual(BowlingGlue.pinCounts(values));
+  thenRollsBecome(values: readonly Pins[]): void {
+    expect(this.game.rolls()).toEqual([...values]);
   }
 
   thenDisplayIs(value: string): void {
@@ -81,10 +81,9 @@ export class BowlingGlue {
     }
   }
 
-  thenGameCompleteIs(values: readonly (readonly string[])[]): void {
-    for (const row of values)
-      for (const expected of row)
-        expect(String(this.game.isComplete())).toBe(expected.trim());
+  thenGameCompleteIs(values: readonly boolean[]): void {
+    for (const expected of values)
+      expect(this.game.isComplete()).toBe(expected);
   }
 
   thenInputControlIs(values: readonly InputControlValuesString[]): void {
@@ -121,14 +120,6 @@ export class BowlingGlue {
 
   // ---- helpers ---------------------------------------------------------
 
-  /** Flattens the step's table into the pin counts it lists, in order. */
-  private static pinCounts(values: readonly (readonly string[])[]): number[] {
-    const result: number[] = [];
-    for (const row of values)
-      for (const cell of row)
-        if (cell.trim() !== "") result.push(Number(cell.trim()));
-    return result;
-  }
 
   private assertFrameEquals(expected: FrameValuesString): void {
     const frame = this.game.frames().find((f) => String(f.number) === expected.frame.trim());
