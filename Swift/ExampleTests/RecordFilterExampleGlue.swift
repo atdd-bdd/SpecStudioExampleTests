@@ -23,9 +23,8 @@ public class RecordFilterExampleGlue {
         computedSum = recordFilter.sumByLabel(id)
     }
 
-    public func thenSumIs(_ values: [[String]]) {
-        guard let first = values.first?.first,
-              let expected = Int(first.trimmingCharacters(in: .whitespaces)) else { return }
+    public func thenSumIs(_ values: [Int]) {
+        guard let expected = values.first else { return }
         XCTAssertEqual(expected, computedSum, "Sum")
     }
 

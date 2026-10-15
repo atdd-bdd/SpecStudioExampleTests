@@ -4,9 +4,7 @@ final class AddressCorrectionTests: XCTestCase {
 
     func testStandardizeAnAddressThatIsAlreadyComplete() {
         let glue = AddressCorrectionGlue()
-        glue.givenBasePageIs([
-            ["https://geocoding.geo.census.gov"],
-        ])
+        glue.givenBasePageIs(["https://geocoding.geo.census.gov"])
         glue.whenSendingRequest([
             RequestString(fromArray: ["GET", "geocoder/locations/onelineaddress", "1600 pennsylvania ave nw, washington, dc", "Public_AR_Current", "json"]),
         ])
@@ -20,9 +18,7 @@ final class AddressCorrectionTests: XCTestCase {
 
     func testCorrectASpelledOutOrdinal() {
         let glue = AddressCorrectionGlue()
-        glue.givenBasePageIs([
-            ["https://geocoding.geo.census.gov"],
-        ])
+        glue.givenBasePageIs(["https://geocoding.geo.census.gov"])
         glue.whenSendingRequest([
             RequestString(fromArray: ["GET", "geocoder/locations/onelineaddress", "350 fifth ave, new york, ny", "Public_AR_Current", "json"]),
         ])
@@ -36,9 +32,7 @@ final class AddressCorrectionTests: XCTestCase {
 
     func testReturnEveryCandidateForAnAmbiguousAddress() {
         let glue = AddressCorrectionGlue()
-        glue.givenBasePageIs([
-            ["https://geocoding.geo.census.gov"],
-        ])
+        glue.givenBasePageIs(["https://geocoding.geo.census.gov"])
         glue.whenSendingRequest([
             RequestString(fromArray: ["GET", "geocoder/locations/onelineaddress", "1600 pennsylvania ave, washington, dc", "Public_AR_Current", "json"]),
         ])
@@ -53,9 +47,7 @@ final class AddressCorrectionTests: XCTestCase {
 
     func testReportAnAddressThatCannotBeCorrected() {
         let glue = AddressCorrectionGlue()
-        glue.givenBasePageIs([
-            ["https://geocoding.geo.census.gov"],
-        ])
+        glue.givenBasePageIs(["https://geocoding.geo.census.gov"])
         glue.whenSendingRequest([
             RequestString(fromArray: ["GET", "geocoder/locations/onelineaddress", "99999 nonexistent rd, nowhere, zz 00000", "Public_AR_Current", "json"]),
         ])

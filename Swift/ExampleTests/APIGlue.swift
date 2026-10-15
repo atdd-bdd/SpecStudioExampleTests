@@ -28,11 +28,9 @@ public class APIGlue {
 
     // ---- given --------------------------------------------------------------
 
-    public func givenBasePageIs(_ values: [[String]]) {
-        for row in values {
-            for cell in row where !cell.trimmed.isEmpty {
-                basePage = cell.trimmed
-            }
+    public func givenBasePageIs(_ values: [String]) {
+        for value in values where !value.trimmed.isEmpty {
+            basePage = value.trimmed
         }
         XCTAssertFalse(basePage.isEmpty, "no base Page given")
     }
@@ -106,12 +104,10 @@ public class APIGlue {
         }
     }
 
-    public func thenResponseArrayContainsThisManyItems(_ values: [[String]]) {
+    public func thenResponseArrayContainsThisManyItems(_ values: [Int]) {
         guard let call = call else { return XCTFail("no request was sent") }
 
-        guard let expected = Int(values[0][0].trimmed) else {
-            return XCTFail("not a count: \(values[0][0])")
-        }
+        let expected = values[0]
         do {
             let items = try PostTyped.fromJSONList(call.body)
             XCTAssertEqual(items.count, expected,

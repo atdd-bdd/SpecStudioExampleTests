@@ -83,11 +83,9 @@ public class BowlingGlue {
         }
     }
 
-    public func thenGameCompleteIs(_ values: [[String]]) {
-        for row in values {
-            for expected in row {
-                XCTAssertEqual(expected.trimmed, String(game.isComplete()), "game complete")
-            }
+    public func thenGameCompleteIs(_ values: [Bool]) {
+        for expected in values {
+            XCTAssertEqual(expected, game.isComplete(), "game complete")
         }
     }
 

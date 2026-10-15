@@ -4,9 +4,7 @@ final class APITests: XCTestCase {
 
     func testRetrieveASinglePost() {
         let glue = APIGlue()
-        glue.givenBasePageIs([
-            ["https://jsonplaceholder.typicode.com"],
-        ])
+        glue.givenBasePageIs(["https://jsonplaceholder.typicode.com"])
         glue.whenSendingRequest([
             ApiRequestString(fromArray: ["GET", "posts", "1", ""]),
         ])
@@ -20,25 +18,19 @@ final class APITests: XCTestCase {
 
     func testRetrieveAllPosts() {
         let glue = APIGlue()
-        glue.givenBasePageIs([
-            ["https://jsonplaceholder.typicode.com"],
-        ])
+        glue.givenBasePageIs(["https://jsonplaceholder.typicode.com"])
         glue.whenSendingRequest([
             ApiRequestString(fromArray: ["GET", "posts", "", ""]),
         ])
         glue.thenResponseStatusIs([
             ApiStatusString(fromArray: ["200"]),
         ])
-        glue.thenResponseArrayContainsThisManyItems([
-            ["100"],
-        ])
+        glue.thenResponseArrayContainsThisManyItems([100])
     }
 
     func testCreateANewPost() {
         let glue = APIGlue()
-        glue.givenBasePageIs([
-            ["https://jsonplaceholder.typicode.com"],
-        ])
+        glue.givenBasePageIs(["https://jsonplaceholder.typicode.com"])
         glue.givenNewPostData([
             NewPostString(fromArray: ["AlignThree Demo", "Testing POST", "7"]),
         ])
@@ -55,9 +47,7 @@ final class APITests: XCTestCase {
 
     func testReplaceAnExistingPost() {
         let glue = APIGlue()
-        glue.givenBasePageIs([
-            ["https://jsonplaceholder.typicode.com"],
-        ])
+        glue.givenBasePageIs(["https://jsonplaceholder.typicode.com"])
         glue.givenReplacementData([
             ReplacePostString(fromArray: ["1", "1", "Replaced Title", "Replaced Body"]),
         ])
@@ -74,9 +64,7 @@ final class APITests: XCTestCase {
 
     func testUpdateAPostTitle() {
         let glue = APIGlue()
-        glue.givenBasePageIs([
-            ["https://jsonplaceholder.typicode.com"],
-        ])
+        glue.givenBasePageIs(["https://jsonplaceholder.typicode.com"])
         glue.givenPatchData([
             PatchTitleString(fromArray: ["Patched Title"]),
         ])
@@ -93,9 +81,7 @@ final class APITests: XCTestCase {
 
     func testDeleteAPost() {
         let glue = APIGlue()
-        glue.givenBasePageIs([
-            ["https://jsonplaceholder.typicode.com"],
-        ])
+        glue.givenBasePageIs(["https://jsonplaceholder.typicode.com"])
         glue.whenSendingRequest([
             ApiRequestString(fromArray: ["DELETE", "posts", "1", ""]),
         ])

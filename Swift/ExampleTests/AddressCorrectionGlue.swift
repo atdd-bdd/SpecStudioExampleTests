@@ -17,8 +17,8 @@ public class AddressCorrectionGlue {
 
     public init() {}
 
-    public func givenBasePageIs(_ values: [[String]]) {
-        baseUrl = values[0][0]
+    public func givenBasePageIs(_ values: [String]) {
+        baseUrl = values[0]
     }
 
     public func whenSendingRequest(_ values: [RequestString]) {

@@ -55,9 +55,7 @@ final class BowlingTests: XCTestCase {
             FrameDisplayString(fromArray: ["9", "4", "/", "", "149"]),
             FrameDisplayString(fromArray: ["10", "X", "X", "", ""]),
         ])
-        glue.thenGameCompleteIs([
-            ["false"],
-        ])
+        glue.thenGameCompleteIs([false])
         glue.thenInputControlIs([
             InputControlValuesString(fromArray: ["10", "3", "10"]),
         ])
@@ -69,9 +67,7 @@ final class BowlingTests: XCTestCase {
             ["5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10", "10"],
         ])
         glue.whenScored()
-        glue.thenGameCompleteIs([
-            ["true"],
-        ])
+        glue.thenGameCompleteIs([true])
     }
 
     func testValuesForTenthFrame() {

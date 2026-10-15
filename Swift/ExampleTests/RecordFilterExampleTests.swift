@@ -12,9 +12,7 @@ final class RecordFilterExampleTests: XCTestCase {
         glue.whenFilteredByIdWithValue([
             ["Q1234"],
         ])
-        glue.thenSumIs([
-            ["4"],
-        ])
+        glue.thenSumIs([4])
     }
 
     func testFilterDataAnotherWay() {
