@@ -16,9 +16,7 @@ fn scenario_filter_data_by_id() {
     glue.when_filtered_by_id_with_value(&[
         vec!["Q1234".to_string()],
     ]);
-    glue.then_sum_is(&[
-        vec!["4".to_string()],
-    ]);
+    glue.then_sum_is(&[4]);
 }
 
 #[test]

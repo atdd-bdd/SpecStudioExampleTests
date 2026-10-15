@@ -61,9 +61,7 @@ fn scenario_a_game_in_steps() {
         FrameDisplayString::from_vec(&["9", "4", "/", "", "149"]),
         FrameDisplayString::from_vec(&["10", "X", "X", "", ""]),
     ]);
-    glue.then_game_complete_is(&[
-        vec!["false".to_string()],
-    ]);
+    glue.then_game_complete_is(&[false]);
     glue.then_input_control_is(&[InputControlValuesString::from_vec(&["10", "3", "10"])]);
 }
 
@@ -74,9 +72,7 @@ fn scenario_check_for_game_complete() {
         vec!["5".to_string(), "5".to_string(), "4".to_string(), "5".to_string(), "8".to_string(), "2".to_string(), "10".to_string(), "0".to_string(), "10".to_string(), "10".to_string(), "6".to_string(), "2".to_string(), "10".to_string(), "4".to_string(), "6".to_string(), "10".to_string(), "10".to_string(), "10".to_string()],
     ]);
     glue.when_scored();
-    glue.then_game_complete_is(&[
-        vec!["true".to_string()],
-    ]);
+    glue.then_game_complete_is(&[true]);
 }
 
 #[test]

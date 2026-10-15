@@ -23,8 +23,8 @@ impl AddressCorrectionGlue {
         Self { base_url: String::new(), response: None }
     }
 
-    pub fn given_base_page_is(&mut self, values: &[Vec<String>]) {
-        self.base_url = values[0][0].clone();
+    pub fn given_base_page_is(&mut self, values: &[String]) {
+        self.base_url = values[0].clone();
     }
 
     pub fn when_sending_request(&mut self, values: &[RequestString]) {

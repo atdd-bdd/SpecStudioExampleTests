@@ -1,8 +1,8 @@
 #![allow(non_snake_case, unused_imports, dead_code)]
 
 pub mod address;
-pub mod bowlinggame;
 pub mod addresscomponents;
+pub mod bowlinggame;
 pub mod calculator;
 pub mod catalog;
 pub mod catalogitem;
@@ -22,8 +22,8 @@ pub mod simple_json;
 pub mod simpletext;
 pub mod temperature_converter;
 pub use address::*;
-pub use bowlinggame::*;
 pub use addresscomponents::*;
+pub use bowlinggame::*;
 pub use calculator::*;
 pub use catalog::*;
 pub use catalogitem::*;

@@ -35,12 +35,10 @@ impl APIGlue {
 
     // ---- given -------------------------------------------------------------
 
-    pub fn given_base_page_is(&mut self, values: &[Vec<String>]) {
-        for row in values {
-            for cell in row {
-                if !cell.trim().is_empty() {
-                    self.base_page = cell.trim().to_string();
-                }
+    pub fn given_base_page_is(&mut self, values: &[String]) {
+        for value in values {
+            if !value.trim().is_empty() {
+                self.base_page = value.trim().to_string();
             }
         }
         assert!(!self.base_page.is_empty(), "no base Page given");
@@ -115,10 +113,10 @@ impl APIGlue {
         }
     }
 
-    pub fn then_response_array_contains_this_many_items(&mut self, values: &[Vec<String>]) {
+    pub fn then_response_array_contains_this_many_items(&mut self, values: &[i32]) {
         let call = self.call.as_ref().expect("no request was sent");
 
-        let expected: usize = values[0][0].trim().parse().expect("a count");
+        let expected = values[0] as usize;
         let items = PostTyped::from_json_list(&call.body).expect("an array of Post");
 
         assert_eq!(items.len(), expected,

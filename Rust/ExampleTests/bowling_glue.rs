@@ -92,12 +92,9 @@ impl BowlingGlue {
         }
     }
 
-    pub fn then_game_complete_is(&mut self, values: &[Vec<String>]) {
-        for row in values {
-            for expected in row {
-                assert_eq!(expected.trim(), self.game.is_complete().to_string(),
-                           "game complete");
-            }
+    pub fn then_game_complete_is(&mut self, values: &[bool]) {
+        for expected in values {
+            assert_eq!(*expected, self.game.is_complete(), "game complete");
         }
     }
 

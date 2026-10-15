@@ -29,10 +29,9 @@ impl RecordFilterExampleGlue {
         }
     }
 
-    pub fn then_sum_is(&mut self, values: &[Vec<String>]) {
-        if let Some(first) = values.first().and_then(|r| r.first()) {
-            let expected: i32 = first.trim().parse().expect("not a number");
-            assert_eq!(expected, self.computed_sum, "Sum");
+    pub fn then_sum_is(&mut self, values: &[i32]) {
+        if let Some(expected) = values.first() {
+            assert_eq!(*expected, self.computed_sum, "Sum");
         }
     }
 
