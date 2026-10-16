@@ -1,13 +1,13 @@
 package common
 
 type IDValueString struct {
-	ID string
+	ID IDFormString
 	Value string
 }
 
 func NewIDValueStringFromSlice(v []string) IDValueString {
 	s := IDValueString{}
-	if len(v) > 0 { s.ID = v[0] }
+	if len(v) > 0 { s.ID = IDFormString(v[0]) }
 	if len(v) > 1 { s.Value = v[1] }
 	return s
 }
@@ -16,17 +16,17 @@ func NewIDValueStringFromSlice(v []string) IDValueString {
 func NewIDValueStringFromText(text string) IDValueString {
 	parts := RequireTokens(text, 2, "IDValue")
 	return IDValueString{
-		ID: parts[0],
+		ID: IDFormString(parts[0]),
 		Value: parts[1],
 	}
 }
 
 func (s IDValueString) String() string {
-	return Token(s.ID) + " " + Token(s.Value)
+	return Token(string(s.ID)) + " " + Token(s.Value)
 }
 
 func (s IDValueString) Equals(o IDValueString) bool {
-	return DNCEqual(s.ID, o.ID) &&
+	return DNCEqual(string(s.ID), string(o.ID)) &&
 		DNCEqual(s.Value, o.Value)
 }
 

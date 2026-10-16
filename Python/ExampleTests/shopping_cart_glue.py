@@ -20,7 +20,7 @@ class ShoppingCartGlue:
     def given_catalog_has(self, values: list):
         for value in values:
             typed = CatalogItemTyped.from_string_obj(value)
-            self.catalog.add(CatalogItem(SimpleText(typed.name), Dollar(typed.price)))
+            self.catalog.add(CatalogItem(typed.name.get(), typed.price.get()))
 
     def given_item_collection_is(self, values: list):
         self.given_item_collection(values)
@@ -30,18 +30,18 @@ class ShoppingCartGlue:
         for value in values:
             typed = OrderItemTyped.from_string_obj(value)
             self.current_items.add(OrderItem(
-                SimpleText(typed.name), typed.quantity,
-                Dollar(typed.price), Dollar(typed.item_total)))
+                typed.name.get(), typed.quantity,
+                typed.price.get(), typed.item_total.get()))
 
     def when_item_added(self, values: list):
         for value in values:
             typed = OrderItemTyped.from_string_obj(value)
             self.current_items.add(
-                OrderItem.from_catalog(self.catalog, SimpleText(typed.name), typed.quantity))
+                OrderItem.from_catalog(self.catalog, typed.name.get(), typed.quantity))
 
     def then_item_collection_is(self, values: list):
         expected = [
-            OrderItem(SimpleText(t.name), t.quantity, Dollar(t.price), Dollar(t.item_total))
+            OrderItem(t.name.get(), t.quantity, t.price.get(), t.item_total.get())
             for t in (OrderItemTyped.from_string_obj(v) for v in values)
         ]
         actual = self.current_items.read()
@@ -67,9 +67,9 @@ class ShoppingCartGlue:
             cart = self._cart()
             # Shipping and Discount are outcomes of the two business rules, not
             # the values the Given supplied, so ask the cart for them.
-            assert Dollar(typed.total_price) == cart.compute_total(), 'TotalPrice'
-            assert Dollar(typed.shipping) == cart.shipping_cost(), 'Shipping'
-            assert Dollar(typed.discount) == cart.discount_amount(), 'Discount'
+            assert typed.total_price.get() == cart.compute_total(), 'TotalPrice'
+            assert typed.shipping.get() == cart.shipping_cost(), 'Shipping'
+            assert typed.discount.get() == cart.discount_amount(), 'Discount'
 
     def when_total_computed(self):
         self.computed_total = self.current_items.compute_total()
@@ -78,15 +78,15 @@ class ShoppingCartGlue:
     def examples_BusinessRule_ShippingCost(self, values: list):
         for value in values:
             typed = ShippingInputTyped.from_string_obj(value)
-            actual = ShoppingCart.shipping_cost_for(Dollar(typed.total_price))
-            assert Dollar(typed.shipping_cost) == actual, \
+            actual = ShoppingCart.shipping_cost_for(typed.total_price.get())
+            assert typed.shipping_cost.get() == actual, \
                 f'Shipping cost for {typed.total_price}'
 
     def examples_BusinessRule_Discount(self, values: list):
         for value in values:
             typed = DiscountInputTyped.from_string_obj(value)
-            actual = ShoppingCart.discount_for(Dollar(typed.total_price))
-            assert Percentage(typed.discount) == actual, \
+            actual = ShoppingCart.discount_for(typed.total_price.get())
+            assert typed.discount.get() == actual, \
                 f'Discount for {typed.total_price}'
 
     def examples_DataType_Percentage(self, values: list):
@@ -103,14 +103,14 @@ class ShoppingCartGlue:
     def then_total_of_items_is(self, values: list):
         for value in values:
             typed = ItemPriceInputTyped.from_string_obj(value)
-            assert Dollar(typed.total_items) == self.current_items.compute_total(),                 'TotalItems'
+            assert typed.total_items.get() == self.current_items.compute_total(),                 'TotalItems'
 
     def examples_BusinessRule_TotalCartPrice(self, values: list):
         for value in values:
             typed = CartInputTyped.from_string_obj(value)
             # The rule states the whole calculation from an item total, so drive
             # it that way rather than building a cart to reach the same numbers.
-            total_items = Dollar(typed.total_items)
-            assert Dollar(typed.discount) == ShoppingCart.discount_amount_for(total_items),                 f'Discount for {typed.total_items}'
-            assert Dollar(typed.shipping) == ShoppingCart.shipping_for(total_items),                 f'Shipping for {typed.total_items}'
-            assert Dollar(typed.total_price) == ShoppingCart.total_price_for(total_items),                 f'Total Price for {typed.total_items}'
+            total_items = typed.total_items.get()
+            assert typed.discount.get() == ShoppingCart.discount_amount_for(total_items),                 f'Discount for {typed.total_items}'
+            assert typed.shipping.get() == ShoppingCart.shipping_for(total_items),                 f'Shipping for {typed.total_items}'
+            assert typed.total_price.get() == ShoppingCart.total_price_for(total_items),                 f'Total Price for {typed.total_items}'

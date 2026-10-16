@@ -48,10 +48,10 @@ export class OrderItemTyped {
 
   static fromJsonValue(m) {
     return new OrderItemTyped(
-      new SimpleText(_json.asString(_json.require(m, "name"), "name")),
+      _json.asString(_json.require(m, "name"), "name"),
       _json.asInt(_json.require(m, "quantity"), "quantity"),
-      new Dollar(_json.asString(_json.require(m, "price"), "price")),
-      new Dollar(_json.asString(_json.require(m, "itemTotal"), "itemTotal"))
+      _json.asString(_json.require(m, "price"), "price"),
+      _json.asString(_json.require(m, "itemTotal"), "itemTotal")
     );
   }
 

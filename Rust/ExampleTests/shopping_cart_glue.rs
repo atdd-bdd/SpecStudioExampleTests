@@ -27,8 +27,8 @@ impl ShoppingCartGlue {
         for value in values {
             let typed = CatalogItemTyped::from_str_struct(value);
             self.catalog.add(CatalogItem::new(
-                SimpleText::new(&typed.name),
-                Dollar::parse(&typed.price).expect("bad price")));
+                SimpleText::new(typed.name.get()),
+                Dollar::parse(typed.price.get()).expect("bad price")));
         }
     }
 
@@ -41,10 +41,10 @@ impl ShoppingCartGlue {
         for value in values {
             let typed = OrderItemTyped::from_str_struct(value);
             self.current_items.add(OrderItem::new(
-                SimpleText::new(&typed.name),
+                SimpleText::new(typed.name.get()),
                 typed.quantity,
-                Dollar::parse(&typed.price).expect("bad price"),
-                Dollar::parse(&typed.itemtotal).expect("bad total")));
+                Dollar::parse(typed.price.get()).expect("bad price"),
+                Dollar::parse(typed.itemtotal.get()).expect("bad total")));
         }
     }
 
@@ -52,7 +52,7 @@ impl ShoppingCartGlue {
         for value in values {
             let typed = OrderItemTyped::from_str_struct(value);
             let item = OrderItem::from_catalog(
-                &self.catalog, SimpleText::new(&typed.name), typed.quantity)
+                &self.catalog, SimpleText::new(typed.name.get()), typed.quantity)
                 .expect("item not in catalog");
             self.current_items.add(item);
         }
@@ -64,10 +64,10 @@ impl ShoppingCartGlue {
         for (i, value) in values.iter().enumerate() {
             let typed = OrderItemTyped::from_str_struct(value);
             let a = &actual[i];
-            assert_eq!(typed.name, a.name.value, "Item {i} name");
+            assert_eq!(typed.name.get(), a.name.value, "Item {i} name");
             assert_eq!(typed.quantity, a.quantity, "Item {i} quantity");
-            assert_eq!(Dollar::parse(&typed.price).unwrap(), a.price, "Item {i} price");
-            assert_eq!(Dollar::parse(&typed.itemtotal).unwrap(), a.item_total,
+            assert_eq!(Dollar::parse(typed.price.get()).unwrap(), a.price, "Item {i} price");
+            assert_eq!(Dollar::parse(typed.itemtotal.get()).unwrap(), a.item_total,
                        "Item {i} itemTotal");
         }
     }
@@ -84,11 +84,11 @@ impl ShoppingCartGlue {
             let cart = self.cart();
             // Shipping and Discount are outcomes of the two business rules, not
             // the values the Given supplied, so ask the cart for them.
-            assert_eq!(Dollar::parse(&typed.totalprice).unwrap(), cart.compute_total(),
+            assert_eq!(Dollar::parse(typed.totalprice.get()).unwrap(), cart.compute_total(),
                        "TotalPrice");
-            assert_eq!(Dollar::parse(&typed.shipping).unwrap(), cart.shipping_cost(),
+            assert_eq!(Dollar::parse(typed.shipping.get()).unwrap(), cart.shipping_cost(),
                        "Shipping");
-            assert_eq!(Dollar::parse(&typed.discount).unwrap(), cart.discount_amount(),
+            assert_eq!(Dollar::parse(typed.discount.get()).unwrap(), cart.discount_amount(),
                        "Discount");
         }
     }
@@ -101,8 +101,8 @@ impl ShoppingCartGlue {
     pub fn examples_business_rule_shipping_cost(&mut self, values: &[ShippingInputString]) {
         for value in values {
             let typed = ShippingInputTyped::from_str_struct(value);
-            let total = Dollar::parse(&typed.total_price).expect("bad total");
-            assert_eq!(Dollar::parse(&typed.shipping_cost).unwrap(),
+            let total = Dollar::parse(typed.total_price.get()).expect("bad total");
+            assert_eq!(Dollar::parse(typed.shipping_cost.get()).unwrap(),
                        ShoppingCart::shipping_cost_for(&total),
                        "Shipping cost for {}", typed.total_price);
         }
@@ -111,8 +111,8 @@ impl ShoppingCartGlue {
     pub fn examples_business_rule_discount(&mut self, values: &[DiscountInputString]) {
         for value in values {
             let typed = DiscountInputTyped::from_str_struct(value);
-            let total = Dollar::parse(&typed.total_price).expect("bad total");
-            assert_eq!(Percentage::parse(&typed.discount).unwrap(),
+            let total = Dollar::parse(typed.total_price.get()).expect("bad total");
+            assert_eq!(Percentage::parse(typed.discount.get()).unwrap(),
                        ShoppingCart::discount_for(&total),
                        "Discount for {}", typed.total_price);
         }
@@ -129,7 +129,7 @@ impl ShoppingCartGlue {
     pub fn then_total_of_items_is(&mut self, values: &[ItemPriceInputString]) {
         for value in values {
             let typed = ItemPriceInputTyped::from_str_struct(value);
-            assert_eq!(Dollar::parse(&typed.totalitems).unwrap(),
+            assert_eq!(Dollar::parse(typed.totalitems.get()).unwrap(),
                        self.current_items.compute_total(), "TotalItems");
         }
     }
@@ -139,14 +139,14 @@ impl ShoppingCartGlue {
             let typed = CartInputTyped::from_str_struct(value);
             // The rule states the whole calculation from an item total, so drive
             // it that way rather than building a cart to reach the same numbers.
-            let total = Dollar::parse(&typed.totalitems).expect("bad total");
-            assert_eq!(Dollar::parse(&typed.discount).unwrap(),
+            let total = Dollar::parse(typed.totalitems.get()).expect("bad total");
+            assert_eq!(Dollar::parse(typed.discount.get()).unwrap(),
                        ShoppingCart::discount_amount_for(&total),
                        "Discount for {}", typed.totalitems);
-            assert_eq!(Dollar::parse(&typed.shipping).unwrap(),
+            assert_eq!(Dollar::parse(typed.shipping.get()).unwrap(),
                        ShoppingCart::shipping_for(&total),
                        "Shipping for {}", typed.totalitems);
-            assert_eq!(Dollar::parse(&typed.total_price).unwrap(),
+            assert_eq!(Dollar::parse(typed.total_price.get()).unwrap(),
                        ShoppingCart::total_price_for(&total),
                        "Total Price for {}", typed.totalitems);
         }

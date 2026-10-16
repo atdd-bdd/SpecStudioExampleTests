@@ -10,12 +10,12 @@ import records.*;
 import calculator.*;
 
 public class AddressTyped {
-    public SimpleText street;
-    public SimpleText city;
-    public SimpleText state;
-    public SimpleText zIP;
+    public SimpleTextTyped street;
+    public SimpleTextTyped city;
+    public SimpleTextTyped state;
+    public SimpleTextTyped zIP;
 
-    public AddressTyped(SimpleText street, SimpleText city, SimpleText state, SimpleText zIP) {
+    public AddressTyped(SimpleTextTyped street, SimpleTextTyped city, SimpleTextTyped state, SimpleTextTyped zIP) {
         this.street = street;
         this.city = city;
         this.state = state;
@@ -23,10 +23,10 @@ public class AddressTyped {
     }
 
     public AddressTyped(AddressString s) {
-        this.street = new SimpleText(s.street);
-        this.city = new SimpleText(s.city);
-        this.state = new SimpleText(s.state);
-        this.zIP = new SimpleText(s.zIP);
+        this.street = new SimpleTextTyped(s.street);
+        this.city = new SimpleTextTyped(s.city);
+        this.state = new SimpleTextTyped(s.state);
+        this.zIP = new SimpleTextTyped(s.zIP);
     }
 
     @Override
@@ -77,10 +77,10 @@ public class AddressTyped {
     public static AddressTyped fromJsonValue(Map<String, Object> m) {
         if (m == null) return null;
         return new AddressTyped(
-            new SimpleText(Json.asString(Json.require(m, "street"), "street")),
-            new SimpleText(Json.asString(Json.require(m, "city"), "city")),
-            new SimpleText(Json.asString(Json.require(m, "state"), "state")),
-            new SimpleText(Json.asString(Json.require(m, "zIP"), "zIP")));
+            new SimpleTextTyped(new SimpleTextString(Json.asString(Json.require(m, "street"), "street"))),
+            new SimpleTextTyped(new SimpleTextString(Json.asString(Json.require(m, "city"), "city"))),
+            new SimpleTextTyped(new SimpleTextString(Json.asString(Json.require(m, "state"), "state"))),
+            new SimpleTextTyped(new SimpleTextString(Json.asString(Json.require(m, "zIP"), "zIP"))));
     }
 
     public static AddressTyped fromJSON(String json) {

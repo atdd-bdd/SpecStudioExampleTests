@@ -10,14 +10,14 @@ import records.*;
 import calculator.*;
 
 public class ItemPriceInputTyped {
-    public Dollar totalItems;
+    public DollarTyped totalItems;
 
-    public ItemPriceInputTyped(Dollar totalItems) {
+    public ItemPriceInputTyped(DollarTyped totalItems) {
         this.totalItems = totalItems;
     }
 
     public ItemPriceInputTyped(ItemPriceInputString s) {
-        this.totalItems = new Dollar(s.totalItems);
+        this.totalItems = new DollarTyped(s.totalItems);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class ItemPriceInputTyped {
     public static ItemPriceInputTyped fromJsonValue(Map<String, Object> m) {
         if (m == null) return null;
         return new ItemPriceInputTyped(
-            new Dollar(Json.asString(Json.require(m, "totalItems"), "totalItems")));
+            new DollarTyped(new DollarString(Json.asString(Json.require(m, "totalItems"), "totalItems"))));
     }
 
     public static ItemPriceInputTyped fromJSON(String json) {

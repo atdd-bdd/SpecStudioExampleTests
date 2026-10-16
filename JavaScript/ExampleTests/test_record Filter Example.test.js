@@ -1,5 +1,4 @@
 import { AdderString, CartInputString, DiscountInputString, FandCString, FilterValueString, IDValueString, ResultValueString, ShippingInputString, ValidValuesString } from "./common/index.js";
-import { IDForm } from "./production/index.js";
 import { RecordFilterExampleGlue } from "./record Filter Example_glue.js";
 
 describe("Record Filter Example", () => {
@@ -12,7 +11,7 @@ describe("Record Filter Example", () => {
       new IDValueString("Q1234", "3"),
     ];
     glue.givenListOfNumbers(objectList1);
-    const typedList2 = [new IDForm("Q1234")];
+    const typedList2 = ["Q1234"];
     glue.whenFilteredByIDWithValue(typedList2);
     const typedList3 = [parseInt("4", 10)];
     glue.thenSumIs(typedList3);

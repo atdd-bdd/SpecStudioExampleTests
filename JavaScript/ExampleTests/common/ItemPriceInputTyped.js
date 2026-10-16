@@ -36,7 +36,7 @@ export class ItemPriceInputTyped {
 
   static fromJsonValue(m) {
     return new ItemPriceInputTyped(
-      new Dollar(_json.asString(_json.require(m, "totalItems"), "totalItems"))
+      _json.asString(_json.require(m, "totalItems"), "totalItems")
     );
   }
 

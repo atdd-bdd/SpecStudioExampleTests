@@ -1,10 +1,10 @@
 public struct AddressTyped: Equatable, CustomStringConvertible {
-    public let street: String
-    public let city: String
-    public let state: String
-    public let zIP: String
+    public let street: SimpleTextTyped
+    public let city: SimpleTextTyped
+    public let state: SimpleTextTyped
+    public let zIP: SimpleTextTyped
 
-    public init(street: String, city: String, state: String, zIP: String) {
+    public init(street: SimpleTextTyped, city: SimpleTextTyped, state: SimpleTextTyped, zIP: SimpleTextTyped) {
         self.street = street
         self.city = city
         self.state = state
@@ -12,18 +12,18 @@ public struct AddressTyped: Equatable, CustomStringConvertible {
     }
 
     public init(from s: AddressString) {
-        self.street = s.street
-        self.city = s.city
-        self.state = s.state
-        self.zIP = s.zIP
+        self.street = SimpleTextTyped(from: s.street)
+        self.city = SimpleTextTyped(from: s.city)
+        self.state = SimpleTextTyped(from: s.state)
+        self.zIP = SimpleTextTyped(from: s.zIP)
     }
 
     public func toStringStruct() -> AddressString {
         return AddressString(
-            street: String(describing: street),
-            city: String(describing: city),
-            state: String(describing: state),
-            zIP: String(describing: zIP)
+            street: street.toSimpleTextString(),
+            city: city.toSimpleTextString(),
+            state: state.toSimpleTextString(),
+            zIP: zIP.toSimpleTextString()
         )
     }
 
@@ -37,10 +37,10 @@ public struct AddressTyped: Equatable, CustomStringConvertible {
 
     public func toJSONValue() -> [String: Any] {
         return [
-            "street": street,
-            "city": city,
-            "state": state,
-            "zIP": zIP,
+            "street": street.text,
+            "city": city.text,
+            "state": state.text,
+            "zIP": zIP.text,
         ]
     }
 
@@ -49,10 +49,10 @@ public struct AddressTyped: Equatable, CustomStringConvertible {
     }
 
     public init(fromJSONValue m: [String: Any]) throws {
-        self.street = try Json.asString(Json.require(m, "street"), "street")
-        self.city = try Json.asString(Json.require(m, "city"), "city")
-        self.state = try Json.asString(Json.require(m, "state"), "state")
-        self.zIP = try Json.asString(Json.require(m, "zIP"), "zIP")
+        self.street = SimpleTextTyped(try Json.asString(Json.require(m, "street"), "street"))
+        self.city = SimpleTextTyped(try Json.asString(Json.require(m, "city"), "city"))
+        self.state = SimpleTextTyped(try Json.asString(Json.require(m, "state"), "state"))
+        self.zIP = SimpleTextTyped(try Json.asString(Json.require(m, "zIP"), "zIP"))
     }
 
     public init(fromJSON text: String) throws {

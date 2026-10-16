@@ -1,5 +1,8 @@
 from .address_string import AddressString
 from .address_string import AddressString
+from .dollar_string import DollarString
+from .dollar_string import DollarString
+from .dollar_string import DollarString
 from . import tokens
 DNC_STRING = '?DNC?'
 
@@ -7,9 +10,9 @@ DNC_STRING = '?DNC?'
 class ShoppingCartString:
     def __init__(self, items: str = '', shipping: str = '', discount: str = '', total_price: str = '', shipping_address: 'AddressString' = None, billing_address: 'AddressString' = None):
         self.items = items
-        self.shipping = shipping
-        self.discount = discount
-        self.total_price = total_price
+        self.shipping = DollarString(shipping)
+        self.discount = DollarString(discount)
+        self.total_price = DollarString(total_price)
         self.shipping_address = shipping_address
         self.billing_address = billing_address
 

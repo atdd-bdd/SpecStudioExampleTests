@@ -10,10 +10,10 @@ using production;
 
     public class IDValueTyped
     {
-        public IDForm iD;
+        public IDFormTyped iD;
         public int value;
 
-        public IDValueTyped(IDForm iD, int value)
+        public IDValueTyped(IDFormTyped iD, int value)
         {
             this.iD = iD;
             this.value = value;
@@ -44,7 +44,7 @@ using production;
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();
-            w.WriteString("iD", Json.ToText(this.iD));
+            w.WriteString("iD", this.iD.ToString());
             w.WriteNumber("value", this.value);
             w.WriteEndObject();
         }
@@ -59,7 +59,7 @@ using production;
         public static IDValueTyped FromJsonElement(JsonElement m)
         {
             return new IDValueTyped(
-                new IDForm(Json.AsString(Json.Require(m, "iD"), "iD")),
+                new IDFormTyped(new IDFormString(Json.AsString(Json.Require(m, "iD"), "iD"))),
                 Json.AsInt(Json.Require(m, "value"), "value")
             );
         }

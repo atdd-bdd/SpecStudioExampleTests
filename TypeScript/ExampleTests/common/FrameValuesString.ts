@@ -1,3 +1,5 @@
+import type { PinsString } from "./PinsString.js";
+import type { ScoreString } from "./ScoreString.js";
 
 import * as tokens from "./tokens.js";
 
@@ -5,13 +7,13 @@ export class FrameValuesString {
   static readonly DNC_STRING = "?DNC?";
 
   frame: string;
-  roll1: string;
-  roll2: string;
-  roll3: string;
-  score: string;
-  totalScore: string;
+  roll1: PinsString;
+  roll2: PinsString;
+  roll3: PinsString;
+  score: ScoreString;
+  totalScore: ScoreString;
 
-  constructor(frame: string = "", roll1: string = "", roll2: string = "", roll3: string = "", score: string = "", totalScore: string = "") {
+  constructor(frame: string = "", roll1: PinsString = "", roll2: PinsString = "", roll3: PinsString = "", score: ScoreString = "", totalScore: ScoreString = "") {
     this.frame = frame;
     this.roll1 = roll1;
     this.roll2 = roll2;

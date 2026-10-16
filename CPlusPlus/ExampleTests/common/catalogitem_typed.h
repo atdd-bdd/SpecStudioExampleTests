@@ -3,22 +3,24 @@
 #include <vector>
 #include "json.h"
 #include "catalogitem_string.h"
+#include "simpletext_typed.h"
+#include "dollar_typed.h"
 
 struct CatalogItemTyped {
-    std::string name;
-    std::string price;
+    SimpleTextTyped name;
+    DollarTyped price;
 
     static CatalogItemTyped from_string_struct(const CatalogItemString& s) {
         CatalogItemTyped t;
-        t.name = s.name;
-        t.price = s.price;
+        t.name = SimpleTextTyped::from_string_struct(s.name);
+        t.price = DollarTyped::from_string_struct(s.price);
         return t;
     }
 
     CatalogItemString to_string_struct() const {
         CatalogItemString s;
-        s.name = name;
-        s.price = price;
+        s.name = name.to_string_struct();
+        s.price = price.to_string_struct();
         return s;
     }
 
@@ -36,8 +38,8 @@ struct CatalogItemTyped {
 
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("Name", json::Convert<std::string>::to_json(name));
-        m.emplace_back("Price", json::Convert<std::string>::to_json(price));
+        m.emplace_back("Name", name.to_json_value());
+        m.emplace_back("Price", price.to_json_value());
         return json::Value::make_object(std::move(m));
     }
 
@@ -45,8 +47,8 @@ struct CatalogItemTyped {
 
     static CatalogItemTyped from_json_value(const json::Value& v) {
         CatalogItemTyped t;
-        t.name = json::Convert<std::string>::from_json(json::require(v, "Name"), "Name");
-        t.price = json::Convert<std::string>::from_json(json::require(v, "Price"), "Price");
+        t.name = SimpleTextTyped::from_json_value(json::require(v, "Name"));
+        t.price = DollarTyped::from_json_value(json::require(v, "Price"));
         return t;
     }
 

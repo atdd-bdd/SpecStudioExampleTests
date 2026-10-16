@@ -3,34 +3,36 @@
 #include <vector>
 #include "json.h"
 #include "framevalues_string.h"
+#include "pins_typed.h"
+#include "score_typed.h"
 
 struct FrameValuesTyped {
     int frame = 0;
-    std::string roll1;
-    std::string roll2;
-    std::string roll3;
-    std::string score;
-    std::string totalscore;
+    PinsTyped roll1;
+    PinsTyped roll2;
+    PinsTyped roll3;
+    ScoreTyped score;
+    ScoreTyped totalscore;
 
     static FrameValuesTyped from_string_struct(const FrameValuesString& s) {
         FrameValuesTyped t;
         t.frame = !s.frame.empty() ? std::stoi(s.frame) : 0;
-        t.roll1 = s.roll1;
-        t.roll2 = s.roll2;
-        t.roll3 = s.roll3;
-        t.score = s.score;
-        t.totalscore = s.totalscore;
+        t.roll1 = PinsTyped::from_string_struct(s.roll1);
+        t.roll2 = PinsTyped::from_string_struct(s.roll2);
+        t.roll3 = PinsTyped::from_string_struct(s.roll3);
+        t.score = ScoreTyped::from_string_struct(s.score);
+        t.totalscore = ScoreTyped::from_string_struct(s.totalscore);
         return t;
     }
 
     FrameValuesString to_string_struct() const {
         FrameValuesString s;
         s.frame = std::to_string(frame);
-        s.roll1 = roll1;
-        s.roll2 = roll2;
-        s.roll3 = roll3;
-        s.score = score;
-        s.totalscore = totalscore;
+        s.roll1 = roll1.to_string_struct();
+        s.roll2 = roll2.to_string_struct();
+        s.roll3 = roll3.to_string_struct();
+        s.score = score.to_string_struct();
+        s.totalscore = totalscore.to_string_struct();
         return s;
     }
 
@@ -49,11 +51,11 @@ struct FrameValuesTyped {
     json::Value to_json_value() const {
         json::Members m;
         m.emplace_back("Frame", json::Convert<int>::to_json(frame));
-        m.emplace_back("Roll1", json::Convert<std::string>::to_json(roll1));
-        m.emplace_back("Roll2", json::Convert<std::string>::to_json(roll2));
-        m.emplace_back("Roll3", json::Convert<std::string>::to_json(roll3));
-        m.emplace_back("Score", json::Convert<std::string>::to_json(score));
-        m.emplace_back("TotalScore", json::Convert<std::string>::to_json(totalscore));
+        m.emplace_back("Roll1", roll1.to_json_value());
+        m.emplace_back("Roll2", roll2.to_json_value());
+        m.emplace_back("Roll3", roll3.to_json_value());
+        m.emplace_back("Score", score.to_json_value());
+        m.emplace_back("TotalScore", totalscore.to_json_value());
         return json::Value::make_object(std::move(m));
     }
 
@@ -62,11 +64,11 @@ struct FrameValuesTyped {
     static FrameValuesTyped from_json_value(const json::Value& v) {
         FrameValuesTyped t;
         t.frame = json::Convert<int>::from_json(json::require(v, "Frame"), "Frame");
-        t.roll1 = json::Convert<std::string>::from_json(json::require(v, "Roll1"), "Roll1");
-        t.roll2 = json::Convert<std::string>::from_json(json::require(v, "Roll2"), "Roll2");
-        t.roll3 = json::Convert<std::string>::from_json(json::require(v, "Roll3"), "Roll3");
-        t.score = json::Convert<std::string>::from_json(json::require(v, "Score"), "Score");
-        t.totalscore = json::Convert<std::string>::from_json(json::require(v, "TotalScore"), "TotalScore");
+        t.roll1 = PinsTyped::from_json_value(json::require(v, "Roll1"));
+        t.roll2 = PinsTyped::from_json_value(json::require(v, "Roll2"));
+        t.roll3 = PinsTyped::from_json_value(json::require(v, "Roll3"));
+        t.score = ScoreTyped::from_json_value(json::require(v, "Score"));
+        t.totalscore = ScoreTyped::from_json_value(json::require(v, "TotalScore"));
         return t;
     }
 

@@ -1,17 +1,17 @@
 public struct FilterValueTyped: Equatable, CustomStringConvertible {
-    public let value: String
+    public let value: IDFormTyped
 
-    public init(value: String) {
+    public init(value: IDFormTyped) {
         self.value = value
     }
 
     public init(from s: FilterValueString) {
-        self.value = s.value
+        self.value = IDFormTyped(from: s.value)
     }
 
     public func toStringStruct() -> FilterValueString {
         return FilterValueString(
-            value: String(describing: value)
+            value: value.toIDFormString()
         )
     }
 
@@ -25,7 +25,7 @@ public struct FilterValueTyped: Equatable, CustomStringConvertible {
 
     public func toJSONValue() -> [String: Any] {
         return [
-            "value": value,
+            "value": value.text,
         ]
     }
 
@@ -34,7 +34,7 @@ public struct FilterValueTyped: Equatable, CustomStringConvertible {
     }
 
     public init(fromJSONValue m: [String: Any]) throws {
-        self.value = try Json.asString(Json.require(m, "value"), "value")
+        self.value = IDFormTyped(try Json.asString(Json.require(m, "value"), "value"))
     }
 
     public init(fromJSON text: String) throws {

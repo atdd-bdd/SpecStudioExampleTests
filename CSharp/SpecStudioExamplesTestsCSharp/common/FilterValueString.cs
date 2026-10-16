@@ -4,9 +4,9 @@ using production;
 
     public class FilterValueString
     {
-        public string value;
+        public IDFormString value;
 
-        public FilterValueString(string value)
+        public FilterValueString(IDFormString value)
         {
             this.value = value;
         }
@@ -21,7 +21,7 @@ using production;
         public FilterValueTyped ToFilterValueTyped()
         {
             return new FilterValueTyped(
-                new IDForm(this.value)
+                new IDFormTyped(this.value)
             );
         }
 
@@ -35,7 +35,7 @@ using production;
         public override bool Equals(object? obj)
         {
             if (obj is not FilterValueString other) return false;
-            return (DNCString == this.value || DNCString == other.value || object.Equals(this.value, other.value));
+            return (DNCString == this.value.Value || DNCString == other.value.Value || this.value.Value == other.value.Value);
         }
 
         public override int GetHashCode()

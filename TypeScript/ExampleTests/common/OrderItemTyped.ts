@@ -1,13 +1,15 @@
 import { OrderItemString } from "./OrderItemString.js";
 import * as _json from "./json.js";
+import { SimpleTextTyped } from "./SimpleTextTyped.js";
+import { DollarTyped } from "./DollarTyped.js";
 
 export class OrderItemTyped {
-  name: string;
+  name: SimpleTextTyped;
   quantity: number;
-  price: string;
-  itemTotal: string;
+  price: DollarTyped;
+  itemTotal: DollarTyped;
 
-  constructor(name: string, quantity: number, price: string, itemTotal: string) {
+  constructor(name: SimpleTextTyped, quantity: number, price: DollarTyped, itemTotal: DollarTyped) {
     this.name = name;
     this.quantity = quantity;
     this.price = price;
@@ -16,10 +18,10 @@ export class OrderItemTyped {
 
   static fromStringObj(s: OrderItemString): OrderItemTyped {
     return new OrderItemTyped(
-      s.name,
+      new SimpleTextTyped(s.name),
       s.quantity !== "" ? Number(s.quantity) : 0,
-      s.price,
-      s.itemTotal
+      new DollarTyped(s.price),
+      new DollarTyped(s.itemTotal)
     );
   }
 
@@ -42,10 +44,10 @@ export class OrderItemTyped {
 
   toJsonValue(): Record<string, unknown> {
     return {
-      name: this.name,
+      name: String(this.name),
       quantity: this.quantity,
-      price: this.price,
-      itemTotal: this.itemTotal,
+      price: String(this.price),
+      itemTotal: String(this.itemTotal),
     };
   }
 
@@ -53,10 +55,10 @@ export class OrderItemTyped {
 
   static fromJsonValue(m: unknown): OrderItemTyped {
     return new OrderItemTyped(
-      _json.asString(_json.requireField(m, "name"), "name"),
+      new SimpleTextTyped(_json.asString(_json.requireField(m, "name"), "name")),
       _json.asInt(_json.requireField(m, "quantity"), "quantity"),
-      _json.asString(_json.requireField(m, "price"), "price"),
-      _json.asString(_json.requireField(m, "itemTotal"), "itemTotal")
+      new DollarTyped(_json.asString(_json.requireField(m, "price"), "price")),
+      new DollarTyped(_json.asString(_json.requireField(m, "itemTotal"), "itemTotal"))
     );
   }
 
@@ -78,9 +80,9 @@ export class OrderItemTyped {
   }
 
   equals(other: OrderItemTyped): boolean {
-    return this.name === other.name
+    return this.name.equals(other.name)
       && this.quantity === other.quantity
-      && this.price === other.price
-      && this.itemTotal === other.itemTotal;
+      && this.price.equals(other.price)
+      && this.itemTotal.equals(other.itemTotal);
   }
 }

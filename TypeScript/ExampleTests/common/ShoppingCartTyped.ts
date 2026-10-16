@@ -2,16 +2,17 @@ import { ShoppingCartString } from "./ShoppingCartString.js";
 import * as _json from "./json.js";
 import { OrderItemTyped } from "./OrderItemTyped.js";
 import { AddressTyped } from "./AddressTyped.js";
+import { DollarTyped } from "./DollarTyped.js";
 
 export class ShoppingCartTyped {
   items: OrderItemTyped[];
-  shipping: string;
-  discount: string;
-  totalPrice: string;
+  shipping: DollarTyped;
+  discount: DollarTyped;
+  totalPrice: DollarTyped;
   shippingAddress: AddressTyped;
   billingAddress: AddressTyped;
 
-  constructor(items: OrderItemTyped[], shipping: string, discount: string, totalPrice: string, shippingAddress: AddressTyped, billingAddress: AddressTyped) {
+  constructor(items: OrderItemTyped[], shipping: DollarTyped, discount: DollarTyped, totalPrice: DollarTyped, shippingAddress: AddressTyped, billingAddress: AddressTyped) {
     this.items = items;
     this.shipping = shipping;
     this.discount = discount;
@@ -23,9 +24,9 @@ export class ShoppingCartTyped {
   static fromStringObj(s: ShoppingCartString): ShoppingCartTyped {
     return new ShoppingCartTyped(
       [],
-      s.shipping,
-      s.discount,
-      s.totalPrice,
+      new DollarTyped(s.shipping),
+      new DollarTyped(s.discount),
+      new DollarTyped(s.totalPrice),
       AddressTyped.fromStringObj(s.shippingAddress),
       AddressTyped.fromStringObj(s.billingAddress)
     );
@@ -53,9 +54,9 @@ export class ShoppingCartTyped {
   toJsonValue(): Record<string, unknown> {
     return {
       items: this.items.map((e) => e.toJsonValue()),
-      shipping: this.shipping,
-      discount: this.discount,
-      totalPrice: this.totalPrice,
+      shipping: String(this.shipping),
+      discount: String(this.discount),
+      totalPrice: String(this.totalPrice),
       shippingAddress: this.shippingAddress.toJsonValue(),
       billingAddress: this.billingAddress.toJsonValue(),
     };
@@ -66,9 +67,9 @@ export class ShoppingCartTyped {
   static fromJsonValue(m: unknown): ShoppingCartTyped {
     return new ShoppingCartTyped(
       (_json.asArray(_json.requireField(m, "items"), "items") ?? []).map((e) => OrderItemTyped.fromJsonValue(e)),
-      _json.asString(_json.requireField(m, "shipping"), "shipping"),
-      _json.asString(_json.requireField(m, "discount"), "discount"),
-      _json.asString(_json.requireField(m, "totalPrice"), "totalPrice"),
+      new DollarTyped(_json.asString(_json.requireField(m, "shipping"), "shipping")),
+      new DollarTyped(_json.asString(_json.requireField(m, "discount"), "discount")),
+      new DollarTyped(_json.asString(_json.requireField(m, "totalPrice"), "totalPrice")),
       AddressTyped.fromJsonValue(_json.requireField(m, "shippingAddress")),
       AddressTyped.fromJsonValue(_json.requireField(m, "billingAddress"))
     );
@@ -93,9 +94,9 @@ export class ShoppingCartTyped {
 
   equals(other: ShoppingCartTyped): boolean {
     return this.items === other.items
-      && this.shipping === other.shipping
-      && this.discount === other.discount
-      && this.totalPrice === other.totalPrice
+      && this.shipping.equals(other.shipping)
+      && this.discount.equals(other.discount)
+      && this.totalPrice.equals(other.totalPrice)
       && this.shippingAddress.equals(other.shippingAddress)
       && this.billingAddress.equals(other.billingAddress);
   }

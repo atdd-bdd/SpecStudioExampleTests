@@ -44,8 +44,8 @@ export class DiscountInputTyped {
 
   static fromJsonValue(m) {
     return new DiscountInputTyped(
-      new Dollar(_json.asString(_json.require(m, "totalPrice"), "totalPrice")),
-      new Percentage(_json.asString(_json.require(m, "discount"), "discount")),
+      _json.asString(_json.require(m, "totalPrice"), "totalPrice"),
+      _json.asString(_json.require(m, "discount"), "discount"),
       _json.asString(_json.require(m, "notes"), "notes")
     );
   }

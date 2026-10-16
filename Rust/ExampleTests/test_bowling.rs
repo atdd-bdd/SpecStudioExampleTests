@@ -8,23 +8,15 @@ use super::bowling_glue::BowlingGlue;
 #[test]
 fn scenario_adding_a_roll() {
     let mut glue = BowlingGlue::new();
-    glue.given_rolls_are(&[
-        vec!["5".to_string(), "5".to_string(), "4".to_string(), "5".to_string(), "8".to_string(), "2".to_string(), "10".to_string(), "0".to_string(), "10".to_string(), "10".to_string(), "6".to_string(), "2".to_string(), "10".to_string(), "4".to_string(), "6".to_string(), "10".to_string()],
-    ]);
-    glue.when_roll_is(&[
-        vec!["10".to_string()],
-    ]);
-    glue.then_rolls_become(&[
-        vec!["5".to_string(), "5".to_string(), "4".to_string(), "5".to_string(), "8".to_string(), "2".to_string(), "10".to_string(), "0".to_string(), "10".to_string(), "10".to_string(), "6".to_string(), "2".to_string(), "10".to_string(), "4".to_string(), "6".to_string(), "10".to_string(), "10".to_string()],
-    ]);
+    glue.given_rolls_are(&[PinsString::from("5"), PinsString::from("5"), PinsString::from("4"), PinsString::from("5"), PinsString::from("8"), PinsString::from("2"), PinsString::from("10"), PinsString::from("0"), PinsString::from("10"), PinsString::from("10"), PinsString::from("6"), PinsString::from("2"), PinsString::from("10"), PinsString::from("4"), PinsString::from("6"), PinsString::from("10")]);
+    glue.when_roll_is(&[PinsString::from("10")]);
+    glue.then_rolls_become(&[PinsString::from("5"), PinsString::from("5"), PinsString::from("4"), PinsString::from("5"), PinsString::from("8"), PinsString::from("2"), PinsString::from("10"), PinsString::from("0"), PinsString::from("10"), PinsString::from("10"), PinsString::from("6"), PinsString::from("2"), PinsString::from("10"), PinsString::from("4"), PinsString::from("6"), PinsString::from("10"), PinsString::from("10")]);
 }
 
 #[test]
 fn scenario_full_game_compute_and_display() {
     let mut glue = BowlingGlue::new();
-    glue.given_rolls_are(&[
-        vec!["5".to_string(), "5".to_string(), "4".to_string(), "5".to_string(), "8".to_string(), "2".to_string(), "10".to_string(), "0".to_string(), "10".to_string(), "10".to_string(), "6".to_string(), "2".to_string(), "10".to_string(), "4".to_string(), "6".to_string(), "10".to_string(), "10".to_string()],
-    ]);
+    glue.given_rolls_are(&[PinsString::from("5"), PinsString::from("5"), PinsString::from("4"), PinsString::from("5"), PinsString::from("8"), PinsString::from("2"), PinsString::from("10"), PinsString::from("0"), PinsString::from("10"), PinsString::from("10"), PinsString::from("6"), PinsString::from("2"), PinsString::from("10"), PinsString::from("4"), PinsString::from("6"), PinsString::from("10"), PinsString::from("10")]);
     glue.when_scored();
     glue.then_display_is("| 5/ | 45 | 8/ | X  | -/ | X   | 62  | X   | 4/  | XX |\n| 14 | 23 | 43 | 63 | 83 | 101 | 109 | 129 | 149 |    |");
 }
@@ -32,9 +24,7 @@ fn scenario_full_game_compute_and_display() {
 #[test]
 fn scenario_a_game_in_steps() {
     let mut glue = BowlingGlue::new();
-    glue.given_rolls_are(&[
-        vec!["5".to_string(), "5".to_string(), "4".to_string(), "5".to_string(), "8".to_string(), "2".to_string(), "10".to_string(), "0".to_string(), "10".to_string(), "10".to_string(), "6".to_string(), "2".to_string(), "10".to_string(), "4".to_string(), "6".to_string(), "10".to_string(), "10".to_string()],
-    ]);
+    glue.given_rolls_are(&[PinsString::from("5"), PinsString::from("5"), PinsString::from("4"), PinsString::from("5"), PinsString::from("8"), PinsString::from("2"), PinsString::from("10"), PinsString::from("0"), PinsString::from("10"), PinsString::from("10"), PinsString::from("6"), PinsString::from("2"), PinsString::from("10"), PinsString::from("4"), PinsString::from("6"), PinsString::from("10"), PinsString::from("10")]);
     glue.when_scored();
     glue.then_frame_values_are(&[
         FrameValuesString::from_vec(&["1", "5", "5", "4", "14", "14"]),
@@ -68,9 +58,7 @@ fn scenario_a_game_in_steps() {
 #[test]
 fn scenario_check_for_game_complete() {
     let mut glue = BowlingGlue::new();
-    glue.given_rolls_are(&[
-        vec!["5".to_string(), "5".to_string(), "4".to_string(), "5".to_string(), "8".to_string(), "2".to_string(), "10".to_string(), "0".to_string(), "10".to_string(), "10".to_string(), "6".to_string(), "2".to_string(), "10".to_string(), "4".to_string(), "6".to_string(), "10".to_string(), "10".to_string(), "10".to_string()],
-    ]);
+    glue.given_rolls_are(&[PinsString::from("5"), PinsString::from("5"), PinsString::from("4"), PinsString::from("5"), PinsString::from("8"), PinsString::from("2"), PinsString::from("10"), PinsString::from("0"), PinsString::from("10"), PinsString::from("10"), PinsString::from("6"), PinsString::from("2"), PinsString::from("10"), PinsString::from("4"), PinsString::from("6"), PinsString::from("10"), PinsString::from("10"), PinsString::from("10")]);
     glue.when_scored();
     glue.then_game_complete_is(&[true]);
 }
@@ -78,9 +66,7 @@ fn scenario_check_for_game_complete() {
 #[test]
 fn scenario_values_for_tenth_frame() {
     let mut glue = BowlingGlue::new();
-    glue.given_rolls_for_tenth_frame_are(&[
-        vec!["10".to_string(), "10".to_string()],
-    ]);
+    glue.given_rolls_for_tenth_frame_are(&[PinsString::from("10"), PinsString::from("10")]);
     glue.when_scored();
     glue.then_then_tenth_frame_values_are(&[FrameValuesString::from_vec(&["10", "10", "10", "-1", "-1", "-1"])]);
 }
@@ -88,9 +74,7 @@ fn scenario_values_for_tenth_frame() {
 #[test]
 fn scenario_input_control_should_be_for_next_frame() {
     let mut glue = BowlingGlue::new();
-    glue.given_rolls_are(&[
-        vec!["10".to_string()],
-    ]);
+    glue.given_rolls_are(&[PinsString::from("10")]);
     glue.when_scored();
     glue.then_input_control_is(&[InputControlValuesString::from_vec(&["2", "1", "10"])]);
 }
@@ -98,16 +82,10 @@ fn scenario_input_control_should_be_for_next_frame() {
 #[test]
 fn scenario_try_to_add_invalid_roll() {
     let mut glue = BowlingGlue::new();
-    glue.given_rolls_are(&[
-        vec!["5".to_string()],
-    ]);
+    glue.given_rolls_are(&[PinsString::from("5")]);
     glue.when_scored();
-    glue.when_roll_is(&[
-        vec!["6".to_string()],
-    ]);
-    glue.then_rolls_become(&[
-        vec!["5".to_string()],
-    ]);
+    glue.when_roll_is(&[PinsString::from("6")]);
+    glue.then_rolls_become(&[PinsString::from("5")]);
 }
 
 // --- DataType Tests ---

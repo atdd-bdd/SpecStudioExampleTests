@@ -1,8 +1,11 @@
 from . import json_util as _json
 from .order_item_string import OrderItemString
+from .simple_text_typed import SimpleTextTyped
+from .dollar_typed import DollarTyped
+from .dollar_typed import DollarTyped
 
 class OrderItemTyped:
-    def __init__(self, name: str = '', quantity: int = 0, price: str = '', item_total: str = ''):
+    def __init__(self, name: 'SimpleTextTyped' = None, quantity: int = 0, price: 'DollarTyped' = None, item_total: 'DollarTyped' = None):
         self.name = name
         self.quantity = quantity
         self.price = price
@@ -11,10 +14,10 @@ class OrderItemTyped:
     @classmethod
     def from_string_obj(cls, s: OrderItemString) -> 'OrderItemTyped':
         return cls(
-            s.name,
+            SimpleTextTyped(s.name),
             int(s.quantity) if s.quantity else 0,
-            s.price,
-            s.item_total
+            DollarTyped(s.price),
+            DollarTyped(s.item_total)
         )
 
     def to_string_obj(self) -> OrderItemString:
@@ -35,10 +38,10 @@ class OrderItemTyped:
 
     def to_json_value(self) -> dict:
         return {
-            'Name': self.name,
+            'Name': str(self.name),
             'Quantity': self.quantity,
-            'Price': self.price,
-            'ItemTotal': self.item_total,
+            'Price': str(self.price),
+            'ItemTotal': str(self.item_total),
         }
 
     def to_json(self) -> str:
@@ -47,10 +50,10 @@ class OrderItemTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'OrderItemTyped':
         return cls(
-            _json.as_str(_json.require(m, 'Name'), 'Name'),
+            SimpleTextTyped(_json.as_str(_json.require(m, 'Name'), 'Name')),
             _json.as_int(_json.require(m, 'Quantity'), 'Quantity'),
-            _json.as_str(_json.require(m, 'Price'), 'Price'),
-            _json.as_str(_json.require(m, 'ItemTotal'), 'ItemTotal')
+            DollarTyped(_json.as_str(_json.require(m, 'Price'), 'Price')),
+            DollarTyped(_json.as_str(_json.require(m, 'ItemTotal'), 'ItemTotal'))
         )
 
     @classmethod

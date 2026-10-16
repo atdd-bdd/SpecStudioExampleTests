@@ -1,9 +1,9 @@
 public struct InputControlValuesTyped: Equatable, CustomStringConvertible {
     public let frame: Int
-    public let roll: String
-    public let remaining: String
+    public let roll: PinsTyped
+    public let remaining: PinsTyped
 
-    public init(frame: Int, roll: String, remaining: String) {
+    public init(frame: Int, roll: PinsTyped, remaining: PinsTyped) {
         self.frame = frame
         self.roll = roll
         self.remaining = remaining
@@ -11,15 +11,15 @@ public struct InputControlValuesTyped: Equatable, CustomStringConvertible {
 
     public init(from s: InputControlValuesString) {
         self.frame = Int(s.frame) ?? 0
-        self.roll = s.roll
-        self.remaining = s.remaining
+        self.roll = PinsTyped(from: s.roll)
+        self.remaining = PinsTyped(from: s.remaining)
     }
 
     public func toStringStruct() -> InputControlValuesString {
         return InputControlValuesString(
             frame: String(describing: frame),
-            roll: String(describing: roll),
-            remaining: String(describing: remaining)
+            roll: roll.toPinsString(),
+            remaining: remaining.toPinsString()
         )
     }
 
@@ -34,8 +34,8 @@ public struct InputControlValuesTyped: Equatable, CustomStringConvertible {
     public func toJSONValue() -> [String: Any] {
         return [
             "frame": frame,
-            "roll": roll,
-            "remaining": remaining,
+            "roll": roll.text,
+            "remaining": remaining.text,
         ]
     }
 
@@ -45,8 +45,8 @@ public struct InputControlValuesTyped: Equatable, CustomStringConvertible {
 
     public init(fromJSONValue m: [String: Any]) throws {
         self.frame = try Json.asInt(Json.require(m, "frame"), "frame")
-        self.roll = try Json.asString(Json.require(m, "roll"), "roll")
-        self.remaining = try Json.asString(Json.require(m, "remaining"), "remaining")
+        self.roll = PinsTyped(try Json.asString(Json.require(m, "roll"), "roll"))
+        self.remaining = PinsTyped(try Json.asString(Json.require(m, "remaining"), "remaining"))
     }
 
     public init(fromJSON text: String) throws {

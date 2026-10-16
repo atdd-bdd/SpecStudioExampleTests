@@ -1,15 +1,15 @@
 package common
 
 type DiscountInputString struct {
-	TotalPrice string
-	Discount string
+	TotalPrice DollarString
+	Discount PercentageString
 	Notes string
 }
 
 func NewDiscountInputStringFromSlice(v []string) DiscountInputString {
 	s := DiscountInputString{}
-	if len(v) > 0 { s.TotalPrice = v[0] }
-	if len(v) > 1 { s.Discount = v[1] }
+	if len(v) > 0 { s.TotalPrice = DollarString(v[0]) }
+	if len(v) > 1 { s.Discount = PercentageString(v[1]) }
 	if len(v) > 2 { s.Notes = v[2] }
 	return s
 }
@@ -18,19 +18,19 @@ func NewDiscountInputStringFromSlice(v []string) DiscountInputString {
 func NewDiscountInputStringFromText(text string) DiscountInputString {
 	parts := RequireTokens(text, 3, "DiscountInput")
 	return DiscountInputString{
-		TotalPrice: parts[0],
-		Discount: parts[1],
+		TotalPrice: DollarString(parts[0]),
+		Discount: PercentageString(parts[1]),
 		Notes: parts[2],
 	}
 }
 
 func (s DiscountInputString) String() string {
-	return Token(s.TotalPrice) + " " + Token(s.Discount) + " " + Token(s.Notes)
+	return Token(string(s.TotalPrice)) + " " + Token(string(s.Discount)) + " " + Token(s.Notes)
 }
 
 func (s DiscountInputString) Equals(o DiscountInputString) bool {
-	return DNCEqual(s.TotalPrice, o.TotalPrice) &&
-		DNCEqual(s.Discount, o.Discount) &&
+	return DNCEqual(string(s.TotalPrice), string(o.TotalPrice)) &&
+		DNCEqual(string(s.Discount), string(o.Discount)) &&
 		DNCEqual(s.Notes, o.Notes)
 }
 

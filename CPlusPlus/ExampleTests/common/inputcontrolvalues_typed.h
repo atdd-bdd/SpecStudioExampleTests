@@ -3,25 +3,26 @@
 #include <vector>
 #include "json.h"
 #include "inputcontrolvalues_string.h"
+#include "pins_typed.h"
 
 struct InputControlValuesTyped {
     int frame = 0;
-    std::string roll;
-    std::string remaining;
+    PinsTyped roll;
+    PinsTyped remaining;
 
     static InputControlValuesTyped from_string_struct(const InputControlValuesString& s) {
         InputControlValuesTyped t;
         t.frame = !s.frame.empty() ? std::stoi(s.frame) : 0;
-        t.roll = s.roll;
-        t.remaining = s.remaining;
+        t.roll = PinsTyped::from_string_struct(s.roll);
+        t.remaining = PinsTyped::from_string_struct(s.remaining);
         return t;
     }
 
     InputControlValuesString to_string_struct() const {
         InputControlValuesString s;
         s.frame = std::to_string(frame);
-        s.roll = roll;
-        s.remaining = remaining;
+        s.roll = roll.to_string_struct();
+        s.remaining = remaining.to_string_struct();
         return s;
     }
 
@@ -40,8 +41,8 @@ struct InputControlValuesTyped {
     json::Value to_json_value() const {
         json::Members m;
         m.emplace_back("Frame", json::Convert<int>::to_json(frame));
-        m.emplace_back("Roll", json::Convert<std::string>::to_json(roll));
-        m.emplace_back("Remaining", json::Convert<std::string>::to_json(remaining));
+        m.emplace_back("Roll", roll.to_json_value());
+        m.emplace_back("Remaining", remaining.to_json_value());
         return json::Value::make_object(std::move(m));
     }
 
@@ -50,8 +51,8 @@ struct InputControlValuesTyped {
     static InputControlValuesTyped from_json_value(const json::Value& v) {
         InputControlValuesTyped t;
         t.frame = json::Convert<int>::from_json(json::require(v, "Frame"), "Frame");
-        t.roll = json::Convert<std::string>::from_json(json::require(v, "Roll"), "Roll");
-        t.remaining = json::Convert<std::string>::from_json(json::require(v, "Remaining"), "Remaining");
+        t.roll = PinsTyped::from_json_value(json::require(v, "Roll"));
+        t.remaining = PinsTyped::from_json_value(json::require(v, "Remaining"));
         return t;
     }
 

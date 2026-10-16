@@ -1,24 +1,24 @@
 public struct ShippingInputTyped: Equatable, CustomStringConvertible {
-    public let totalPrice: String
-    public let shippingCost: String
+    public let totalPrice: DollarTyped
+    public let shippingCost: DollarTyped
     public let notes: String
 
-    public init(totalPrice: String, shippingCost: String, notes: String) {
+    public init(totalPrice: DollarTyped, shippingCost: DollarTyped, notes: String) {
         self.totalPrice = totalPrice
         self.shippingCost = shippingCost
         self.notes = notes
     }
 
     public init(from s: ShippingInputString) {
-        self.totalPrice = s.totalPrice
-        self.shippingCost = s.shippingCost
+        self.totalPrice = DollarTyped(from: s.totalPrice)
+        self.shippingCost = DollarTyped(from: s.shippingCost)
         self.notes = s.notes
     }
 
     public func toStringStruct() -> ShippingInputString {
         return ShippingInputString(
-            totalPrice: String(describing: totalPrice),
-            shippingCost: String(describing: shippingCost),
+            totalPrice: totalPrice.toDollarString(),
+            shippingCost: shippingCost.toDollarString(),
             notes: String(describing: notes)
         )
     }
@@ -33,8 +33,8 @@ public struct ShippingInputTyped: Equatable, CustomStringConvertible {
 
     public func toJSONValue() -> [String: Any] {
         return [
-            "totalPrice": totalPrice,
-            "shippingCost": shippingCost,
+            "totalPrice": totalPrice.text,
+            "shippingCost": shippingCost.text,
             "notes": notes,
         ]
     }
@@ -44,8 +44,8 @@ public struct ShippingInputTyped: Equatable, CustomStringConvertible {
     }
 
     public init(fromJSONValue m: [String: Any]) throws {
-        self.totalPrice = try Json.asString(Json.require(m, "totalPrice"), "totalPrice")
-        self.shippingCost = try Json.asString(Json.require(m, "shippingCost"), "shippingCost")
+        self.totalPrice = DollarTyped(try Json.asString(Json.require(m, "totalPrice"), "totalPrice"))
+        self.shippingCost = DollarTyped(try Json.asString(Json.require(m, "shippingCost"), "shippingCost"))
         self.notes = try Json.asString(Json.require(m, "notes"), "notes")
     }
 

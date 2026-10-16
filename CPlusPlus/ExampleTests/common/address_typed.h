@@ -3,28 +3,29 @@
 #include <vector>
 #include "json.h"
 #include "address_string.h"
+#include "simpletext_typed.h"
 
 struct AddressTyped {
-    std::string street;
-    std::string city;
-    std::string state;
-    std::string zip;
+    SimpleTextTyped street;
+    SimpleTextTyped city;
+    SimpleTextTyped state;
+    SimpleTextTyped zip;
 
     static AddressTyped from_string_struct(const AddressString& s) {
         AddressTyped t;
-        t.street = s.street;
-        t.city = s.city;
-        t.state = s.state;
-        t.zip = s.zip;
+        t.street = SimpleTextTyped::from_string_struct(s.street);
+        t.city = SimpleTextTyped::from_string_struct(s.city);
+        t.state = SimpleTextTyped::from_string_struct(s.state);
+        t.zip = SimpleTextTyped::from_string_struct(s.zip);
         return t;
     }
 
     AddressString to_string_struct() const {
         AddressString s;
-        s.street = street;
-        s.city = city;
-        s.state = state;
-        s.zip = zip;
+        s.street = street.to_string_struct();
+        s.city = city.to_string_struct();
+        s.state = state.to_string_struct();
+        s.zip = zip.to_string_struct();
         return s;
     }
 
@@ -42,10 +43,10 @@ struct AddressTyped {
 
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("Street", json::Convert<std::string>::to_json(street));
-        m.emplace_back("City", json::Convert<std::string>::to_json(city));
-        m.emplace_back("State", json::Convert<std::string>::to_json(state));
-        m.emplace_back("ZIP", json::Convert<std::string>::to_json(zip));
+        m.emplace_back("Street", street.to_json_value());
+        m.emplace_back("City", city.to_json_value());
+        m.emplace_back("State", state.to_json_value());
+        m.emplace_back("ZIP", zip.to_json_value());
         return json::Value::make_object(std::move(m));
     }
 
@@ -53,10 +54,10 @@ struct AddressTyped {
 
     static AddressTyped from_json_value(const json::Value& v) {
         AddressTyped t;
-        t.street = json::Convert<std::string>::from_json(json::require(v, "Street"), "Street");
-        t.city = json::Convert<std::string>::from_json(json::require(v, "City"), "City");
-        t.state = json::Convert<std::string>::from_json(json::require(v, "State"), "State");
-        t.zip = json::Convert<std::string>::from_json(json::require(v, "ZIP"), "ZIP");
+        t.street = SimpleTextTyped::from_json_value(json::require(v, "Street"));
+        t.city = SimpleTextTyped::from_json_value(json::require(v, "City"));
+        t.state = SimpleTextTyped::from_json_value(json::require(v, "State"));
+        t.zip = SimpleTextTyped::from_json_value(json::require(v, "ZIP"));
         return t;
     }
 

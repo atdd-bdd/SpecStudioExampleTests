@@ -10,15 +10,15 @@ public class RecordFilterExampleGlue {
         recordFilter = RecordFilter()
         for value in values {
             let typed = IDValueTyped(from: value)
-            guard let id = try? IDForm(typed.iD) else {
+            guard let id = try? IDForm(typed.iD.get()) else {
                 return XCTFail("bad ID \(typed.iD)")
             }
             recordFilter.add(IDValue(id: id, value: typed.value))
         }
     }
 
-    public func whenFilteredByIdWithValue(_ values: [[String]]) {
-        guard let first = values.first?.first else { return }
+    public func whenFilteredByIdWithValue(_ values: [IDFormString]) {
+        guard let first = values.first?.value else { return }
         guard let id = try? IDForm(first) else { return XCTFail("bad ID \(first)") }
         computedSum = recordFilter.sumByLabel(id)
     }
@@ -31,7 +31,7 @@ public class RecordFilterExampleGlue {
     public func whenFilteredBy(_ values: [FilterValueString]) {
         for value in values {
             let typed = FilterValueTyped(from: value)
-            guard let id = try? IDForm(typed.value) else {
+            guard let id = try? IDForm(typed.value.get()) else {
                 return XCTFail("bad ID \(typed.value)")
             }
             computedSum = recordFilter.sumByLabel(id)
@@ -48,7 +48,7 @@ public class RecordFilterExampleGlue {
     public func whenElementAdded(_ values: [IDValueString]) {
         for value in values {
             let typed = IDValueTyped(from: value)
-            guard let id = try? IDForm(typed.iD) else {
+            guard let id = try? IDForm(typed.iD.get()) else {
                 return XCTFail("bad ID \(typed.iD)")
             }
             recordFilter.add(IDValue(id: id, value: typed.value))

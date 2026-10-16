@@ -11,11 +11,11 @@ public class Bowling{
 public void Test_Scenario_Adding_a_roll(){
      Bowling_glue bowling_glue_object = new Bowling_glue();
 
-         bowling_glue_object.Given_rolls_are(new List<Pins>{ new Pins("5"), new Pins("5"), new Pins("4"), new Pins("5"), new Pins("8"), new Pins("2"), new Pins("10"), new Pins("0"), new Pins("10"), new Pins("10"), new Pins("6"), new Pins("2"), new Pins("10"), new Pins("4"), new Pins("6"), new Pins("10") });
+         bowling_glue_object.Given_rolls_are(new List<PinsString>{ new PinsString("5"), new PinsString("5"), new PinsString("4"), new PinsString("5"), new PinsString("8"), new PinsString("2"), new PinsString("10"), new PinsString("0"), new PinsString("10"), new PinsString("10"), new PinsString("6"), new PinsString("2"), new PinsString("10"), new PinsString("4"), new PinsString("6"), new PinsString("10") });
 
-         bowling_glue_object.When_roll_is(new List<Pins>{ new Pins("10") });
+         bowling_glue_object.When_roll_is(new List<PinsString>{ new PinsString("10") });
 
-         bowling_glue_object.Then_rolls_become(new List<Pins>{ new Pins("5"), new Pins("5"), new Pins("4"), new Pins("5"), new Pins("8"), new Pins("2"), new Pins("10"), new Pins("0"), new Pins("10"), new Pins("10"), new Pins("6"), new Pins("2"), new Pins("10"), new Pins("4"), new Pins("6"), new Pins("10"), new Pins("10") });
+         bowling_glue_object.Then_rolls_become(new List<PinsString>{ new PinsString("5"), new PinsString("5"), new PinsString("4"), new PinsString("5"), new PinsString("8"), new PinsString("2"), new PinsString("10"), new PinsString("0"), new PinsString("10"), new PinsString("10"), new PinsString("6"), new PinsString("2"), new PinsString("10"), new PinsString("4"), new PinsString("6"), new PinsString("10"), new PinsString("10") });
 
 }
 
@@ -23,7 +23,7 @@ public void Test_Scenario_Adding_a_roll(){
 public void Test_Scenario_Full_Game_Compute_and_Display(){
      Bowling_glue bowling_glue_object = new Bowling_glue();
 
-         bowling_glue_object.Given_rolls_are(new List<Pins>{ new Pins("5"), new Pins("5"), new Pins("4"), new Pins("5"), new Pins("8"), new Pins("2"), new Pins("10"), new Pins("0"), new Pins("10"), new Pins("10"), new Pins("6"), new Pins("2"), new Pins("10"), new Pins("4"), new Pins("6"), new Pins("10"), new Pins("10") });
+         bowling_glue_object.Given_rolls_are(new List<PinsString>{ new PinsString("5"), new PinsString("5"), new PinsString("4"), new PinsString("5"), new PinsString("8"), new PinsString("2"), new PinsString("10"), new PinsString("0"), new PinsString("10"), new PinsString("10"), new PinsString("6"), new PinsString("2"), new PinsString("10"), new PinsString("4"), new PinsString("6"), new PinsString("10"), new PinsString("10") });
 
          bowling_glue_object.When_scored();
 
@@ -35,7 +35,7 @@ public void Test_Scenario_Full_Game_Compute_and_Display(){
 public void Test_Scenario_A_Game_in_Steps(){
      Bowling_glue bowling_glue_object = new Bowling_glue();
 
-         bowling_glue_object.Given_rolls_are(new List<Pins>{ new Pins("5"), new Pins("5"), new Pins("4"), new Pins("5"), new Pins("8"), new Pins("2"), new Pins("10"), new Pins("0"), new Pins("10"), new Pins("10"), new Pins("6"), new Pins("2"), new Pins("10"), new Pins("4"), new Pins("6"), new Pins("10"), new Pins("10") });
+         bowling_glue_object.Given_rolls_are(new List<PinsString>{ new PinsString("5"), new PinsString("5"), new PinsString("4"), new PinsString("5"), new PinsString("8"), new PinsString("2"), new PinsString("10"), new PinsString("0"), new PinsString("10"), new PinsString("10"), new PinsString("6"), new PinsString("2"), new PinsString("10"), new PinsString("4"), new PinsString("6"), new PinsString("10"), new PinsString("10") });
 
          bowling_glue_object.When_scored();
 
@@ -82,7 +82,7 @@ public void Test_Scenario_A_Game_in_Steps(){
 public void Test_Scenario_Check_for_Game_Complete(){
      Bowling_glue bowling_glue_object = new Bowling_glue();
 
-         bowling_glue_object.Given_rolls_are(new List<Pins>{ new Pins("5"), new Pins("5"), new Pins("4"), new Pins("5"), new Pins("8"), new Pins("2"), new Pins("10"), new Pins("0"), new Pins("10"), new Pins("10"), new Pins("6"), new Pins("2"), new Pins("10"), new Pins("4"), new Pins("6"), new Pins("10"), new Pins("10"), new Pins("10") });
+         bowling_glue_object.Given_rolls_are(new List<PinsString>{ new PinsString("5"), new PinsString("5"), new PinsString("4"), new PinsString("5"), new PinsString("8"), new PinsString("2"), new PinsString("10"), new PinsString("0"), new PinsString("10"), new PinsString("10"), new PinsString("6"), new PinsString("2"), new PinsString("10"), new PinsString("4"), new PinsString("6"), new PinsString("10"), new PinsString("10"), new PinsString("10") });
 
          bowling_glue_object.When_scored();
 
@@ -94,7 +94,7 @@ public void Test_Scenario_Check_for_Game_Complete(){
 public void Test_Scenario_Values_for_Tenth_Frame(){
      Bowling_glue bowling_glue_object = new Bowling_glue();
 
-         bowling_glue_object.Given_rolls_for_tenth_frame_are(new List<Pins>{ new Pins("10"), new Pins("10") });
+         bowling_glue_object.Given_rolls_for_tenth_frame_are(new List<PinsString>{ new PinsString("10"), new PinsString("10") });
 
          bowling_glue_object.When_scored();
 
@@ -109,7 +109,7 @@ public void Test_Scenario_Values_for_Tenth_Frame(){
 public void Test_Scenario_Input_Control_Should_Be_For_Next_Frame(){
      Bowling_glue bowling_glue_object = new Bowling_glue();
 
-         bowling_glue_object.Given_rolls_are(new List<Pins>{ new Pins("10") });
+         bowling_glue_object.Given_rolls_are(new List<PinsString>{ new PinsString("10") });
 
          bowling_glue_object.When_scored();
 
@@ -124,13 +124,13 @@ public void Test_Scenario_Input_Control_Should_Be_For_Next_Frame(){
 public void Test_Scenario_Try_to_add_invalid_roll(){
      Bowling_glue bowling_glue_object = new Bowling_glue();
 
-         bowling_glue_object.Given_rolls_are(new List<Pins>{ new Pins("5") });
+         bowling_glue_object.Given_rolls_are(new List<PinsString>{ new PinsString("5") });
 
          bowling_glue_object.When_scored();
 
-         bowling_glue_object.When_roll_is(new List<Pins>{ new Pins("6") });
+         bowling_glue_object.When_roll_is(new List<PinsString>{ new PinsString("6") });
 
-         bowling_glue_object.Then_rolls_become(new List<Pins>{ new Pins("5") });
+         bowling_glue_object.Then_rolls_become(new List<PinsString>{ new PinsString("5") });
 
 }
 

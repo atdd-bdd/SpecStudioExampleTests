@@ -4,6 +4,8 @@
 #include <vector>
 #include <sstream>
 #include "tokens.h"
+#include "dollar_string.h"
+#include "percentage_string.h"
 
 #ifndef SPECTABLE_DNC_STRING
 #define SPECTABLE_DNC_STRING
@@ -20,8 +22,8 @@ inline bool parse_bool_cell(const std::string& v) {
 #endif
 
 struct DiscountInputString {
-    std::string total_price;
-    std::string discount;
+    DollarString total_price;
+    PercentageString discount;
     std::string notes;
 
     static DiscountInputString from_vec(const std::vector<std::string>& v) {

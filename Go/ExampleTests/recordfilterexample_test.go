@@ -13,10 +13,8 @@ func TestRecordFilterExample_Scenario_FilterDataByID(t *testing.T) {
 		common.NewIDValueStringFromSlice([]string{"Q1234", "3"}),
 	}
 	glue.GivenListOfNumbers(t, objectList1)
-	stringListList2 := [][]string{
-		{"Q1234"},
-	}
-	glue.WhenFilteredByIDWithValue(t, stringListList2)
+	typedList2 := []common.IDFormString{common.IDFormString("Q1234")}
+	glue.WhenFilteredByIDWithValue(t, typedList2)
 	typedList3 := []int{4}
 	glue.ThenSumIs(t, typedList3)
 }

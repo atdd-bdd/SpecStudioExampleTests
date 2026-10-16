@@ -45,8 +45,8 @@ export class InputControlValuesTyped {
   static fromJsonValue(m) {
     return new InputControlValuesTyped(
       _json.asInt(_json.require(m, "frame"), "frame"),
-      new Pins(_json.asString(_json.require(m, "roll"), "roll")),
-      new Pins(_json.asString(_json.require(m, "remaining"), "remaining"))
+      _json.asString(_json.require(m, "roll"), "roll"),
+      _json.asString(_json.require(m, "remaining"), "remaining")
     );
   }
 

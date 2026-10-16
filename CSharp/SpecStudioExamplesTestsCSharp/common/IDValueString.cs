@@ -4,10 +4,10 @@ using production;
 
     public class IDValueString
     {
-        public string iD;
+        public IDFormString iD;
         public string value;
 
-        public IDValueString(string iD, string value)
+        public IDValueString(IDFormString iD, string value)
         {
             this.iD = iD;
             this.value = value;
@@ -30,7 +30,7 @@ using production;
         public IDValueTyped ToIDValueTyped()
         {
             return new IDValueTyped(
-                new IDForm(this.iD),
+                new IDFormTyped(this.iD),
                 int.Parse(this.value)
             );
         }
@@ -45,7 +45,7 @@ using production;
         public override bool Equals(object? obj)
         {
             if (obj is not IDValueString other) return false;
-            return (DNCString == this.iD || DNCString == other.iD || object.Equals(this.iD, other.iD))
+            return (DNCString == this.iD.Value || DNCString == other.iD.Value || this.iD.Value == other.iD.Value)
                 && (DNCString == this.value || DNCString == other.value || object.Equals(this.value, other.value));
         }
 

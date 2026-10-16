@@ -19,7 +19,7 @@ func (g *RecordFilterExampleGlue) GivenListOfNumbers(t *testing.T, values []comm
 	g.recordFilter = production.NewRecordFilter()
 	for _, value := range values {
 		typed := common.NewIDValueTypedFromString(value)
-		id, err := production.ParseIDForm(typed.ID)
+		id, err := production.ParseIDForm(typed.ID.Get())
 		if err != nil {
 			t.Fatalf("bad ID %s: %v", typed.ID, err)
 		}
@@ -27,11 +27,11 @@ func (g *RecordFilterExampleGlue) GivenListOfNumbers(t *testing.T, values []comm
 	}
 }
 
-func (g *RecordFilterExampleGlue) WhenFilteredByIDWithValue(t *testing.T, values [][]string) {
-	if len(values) > 0 && len(values[0]) > 0 {
-		id, err := production.ParseIDForm(values[0][0])
+func (g *RecordFilterExampleGlue) WhenFilteredByIDWithValue(t *testing.T, values []common.IDFormString) {
+	if len(values) > 0 {
+		id, err := production.ParseIDForm(values[0].Value())
 		if err != nil {
-			t.Fatalf("bad ID %s: %v", values[0][0], err)
+			t.Fatalf("bad ID %s: %v", values[0].Value(), err)
 		}
 		g.computedSum = g.recordFilter.SumByLabel(id)
 	}
@@ -48,7 +48,7 @@ func (g *RecordFilterExampleGlue) ThenSumIs(t *testing.T, values []int) {
 func (g *RecordFilterExampleGlue) WhenFilteredBy(t *testing.T, values []common.FilterValueString) {
 	for _, value := range values {
 		typed := common.NewFilterValueTypedFromString(value)
-		id, err := production.ParseIDForm(typed.Value)
+		id, err := production.ParseIDForm(typed.Value.Get())
 		if err != nil {
 			t.Fatalf("bad ID %s: %v", typed.Value, err)
 		}
@@ -68,7 +68,7 @@ func (g *RecordFilterExampleGlue) ThenResult(t *testing.T, values []common.Resul
 func (g *RecordFilterExampleGlue) WhenElementAdded(t *testing.T, values []common.IDValueString) {
 	for _, value := range values {
 		typed := common.NewIDValueTypedFromString(value)
-		id, err := production.ParseIDForm(typed.ID)
+		id, err := production.ParseIDForm(typed.ID.Get())
 		if err != nil {
 			t.Fatalf("bad ID %s: %v", typed.ID, err)
 		}

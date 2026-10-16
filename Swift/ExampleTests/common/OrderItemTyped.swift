@@ -1,10 +1,10 @@
 public struct OrderItemTyped: Equatable, CustomStringConvertible {
-    public let name: String
+    public let name: SimpleTextTyped
     public let quantity: Int
-    public let price: String
-    public let itemTotal: String
+    public let price: DollarTyped
+    public let itemTotal: DollarTyped
 
-    public init(name: String, quantity: Int, price: String, itemTotal: String) {
+    public init(name: SimpleTextTyped, quantity: Int, price: DollarTyped, itemTotal: DollarTyped) {
         self.name = name
         self.quantity = quantity
         self.price = price
@@ -12,18 +12,18 @@ public struct OrderItemTyped: Equatable, CustomStringConvertible {
     }
 
     public init(from s: OrderItemString) {
-        self.name = s.name
+        self.name = SimpleTextTyped(from: s.name)
         self.quantity = Int(s.quantity) ?? 0
-        self.price = s.price
-        self.itemTotal = s.itemTotal
+        self.price = DollarTyped(from: s.price)
+        self.itemTotal = DollarTyped(from: s.itemTotal)
     }
 
     public func toStringStruct() -> OrderItemString {
         return OrderItemString(
-            name: String(describing: name),
+            name: name.toSimpleTextString(),
             quantity: String(describing: quantity),
-            price: String(describing: price),
-            itemTotal: String(describing: itemTotal)
+            price: price.toDollarString(),
+            itemTotal: itemTotal.toDollarString()
         )
     }
 
@@ -37,10 +37,10 @@ public struct OrderItemTyped: Equatable, CustomStringConvertible {
 
     public func toJSONValue() -> [String: Any] {
         return [
-            "name": name,
+            "name": name.text,
             "quantity": quantity,
-            "price": price,
-            "itemTotal": itemTotal,
+            "price": price.text,
+            "itemTotal": itemTotal.text,
         ]
     }
 
@@ -49,10 +49,10 @@ public struct OrderItemTyped: Equatable, CustomStringConvertible {
     }
 
     public init(fromJSONValue m: [String: Any]) throws {
-        self.name = try Json.asString(Json.require(m, "name"), "name")
+        self.name = SimpleTextTyped(try Json.asString(Json.require(m, "name"), "name"))
         self.quantity = try Json.asInt(Json.require(m, "quantity"), "quantity")
-        self.price = try Json.asString(Json.require(m, "price"), "price")
-        self.itemTotal = try Json.asString(Json.require(m, "itemTotal"), "itemTotal")
+        self.price = DollarTyped(try Json.asString(Json.require(m, "price"), "price"))
+        self.itemTotal = DollarTyped(try Json.asString(Json.require(m, "itemTotal"), "itemTotal"))
     }
 
     public init(fromJSON text: String) throws {

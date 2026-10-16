@@ -10,19 +10,19 @@ import records.*;
 import calculator.*;
 
 public class ShippingInputTyped {
-    public Dollar totalPrice;
-    public Dollar shippingCost;
+    public DollarTyped totalPrice;
+    public DollarTyped shippingCost;
     public String notes;
 
-    public ShippingInputTyped(Dollar totalPrice, Dollar shippingCost, String notes) {
+    public ShippingInputTyped(DollarTyped totalPrice, DollarTyped shippingCost, String notes) {
         this.totalPrice = totalPrice;
         this.shippingCost = shippingCost;
         this.notes = notes;
     }
 
     public ShippingInputTyped(ShippingInputString s) {
-        this.totalPrice = new Dollar(s.totalPrice);
-        this.shippingCost = new Dollar(s.shippingCost);
+        this.totalPrice = new DollarTyped(s.totalPrice);
+        this.shippingCost = new DollarTyped(s.shippingCost);
         this.notes = s.notes;
     }
 
@@ -72,8 +72,8 @@ public class ShippingInputTyped {
     public static ShippingInputTyped fromJsonValue(Map<String, Object> m) {
         if (m == null) return null;
         return new ShippingInputTyped(
-            new Dollar(Json.asString(Json.require(m, "totalPrice"), "totalPrice")),
-            new Dollar(Json.asString(Json.require(m, "shippingCost"), "shippingCost")),
+            new DollarTyped(new DollarString(Json.asString(Json.require(m, "totalPrice"), "totalPrice"))),
+            new DollarTyped(new DollarString(Json.asString(Json.require(m, "shippingCost"), "shippingCost"))),
             Json.asString(Json.require(m, "notes"), "notes"));
     }
 

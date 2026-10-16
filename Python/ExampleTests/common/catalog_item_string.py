@@ -1,11 +1,13 @@
+from .simple_text_string import SimpleTextString
+from .dollar_string import DollarString
 from . import tokens
 DNC_STRING = '?DNC?'
 
 
 class CatalogItemString:
     def __init__(self, name: str = '', price: str = ''):
-        self.name = name
-        self.price = price
+        self.name = SimpleTextString(name)
+        self.price = DollarString(price)
 
     @classmethod
     def from_list(cls, values):

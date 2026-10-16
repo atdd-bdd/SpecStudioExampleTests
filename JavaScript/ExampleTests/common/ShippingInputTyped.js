@@ -44,8 +44,8 @@ export class ShippingInputTyped {
 
   static fromJsonValue(m) {
     return new ShippingInputTyped(
-      new Dollar(_json.asString(_json.require(m, "totalPrice"), "totalPrice")),
-      new Dollar(_json.asString(_json.require(m, "shippingCost"), "shippingCost")),
+      _json.asString(_json.require(m, "totalPrice"), "totalPrice"),
+      _json.asString(_json.require(m, "shippingCost"), "shippingCost"),
       _json.asString(_json.require(m, "notes"), "notes")
     );
   }

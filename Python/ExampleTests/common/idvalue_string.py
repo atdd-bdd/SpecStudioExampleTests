@@ -1,10 +1,11 @@
+from .idform_string import IDFormString
 from . import tokens
 DNC_STRING = '?DNC?'
 
 
 class IDValueString:
     def __init__(self, id: str = '', value: str = ''):
-        self.id = id
+        self.id = IDFormString(id)
         self.value = value
 
     @classmethod

@@ -1,18 +1,19 @@
 #![allow(dead_code, unused_imports, unused_variables)]
 
+use super::pins_string::PinsString;
 #[derive(Debug, Clone, Default)]
 pub struct InputControlValuesString {
     pub frame: String,
-    pub roll: String,
-    pub remaining: String,
+    pub roll: PinsString,
+    pub remaining: PinsString,
 }
 
 impl InputControlValuesString {
     pub fn from_vec(v: &[&str]) -> Self {
         Self {
             frame: v.get(0).copied().unwrap_or("").to_string(),
-            roll: v.get(1).copied().unwrap_or("").to_string(),
-            remaining: v.get(2).copied().unwrap_or("").to_string(),
+            roll: PinsString::from(v.get(1).copied().unwrap_or("")),
+            remaining: PinsString::from(v.get(2).copied().unwrap_or("")),
         }
     }
 
@@ -21,8 +22,8 @@ impl InputControlValuesString {
         let parts = crate::common::tokens::require(text, 3, "InputControlValues");
         Self {
             frame: parts[0].clone(),
-            roll: parts[1].clone(),
-            remaining: parts[2].clone(),
+            roll: PinsString::from(parts[1].clone()),
+            remaining: PinsString::from(parts[2].clone()),
         }
     }
 }

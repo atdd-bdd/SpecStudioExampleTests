@@ -48,10 +48,10 @@ export class AddressTyped {
 
   static fromJsonValue(m) {
     return new AddressTyped(
-      new SimpleText(_json.asString(_json.require(m, "street"), "street")),
-      new SimpleText(_json.asString(_json.require(m, "city"), "city")),
-      new SimpleText(_json.asString(_json.require(m, "state"), "state")),
-      new SimpleText(_json.asString(_json.require(m, "zIP"), "zIP"))
+      _json.asString(_json.require(m, "street"), "street"),
+      _json.asString(_json.require(m, "city"), "city"),
+      _json.asString(_json.require(m, "state"), "state"),
+      _json.asString(_json.require(m, "zIP"), "zIP")
     );
   }
 

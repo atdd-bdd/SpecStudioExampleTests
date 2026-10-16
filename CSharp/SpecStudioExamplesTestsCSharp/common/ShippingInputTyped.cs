@@ -10,11 +10,11 @@ using production;
 
     public class ShippingInputTyped
     {
-        public Dollar totalPrice;
-        public Dollar shippingCost;
+        public DollarTyped totalPrice;
+        public DollarTyped shippingCost;
         public string notes;
 
-        public ShippingInputTyped(Dollar totalPrice, Dollar shippingCost, string notes)
+        public ShippingInputTyped(DollarTyped totalPrice, DollarTyped shippingCost, string notes)
         {
             this.totalPrice = totalPrice;
             this.shippingCost = shippingCost;
@@ -47,8 +47,8 @@ using production;
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();
-            w.WriteString("totalPrice", Json.ToText(this.totalPrice));
-            w.WriteString("shippingCost", Json.ToText(this.shippingCost));
+            w.WriteString("totalPrice", this.totalPrice.ToString());
+            w.WriteString("shippingCost", this.shippingCost.ToString());
             w.WriteString("notes", this.notes);
             w.WriteEndObject();
         }
@@ -63,8 +63,8 @@ using production;
         public static ShippingInputTyped FromJsonElement(JsonElement m)
         {
             return new ShippingInputTyped(
-                new Dollar(Json.AsString(Json.Require(m, "totalPrice"), "totalPrice")),
-                new Dollar(Json.AsString(Json.Require(m, "shippingCost"), "shippingCost")),
+                new DollarTyped(new DollarString(Json.AsString(Json.Require(m, "totalPrice"), "totalPrice"))),
+                new DollarTyped(new DollarString(Json.AsString(Json.Require(m, "shippingCost"), "shippingCost"))),
                 Json.AsString(Json.Require(m, "notes"), "notes")
             );
         }

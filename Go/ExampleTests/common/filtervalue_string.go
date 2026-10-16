@@ -1,12 +1,12 @@
 package common
 
 type FilterValueString struct {
-	Value string
+	Value IDFormString
 }
 
 func NewFilterValueStringFromSlice(v []string) FilterValueString {
 	s := FilterValueString{}
-	if len(v) > 0 { s.Value = v[0] }
+	if len(v) > 0 { s.Value = IDFormString(v[0]) }
 	return s
 }
 
@@ -14,16 +14,16 @@ func NewFilterValueStringFromSlice(v []string) FilterValueString {
 func NewFilterValueStringFromText(text string) FilterValueString {
 	parts := RequireTokens(text, 1, "FilterValue")
 	return FilterValueString{
-		Value: parts[0],
+		Value: IDFormString(parts[0]),
 	}
 }
 
 func (s FilterValueString) String() string {
-	return Token(s.Value)
+	return Token(string(s.Value))
 }
 
 func (s FilterValueString) Equals(o FilterValueString) bool {
-	return DNCEqual(s.Value, o.Value)
+	return DNCEqual(string(s.Value), string(o.Value))
 }
 
 func EqualFilterValueStringSlices(a, b []FilterValueString) bool {

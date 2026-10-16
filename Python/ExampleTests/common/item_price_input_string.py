@@ -1,10 +1,11 @@
+from .dollar_string import DollarString
 from . import tokens
 DNC_STRING = '?DNC?'
 
 
 class ItemPriceInputString:
     def __init__(self, total_items: str = ''):
-        self.total_items = total_items
+        self.total_items = DollarString(total_items)
 
     @classmethod
     def from_list(cls, values):

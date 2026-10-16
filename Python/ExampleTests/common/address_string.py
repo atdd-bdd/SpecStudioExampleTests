@@ -1,13 +1,17 @@
+from .simple_text_string import SimpleTextString
+from .simple_text_string import SimpleTextString
+from .simple_text_string import SimpleTextString
+from .simple_text_string import SimpleTextString
 from . import tokens
 DNC_STRING = '?DNC?'
 
 
 class AddressString:
     def __init__(self, street: str = '', city: str = '', state: str = '', zip: str = ''):
-        self.street = street
-        self.city = city
-        self.state = state
-        self.zip = zip
+        self.street = SimpleTextString(street)
+        self.city = SimpleTextString(city)
+        self.state = SimpleTextString(state)
+        self.zip = SimpleTextString(zip)
 
     @classmethod
     def from_list(cls, values):

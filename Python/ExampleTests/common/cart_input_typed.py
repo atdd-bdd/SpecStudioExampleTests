@@ -1,8 +1,12 @@
 from . import json_util as _json
 from .cart_input_string import CartInputString
+from .dollar_typed import DollarTyped
+from .dollar_typed import DollarTyped
+from .dollar_typed import DollarTyped
+from .dollar_typed import DollarTyped
 
 class CartInputTyped:
-    def __init__(self, total_items: str = '', shipping: str = '', discount: str = '', total_price: str = '', notes: str = ''):
+    def __init__(self, total_items: 'DollarTyped' = None, shipping: 'DollarTyped' = None, discount: 'DollarTyped' = None, total_price: 'DollarTyped' = None, notes: str = ''):
         self.total_items = total_items
         self.shipping = shipping
         self.discount = discount
@@ -12,10 +16,10 @@ class CartInputTyped:
     @classmethod
     def from_string_obj(cls, s: CartInputString) -> 'CartInputTyped':
         return cls(
-            s.total_items,
-            s.shipping,
-            s.discount,
-            s.total_price,
+            DollarTyped(s.total_items),
+            DollarTyped(s.shipping),
+            DollarTyped(s.discount),
+            DollarTyped(s.total_price),
             s.notes
         )
 
@@ -38,10 +42,10 @@ class CartInputTyped:
 
     def to_json_value(self) -> dict:
         return {
-            'TotalItems': self.total_items,
-            'Shipping': self.shipping,
-            'Discount': self.discount,
-            'Total Price': self.total_price,
+            'TotalItems': str(self.total_items),
+            'Shipping': str(self.shipping),
+            'Discount': str(self.discount),
+            'Total Price': str(self.total_price),
             'Notes': self.notes,
         }
 
@@ -51,10 +55,10 @@ class CartInputTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'CartInputTyped':
         return cls(
-            _json.as_str(_json.require(m, 'TotalItems'), 'TotalItems'),
-            _json.as_str(_json.require(m, 'Shipping'), 'Shipping'),
-            _json.as_str(_json.require(m, 'Discount'), 'Discount'),
-            _json.as_str(_json.require(m, 'Total Price'), 'Total Price'),
+            DollarTyped(_json.as_str(_json.require(m, 'TotalItems'), 'TotalItems')),
+            DollarTyped(_json.as_str(_json.require(m, 'Shipping'), 'Shipping')),
+            DollarTyped(_json.as_str(_json.require(m, 'Discount'), 'Discount')),
+            DollarTyped(_json.as_str(_json.require(m, 'Total Price'), 'Total Price')),
             _json.as_str(_json.require(m, 'Notes'), 'Notes')
         )
 

@@ -1,19 +1,19 @@
 package common
 
 type ItemPriceInputTyped struct {
-	TotalItems string
+	TotalItems DollarTyped
 }
 
 func NewItemPriceInputTypedFromString(s ItemPriceInputString) ItemPriceInputTyped {
 	t := ItemPriceInputTyped{}
-	t.TotalItems = s.TotalItems
+	t.TotalItems = NewDollarTypedFromString(s.TotalItems)
 	return t
 }
 
 // ToItemPriceInputString converts this ItemPriceInputTyped back to the string form a table compares.
 func (t ItemPriceInputTyped) ToItemPriceInputString() ItemPriceInputString {
 	s := ItemPriceInputString{}
-	s.TotalItems = t.TotalItems
+	s.TotalItems = t.TotalItems.ToDollarString()
 	return s
 }
 
@@ -34,7 +34,7 @@ func ItemPriceInputTypedFromStringList(list []ItemPriceInputString) []ItemPriceI
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t ItemPriceInputTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"TotalItems": t.TotalItems,
+		"TotalItems": t.TotalItems.String(),
 	}
 }
 
@@ -52,7 +52,7 @@ func NewItemPriceInputTypedFromJSONValue(m map[string]interface{}) (ItemPriceInp
 	if err != nil {
 		return t, err
 	}
-	t.TotalItems = valTotalItems
+	t.TotalItems = NewDollarTyped(valTotalItems)
 	return t, nil
 }
 

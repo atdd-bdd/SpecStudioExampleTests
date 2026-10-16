@@ -1,6 +1,6 @@
 import { FandCString, FandCTyped, FilterValueString, FilterValueTyped,
-         IDValueString, IDValueTyped, ResultValueString, ResultValueTyped,
-         ValidValuesString, ValidValuesTyped } from "./common/index.js";
+         IDFormString, IDValueString, IDValueTyped, ResultValueString,
+         ResultValueTyped, ValidValuesString, ValidValuesTyped } from "./common/index.js";
 import { IDForm, IDValue, RecordFilter, fahrenheitToCelsius }
   from "./production/index.js";
 
@@ -12,13 +12,14 @@ export class RecordFilterExampleGlue {
     this.recordFilter = new RecordFilter();
     values.forEach((value) => {
       const typed = IDValueTyped.fromStringObj(value);
-      this.recordFilter.add(new IDValue(new IDForm(typed.iD), typed.value));
+      this.recordFilter.add(new IDValue(typed.iD.get(), typed.value));
     });
   }
 
-  whenFilteredByIDWithValue(values: readonly IDForm[]): void {
+  whenFilteredByIDWithValue(values: readonly IDFormString[]): void {
     if (values.length > 0) {
-      this.computedSum = this.recordFilter.sumByLabel(values[0]!);
+      // The column is an IDForm, and it reaches the glue as text.
+      this.computedSum = this.recordFilter.sumByLabel(new IDForm(values[0]!));
     }
   }
 
@@ -31,7 +32,7 @@ export class RecordFilterExampleGlue {
   whenFilteredBy(values: readonly FilterValueString[]): void {
     values.forEach((value) => {
       const typed = FilterValueTyped.fromStringObj(value);
-      this.computedSum = this.recordFilter.sumByLabel(new IDForm(typed.value));
+      this.computedSum = this.recordFilter.sumByLabel(typed.value.get());
     });
   }
 
@@ -45,7 +46,7 @@ export class RecordFilterExampleGlue {
   whenElementAdded(values: readonly IDValueString[]): void {
     values.forEach((value) => {
       const typed = IDValueTyped.fromStringObj(value);
-      this.recordFilter.add(new IDValue(new IDForm(typed.iD), typed.value));
+      this.recordFilter.add(new IDValue(typed.iD.get(), typed.value));
     });
   }
 

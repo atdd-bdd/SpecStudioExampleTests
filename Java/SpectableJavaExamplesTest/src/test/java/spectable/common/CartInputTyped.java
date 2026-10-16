@@ -10,13 +10,13 @@ import records.*;
 import calculator.*;
 
 public class CartInputTyped {
-    public Dollar totalItems;
-    public Dollar shipping;
-    public Dollar discount;
-    public Dollar totalPrice;
+    public DollarTyped totalItems;
+    public DollarTyped shipping;
+    public DollarTyped discount;
+    public DollarTyped totalPrice;
     public String notes;
 
-    public CartInputTyped(Dollar totalItems, Dollar shipping, Dollar discount, Dollar totalPrice, String notes) {
+    public CartInputTyped(DollarTyped totalItems, DollarTyped shipping, DollarTyped discount, DollarTyped totalPrice, String notes) {
         this.totalItems = totalItems;
         this.shipping = shipping;
         this.discount = discount;
@@ -25,10 +25,10 @@ public class CartInputTyped {
     }
 
     public CartInputTyped(CartInputString s) {
-        this.totalItems = new Dollar(s.totalItems);
-        this.shipping = new Dollar(s.shipping);
-        this.discount = new Dollar(s.discount);
-        this.totalPrice = new Dollar(s.totalPrice);
+        this.totalItems = new DollarTyped(s.totalItems);
+        this.shipping = new DollarTyped(s.shipping);
+        this.discount = new DollarTyped(s.discount);
+        this.totalPrice = new DollarTyped(s.totalPrice);
         this.notes = s.notes;
     }
 
@@ -82,10 +82,10 @@ public class CartInputTyped {
     public static CartInputTyped fromJsonValue(Map<String, Object> m) {
         if (m == null) return null;
         return new CartInputTyped(
-            new Dollar(Json.asString(Json.require(m, "totalItems"), "totalItems")),
-            new Dollar(Json.asString(Json.require(m, "shipping"), "shipping")),
-            new Dollar(Json.asString(Json.require(m, "discount"), "discount")),
-            new Dollar(Json.asString(Json.require(m, "totalPrice"), "totalPrice")),
+            new DollarTyped(new DollarString(Json.asString(Json.require(m, "totalItems"), "totalItems"))),
+            new DollarTyped(new DollarString(Json.asString(Json.require(m, "shipping"), "shipping"))),
+            new DollarTyped(new DollarString(Json.asString(Json.require(m, "discount"), "discount"))),
+            new DollarTyped(new DollarString(Json.asString(Json.require(m, "totalPrice"), "totalPrice"))),
             Json.asString(Json.require(m, "notes"), "notes"));
     }
 

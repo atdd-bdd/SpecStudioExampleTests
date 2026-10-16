@@ -9,9 +9,7 @@ final class RecordFilterExampleTests: XCTestCase {
             IDValueString(fromArray: ["Q9999", "2"]),
             IDValueString(fromArray: ["Q1234", "3"]),
         ])
-        glue.whenFilteredByIdWithValue([
-            ["Q1234"],
-        ])
+        glue.whenFilteredByIdWithValue([IDFormString("Q1234")])
         glue.thenSumIs([4])
     }
 

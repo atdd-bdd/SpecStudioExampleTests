@@ -1,19 +1,21 @@
 import { CatalogItemString } from "./CatalogItemString.js";
 import * as _json from "./json.js";
+import { SimpleTextTyped } from "./SimpleTextTyped.js";
+import { DollarTyped } from "./DollarTyped.js";
 
 export class CatalogItemTyped {
-  name: string;
-  price: string;
+  name: SimpleTextTyped;
+  price: DollarTyped;
 
-  constructor(name: string, price: string) {
+  constructor(name: SimpleTextTyped, price: DollarTyped) {
     this.name = name;
     this.price = price;
   }
 
   static fromStringObj(s: CatalogItemString): CatalogItemTyped {
     return new CatalogItemTyped(
-      s.name,
-      s.price
+      new SimpleTextTyped(s.name),
+      new DollarTyped(s.price)
     );
   }
 
@@ -34,8 +36,8 @@ export class CatalogItemTyped {
 
   toJsonValue(): Record<string, unknown> {
     return {
-      name: this.name,
-      price: this.price,
+      name: String(this.name),
+      price: String(this.price),
     };
   }
 
@@ -43,8 +45,8 @@ export class CatalogItemTyped {
 
   static fromJsonValue(m: unknown): CatalogItemTyped {
     return new CatalogItemTyped(
-      _json.asString(_json.requireField(m, "name"), "name"),
-      _json.asString(_json.requireField(m, "price"), "price")
+      new SimpleTextTyped(_json.asString(_json.requireField(m, "name"), "name")),
+      new DollarTyped(_json.asString(_json.requireField(m, "price"), "price"))
     );
   }
 
@@ -66,7 +68,7 @@ export class CatalogItemTyped {
   }
 
   equals(other: CatalogItemTyped): boolean {
-    return this.name === other.name
-      && this.price === other.price;
+    return this.name.equals(other.name)
+      && this.price.equals(other.price);
   }
 }

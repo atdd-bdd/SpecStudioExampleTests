@@ -2,31 +2,32 @@
 
 use super::json;
 use super::address_string::AddressString;
+use super::simpletext_typed::SimpleTextTyped;
 
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct AddressTyped {
-    pub street: String,
-    pub city: String,
-    pub state: String,
-    pub zip: String,
+    pub street: SimpleTextTyped,
+    pub city: SimpleTextTyped,
+    pub state: SimpleTextTyped,
+    pub zip: SimpleTextTyped,
 }
 
 impl AddressTyped {
     pub fn from_str_struct(s: &AddressString) -> Self {
         Self {
-            street: s.street.clone(),
-            city: s.city.clone(),
-            state: s.state.clone(),
-            zip: s.zip.clone(),
+            street: SimpleTextTyped::from_str_struct(&s.street),
+            city: SimpleTextTyped::from_str_struct(&s.city),
+            state: SimpleTextTyped::from_str_struct(&s.state),
+            zip: SimpleTextTyped::from_str_struct(&s.zip),
         }
     }
 
     pub fn to_str_struct(&self) -> AddressString {
         AddressString {
-            street: self.street.clone(),
-            city: self.city.clone(),
-            state: self.state.clone(),
-            zip: self.zip.clone(),
+            street: self.street.to_str_struct(),
+            city: self.city.to_str_struct(),
+            state: self.state.to_str_struct(),
+            zip: self.zip.to_str_struct(),
         }
     }
 
@@ -40,10 +41,10 @@ impl AddressTyped {
 
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("Street".to_string(), json::Value::Str(self.street.clone())),
-            ("City".to_string(), json::Value::Str(self.city.clone())),
-            ("State".to_string(), json::Value::Str(self.state.clone())),
-            ("ZIP".to_string(), json::Value::Str(self.zip.clone())),
+            ("Street".to_string(), json::Value::Str(self.street.text.clone())),
+            ("City".to_string(), json::Value::Str(self.city.text.clone())),
+            ("State".to_string(), json::Value::Str(self.state.text.clone())),
+            ("ZIP".to_string(), json::Value::Str(self.zip.text.clone())),
         ])
     }
 
@@ -53,10 +54,10 @@ impl AddressTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            street: json::as_string(json::require(v, "Street")?, "Street")?,
-            city: json::as_string(json::require(v, "City")?, "City")?,
-            state: json::as_string(json::require(v, "State")?, "State")?,
-            zip: json::as_string(json::require(v, "ZIP")?, "ZIP")?,
+            street: SimpleTextTyped::from(json::as_string(json::require(v, "Street")?, "Street")?),
+            city: SimpleTextTyped::from(json::as_string(json::require(v, "City")?, "City")?),
+            state: SimpleTextTyped::from(json::as_string(json::require(v, "State")?, "State")?),
+            zip: SimpleTextTyped::from(json::as_string(json::require(v, "ZIP")?, "ZIP")?),
         })
     }
 

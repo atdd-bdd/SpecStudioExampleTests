@@ -2,18 +2,18 @@ package common
 
 type ShoppingCartTyped struct {
 	Items []OrderItemTyped
-	Shipping string
-	Discount string
-	TotalPrice string
+	Shipping DollarTyped
+	Discount DollarTyped
+	TotalPrice DollarTyped
 	ShippingAddress AddressTyped
 	BillingAddress AddressTyped
 }
 
 func NewShoppingCartTypedFromString(s ShoppingCartString) ShoppingCartTyped {
 	t := ShoppingCartTyped{}
-	t.Shipping = s.Shipping
-	t.Discount = s.Discount
-	t.TotalPrice = s.TotalPrice
+	t.Shipping = NewDollarTypedFromString(s.Shipping)
+	t.Discount = NewDollarTypedFromString(s.Discount)
+	t.TotalPrice = NewDollarTypedFromString(s.TotalPrice)
 	t.ShippingAddress = NewAddressTypedFromString(s.ShippingAddress)
 	t.BillingAddress = NewAddressTypedFromString(s.BillingAddress)
 	return t
@@ -22,9 +22,9 @@ func NewShoppingCartTypedFromString(s ShoppingCartString) ShoppingCartTyped {
 // ToShoppingCartString converts this ShoppingCartTyped back to the string form a table compares.
 func (t ShoppingCartTyped) ToShoppingCartString() ShoppingCartString {
 	s := ShoppingCartString{}
-	s.Shipping = t.Shipping
-	s.Discount = t.Discount
-	s.TotalPrice = t.TotalPrice
+	s.Shipping = t.Shipping.ToDollarString()
+	s.Discount = t.Discount.ToDollarString()
+	s.TotalPrice = t.TotalPrice.ToDollarString()
 	s.ShippingAddress = t.ShippingAddress.ToAddressString()
 	s.BillingAddress = t.BillingAddress.ToAddressString()
 	return s
@@ -52,9 +52,9 @@ func (t ShoppingCartTyped) ToJSONValue() map[string]interface{} {
 			for _, e := range t.Items { out = append(out, e.ToJSONValue()) }
 			return out
 		}(),
-		"Shipping": t.Shipping,
-		"Discount": t.Discount,
-		"TotalPrice": t.TotalPrice,
+		"Shipping": t.Shipping.String(),
+		"Discount": t.Discount.String(),
+		"TotalPrice": t.TotalPrice.String(),
 		"ShippingAddress": t.ShippingAddress.ToJSONValue(),
 		"BillingAddress": t.BillingAddress.ToJSONValue(),
 	}
@@ -94,7 +94,7 @@ func NewShoppingCartTypedFromJSONValue(m map[string]interface{}) (ShoppingCartTy
 	if err != nil {
 		return t, err
 	}
-	t.Shipping = valShipping
+	t.Shipping = NewDollarTyped(valShipping)
 	rawDiscount, err := JSONRequire(m, "Discount")
 	if err != nil {
 		return t, err
@@ -103,7 +103,7 @@ func NewShoppingCartTypedFromJSONValue(m map[string]interface{}) (ShoppingCartTy
 	if err != nil {
 		return t, err
 	}
-	t.Discount = valDiscount
+	t.Discount = NewDollarTyped(valDiscount)
 	rawTotalPrice, err := JSONRequire(m, "TotalPrice")
 	if err != nil {
 		return t, err
@@ -112,7 +112,7 @@ func NewShoppingCartTypedFromJSONValue(m map[string]interface{}) (ShoppingCartTy
 	if err != nil {
 		return t, err
 	}
-	t.TotalPrice = valTotalPrice
+	t.TotalPrice = NewDollarTyped(valTotalPrice)
 	rawShippingAddress, err := JSONRequire(m, "ShippingAddress")
 	if err != nil {
 		return t, err

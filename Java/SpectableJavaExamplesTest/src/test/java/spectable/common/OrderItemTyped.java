@@ -10,12 +10,12 @@ import records.*;
 import calculator.*;
 
 public class OrderItemTyped {
-    public SimpleText name;
+    public SimpleTextTyped name;
     public int quantity;
-    public Dollar price;
-    public Dollar itemTotal;
+    public DollarTyped price;
+    public DollarTyped itemTotal;
 
-    public OrderItemTyped(SimpleText name, int quantity, Dollar price, Dollar itemTotal) {
+    public OrderItemTyped(SimpleTextTyped name, int quantity, DollarTyped price, DollarTyped itemTotal) {
         this.name = name;
         this.quantity = quantity;
         this.price = price;
@@ -23,10 +23,10 @@ public class OrderItemTyped {
     }
 
     public OrderItemTyped(OrderItemString s) {
-        this.name = new SimpleText(s.name);
+        this.name = new SimpleTextTyped(s.name);
         this.quantity = Integer.parseInt(s.quantity);
-        this.price = new Dollar(s.price);
-        this.itemTotal = new Dollar(s.itemTotal);
+        this.price = new DollarTyped(s.price);
+        this.itemTotal = new DollarTyped(s.itemTotal);
     }
 
     @Override
@@ -77,10 +77,10 @@ public class OrderItemTyped {
     public static OrderItemTyped fromJsonValue(Map<String, Object> m) {
         if (m == null) return null;
         return new OrderItemTyped(
-            new SimpleText(Json.asString(Json.require(m, "name"), "name")),
+            new SimpleTextTyped(new SimpleTextString(Json.asString(Json.require(m, "name"), "name"))),
             Json.asInt(Json.require(m, "quantity"), "quantity"),
-            new Dollar(Json.asString(Json.require(m, "price"), "price")),
-            new Dollar(Json.asString(Json.require(m, "itemTotal"), "itemTotal")));
+            new DollarTyped(new DollarString(Json.asString(Json.require(m, "price"), "price"))),
+            new DollarTyped(new DollarString(Json.asString(Json.require(m, "itemTotal"), "itemTotal"))));
     }
 
     public static OrderItemTyped fromJSON(String json) {

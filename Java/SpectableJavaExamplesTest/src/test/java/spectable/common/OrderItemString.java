@@ -8,16 +8,16 @@ import calculator.*;
 public class OrderItemString {
     private static final String DNCString = "?DNC?";
 
-    public String name;
+    public SimpleTextString name;
     public String quantity;
-    public String price;
-    public String itemTotal;
+    public DollarString price;
+    public DollarString itemTotal;
 
     public OrderItemString(String name, String quantity, String price, String itemTotal) {
-        this.name = name;
+        this.name = new SimpleTextString(name);
         this.quantity = quantity;
-        this.price = price;
-        this.itemTotal = itemTotal;
+        this.price = new DollarString(price);
+        this.itemTotal = new DollarString(itemTotal);
     }
 
     /** Builds from the text form, e.g. Money as "25 USD". */
@@ -39,10 +39,10 @@ public class OrderItemString {
         if (this == o) return true;
         if (!(o instanceof OrderItemString)) return false;
         OrderItemString that = (OrderItemString) o;
-        return (DNCString.equals(name) || DNCString.equals(that.name) || Objects.equals(name, that.name))
+        return (DNCString.equals(name.value) || DNCString.equals(that.name.value) || Objects.equals(name.value, that.name.value))
             && (DNCString.equals(quantity) || DNCString.equals(that.quantity) || Objects.equals(quantity, that.quantity))
-            && (DNCString.equals(price) || DNCString.equals(that.price) || Objects.equals(price, that.price))
-            && (DNCString.equals(itemTotal) || DNCString.equals(that.itemTotal) || Objects.equals(itemTotal, that.itemTotal));
+            && (DNCString.equals(price.value) || DNCString.equals(that.price.value) || Objects.equals(price.value, that.price.value))
+            && (DNCString.equals(itemTotal.value) || DNCString.equals(that.itemTotal.value) || Objects.equals(itemTotal.value, that.itemTotal.value));
     }
 
     @Override
@@ -52,6 +52,6 @@ public class OrderItemString {
 
     @Override
     public String toString() {
-        return Tokens.token(name) + " " + Tokens.token(quantity) + " " + Tokens.token(price) + " " + Tokens.token(itemTotal);
+        return Tokens.token(name.value) + " " + Tokens.token(quantity) + " " + Tokens.token(price.value) + " " + Tokens.token(itemTotal.value);
     }
 }

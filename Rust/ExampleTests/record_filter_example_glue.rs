@@ -17,14 +17,14 @@ impl RecordFilterExampleGlue {
         self.record_filter = RecordFilter::new();
         for value in values {
             let typed = IDValueTyped::from_str_struct(value);
-            let id = IDForm::parse(&typed.id).expect("bad ID");
+            let id = IDForm::parse(typed.id.get()).expect("bad ID");
             self.record_filter.add(IDValue::new(id, typed.value));
         }
     }
 
-    pub fn when_filtered_by_id_with_value(&mut self, values: &[Vec<String>]) {
-        if let Some(first) = values.first().and_then(|r| r.first()) {
-            let id = IDForm::parse(first).expect("bad ID");
+    pub fn when_filtered_by_id_with_value(&mut self, values: &[IDFormString]) {
+        if let Some(first) = values.first() {
+            let id = IDForm::parse(first.value()).expect("bad ID");
             self.computed_sum = self.record_filter.sum_by_label(&id);
         }
     }
@@ -38,7 +38,7 @@ impl RecordFilterExampleGlue {
     pub fn when_filtered_by(&mut self, values: &[FilterValueString]) {
         for value in values {
             let typed = FilterValueTyped::from_str_struct(value);
-            let id = IDForm::parse(&typed.value).expect("bad ID");
+            let id = IDForm::parse(typed.value.get()).expect("bad ID");
             self.computed_sum = self.record_filter.sum_by_label(&id);
         }
     }
@@ -53,7 +53,7 @@ impl RecordFilterExampleGlue {
     pub fn when_element_added(&mut self, values: &[IDValueString]) {
         for value in values {
             let typed = IDValueTyped::from_str_struct(value);
-            let id = IDForm::parse(&typed.id).expect("bad ID");
+            let id = IDForm::parse(typed.id.get()).expect("bad ID");
             self.record_filter.add(IDValue::new(id, typed.value));
         }
     }

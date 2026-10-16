@@ -1,10 +1,11 @@
+from .idform_string import IDFormString
 from . import tokens
 DNC_STRING = '?DNC?'
 
 
 class FilterValueString:
     def __init__(self, value: str = ''):
-        self.value = value
+        self.value = IDFormString(value)
 
     @classmethod
     def from_list(cls, values):

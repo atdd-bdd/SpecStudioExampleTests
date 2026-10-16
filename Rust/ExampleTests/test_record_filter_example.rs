@@ -13,9 +13,7 @@ fn scenario_filter_data_by_id() {
         IDValueString::from_vec(&["Q9999", "2"]),
         IDValueString::from_vec(&["Q1234", "3"]),
     ]);
-    glue.when_filtered_by_id_with_value(&[
-        vec!["Q1234".to_string()],
-    ]);
+    glue.when_filtered_by_id_with_value(&[IDFormString::from("Q1234")]);
     glue.then_sum_is(&[4]);
 }
 

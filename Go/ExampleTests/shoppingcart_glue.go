@@ -23,10 +23,12 @@ func (g *ShoppingCartGlue) cart() *production.ShoppingCart {
 	return production.NewShoppingCart(g.currentItems)
 }
 
-func mustDollar(t *testing.T, s string) production.Dollar {
-	d, err := production.ParseDollar(s)
+// A Dollar column reaches the glue as text, held by the Typed form the
+// generated test built; Dollar itself is read here.
+func mustDollar(t *testing.T, cell common.DollarTyped) production.Dollar {
+	d, err := production.ParseDollar(cell.Get())
 	if err != nil {
-		t.Fatalf("bad dollar %q: %v", s, err)
+		t.Fatalf("bad dollar %q: %v", cell.Get(), err)
 	}
 	return d
 }
@@ -35,7 +37,7 @@ func (g *ShoppingCartGlue) GivenCatalogHas(t *testing.T, values []common.Catalog
 	for _, value := range values {
 		typed := common.NewCatalogItemTypedFromString(value)
 		g.catalog.Add(production.NewCatalogItem(
-			production.NewSimpleText(typed.Name), mustDollar(t, typed.Price)))
+			production.NewSimpleText(typed.Name.Get()), mustDollar(t, typed.Price)))
 	}
 }
 
@@ -48,7 +50,7 @@ func (g *ShoppingCartGlue) GivenItemCollection(t *testing.T, values []common.Ord
 	for _, value := range values {
 		typed := common.NewOrderItemTypedFromString(value)
 		g.currentItems.Add(production.NewOrderItem(
-			production.NewSimpleText(typed.Name), typed.Quantity,
+			production.NewSimpleText(typed.Name.Get()), typed.Quantity,
 			mustDollar(t, typed.Price), mustDollar(t, typed.ItemTotal)))
 	}
 }
@@ -57,9 +59,9 @@ func (g *ShoppingCartGlue) WhenItemAdded(t *testing.T, values []common.OrderItem
 	for _, value := range values {
 		typed := common.NewOrderItemTypedFromString(value)
 		item, ok := production.OrderItemFromCatalog(
-			g.catalog, production.NewSimpleText(typed.Name), typed.Quantity)
+			g.catalog, production.NewSimpleText(typed.Name.Get()), typed.Quantity)
 		if !ok {
-			t.Fatalf("item not in catalog: %s", typed.Name)
+			t.Fatalf("item not in catalog: %s", typed.Name.Get())
 		}
 		g.currentItems.Add(item)
 	}
@@ -73,7 +75,7 @@ func (g *ShoppingCartGlue) ThenItemCollectionIs(t *testing.T, values []common.Or
 	for i, value := range values {
 		typed := common.NewOrderItemTypedFromString(value)
 		a := actual[i]
-		if typed.Name != a.Name.Value {
+		if typed.Name.Get() != a.Name.Value {
 			t.Errorf("Item %d name: expected %s, got %s", i, typed.Name, a.Name.Value)
 		}
 		if typed.Quantity != a.Quantity {
@@ -131,9 +133,9 @@ func (g *ShoppingCartGlue) ExamplesBusinessRuleDiscount(t *testing.T, values []c
 	for _, value := range values {
 		typed := common.NewDiscountInputTypedFromString(value)
 		got := production.DiscountFor(mustDollar(t, typed.TotalPrice))
-		e, err := production.ParsePercentage(typed.Discount)
+		e, err := production.ParsePercentage(typed.Discount.Get())
 		if err != nil {
-			t.Fatalf("bad percentage %q: %v", typed.Discount, err)
+			t.Fatalf("bad percentage %q: %v", typed.Discount.Get(), err)
 		}
 		if e != got {
 			t.Errorf("Discount for %s: expected %s, got %s", typed.TotalPrice, e, got)

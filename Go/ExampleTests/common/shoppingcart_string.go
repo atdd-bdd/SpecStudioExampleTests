@@ -2,9 +2,9 @@ package common
 
 type ShoppingCartString struct {
 	Items string
-	Shipping string
-	Discount string
-	TotalPrice string
+	Shipping DollarString
+	Discount DollarString
+	TotalPrice DollarString
 	ShippingAddress AddressString
 	BillingAddress AddressString
 }
@@ -12,9 +12,9 @@ type ShoppingCartString struct {
 func NewShoppingCartStringFromSlice(v []string) ShoppingCartString {
 	s := ShoppingCartString{}
 	if len(v) > 0 { s.Items = v[0] }
-	if len(v) > 1 { s.Shipping = v[1] }
-	if len(v) > 2 { s.Discount = v[2] }
-	if len(v) > 3 { s.TotalPrice = v[3] }
+	if len(v) > 1 { s.Shipping = DollarString(v[1]) }
+	if len(v) > 2 { s.Discount = DollarString(v[2]) }
+	if len(v) > 3 { s.TotalPrice = DollarString(v[3]) }
 	if len(v) > 4 { s.ShippingAddress = NewAddressStringFromText(v[4]) }
 	if len(v) > 5 { s.BillingAddress = NewAddressStringFromText(v[5]) }
 	return s
@@ -25,23 +25,23 @@ func NewShoppingCartStringFromText(text string) ShoppingCartString {
 	parts := RequireTokens(text, 6, "ShoppingCart")
 	return ShoppingCartString{
 		Items: parts[0],
-		Shipping: parts[1],
-		Discount: parts[2],
-		TotalPrice: parts[3],
+		Shipping: DollarString(parts[1]),
+		Discount: DollarString(parts[2]),
+		TotalPrice: DollarString(parts[3]),
 		ShippingAddress: NewAddressStringFromText(parts[4]),
 		BillingAddress: NewAddressStringFromText(parts[5]),
 	}
 }
 
 func (s ShoppingCartString) String() string {
-	return Token(s.Items) + " " + Token(s.Shipping) + " " + Token(s.Discount) + " " + Token(s.TotalPrice) + " " + Nested(s.ShippingAddress.String()) + " " + Nested(s.BillingAddress.String())
+	return Token(s.Items) + " " + Token(string(s.Shipping)) + " " + Token(string(s.Discount)) + " " + Token(string(s.TotalPrice)) + " " + Nested(s.ShippingAddress.String()) + " " + Nested(s.BillingAddress.String())
 }
 
 func (s ShoppingCartString) Equals(o ShoppingCartString) bool {
 	return DNCEqual(s.Items, o.Items) &&
-		DNCEqual(s.Shipping, o.Shipping) &&
-		DNCEqual(s.Discount, o.Discount) &&
-		DNCEqual(s.TotalPrice, o.TotalPrice) &&
+		DNCEqual(string(s.Shipping), string(o.Shipping)) &&
+		DNCEqual(string(s.Discount), string(o.Discount)) &&
+		DNCEqual(string(s.TotalPrice), string(o.TotalPrice)) &&
 		s.ShippingAddress.Equals(o.ShippingAddress) &&
 		s.BillingAddress.Equals(o.BillingAddress)
 }

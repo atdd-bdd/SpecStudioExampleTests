@@ -59,9 +59,9 @@ export class ShoppingCartTyped {
   static fromJsonValue(m) {
     return new ShoppingCartTyped(
       (_json.asArray(_json.require(m, "items"), "items") ?? []).map((e) => OrderItemTyped.fromJsonValue(e)),
-      new Dollar(_json.asString(_json.require(m, "shipping"), "shipping")),
-      new Dollar(_json.asString(_json.require(m, "discount"), "discount")),
-      new Dollar(_json.asString(_json.require(m, "totalPrice"), "totalPrice")),
+      _json.asString(_json.require(m, "shipping"), "shipping"),
+      _json.asString(_json.require(m, "discount"), "discount"),
+      _json.asString(_json.require(m, "totalPrice"), "totalPrice"),
       AddressTyped.fromJsonValue(_json.require(m, "shippingAddress")),
       AddressTyped.fromJsonValue(_json.require(m, "billingAddress"))
     );

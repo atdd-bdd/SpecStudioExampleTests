@@ -1,28 +1,28 @@
 package common
 
 type AddressTyped struct {
-	Street string
-	City string
-	State string
-	ZIP string
+	Street SimpleTextTyped
+	City SimpleTextTyped
+	State SimpleTextTyped
+	ZIP SimpleTextTyped
 }
 
 func NewAddressTypedFromString(s AddressString) AddressTyped {
 	t := AddressTyped{}
-	t.Street = s.Street
-	t.City = s.City
-	t.State = s.State
-	t.ZIP = s.ZIP
+	t.Street = NewSimpleTextTypedFromString(s.Street)
+	t.City = NewSimpleTextTypedFromString(s.City)
+	t.State = NewSimpleTextTypedFromString(s.State)
+	t.ZIP = NewSimpleTextTypedFromString(s.ZIP)
 	return t
 }
 
 // ToAddressString converts this AddressTyped back to the string form a table compares.
 func (t AddressTyped) ToAddressString() AddressString {
 	s := AddressString{}
-	s.Street = t.Street
-	s.City = t.City
-	s.State = t.State
-	s.ZIP = t.ZIP
+	s.Street = t.Street.ToSimpleTextString()
+	s.City = t.City.ToSimpleTextString()
+	s.State = t.State.ToSimpleTextString()
+	s.ZIP = t.ZIP.ToSimpleTextString()
 	return s
 }
 
@@ -43,10 +43,10 @@ func AddressTypedFromStringList(list []AddressString) []AddressTyped {
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t AddressTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"Street": t.Street,
-		"City": t.City,
-		"State": t.State,
-		"ZIP": t.ZIP,
+		"Street": t.Street.String(),
+		"City": t.City.String(),
+		"State": t.State.String(),
+		"ZIP": t.ZIP.String(),
 	}
 }
 
@@ -64,7 +64,7 @@ func NewAddressTypedFromJSONValue(m map[string]interface{}) (AddressTyped, error
 	if err != nil {
 		return t, err
 	}
-	t.Street = valStreet
+	t.Street = NewSimpleTextTyped(valStreet)
 	rawCity, err := JSONRequire(m, "City")
 	if err != nil {
 		return t, err
@@ -73,7 +73,7 @@ func NewAddressTypedFromJSONValue(m map[string]interface{}) (AddressTyped, error
 	if err != nil {
 		return t, err
 	}
-	t.City = valCity
+	t.City = NewSimpleTextTyped(valCity)
 	rawState, err := JSONRequire(m, "State")
 	if err != nil {
 		return t, err
@@ -82,7 +82,7 @@ func NewAddressTypedFromJSONValue(m map[string]interface{}) (AddressTyped, error
 	if err != nil {
 		return t, err
 	}
-	t.State = valState
+	t.State = NewSimpleTextTyped(valState)
 	rawZIP, err := JSONRequire(m, "ZIP")
 	if err != nil {
 		return t, err
@@ -91,7 +91,7 @@ func NewAddressTypedFromJSONValue(m map[string]interface{}) (AddressTyped, error
 	if err != nil {
 		return t, err
 	}
-	t.ZIP = valZIP
+	t.ZIP = NewSimpleTextTyped(valZIP)
 	return t, nil
 }
 

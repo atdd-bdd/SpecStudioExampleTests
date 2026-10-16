@@ -4,11 +4,11 @@ using production;
 
     public class ShippingInputString
     {
-        public string totalPrice;
-        public string shippingCost;
+        public DollarString totalPrice;
+        public DollarString shippingCost;
         public string notes;
 
-        public ShippingInputString(string totalPrice, string shippingCost, string notes)
+        public ShippingInputString(DollarString totalPrice, DollarString shippingCost, string notes)
         {
             this.totalPrice = totalPrice;
             this.shippingCost = shippingCost;
@@ -33,8 +33,8 @@ using production;
         public ShippingInputTyped ToShippingInputTyped()
         {
             return new ShippingInputTyped(
-                new Dollar(this.totalPrice),
-                new Dollar(this.shippingCost),
+                new DollarTyped(this.totalPrice),
+                new DollarTyped(this.shippingCost),
                 this.notes
             );
         }
@@ -49,8 +49,8 @@ using production;
         public override bool Equals(object? obj)
         {
             if (obj is not ShippingInputString other) return false;
-            return (DNCString == this.totalPrice || DNCString == other.totalPrice || object.Equals(this.totalPrice, other.totalPrice))
-                && (DNCString == this.shippingCost || DNCString == other.shippingCost || object.Equals(this.shippingCost, other.shippingCost))
+            return (DNCString == this.totalPrice.Value || DNCString == other.totalPrice.Value || this.totalPrice.Value == other.totalPrice.Value)
+                && (DNCString == this.shippingCost.Value || DNCString == other.shippingCost.Value || this.shippingCost.Value == other.shippingCost.Value)
                 && (DNCString == this.notes || DNCString == other.notes || object.Equals(this.notes, other.notes));
         }
 

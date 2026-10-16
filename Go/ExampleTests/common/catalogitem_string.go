@@ -1,14 +1,14 @@
 package common
 
 type CatalogItemString struct {
-	Name string
-	Price string
+	Name SimpleTextString
+	Price DollarString
 }
 
 func NewCatalogItemStringFromSlice(v []string) CatalogItemString {
 	s := CatalogItemString{}
-	if len(v) > 0 { s.Name = v[0] }
-	if len(v) > 1 { s.Price = v[1] }
+	if len(v) > 0 { s.Name = SimpleTextString(v[0]) }
+	if len(v) > 1 { s.Price = DollarString(v[1]) }
 	return s
 }
 
@@ -16,18 +16,18 @@ func NewCatalogItemStringFromSlice(v []string) CatalogItemString {
 func NewCatalogItemStringFromText(text string) CatalogItemString {
 	parts := RequireTokens(text, 2, "CatalogItem")
 	return CatalogItemString{
-		Name: parts[0],
-		Price: parts[1],
+		Name: SimpleTextString(parts[0]),
+		Price: DollarString(parts[1]),
 	}
 }
 
 func (s CatalogItemString) String() string {
-	return Token(s.Name) + " " + Token(s.Price)
+	return Token(string(s.Name)) + " " + Token(string(s.Price))
 }
 
 func (s CatalogItemString) Equals(o CatalogItemString) bool {
-	return DNCEqual(s.Name, o.Name) &&
-		DNCEqual(s.Price, o.Price)
+	return DNCEqual(string(s.Name), string(o.Name)) &&
+		DNCEqual(string(s.Price), string(o.Price))
 }
 
 func EqualCatalogItemStringSlices(a, b []CatalogItemString) bool {

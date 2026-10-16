@@ -1,14 +1,15 @@
 from . import json_util as _json
 from .item_price_input_string import ItemPriceInputString
+from .dollar_typed import DollarTyped
 
 class ItemPriceInputTyped:
-    def __init__(self, total_items: str = ''):
+    def __init__(self, total_items: 'DollarTyped' = None):
         self.total_items = total_items
 
     @classmethod
     def from_string_obj(cls, s: ItemPriceInputString) -> 'ItemPriceInputTyped':
         return cls(
-            s.total_items
+            DollarTyped(s.total_items)
         )
 
     def to_string_obj(self) -> ItemPriceInputString:
@@ -26,7 +27,7 @@ class ItemPriceInputTyped:
 
     def to_json_value(self) -> dict:
         return {
-            'TotalItems': self.total_items,
+            'TotalItems': str(self.total_items),
         }
 
     def to_json(self) -> str:
@@ -35,7 +36,7 @@ class ItemPriceInputTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'ItemPriceInputTyped':
         return cls(
-            _json.as_str(_json.require(m, 'TotalItems'), 'TotalItems')
+            DollarTyped(_json.as_str(_json.require(m, 'TotalItems'), 'TotalItems'))
         )
 
     @classmethod

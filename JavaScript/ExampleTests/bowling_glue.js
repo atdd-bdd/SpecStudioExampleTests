@@ -17,11 +17,11 @@ export class BowlingGlue {
   // ---- given -----------------------------------------------------------
 
   givenRollsAre(values) {
-    this.#game.setRolls(values);
+    this.#game.setRolls(BowlingGlue.#asPins(values));
   }
 
   givenRollsForTenthFrameAre(values) {
-    this.#game.setTenthFrameRolls(values);
+    this.#game.setTenthFrameRolls(BowlingGlue.#asPins(values));
   }
 
   /** The frame values from the previous step are still on the same game. */
@@ -32,7 +32,7 @@ export class BowlingGlue {
   // ---- when ------------------------------------------------------------
 
   whenRollIs(values) {
-    for (const roll of values)
+    for (const roll of BowlingGlue.#asPins(values))
       this.#game.addRoll(roll);
   }
 
@@ -43,7 +43,12 @@ export class BowlingGlue {
   // ---- then ------------------------------------------------------------
 
   thenRollsBecome(values) {
-    expect(this.#game.rolls()).toEqual([...values]);
+    expect(this.#game.rolls()).toEqual(BowlingGlue.#asPins(values));
+  }
+
+  /** A column of Pins reaches the glue as text; Pins itself is read here. */
+  static #asPins(cells) {
+    return [...cells].map((cell) => new Pins(cell));
   }
 
   thenDisplayIs(value) {

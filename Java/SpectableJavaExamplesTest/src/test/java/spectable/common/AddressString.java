@@ -8,16 +8,16 @@ import calculator.*;
 public class AddressString {
     private static final String DNCString = "?DNC?";
 
-    public String street;
-    public String city;
-    public String state;
-    public String zIP;
+    public SimpleTextString street;
+    public SimpleTextString city;
+    public SimpleTextString state;
+    public SimpleTextString zIP;
 
     public AddressString(String street, String city, String state, String zIP) {
-        this.street = street;
-        this.city = city;
-        this.state = state;
-        this.zIP = zIP;
+        this.street = new SimpleTextString(street);
+        this.city = new SimpleTextString(city);
+        this.state = new SimpleTextString(state);
+        this.zIP = new SimpleTextString(zIP);
     }
 
     /** Builds from the text form, e.g. Money as "25 USD". */
@@ -39,10 +39,10 @@ public class AddressString {
         if (this == o) return true;
         if (!(o instanceof AddressString)) return false;
         AddressString that = (AddressString) o;
-        return (DNCString.equals(street) || DNCString.equals(that.street) || Objects.equals(street, that.street))
-            && (DNCString.equals(city) || DNCString.equals(that.city) || Objects.equals(city, that.city))
-            && (DNCString.equals(state) || DNCString.equals(that.state) || Objects.equals(state, that.state))
-            && (DNCString.equals(zIP) || DNCString.equals(that.zIP) || Objects.equals(zIP, that.zIP));
+        return (DNCString.equals(street.value) || DNCString.equals(that.street.value) || Objects.equals(street.value, that.street.value))
+            && (DNCString.equals(city.value) || DNCString.equals(that.city.value) || Objects.equals(city.value, that.city.value))
+            && (DNCString.equals(state.value) || DNCString.equals(that.state.value) || Objects.equals(state.value, that.state.value))
+            && (DNCString.equals(zIP.value) || DNCString.equals(that.zIP.value) || Objects.equals(zIP.value, that.zIP.value));
     }
 
     @Override
@@ -52,6 +52,6 @@ public class AddressString {
 
     @Override
     public String toString() {
-        return Tokens.token(street) + " " + Tokens.token(city) + " " + Tokens.token(state) + " " + Tokens.token(zIP);
+        return Tokens.token(street.value) + " " + Tokens.token(city.value) + " " + Tokens.token(state.value) + " " + Tokens.token(zIP.value);
     }
 }

@@ -2,27 +2,28 @@
 
 use super::json;
 use super::shippinginput_string::ShippingInputString;
+use super::dollar_typed::DollarTyped;
 
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct ShippingInputTyped {
-    pub total_price: String,
-    pub shipping_cost: String,
+    pub total_price: DollarTyped,
+    pub shipping_cost: DollarTyped,
     pub notes: String,
 }
 
 impl ShippingInputTyped {
     pub fn from_str_struct(s: &ShippingInputString) -> Self {
         Self {
-            total_price: s.total_price.clone(),
-            shipping_cost: s.shipping_cost.clone(),
+            total_price: DollarTyped::from_str_struct(&s.total_price),
+            shipping_cost: DollarTyped::from_str_struct(&s.shipping_cost),
             notes: s.notes.clone(),
         }
     }
 
     pub fn to_str_struct(&self) -> ShippingInputString {
         ShippingInputString {
-            total_price: self.total_price.clone(),
-            shipping_cost: self.shipping_cost.clone(),
+            total_price: self.total_price.to_str_struct(),
+            shipping_cost: self.shipping_cost.to_str_struct(),
             notes: self.notes.clone(),
         }
     }
@@ -37,8 +38,8 @@ impl ShippingInputTyped {
 
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("Total Price".to_string(), json::Value::Str(self.total_price.clone())),
-            ("Shipping Cost".to_string(), json::Value::Str(self.shipping_cost.clone())),
+            ("Total Price".to_string(), json::Value::Str(self.total_price.text.clone())),
+            ("Shipping Cost".to_string(), json::Value::Str(self.shipping_cost.text.clone())),
             ("Notes".to_string(), json::Value::Str(self.notes.clone())),
         ])
     }
@@ -49,8 +50,8 @@ impl ShippingInputTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            total_price: json::as_string(json::require(v, "Total Price")?, "Total Price")?,
-            shipping_cost: json::as_string(json::require(v, "Shipping Cost")?, "Shipping Cost")?,
+            total_price: DollarTyped::from(json::as_string(json::require(v, "Total Price")?, "Total Price")?),
+            shipping_cost: DollarTyped::from(json::as_string(json::require(v, "Shipping Cost")?, "Shipping Cost")?),
             notes: json::as_string(json::require(v, "Notes")?, "Notes")?,
         })
     }

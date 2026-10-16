@@ -4,12 +4,12 @@ using production;
 
     public class OrderItemString
     {
-        public string name;
+        public SimpleTextString name;
         public string quantity;
-        public string price;
-        public string itemTotal;
+        public DollarString price;
+        public DollarString itemTotal;
 
-        public OrderItemString(string name, string quantity, string price, string itemTotal)
+        public OrderItemString(SimpleTextString name, string quantity, DollarString price, DollarString itemTotal)
         {
             this.name = name;
             this.quantity = quantity;
@@ -36,10 +36,10 @@ using production;
         public OrderItemTyped ToOrderItemTyped()
         {
             return new OrderItemTyped(
-                new SimpleText(this.name),
+                new SimpleTextTyped(this.name),
                 int.Parse(this.quantity),
-                new Dollar(this.price),
-                new Dollar(this.itemTotal)
+                new DollarTyped(this.price),
+                new DollarTyped(this.itemTotal)
             );
         }
 
@@ -53,10 +53,10 @@ using production;
         public override bool Equals(object? obj)
         {
             if (obj is not OrderItemString other) return false;
-            return (DNCString == this.name || DNCString == other.name || object.Equals(this.name, other.name))
+            return (DNCString == this.name.Value || DNCString == other.name.Value || this.name.Value == other.name.Value)
                 && (DNCString == this.quantity || DNCString == other.quantity || object.Equals(this.quantity, other.quantity))
-                && (DNCString == this.price || DNCString == other.price || object.Equals(this.price, other.price))
-                && (DNCString == this.itemTotal || DNCString == other.itemTotal || object.Equals(this.itemTotal, other.itemTotal));
+                && (DNCString == this.price.Value || DNCString == other.price.Value || this.price.Value == other.price.Value)
+                && (DNCString == this.itemTotal.Value || DNCString == other.itemTotal.Value || this.itemTotal.Value == other.itemTotal.Value);
         }
 
         public override int GetHashCode()

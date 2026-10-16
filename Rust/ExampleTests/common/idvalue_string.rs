@@ -1,15 +1,16 @@
 #![allow(dead_code, unused_imports, unused_variables)]
 
+use super::idform_string::IDFormString;
 #[derive(Debug, Clone, Default)]
 pub struct IDValueString {
-    pub id: String,
+    pub id: IDFormString,
     pub value: String,
 }
 
 impl IDValueString {
     pub fn from_vec(v: &[&str]) -> Self {
         Self {
-            id: v.get(0).copied().unwrap_or("").to_string(),
+            id: IDFormString::from(v.get(0).copied().unwrap_or("")),
             value: v.get(1).copied().unwrap_or("").to_string(),
         }
     }
@@ -18,7 +19,7 @@ impl IDValueString {
     pub fn from_text(text: &str) -> Self {
         let parts = crate::common::tokens::require(text, 2, "IDValue");
         Self {
-            id: parts[0].clone(),
+            id: IDFormString::from(parts[0].clone()),
             value: parts[1].clone(),
         }
     }

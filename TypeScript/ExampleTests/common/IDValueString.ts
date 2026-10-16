@@ -1,13 +1,14 @@
+import type { IDFormString } from "./IDFormString.js";
 
 import * as tokens from "./tokens.js";
 
 export class IDValueString {
   static readonly DNC_STRING = "?DNC?";
 
-  iD: string;
+  iD: IDFormString;
   value: string;
 
-  constructor(iD: string = "", value: string = "") {
+  constructor(iD: IDFormString = "", value: string = "") {
     this.iD = iD;
     this.value = value;
   }

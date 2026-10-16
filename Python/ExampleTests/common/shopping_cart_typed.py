@@ -3,9 +3,12 @@ from .shopping_cart_string import ShoppingCartString
 from .order_item_typed import OrderItemTyped
 from .address_typed import AddressTyped
 from .address_typed import AddressTyped
+from .dollar_typed import DollarTyped
+from .dollar_typed import DollarTyped
+from .dollar_typed import DollarTyped
 
 class ShoppingCartTyped:
-    def __init__(self, items: list = None, shipping: str = '', discount: str = '', total_price: str = '', shipping_address: 'AddressTyped' = None, billing_address: 'AddressTyped' = None):
+    def __init__(self, items: list = None, shipping: 'DollarTyped' = None, discount: 'DollarTyped' = None, total_price: 'DollarTyped' = None, shipping_address: 'AddressTyped' = None, billing_address: 'AddressTyped' = None):
         self.items = items if items is not None else []
         self.shipping = shipping
         self.discount = discount
@@ -17,9 +20,9 @@ class ShoppingCartTyped:
     def from_string_obj(cls, s: ShoppingCartString) -> 'ShoppingCartTyped':
         return cls(
             [],
-            s.shipping,
-            s.discount,
-            s.total_price,
+            DollarTyped(s.shipping),
+            DollarTyped(s.discount),
+            DollarTyped(s.total_price),
             AddressTyped.from_string_obj(s.shipping_address),
             AddressTyped.from_string_obj(s.billing_address)
         )
@@ -45,9 +48,9 @@ class ShoppingCartTyped:
     def to_json_value(self) -> dict:
         return {
             'Items': [e.to_json_value() for e in self.items],
-            'Shipping': self.shipping,
-            'Discount': self.discount,
-            'TotalPrice': self.total_price,
+            'Shipping': str(self.shipping),
+            'Discount': str(self.discount),
+            'TotalPrice': str(self.total_price),
             'ShippingAddress': self.shipping_address.to_json_value() if self.shipping_address else None,
             'BillingAddress': self.billing_address.to_json_value() if self.billing_address else None,
         }
@@ -59,9 +62,9 @@ class ShoppingCartTyped:
     def from_json_value(cls, m: dict) -> 'ShoppingCartTyped':
         return cls(
             [OrderItemTyped.from_json_value(e) for e in _json.as_list(_json.require(m, 'Items'), 'Items')],
-            _json.as_str(_json.require(m, 'Shipping'), 'Shipping'),
-            _json.as_str(_json.require(m, 'Discount'), 'Discount'),
-            _json.as_str(_json.require(m, 'TotalPrice'), 'TotalPrice'),
+            DollarTyped(_json.as_str(_json.require(m, 'Shipping'), 'Shipping')),
+            DollarTyped(_json.as_str(_json.require(m, 'Discount'), 'Discount')),
+            DollarTyped(_json.as_str(_json.require(m, 'TotalPrice'), 'TotalPrice')),
             AddressTyped.from_json_value(_json.require(m, 'ShippingAddress')),
             AddressTyped.from_json_value(_json.require(m, 'BillingAddress'))
         )

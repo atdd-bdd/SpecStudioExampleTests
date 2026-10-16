@@ -1,17 +1,19 @@
 #![allow(dead_code, unused_imports, unused_variables)]
 
+use super::dollar_string::DollarString;
+use super::percentage_string::PercentageString;
 #[derive(Debug, Clone, Default)]
 pub struct DiscountInputString {
-    pub total_price: String,
-    pub discount: String,
+    pub total_price: DollarString,
+    pub discount: PercentageString,
     pub notes: String,
 }
 
 impl DiscountInputString {
     pub fn from_vec(v: &[&str]) -> Self {
         Self {
-            total_price: v.get(0).copied().unwrap_or("").to_string(),
-            discount: v.get(1).copied().unwrap_or("").to_string(),
+            total_price: DollarString::from(v.get(0).copied().unwrap_or("")),
+            discount: PercentageString::from(v.get(1).copied().unwrap_or("")),
             notes: v.get(2).copied().unwrap_or("").to_string(),
         }
     }
@@ -20,8 +22,8 @@ impl DiscountInputString {
     pub fn from_text(text: &str) -> Self {
         let parts = crate::common::tokens::require(text, 3, "DiscountInput");
         Self {
-            total_price: parts[0].clone(),
-            discount: parts[1].clone(),
+            total_price: DollarString::from(parts[0].clone()),
+            discount: PercentageString::from(parts[1].clone()),
             notes: parts[2].clone(),
         }
     }

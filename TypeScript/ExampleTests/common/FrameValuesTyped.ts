@@ -1,15 +1,17 @@
 import { FrameValuesString } from "./FrameValuesString.js";
 import * as _json from "./json.js";
+import { PinsTyped } from "./PinsTyped.js";
+import { ScoreTyped } from "./ScoreTyped.js";
 
 export class FrameValuesTyped {
   frame: number;
-  roll1: string;
-  roll2: string;
-  roll3: string;
-  score: string;
-  totalScore: string;
+  roll1: PinsTyped;
+  roll2: PinsTyped;
+  roll3: PinsTyped;
+  score: ScoreTyped;
+  totalScore: ScoreTyped;
 
-  constructor(frame: number, roll1: string, roll2: string, roll3: string, score: string, totalScore: string) {
+  constructor(frame: number, roll1: PinsTyped, roll2: PinsTyped, roll3: PinsTyped, score: ScoreTyped, totalScore: ScoreTyped) {
     this.frame = frame;
     this.roll1 = roll1;
     this.roll2 = roll2;
@@ -21,11 +23,11 @@ export class FrameValuesTyped {
   static fromStringObj(s: FrameValuesString): FrameValuesTyped {
     return new FrameValuesTyped(
       s.frame !== "" ? Number(s.frame) : 0,
-      s.roll1,
-      s.roll2,
-      s.roll3,
-      s.score,
-      s.totalScore
+      new PinsTyped(s.roll1),
+      new PinsTyped(s.roll2),
+      new PinsTyped(s.roll3),
+      new ScoreTyped(s.score),
+      new ScoreTyped(s.totalScore)
     );
   }
 
@@ -51,11 +53,11 @@ export class FrameValuesTyped {
   toJsonValue(): Record<string, unknown> {
     return {
       frame: this.frame,
-      roll1: this.roll1,
-      roll2: this.roll2,
-      roll3: this.roll3,
-      score: this.score,
-      totalScore: this.totalScore,
+      roll1: String(this.roll1),
+      roll2: String(this.roll2),
+      roll3: String(this.roll3),
+      score: String(this.score),
+      totalScore: String(this.totalScore),
     };
   }
 
@@ -64,11 +66,11 @@ export class FrameValuesTyped {
   static fromJsonValue(m: unknown): FrameValuesTyped {
     return new FrameValuesTyped(
       _json.asInt(_json.requireField(m, "frame"), "frame"),
-      _json.asString(_json.requireField(m, "roll1"), "roll1"),
-      _json.asString(_json.requireField(m, "roll2"), "roll2"),
-      _json.asString(_json.requireField(m, "roll3"), "roll3"),
-      _json.asString(_json.requireField(m, "score"), "score"),
-      _json.asString(_json.requireField(m, "totalScore"), "totalScore")
+      new PinsTyped(_json.asString(_json.requireField(m, "roll1"), "roll1")),
+      new PinsTyped(_json.asString(_json.requireField(m, "roll2"), "roll2")),
+      new PinsTyped(_json.asString(_json.requireField(m, "roll3"), "roll3")),
+      new ScoreTyped(_json.asString(_json.requireField(m, "score"), "score")),
+      new ScoreTyped(_json.asString(_json.requireField(m, "totalScore"), "totalScore"))
     );
   }
 
@@ -91,10 +93,10 @@ export class FrameValuesTyped {
 
   equals(other: FrameValuesTyped): boolean {
     return this.frame === other.frame
-      && this.roll1 === other.roll1
-      && this.roll2 === other.roll2
-      && this.roll3 === other.roll3
-      && this.score === other.score
-      && this.totalScore === other.totalScore;
+      && this.roll1.equals(other.roll1)
+      && this.roll2.equals(other.roll2)
+      && this.roll3.equals(other.roll3)
+      && this.score.equals(other.score)
+      && this.totalScore.equals(other.totalScore);
   }
 }

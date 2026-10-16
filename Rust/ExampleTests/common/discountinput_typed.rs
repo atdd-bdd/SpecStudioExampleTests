@@ -2,27 +2,29 @@
 
 use super::json;
 use super::discountinput_string::DiscountInputString;
+use super::dollar_typed::DollarTyped;
+use super::percentage_typed::PercentageTyped;
 
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct DiscountInputTyped {
-    pub total_price: String,
-    pub discount: String,
+    pub total_price: DollarTyped,
+    pub discount: PercentageTyped,
     pub notes: String,
 }
 
 impl DiscountInputTyped {
     pub fn from_str_struct(s: &DiscountInputString) -> Self {
         Self {
-            total_price: s.total_price.clone(),
-            discount: s.discount.clone(),
+            total_price: DollarTyped::from_str_struct(&s.total_price),
+            discount: PercentageTyped::from_str_struct(&s.discount),
             notes: s.notes.clone(),
         }
     }
 
     pub fn to_str_struct(&self) -> DiscountInputString {
         DiscountInputString {
-            total_price: self.total_price.clone(),
-            discount: self.discount.clone(),
+            total_price: self.total_price.to_str_struct(),
+            discount: self.discount.to_str_struct(),
             notes: self.notes.clone(),
         }
     }
@@ -37,8 +39,8 @@ impl DiscountInputTyped {
 
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("Total Price".to_string(), json::Value::Str(self.total_price.clone())),
-            ("Discount".to_string(), json::Value::Str(self.discount.clone())),
+            ("Total Price".to_string(), json::Value::Str(self.total_price.text.clone())),
+            ("Discount".to_string(), json::Value::Str(self.discount.text.clone())),
             ("Notes".to_string(), json::Value::Str(self.notes.clone())),
         ])
     }
@@ -49,8 +51,8 @@ impl DiscountInputTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            total_price: json::as_string(json::require(v, "Total Price")?, "Total Price")?,
-            discount: json::as_string(json::require(v, "Discount")?, "Discount")?,
+            total_price: DollarTyped::from(json::as_string(json::require(v, "Total Price")?, "Total Price")?),
+            discount: PercentageTyped::from(json::as_string(json::require(v, "Discount")?, "Discount")?),
             notes: json::as_string(json::require(v, "Notes")?, "Notes")?,
         })
     }

@@ -10,14 +10,14 @@ import records.*;
 import calculator.*;
 
 public class FilterValueTyped {
-    public IDForm value;
+    public IDFormTyped value;
 
-    public FilterValueTyped(IDForm value) {
+    public FilterValueTyped(IDFormTyped value) {
         this.value = value;
     }
 
     public FilterValueTyped(FilterValueString s) {
-        this.value = new IDForm(s.value);
+        this.value = new IDFormTyped(s.value);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class FilterValueTyped {
     public static FilterValueTyped fromJsonValue(Map<String, Object> m) {
         if (m == null) return null;
         return new FilterValueTyped(
-            new IDForm(Json.asString(Json.require(m, "value"), "value")));
+            new IDFormTyped(new IDFormString(Json.asString(Json.require(m, "value"), "value"))));
     }
 
     public static FilterValueTyped fromJSON(String json) {

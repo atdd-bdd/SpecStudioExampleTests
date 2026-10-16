@@ -1,4 +1,4 @@
-import { FrameDisplayString, FrameValuesString, InputControlValuesString, ValidValuesString } from "./common/index.js";
+import { FrameDisplayString, FrameValuesString, InputControlValuesString, PinsString, ValidValuesString } from "./common/index.js";
 import { BowlingGame, Pins, Score } from "./production/index.js";
 
 const DNC_STRING = "?DNC?";
@@ -17,12 +17,12 @@ export class BowlingGlue {
 
   // ---- given -----------------------------------------------------------
 
-  givenRollsAre(values: readonly Pins[]): void {
-    this.game.setRolls(values);
+  givenRollsAre(values: readonly PinsString[]): void {
+    this.game.setRolls(BowlingGlue.asPins(values));
   }
 
-  givenRollsForTenthFrameAre(values: readonly Pins[]): void {
-    this.game.setTenthFrameRolls(values);
+  givenRollsForTenthFrameAre(values: readonly PinsString[]): void {
+    this.game.setTenthFrameRolls(BowlingGlue.asPins(values));
   }
 
   /** The frame values from the previous step are still on the same game. */
@@ -32,8 +32,8 @@ export class BowlingGlue {
 
   // ---- when ------------------------------------------------------------
 
-  whenRollIs(values: readonly Pins[]): void {
-    for (const roll of values)
+  whenRollIs(values: readonly PinsString[]): void {
+    for (const roll of BowlingGlue.asPins(values))
       this.game.addRoll(roll);
   }
 
@@ -43,8 +43,13 @@ export class BowlingGlue {
 
   // ---- then ------------------------------------------------------------
 
-  thenRollsBecome(values: readonly Pins[]): void {
-    expect(this.game.rolls()).toEqual([...values]);
+  thenRollsBecome(values: readonly PinsString[]): void {
+    expect(this.game.rolls()).toEqual(BowlingGlue.asPins(values));
+  }
+
+  /** A column of Pins reaches the glue as text; Pins itself is read here. */
+  private static asPins(cells: readonly PinsString[]): Pins[] {
+    return cells.map((cell) => new Pins(cell));
   }
 
   thenDisplayIs(value: string): void {

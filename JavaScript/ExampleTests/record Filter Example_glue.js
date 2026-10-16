@@ -21,7 +21,8 @@ export class RecordFilterExampleGlue {
 
   whenFilteredByIDWithValue(values) {
     if (values.length > 0) {
-      this.computedSum = this.recordFilter.sumByLabel(values[0]);
+      // The column is an IDForm, and it reaches the glue as text.
+      this.computedSum = this.recordFilter.sumByLabel(new IDForm(values[0]));
     }
   }
 

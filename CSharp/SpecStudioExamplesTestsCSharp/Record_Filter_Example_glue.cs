@@ -20,14 +20,14 @@ namespace SpecStudioExamplesTestsCSharp.Record_Filter_Example
             foreach (var value in values)
             {
                 var typed = value.ToIDValueTyped();
-                recordFilter.Add(new IDValue(typed.iD, typed.value));
+                recordFilter.Add(new IDValue(typed.iD.Get(), typed.value));
             }
         }
 
-        public void When_filtered_by_ID_with_value(List<IDForm> values)
+        public void When_filtered_by_ID_with_value(List<IDFormString> values)
         {
             if (values.Count > 0)
-                computedSum = recordFilter.SumByLabel(values[0]);
+                computedSum = recordFilter.SumByLabel(new IDForm(values[0].Value));
         }
 
         public void Then_sum_is(List<int> values)
@@ -39,7 +39,7 @@ namespace SpecStudioExamplesTestsCSharp.Record_Filter_Example
         public void When_filtered_by(List<FilterValueString> values)
         {
             foreach (var value in values)
-                computedSum = recordFilter.SumByLabel(value.ToFilterValueTyped().value);
+                computedSum = recordFilter.SumByLabel(value.ToFilterValueTyped().value.Get());
         }
 
         public void Then_result(List<ResultValueString> values)
@@ -53,7 +53,7 @@ namespace SpecStudioExamplesTestsCSharp.Record_Filter_Example
             foreach (var value in values)
             {
                 var typed = value.ToIDValueTyped();
-                recordFilter.Add(new IDValue(typed.iD, typed.value));
+                recordFilter.Add(new IDValue(typed.iD.Get(), typed.value));
             }
         }
 

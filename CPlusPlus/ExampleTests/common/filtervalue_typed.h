@@ -3,19 +3,20 @@
 #include <vector>
 #include "json.h"
 #include "filtervalue_string.h"
+#include "idform_typed.h"
 
 struct FilterValueTyped {
-    std::string value;
+    IDFormTyped value;
 
     static FilterValueTyped from_string_struct(const FilterValueString& s) {
         FilterValueTyped t;
-        t.value = s.value;
+        t.value = IDFormTyped::from_string_struct(s.value);
         return t;
     }
 
     FilterValueString to_string_struct() const {
         FilterValueString s;
-        s.value = value;
+        s.value = value.to_string_struct();
         return s;
     }
 
@@ -33,7 +34,7 @@ struct FilterValueTyped {
 
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("Value", json::Convert<std::string>::to_json(value));
+        m.emplace_back("Value", value.to_json_value());
         return json::Value::make_object(std::move(m));
     }
 
@@ -41,7 +42,7 @@ struct FilterValueTyped {
 
     static FilterValueTyped from_json_value(const json::Value& v) {
         FilterValueTyped t;
-        t.value = json::Convert<std::string>::from_json(json::require(v, "Value"), "Value");
+        t.value = IDFormTyped::from_json_value(json::require(v, "Value"));
         return t;
     }
 

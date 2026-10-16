@@ -24,18 +24,25 @@ public class Shopping_Cart_glue {
     private AddressTyped cartBillingAddress;
     private Dollar computedTotal;
 
+    // A Dollar column reaches the glue as text and arrives here as the Typed
+    // form that holds the Dollar, so get() is where the production value comes
+    // from. Nothing in the test body converted it.
+    private static void assertDollarEquals(DollarTyped expected, Dollar actual, String field) {
+        assertEquals(0, expected.get().toDecimal().compareTo(actual.toDecimal()), field);
+    }
+
     private static void assertDollarEquals(Dollar expected, Dollar actual, String field) {
         assertEquals(0, expected.toDecimal().compareTo(actual.toDecimal()), field);
     }
 
-    private static void assertPercentageEquals(Percentage expected, Percentage actual, String field) {
-        assertEquals(0, expected.toDecimal().compareTo(actual.toDecimal()), field);
+    private static void assertPercentageEquals(PercentageTyped expected, Percentage actual, String field) {
+        assertEquals(0, expected.get().toDecimal().compareTo(actual.toDecimal()), field);
     }
 
     public void Given_catalog_has(List<CatalogItemString> values) {
         for (CatalogItemString value : values) {
             CatalogItemTyped typed = new CatalogItemTyped(value);
-            catalog.add(new CatalogItem(typed.name, typed.price));
+            catalog.add(new CatalogItem(typed.name.get(), typed.price.get()));
         }
     }
 
@@ -46,8 +53,8 @@ public class Shopping_Cart_glue {
             // =EmptyCart, which has no data rows) -- start the working item
             // collection fresh rather than relying on Define-reference resolution.
             currentItems = new OrderItemCollection();
-            cartShipping = typed.shipping;
-            cartDiscount = typed.discount;
+            cartShipping = typed.shipping.get();
+            cartDiscount = typed.discount.get();
             cartShippingAddress = typed.shippingAddress;
             cartBillingAddress = typed.billingAddress;
         }
@@ -56,7 +63,7 @@ public class Shopping_Cart_glue {
     public void When_item_added(List<OrderItemString> values) {
         for (OrderItemString value : values) {
             OrderItemTyped typed = new OrderItemTyped(value);
-            OrderItem item = OrderItem.create(catalog, typed.name, typed.quantity);
+            OrderItem item = OrderItem.create(catalog, typed.name.get(), typed.quantity);
             currentItems.add(item);
         }
     }
@@ -90,7 +97,8 @@ public class Shopping_Cart_glue {
         currentItems = new OrderItemCollection();
         for (OrderItemString value : values) {
             OrderItemTyped typed = new OrderItemTyped(value);
-            currentItems.add(new OrderItem(typed.name, typed.quantity, typed.price, typed.itemTotal));
+            currentItems.add(new OrderItem(typed.name.get(), typed.quantity, typed.price.get(),
+                                           typed.itemTotal.get()));
         }
     }
 
@@ -106,7 +114,8 @@ public class Shopping_Cart_glue {
         OrderItemCollection expected = new OrderItemCollection();
         for (OrderItemString value : values) {
             OrderItemTyped typed = new OrderItemTyped(value);
-            expected.add(new OrderItem(typed.name, typed.quantity, typed.price, typed.itemTotal));
+            expected.add(new OrderItem(typed.name.get(), typed.quantity, typed.price.get(),
+                                       typed.itemTotal.get()));
         }
 
         assertEquals(expected.size(), currentItems.size(), "Item count");
@@ -123,16 +132,16 @@ public class Shopping_Cart_glue {
     public void Examples_BusinessRule_Shipping_Cost(List<ShippingInputString> values) {
         for (ShippingInputString value : values) {
             ShippingInputTyped typed = new ShippingInputTyped(value);
-            Dollar actual = ShoppingCart.shippingCostFor(typed.totalPrice);
-            assertDollarEquals(typed.shippingCost, actual, "Shipping cost for " + typed.totalPrice.value);
+            Dollar actual = ShoppingCart.shippingCostFor(typed.totalPrice.get());
+            assertDollarEquals(typed.shippingCost, actual, "Shipping cost for " + typed.totalPrice.text);
         }
     }
 
     public void Examples_BusinessRule_Discount(List<DiscountInputString> values) {
         for (DiscountInputString value : values) {
             DiscountInputTyped typed = new DiscountInputTyped(value);
-            Percentage actual = ShoppingCart.discountFor(typed.totalPrice);
-            assertPercentageEquals(typed.discount, actual, "Discount for " + typed.totalPrice.value);
+            Percentage actual = ShoppingCart.discountFor(typed.totalPrice.get());
+            assertPercentageEquals(typed.discount, actual, "Discount for " + typed.totalPrice.text);
         }
     }
 
@@ -162,7 +171,7 @@ public class Shopping_Cart_glue {
             CartInputTyped typed = new CartInputTyped(value);
             // The rule states the whole calculation from an item total, so drive
             // it that way rather than building a cart to reach the same numbers.
-            Dollar totalItems = typed.totalItems;
+            Dollar totalItems = typed.totalItems.get();
             assertDollarEquals(typed.discount, ShoppingCart.discountAmountFor(totalItems),
                                "Discount for " + totalItems.value);
             assertDollarEquals(typed.shipping, ShoppingCart.shippingFor(totalItems),

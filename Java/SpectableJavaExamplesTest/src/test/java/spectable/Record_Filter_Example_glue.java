@@ -22,9 +22,9 @@ public class Record_Filter_Example_glue {
         }
     }
 
-    public void When_filtered_by_ID_with_value(List<IDForm> values) {
+    public void When_filtered_by_ID_with_value(List<IDFormString> values) {
         if (!values.isEmpty()) {
-            IDForm id = values.get(0);
+            IDForm id = new IDForm(values.get(0).value);
             computedSum = recordFilter.sumByLabel(id);
         }
     }
@@ -38,7 +38,7 @@ public class Record_Filter_Example_glue {
 
     public void When_filtered_by(List<FilterValueString> values) {
         if (!values.isEmpty()) {
-            IDForm id = new FilterValueTyped(values.get(0)).value;
+            IDForm id = new FilterValueTyped(values.get(0)).value.get();
             computedSum = recordFilter.sumByLabel(id);
         }
     }

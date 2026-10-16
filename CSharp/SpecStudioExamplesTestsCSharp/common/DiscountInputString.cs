@@ -4,11 +4,11 @@ using production;
 
     public class DiscountInputString
     {
-        public string totalPrice;
-        public string discount;
+        public DollarString totalPrice;
+        public PercentageString discount;
         public string notes;
 
-        public DiscountInputString(string totalPrice, string discount, string notes)
+        public DiscountInputString(DollarString totalPrice, PercentageString discount, string notes)
         {
             this.totalPrice = totalPrice;
             this.discount = discount;
@@ -33,8 +33,8 @@ using production;
         public DiscountInputTyped ToDiscountInputTyped()
         {
             return new DiscountInputTyped(
-                new Dollar(this.totalPrice),
-                new Percentage(this.discount),
+                new DollarTyped(this.totalPrice),
+                new PercentageTyped(this.discount),
                 this.notes
             );
         }
@@ -49,8 +49,8 @@ using production;
         public override bool Equals(object? obj)
         {
             if (obj is not DiscountInputString other) return false;
-            return (DNCString == this.totalPrice || DNCString == other.totalPrice || object.Equals(this.totalPrice, other.totalPrice))
-                && (DNCString == this.discount || DNCString == other.discount || object.Equals(this.discount, other.discount))
+            return (DNCString == this.totalPrice.Value || DNCString == other.totalPrice.Value || this.totalPrice.Value == other.totalPrice.Value)
+                && (DNCString == this.discount.Value || DNCString == other.discount.Value || this.discount.Value == other.discount.Value)
                 && (DNCString == this.notes || DNCString == other.notes || object.Equals(this.notes, other.notes));
         }
 

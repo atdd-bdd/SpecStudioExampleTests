@@ -1,16 +1,17 @@
 import { FilterValueString } from "./FilterValueString.js";
 import * as _json from "./json.js";
+import { IDFormTyped } from "./IDFormTyped.js";
 
 export class FilterValueTyped {
-  value: string;
+  value: IDFormTyped;
 
-  constructor(value: string) {
+  constructor(value: IDFormTyped) {
     this.value = value;
   }
 
   static fromStringObj(s: FilterValueString): FilterValueTyped {
     return new FilterValueTyped(
-      s.value
+      new IDFormTyped(s.value)
     );
   }
 
@@ -30,7 +31,7 @@ export class FilterValueTyped {
 
   toJsonValue(): Record<string, unknown> {
     return {
-      value: this.value,
+      value: String(this.value),
     };
   }
 
@@ -38,7 +39,7 @@ export class FilterValueTyped {
 
   static fromJsonValue(m: unknown): FilterValueTyped {
     return new FilterValueTyped(
-      _json.asString(_json.requireField(m, "value"), "value")
+      new IDFormTyped(_json.asString(_json.requireField(m, "value"), "value"))
     );
   }
 
@@ -60,6 +61,6 @@ export class FilterValueTyped {
   }
 
   equals(other: FilterValueTyped): boolean {
-    return this.value === other.value;
+    return this.value.equals(other.value);
   }
 }

@@ -16,6 +16,10 @@ public class TableHelper {
         return new IDForm(cell);
     }
 
+    public static IDFormString toIDFormString(String cell) {
+        return new IDFormString(cell);
+    }
+
     public static Integer toInteger(String cell) {
         return Integer.parseInt(cell);
     }
@@ -29,6 +33,12 @@ public class TableHelper {
     public static List<IDForm> toListIDForm(List<String> values) {
         List<IDForm> result = new ArrayList<>();
         for (String cell : values) { result.add(new IDForm(cell)); }
+        return result;
+    }
+
+    public static List<IDFormString> toListIDFormString(List<String> values) {
+        List<IDFormString> result = new ArrayList<>();
+        for (String cell : values) { result.add(new IDFormString(cell)); }
         return result;
     }
 
@@ -58,6 +68,16 @@ public class TableHelper {
         return result;
     }
 
+    public static List<List<IDFormString>> toListListIDFormString(List<List<String>> values) {
+        List<List<IDFormString>> result = new ArrayList<>();
+        for (List<String> row : values) {
+            List<IDFormString> typedRow = new ArrayList<>();
+            for (String cell : row) { typedRow.add(new IDFormString(cell)); }
+            result.add(typedRow);
+        }
+        return result;
+    }
+
     public static List<List<Integer>> toListListInteger(List<List<String>> values) {
         List<List<Integer>> result = new ArrayList<>();
         for (List<String> row : values) {
@@ -73,6 +93,16 @@ public class TableHelper {
         for (List<String> row : values) {
             List<Pins> typedRow = new ArrayList<>();
             for (String cell : row) { typedRow.add(new Pins(cell)); }
+            result.add(typedRow);
+        }
+        return result;
+    }
+
+    public static List<List<PinsString>> toListListPinsString(List<List<String>> values) {
+        List<List<PinsString>> result = new ArrayList<>();
+        for (List<String> row : values) {
+            List<PinsString> typedRow = new ArrayList<>();
+            for (String cell : row) { typedRow.add(new PinsString(cell)); }
             result.add(typedRow);
         }
         return result;
@@ -94,6 +124,12 @@ public class TableHelper {
         return result;
     }
 
+    public static List<PinsString> toListPinsString(List<String> values) {
+        List<PinsString> result = new ArrayList<>();
+        for (String cell : values) { result.add(new PinsString(cell)); }
+        return result;
+    }
+
     public static List<String> toListString(List<String> values) {
         List<String> result = new ArrayList<>();
         for (String cell : values) { result.add(cell); }
@@ -102,6 +138,10 @@ public class TableHelper {
 
     public static Pins toPins(String cell) {
         return new Pins(cell);
+    }
+
+    public static PinsString toPinsString(String cell) {
+        return new PinsString(cell);
     }
 
     public static String toString(String cell) {

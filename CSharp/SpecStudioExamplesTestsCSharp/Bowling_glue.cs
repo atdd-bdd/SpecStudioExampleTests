@@ -23,12 +23,12 @@ namespace SpecStudioExamplesTestsCSharp.Bowling
 
         // ---- given ----------------------------------------------------------
 
-        public void Given_rolls_are(List<Pins> values)
+        public void Given_rolls_are(List<PinsString> values)
         {
             _game.SetRolls(PinCounts(values));
         }
 
-        public void Given_rolls_for_tenth_frame_are(List<Pins> values)
+        public void Given_rolls_for_tenth_frame_are(List<PinsString> values)
         {
             _game.SetTenthFrameRolls(PinCounts(values));
         }
@@ -41,7 +41,7 @@ namespace SpecStudioExamplesTestsCSharp.Bowling
 
         // ---- when -----------------------------------------------------------
 
-        public void When_roll_is(List<Pins> values)
+        public void When_roll_is(List<PinsString> values)
         {
             foreach (var pinCount in PinCounts(values))
                 _game.AddRoll(pinCount);
@@ -54,7 +54,7 @@ namespace SpecStudioExamplesTestsCSharp.Bowling
 
         // ---- then -----------------------------------------------------------
 
-        public void Then_rolls_become(List<Pins> values)
+        public void Then_rolls_become(List<PinsString> values)
         {
             var expected = PinCounts(values);
             var actual = _game.Rolls();
@@ -147,15 +147,14 @@ namespace SpecStudioExamplesTestsCSharp.Bowling
         // ---- helpers ---------------------------------------------------------
 
         /// <summary>Flattens the step's table into the pin counts it lists, in order.</summary>
-        // The counts the step lists, in order. It used to parse the text
-        // itself; the table says ": Pins", so the generated test builds a Pins
-        // per cell and a cell the DataType refuses fails there. What is left is
-        // unwrapping.
-        private static List<int> PinCounts(List<Pins> values)
+        // The counts the step lists, in order. A column of Pins reaches the
+        // glue as text -- the table says ": Pins", so Pins itself is read here,
+        // and a cell the DataType refuses fails here rather than in the test.
+        private static List<int> PinCounts(List<PinsString> values)
         {
             var result = new List<int>();
-            foreach (var pins in values)
-                result.Add(pins.Value);
+            foreach (var cell in values)
+                result.Add(new Pins(cell.Value).Value);
             return result;
         }
 

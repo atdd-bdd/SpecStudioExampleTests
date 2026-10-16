@@ -1,8 +1,12 @@
 from . import json_util as _json
 from .address_string import AddressString
+from .simple_text_typed import SimpleTextTyped
+from .simple_text_typed import SimpleTextTyped
+from .simple_text_typed import SimpleTextTyped
+from .simple_text_typed import SimpleTextTyped
 
 class AddressTyped:
-    def __init__(self, street: str = '', city: str = '', state: str = '', zip: str = ''):
+    def __init__(self, street: 'SimpleTextTyped' = None, city: 'SimpleTextTyped' = None, state: 'SimpleTextTyped' = None, zip: 'SimpleTextTyped' = None):
         self.street = street
         self.city = city
         self.state = state
@@ -11,10 +15,10 @@ class AddressTyped:
     @classmethod
     def from_string_obj(cls, s: AddressString) -> 'AddressTyped':
         return cls(
-            s.street,
-            s.city,
-            s.state,
-            s.zip
+            SimpleTextTyped(s.street),
+            SimpleTextTyped(s.city),
+            SimpleTextTyped(s.state),
+            SimpleTextTyped(s.zip)
         )
 
     def to_string_obj(self) -> AddressString:
@@ -35,10 +39,10 @@ class AddressTyped:
 
     def to_json_value(self) -> dict:
         return {
-            'Street': self.street,
-            'City': self.city,
-            'State': self.state,
-            'ZIP': self.zip,
+            'Street': str(self.street),
+            'City': str(self.city),
+            'State': str(self.state),
+            'ZIP': str(self.zip),
         }
 
     def to_json(self) -> str:
@@ -47,10 +51,10 @@ class AddressTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'AddressTyped':
         return cls(
-            _json.as_str(_json.require(m, 'Street'), 'Street'),
-            _json.as_str(_json.require(m, 'City'), 'City'),
-            _json.as_str(_json.require(m, 'State'), 'State'),
-            _json.as_str(_json.require(m, 'ZIP'), 'ZIP')
+            SimpleTextTyped(_json.as_str(_json.require(m, 'Street'), 'Street')),
+            SimpleTextTyped(_json.as_str(_json.require(m, 'City'), 'City')),
+            SimpleTextTyped(_json.as_str(_json.require(m, 'State'), 'State')),
+            SimpleTextTyped(_json.as_str(_json.require(m, 'ZIP'), 'ZIP'))
         )
 
     @classmethod

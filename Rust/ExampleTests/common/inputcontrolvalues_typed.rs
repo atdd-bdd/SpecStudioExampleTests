@@ -2,28 +2,29 @@
 
 use super::json;
 use super::inputcontrolvalues_string::InputControlValuesString;
+use super::pins_typed::PinsTyped;
 
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct InputControlValuesTyped {
     pub frame: i32,
-    pub roll: String,
-    pub remaining: String,
+    pub roll: PinsTyped,
+    pub remaining: PinsTyped,
 }
 
 impl InputControlValuesTyped {
     pub fn from_str_struct(s: &InputControlValuesString) -> Self {
         Self {
             frame: s.frame.parse::<i32>().unwrap_or_default(),
-            roll: s.roll.clone(),
-            remaining: s.remaining.clone(),
+            roll: PinsTyped::from_str_struct(&s.roll),
+            remaining: PinsTyped::from_str_struct(&s.remaining),
         }
     }
 
     pub fn to_str_struct(&self) -> InputControlValuesString {
         InputControlValuesString {
             frame: self.frame.to_string(),
-            roll: self.roll.clone(),
-            remaining: self.remaining.clone(),
+            roll: self.roll.to_str_struct(),
+            remaining: self.remaining.to_str_struct(),
         }
     }
 
@@ -38,8 +39,8 @@ impl InputControlValuesTyped {
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
             ("Frame".to_string(), json::Value::number_from_i64(self.frame as i64)),
-            ("Roll".to_string(), json::Value::Str(self.roll.clone())),
-            ("Remaining".to_string(), json::Value::Str(self.remaining.clone())),
+            ("Roll".to_string(), json::Value::Str(self.roll.text.clone())),
+            ("Remaining".to_string(), json::Value::Str(self.remaining.text.clone())),
         ])
     }
 
@@ -50,8 +51,8 @@ impl InputControlValuesTyped {
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
             frame: json::as_i32(json::require(v, "Frame")?, "Frame")?,
-            roll: json::as_string(json::require(v, "Roll")?, "Roll")?,
-            remaining: json::as_string(json::require(v, "Remaining")?, "Remaining")?,
+            roll: PinsTyped::from(json::as_string(json::require(v, "Roll")?, "Roll")?),
+            remaining: PinsTyped::from(json::as_string(json::require(v, "Remaining")?, "Remaining")?),
         })
     }
 

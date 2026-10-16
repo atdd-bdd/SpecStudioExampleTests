@@ -1,12 +1,12 @@
 public struct ShoppingCartTyped: Equatable, CustomStringConvertible {
     public let items: [OrderItemTyped]
-    public let shipping: String
-    public let discount: String
-    public let totalPrice: String
+    public let shipping: DollarTyped
+    public let discount: DollarTyped
+    public let totalPrice: DollarTyped
     public let shippingAddress: AddressTyped
     public let billingAddress: AddressTyped
 
-    public init(items: [OrderItemTyped], shipping: String, discount: String, totalPrice: String, shippingAddress: AddressTyped, billingAddress: AddressTyped) {
+    public init(items: [OrderItemTyped], shipping: DollarTyped, discount: DollarTyped, totalPrice: DollarTyped, shippingAddress: AddressTyped, billingAddress: AddressTyped) {
         self.items = items
         self.shipping = shipping
         self.discount = discount
@@ -17,9 +17,9 @@ public struct ShoppingCartTyped: Equatable, CustomStringConvertible {
 
     public init(from s: ShoppingCartString) {
         self.items = []
-        self.shipping = s.shipping
-        self.discount = s.discount
-        self.totalPrice = s.totalPrice
+        self.shipping = DollarTyped(from: s.shipping)
+        self.discount = DollarTyped(from: s.discount)
+        self.totalPrice = DollarTyped(from: s.totalPrice)
         self.shippingAddress = AddressTyped(from: s.shippingAddress)
         self.billingAddress = AddressTyped(from: s.billingAddress)
     }
@@ -27,9 +27,9 @@ public struct ShoppingCartTyped: Equatable, CustomStringConvertible {
     public func toStringStruct() -> ShoppingCartString {
         return ShoppingCartString(
             items: "",
-            shipping: String(describing: shipping),
-            discount: String(describing: discount),
-            totalPrice: String(describing: totalPrice),
+            shipping: shipping.toDollarString(),
+            discount: discount.toDollarString(),
+            totalPrice: totalPrice.toDollarString(),
             shippingAddress: shippingAddress.toStringStruct(),
             billingAddress: billingAddress.toStringStruct()
         )
@@ -46,9 +46,9 @@ public struct ShoppingCartTyped: Equatable, CustomStringConvertible {
     public func toJSONValue() -> [String: Any] {
         return [
             "items": items.map { $0.toJSONValue() },
-            "shipping": shipping,
-            "discount": discount,
-            "totalPrice": totalPrice,
+            "shipping": shipping.text,
+            "discount": discount.text,
+            "totalPrice": totalPrice.text,
             "shippingAddress": shippingAddress.toJSONValue(),
             "billingAddress": billingAddress.toJSONValue(),
         ]
@@ -60,9 +60,9 @@ public struct ShoppingCartTyped: Equatable, CustomStringConvertible {
 
     public init(fromJSONValue m: [String: Any]) throws {
         self.items = try Json.asArray(Json.require(m, "items"), "items").map { try OrderItemTyped(fromJSONValue: Json.asObject($0, "items")) }
-        self.shipping = try Json.asString(Json.require(m, "shipping"), "shipping")
-        self.discount = try Json.asString(Json.require(m, "discount"), "discount")
-        self.totalPrice = try Json.asString(Json.require(m, "totalPrice"), "totalPrice")
+        self.shipping = DollarTyped(try Json.asString(Json.require(m, "shipping"), "shipping"))
+        self.discount = DollarTyped(try Json.asString(Json.require(m, "discount"), "discount"))
+        self.totalPrice = DollarTyped(try Json.asString(Json.require(m, "totalPrice"), "totalPrice"))
         self.shippingAddress = try AddressTyped(fromJSONValue: Json.asObject(Json.require(m, "shippingAddress"), "shippingAddress"))
         self.billingAddress = try AddressTyped(fromJSONValue: Json.asObject(Json.require(m, "billingAddress"), "billingAddress"))
     }

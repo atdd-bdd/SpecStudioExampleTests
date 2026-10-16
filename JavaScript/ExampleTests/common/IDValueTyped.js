@@ -40,7 +40,7 @@ export class IDValueTyped {
 
   static fromJsonValue(m) {
     return new IDValueTyped(
-      new IDForm(_json.asString(_json.require(m, "iD"), "iD")),
+      _json.asString(_json.require(m, "iD"), "iD"),
       _json.asInt(_json.require(m, "value"), "value")
     );
   }

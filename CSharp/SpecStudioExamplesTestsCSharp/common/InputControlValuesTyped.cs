@@ -11,10 +11,10 @@ using production;
     public class InputControlValuesTyped
     {
         public int frame;
-        public Pins roll;
-        public Pins remaining;
+        public PinsTyped roll;
+        public PinsTyped remaining;
 
-        public InputControlValuesTyped(int frame, Pins roll, Pins remaining)
+        public InputControlValuesTyped(int frame, PinsTyped roll, PinsTyped remaining)
         {
             this.frame = frame;
             this.roll = roll;
@@ -48,8 +48,8 @@ using production;
         {
             w.WriteStartObject();
             w.WriteNumber("frame", this.frame);
-            w.WriteString("roll", Json.ToText(this.roll));
-            w.WriteString("remaining", Json.ToText(this.remaining));
+            w.WriteString("roll", this.roll.ToString());
+            w.WriteString("remaining", this.remaining.ToString());
             w.WriteEndObject();
         }
 
@@ -64,8 +64,8 @@ using production;
         {
             return new InputControlValuesTyped(
                 Json.AsInt(Json.Require(m, "frame"), "frame"),
-                new Pins(Json.AsString(Json.Require(m, "roll"), "roll")),
-                new Pins(Json.AsString(Json.Require(m, "remaining"), "remaining"))
+                new PinsTyped(new PinsString(Json.AsString(Json.Require(m, "roll"), "roll"))),
+                new PinsTyped(new PinsString(Json.AsString(Json.Require(m, "remaining"), "remaining")))
             );
         }
 

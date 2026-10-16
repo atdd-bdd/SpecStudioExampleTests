@@ -10,16 +10,16 @@ import records.*;
 import calculator.*;
 
 public class IDValueTyped {
-    public IDForm iD;
+    public IDFormTyped iD;
     public int value;
 
-    public IDValueTyped(IDForm iD, int value) {
+    public IDValueTyped(IDFormTyped iD, int value) {
         this.iD = iD;
         this.value = value;
     }
 
     public IDValueTyped(IDValueString s) {
-        this.iD = new IDForm(s.iD);
+        this.iD = new IDFormTyped(s.iD);
         this.value = Integer.parseInt(s.value);
     }
 
@@ -67,7 +67,7 @@ public class IDValueTyped {
     public static IDValueTyped fromJsonValue(Map<String, Object> m) {
         if (m == null) return null;
         return new IDValueTyped(
-            new IDForm(Json.asString(Json.require(m, "iD"), "iD")),
+            new IDFormTyped(new IDFormString(Json.asString(Json.require(m, "iD"), "iD"))),
             Json.asInt(Json.require(m, "value"), "value"));
     }
 

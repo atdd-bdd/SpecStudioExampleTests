@@ -1,8 +1,10 @@
 from . import json_util as _json
 from .input_control_values_string import InputControlValuesString
+from .pins_typed import PinsTyped
+from .pins_typed import PinsTyped
 
 class InputControlValuesTyped:
-    def __init__(self, frame: int = 0, roll: str = '', remaining: str = ''):
+    def __init__(self, frame: int = 0, roll: 'PinsTyped' = None, remaining: 'PinsTyped' = None):
         self.frame = frame
         self.roll = roll
         self.remaining = remaining
@@ -11,8 +13,8 @@ class InputControlValuesTyped:
     def from_string_obj(cls, s: InputControlValuesString) -> 'InputControlValuesTyped':
         return cls(
             int(s.frame) if s.frame else 0,
-            s.roll,
-            s.remaining
+            PinsTyped(s.roll),
+            PinsTyped(s.remaining)
         )
 
     def to_string_obj(self) -> InputControlValuesString:
@@ -33,8 +35,8 @@ class InputControlValuesTyped:
     def to_json_value(self) -> dict:
         return {
             'Frame': self.frame,
-            'Roll': self.roll,
-            'Remaining': self.remaining,
+            'Roll': str(self.roll),
+            'Remaining': str(self.remaining),
         }
 
     def to_json(self) -> str:
@@ -44,8 +46,8 @@ class InputControlValuesTyped:
     def from_json_value(cls, m: dict) -> 'InputControlValuesTyped':
         return cls(
             _json.as_int(_json.require(m, 'Frame'), 'Frame'),
-            _json.as_str(_json.require(m, 'Roll'), 'Roll'),
-            _json.as_str(_json.require(m, 'Remaining'), 'Remaining')
+            PinsTyped(_json.as_str(_json.require(m, 'Roll'), 'Roll')),
+            PinsTyped(_json.as_str(_json.require(m, 'Remaining'), 'Remaining'))
         )
 
     @classmethod

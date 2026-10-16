@@ -1,18 +1,19 @@
 import { IDValueString } from "./IDValueString.js";
 import * as _json from "./json.js";
+import { IDFormTyped } from "./IDFormTyped.js";
 
 export class IDValueTyped {
-  iD: string;
+  iD: IDFormTyped;
   value: number;
 
-  constructor(iD: string, value: number) {
+  constructor(iD: IDFormTyped, value: number) {
     this.iD = iD;
     this.value = value;
   }
 
   static fromStringObj(s: IDValueString): IDValueTyped {
     return new IDValueTyped(
-      s.iD,
+      new IDFormTyped(s.iD),
       s.value !== "" ? Number(s.value) : 0
     );
   }
@@ -34,7 +35,7 @@ export class IDValueTyped {
 
   toJsonValue(): Record<string, unknown> {
     return {
-      iD: this.iD,
+      iD: String(this.iD),
       value: this.value,
     };
   }
@@ -43,7 +44,7 @@ export class IDValueTyped {
 
   static fromJsonValue(m: unknown): IDValueTyped {
     return new IDValueTyped(
-      _json.asString(_json.requireField(m, "iD"), "iD"),
+      new IDFormTyped(_json.asString(_json.requireField(m, "iD"), "iD")),
       _json.asInt(_json.requireField(m, "value"), "value")
     );
   }
@@ -66,7 +67,7 @@ export class IDValueTyped {
   }
 
   equals(other: IDValueTyped): boolean {
-    return this.iD === other.iD
+    return this.iD.equals(other.iD)
       && this.value === other.value;
   }
 }

@@ -5,13 +5,13 @@ using production;
     public class FrameValuesString
     {
         public string frame;
-        public string roll1;
-        public string roll2;
-        public string roll3;
-        public string score;
-        public string totalScore;
+        public PinsString roll1;
+        public PinsString roll2;
+        public PinsString roll3;
+        public ScoreString score;
+        public ScoreString totalScore;
 
-        public FrameValuesString(string frame, string roll1, string roll2, string roll3, string score, string totalScore)
+        public FrameValuesString(string frame, PinsString roll1, PinsString roll2, PinsString roll3, ScoreString score, ScoreString totalScore)
         {
             this.frame = frame;
             this.roll1 = roll1;
@@ -43,11 +43,11 @@ using production;
         {
             return new FrameValuesTyped(
                 int.Parse(this.frame),
-                new Pins(this.roll1),
-                new Pins(this.roll2),
-                new Pins(this.roll3),
-                new Score(this.score),
-                new Score(this.totalScore)
+                new PinsTyped(this.roll1),
+                new PinsTyped(this.roll2),
+                new PinsTyped(this.roll3),
+                new ScoreTyped(this.score),
+                new ScoreTyped(this.totalScore)
             );
         }
 
@@ -62,11 +62,11 @@ using production;
         {
             if (obj is not FrameValuesString other) return false;
             return (DNCString == this.frame || DNCString == other.frame || object.Equals(this.frame, other.frame))
-                && (DNCString == this.roll1 || DNCString == other.roll1 || object.Equals(this.roll1, other.roll1))
-                && (DNCString == this.roll2 || DNCString == other.roll2 || object.Equals(this.roll2, other.roll2))
-                && (DNCString == this.roll3 || DNCString == other.roll3 || object.Equals(this.roll3, other.roll3))
-                && (DNCString == this.score || DNCString == other.score || object.Equals(this.score, other.score))
-                && (DNCString == this.totalScore || DNCString == other.totalScore || object.Equals(this.totalScore, other.totalScore));
+                && (DNCString == this.roll1.Value || DNCString == other.roll1.Value || this.roll1.Value == other.roll1.Value)
+                && (DNCString == this.roll2.Value || DNCString == other.roll2.Value || this.roll2.Value == other.roll2.Value)
+                && (DNCString == this.roll3.Value || DNCString == other.roll3.Value || this.roll3.Value == other.roll3.Value)
+                && (DNCString == this.score.Value || DNCString == other.score.Value || this.score.Value == other.score.Value)
+                && (DNCString == this.totalScore.Value || DNCString == other.totalScore.Value || this.totalScore.Value == other.totalScore.Value);
         }
 
         public override int GetHashCode()

@@ -18,7 +18,7 @@ public void Test_Scenario_Filter_Data_by_ID(){
          };
          record_Filter_Example_glue_object.Given_list_of_numbers(objectList1);
 
-         record_Filter_Example_glue_object.When_filtered_by_ID_with_value(new List<IDForm>{ new IDForm("Q1234") });
+         record_Filter_Example_glue_object.When_filtered_by_ID_with_value(new List<IDFormString>{ new IDFormString("Q1234") });
 
          record_Filter_Example_glue_object.Then_sum_is(new List<int>{ int.Parse("4") });
 

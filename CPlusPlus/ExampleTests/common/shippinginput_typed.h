@@ -3,24 +3,25 @@
 #include <vector>
 #include "json.h"
 #include "shippinginput_string.h"
+#include "dollar_typed.h"
 
 struct ShippingInputTyped {
-    std::string total_price;
-    std::string shipping_cost;
+    DollarTyped total_price;
+    DollarTyped shipping_cost;
     std::string notes;
 
     static ShippingInputTyped from_string_struct(const ShippingInputString& s) {
         ShippingInputTyped t;
-        t.total_price = s.total_price;
-        t.shipping_cost = s.shipping_cost;
+        t.total_price = DollarTyped::from_string_struct(s.total_price);
+        t.shipping_cost = DollarTyped::from_string_struct(s.shipping_cost);
         t.notes = s.notes;
         return t;
     }
 
     ShippingInputString to_string_struct() const {
         ShippingInputString s;
-        s.total_price = total_price;
-        s.shipping_cost = shipping_cost;
+        s.total_price = total_price.to_string_struct();
+        s.shipping_cost = shipping_cost.to_string_struct();
         s.notes = notes;
         return s;
     }
@@ -39,8 +40,8 @@ struct ShippingInputTyped {
 
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("Total Price", json::Convert<std::string>::to_json(total_price));
-        m.emplace_back("Shipping Cost", json::Convert<std::string>::to_json(shipping_cost));
+        m.emplace_back("Total Price", total_price.to_json_value());
+        m.emplace_back("Shipping Cost", shipping_cost.to_json_value());
         m.emplace_back("Notes", json::Convert<std::string>::to_json(notes));
         return json::Value::make_object(std::move(m));
     }
@@ -49,8 +50,8 @@ struct ShippingInputTyped {
 
     static ShippingInputTyped from_json_value(const json::Value& v) {
         ShippingInputTyped t;
-        t.total_price = json::Convert<std::string>::from_json(json::require(v, "Total Price"), "Total Price");
-        t.shipping_cost = json::Convert<std::string>::from_json(json::require(v, "Shipping Cost"), "Shipping Cost");
+        t.total_price = DollarTyped::from_json_value(json::require(v, "Total Price"));
+        t.shipping_cost = DollarTyped::from_json_value(json::require(v, "Shipping Cost"));
         t.notes = json::Convert<std::string>::from_json(json::require(v, "Notes"), "Notes");
         return t;
     }

@@ -1,14 +1,15 @@
 #![allow(dead_code, unused_imports, unused_variables)]
 
+use super::dollar_string::DollarString;
 #[derive(Debug, Clone, Default)]
 pub struct ItemPriceInputString {
-    pub totalitems: String,
+    pub totalitems: DollarString,
 }
 
 impl ItemPriceInputString {
     pub fn from_vec(v: &[&str]) -> Self {
         Self {
-            totalitems: v.get(0).copied().unwrap_or("").to_string(),
+            totalitems: DollarString::from(v.get(0).copied().unwrap_or("")),
         }
     }
 
@@ -16,7 +17,7 @@ impl ItemPriceInputString {
     pub fn from_text(text: &str) -> Self {
         let parts = crate::common::tokens::require(text, 1, "ItemPriceInput");
         Self {
-            totalitems: parts[0].clone(),
+            totalitems: DollarString::from(parts[0].clone()),
         }
     }
 }

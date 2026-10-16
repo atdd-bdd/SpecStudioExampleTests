@@ -10,12 +10,12 @@ using production;
 
     public class OrderItemTyped
     {
-        public SimpleText name;
+        public SimpleTextTyped name;
         public int quantity;
-        public Dollar price;
-        public Dollar itemTotal;
+        public DollarTyped price;
+        public DollarTyped itemTotal;
 
-        public OrderItemTyped(SimpleText name, int quantity, Dollar price, Dollar itemTotal)
+        public OrderItemTyped(SimpleTextTyped name, int quantity, DollarTyped price, DollarTyped itemTotal)
         {
             this.name = name;
             this.quantity = quantity;
@@ -50,10 +50,10 @@ using production;
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();
-            w.WriteString("name", Json.ToText(this.name));
+            w.WriteString("name", this.name.ToString());
             w.WriteNumber("quantity", this.quantity);
-            w.WriteString("price", Json.ToText(this.price));
-            w.WriteString("itemTotal", Json.ToText(this.itemTotal));
+            w.WriteString("price", this.price.ToString());
+            w.WriteString("itemTotal", this.itemTotal.ToString());
             w.WriteEndObject();
         }
 
@@ -67,10 +67,10 @@ using production;
         public static OrderItemTyped FromJsonElement(JsonElement m)
         {
             return new OrderItemTyped(
-                new SimpleText(Json.AsString(Json.Require(m, "name"), "name")),
+                new SimpleTextTyped(new SimpleTextString(Json.AsString(Json.Require(m, "name"), "name"))),
                 Json.AsInt(Json.Require(m, "quantity"), "quantity"),
-                new Dollar(Json.AsString(Json.Require(m, "price"), "price")),
-                new Dollar(Json.AsString(Json.Require(m, "itemTotal"), "itemTotal"))
+                new DollarTyped(new DollarString(Json.AsString(Json.Require(m, "price"), "price"))),
+                new DollarTyped(new DollarString(Json.AsString(Json.Require(m, "itemTotal"), "itemTotal")))
             );
         }
 

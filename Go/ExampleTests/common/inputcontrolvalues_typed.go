@@ -4,15 +4,15 @@ import "strconv"
 
 type InputControlValuesTyped struct {
 	Frame int
-	Roll string
-	Remaining string
+	Roll PinsTyped
+	Remaining PinsTyped
 }
 
 func NewInputControlValuesTypedFromString(s InputControlValuesString) InputControlValuesTyped {
 	t := InputControlValuesTyped{}
 	if v, err := strconv.Atoi(s.Frame); err == nil { t.Frame = v }
-	t.Roll = s.Roll
-	t.Remaining = s.Remaining
+	t.Roll = NewPinsTypedFromString(s.Roll)
+	t.Remaining = NewPinsTypedFromString(s.Remaining)
 	return t
 }
 
@@ -20,8 +20,8 @@ func NewInputControlValuesTypedFromString(s InputControlValuesString) InputContr
 func (t InputControlValuesTyped) ToInputControlValuesString() InputControlValuesString {
 	s := InputControlValuesString{}
 	s.Frame = strconv.Itoa(t.Frame)
-	s.Roll = t.Roll
-	s.Remaining = t.Remaining
+	s.Roll = t.Roll.ToPinsString()
+	s.Remaining = t.Remaining.ToPinsString()
 	return s
 }
 
@@ -43,8 +43,8 @@ func InputControlValuesTypedFromStringList(list []InputControlValuesString) []In
 func (t InputControlValuesTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
 		"Frame": t.Frame,
-		"Roll": t.Roll,
-		"Remaining": t.Remaining,
+		"Roll": t.Roll.String(),
+		"Remaining": t.Remaining.String(),
 	}
 }
 
@@ -71,7 +71,7 @@ func NewInputControlValuesTypedFromJSONValue(m map[string]interface{}) (InputCon
 	if err != nil {
 		return t, err
 	}
-	t.Roll = valRoll
+	t.Roll = NewPinsTyped(valRoll)
 	rawRemaining, err := JSONRequire(m, "Remaining")
 	if err != nil {
 		return t, err
@@ -80,7 +80,7 @@ func NewInputControlValuesTypedFromJSONValue(m map[string]interface{}) (InputCon
 	if err != nil {
 		return t, err
 	}
-	t.Remaining = valRemaining
+	t.Remaining = NewPinsTyped(valRemaining)
 	return t, nil
 }
 

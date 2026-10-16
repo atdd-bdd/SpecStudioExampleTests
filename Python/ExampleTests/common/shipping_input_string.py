@@ -1,11 +1,13 @@
+from .dollar_string import DollarString
+from .dollar_string import DollarString
 from . import tokens
 DNC_STRING = '?DNC?'
 
 
 class ShippingInputString:
     def __init__(self, total_price: str = '', shipping_cost: str = '', notes: str = ''):
-        self.total_price = total_price
-        self.shipping_cost = shipping_cost
+        self.total_price = DollarString(total_price)
+        self.shipping_cost = DollarString(shipping_cost)
         self.notes = notes
 
     @classmethod

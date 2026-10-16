@@ -3,28 +3,30 @@
 #include <vector>
 #include "json.h"
 #include "orderitem_string.h"
+#include "simpletext_typed.h"
+#include "dollar_typed.h"
 
 struct OrderItemTyped {
-    std::string name;
+    SimpleTextTyped name;
     int quantity = 0;
-    std::string price;
-    std::string itemtotal;
+    DollarTyped price;
+    DollarTyped itemtotal;
 
     static OrderItemTyped from_string_struct(const OrderItemString& s) {
         OrderItemTyped t;
-        t.name = s.name;
+        t.name = SimpleTextTyped::from_string_struct(s.name);
         t.quantity = !s.quantity.empty() ? std::stoi(s.quantity) : 0;
-        t.price = s.price;
-        t.itemtotal = s.itemtotal;
+        t.price = DollarTyped::from_string_struct(s.price);
+        t.itemtotal = DollarTyped::from_string_struct(s.itemtotal);
         return t;
     }
 
     OrderItemString to_string_struct() const {
         OrderItemString s;
-        s.name = name;
+        s.name = name.to_string_struct();
         s.quantity = std::to_string(quantity);
-        s.price = price;
-        s.itemtotal = itemtotal;
+        s.price = price.to_string_struct();
+        s.itemtotal = itemtotal.to_string_struct();
         return s;
     }
 
@@ -42,10 +44,10 @@ struct OrderItemTyped {
 
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("Name", json::Convert<std::string>::to_json(name));
+        m.emplace_back("Name", name.to_json_value());
         m.emplace_back("Quantity", json::Convert<int>::to_json(quantity));
-        m.emplace_back("Price", json::Convert<std::string>::to_json(price));
-        m.emplace_back("ItemTotal", json::Convert<std::string>::to_json(itemtotal));
+        m.emplace_back("Price", price.to_json_value());
+        m.emplace_back("ItemTotal", itemtotal.to_json_value());
         return json::Value::make_object(std::move(m));
     }
 
@@ -53,10 +55,10 @@ struct OrderItemTyped {
 
     static OrderItemTyped from_json_value(const json::Value& v) {
         OrderItemTyped t;
-        t.name = json::Convert<std::string>::from_json(json::require(v, "Name"), "Name");
+        t.name = SimpleTextTyped::from_json_value(json::require(v, "Name"));
         t.quantity = json::Convert<int>::from_json(json::require(v, "Quantity"), "Quantity");
-        t.price = json::Convert<std::string>::from_json(json::require(v, "Price"), "Price");
-        t.itemtotal = json::Convert<std::string>::from_json(json::require(v, "ItemTotal"), "ItemTotal");
+        t.price = DollarTyped::from_json_value(json::require(v, "Price"));
+        t.itemtotal = DollarTyped::from_json_value(json::require(v, "ItemTotal"));
         return t;
     }
 

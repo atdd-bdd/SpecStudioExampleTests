@@ -8,10 +8,10 @@ import calculator.*;
 public class FilterValueString {
     private static final String DNCString = "?DNC?";
 
-    public String value;
+    public IDFormString value;
 
     public FilterValueString(String value) {
-        this.value = value;
+        this.value = new IDFormString(value);
     }
 
     /** Builds from the text form, e.g. Money as "25 USD". */
@@ -25,7 +25,7 @@ public class FilterValueString {
         if (this == o) return true;
         if (!(o instanceof FilterValueString)) return false;
         FilterValueString that = (FilterValueString) o;
-        return (DNCString.equals(value) || DNCString.equals(that.value) || Objects.equals(value, that.value));
+        return (DNCString.equals(value.value) || DNCString.equals(that.value.value) || Objects.equals(value.value, that.value.value));
     }
 
     @Override
@@ -35,6 +35,6 @@ public class FilterValueString {
 
     @Override
     public String toString() {
-        return Tokens.token(value);
+        return Tokens.token(value.value);
     }
 }

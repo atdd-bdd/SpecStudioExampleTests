@@ -15,8 +15,8 @@ export class ShoppingCartGlue {
   givenCatalogHas(values: readonly CatalogItemString[]): void {
     values.forEach((value) => {
       const typed = CatalogItemTyped.fromStringObj(value);
-      this.catalog.add(new CatalogItem(new SimpleText(typed.name),
-                                       new Dollar(typed.price)));
+      this.catalog.add(new CatalogItem(typed.name.get(),
+                                       typed.price.get()));
     });
   }
 
@@ -29,8 +29,8 @@ export class ShoppingCartGlue {
     values.forEach((value) => {
       const typed = OrderItemTyped.fromStringObj(value);
       this.currentItems.add(new OrderItem(
-        new SimpleText(typed.name), typed.quantity,
-        new Dollar(typed.price), new Dollar(typed.itemTotal)));
+        typed.name.get(), typed.quantity,
+        typed.price.get(), typed.itemTotal.get()));
     });
   }
 
@@ -38,7 +38,7 @@ export class ShoppingCartGlue {
     values.forEach((value) => {
       const typed = OrderItemTyped.fromStringObj(value);
       const item = OrderItem.fromCatalog(
-        this.catalog, new SimpleText(typed.name), typed.quantity);
+        this.catalog, typed.name.get(), typed.quantity);
       expect(item).not.toBeNull();
       this.currentItems.add(item!);
     });
@@ -49,10 +49,10 @@ export class ShoppingCartGlue {
     expect(actual.length).toBe(values.length);
     values.forEach((value, i) => {
       const typed = OrderItemTyped.fromStringObj(value);
-      expect(actual[i]!.name.value).toBe(typed.name);
+      expect(actual[i]!.name.value).toBe(typed.name.text);
       expect(actual[i]!.quantity).toBe(typed.quantity);
-      expect(actual[i]!.price.equals(new Dollar(typed.price))).toBe(true);
-      expect(actual[i]!.itemTotal.equals(new Dollar(typed.itemTotal))).toBe(true);
+      expect(actual[i]!.price.equals(typed.price.get())).toBe(true);
+      expect(actual[i]!.itemTotal.equals(typed.itemTotal.get())).toBe(true);
     });
   }
 
@@ -68,9 +68,9 @@ export class ShoppingCartGlue {
       const cart = this.cart();
       // Shipping and Discount are outcomes of the two business rules, not the
       // values the Given supplied, so ask the cart for them.
-      expect(cart.computeTotal().equals(new Dollar(typed.totalPrice))).toBe(true);
-      expect(cart.shippingCost().equals(new Dollar(typed.shipping))).toBe(true);
-      expect(cart.discountAmount().equals(new Dollar(typed.discount))).toBe(true);
+      expect(cart.computeTotal().equals(typed.totalPrice.get())).toBe(true);
+      expect(cart.shippingCost().equals(typed.shipping.get())).toBe(true);
+      expect(cart.discountAmount().equals(typed.discount.get())).toBe(true);
     });
   }
 
@@ -82,16 +82,16 @@ export class ShoppingCartGlue {
   examplesBusinessRuleShippingCost(values: readonly ShippingInputString[]): void {
     values.forEach((value) => {
       const typed = ShippingInputTyped.fromStringObj(value);
-      const actual = ShoppingCart.shippingCostFor(new Dollar(typed.totalPrice));
-      expect(actual.equals(new Dollar(typed.shippingCost))).toBe(true);
+      const actual = ShoppingCart.shippingCostFor(typed.totalPrice.get());
+      expect(actual.equals(typed.shippingCost.get())).toBe(true);
     });
   }
 
   examplesBusinessRuleDiscount(values: readonly DiscountInputString[]): void {
     values.forEach((value) => {
       const typed = DiscountInputTyped.fromStringObj(value);
-      const actual = ShoppingCart.discountFor(new Dollar(typed.totalPrice));
-      expect(actual.equals(new Percentage(typed.discount))).toBe(true);
+      const actual = ShoppingCart.discountFor(typed.totalPrice.get());
+      expect(actual.equals(typed.discount.get())).toBe(true);
     });
   }
 
@@ -107,7 +107,7 @@ export class ShoppingCartGlue {
   thenTotalOfItemsIs(values: readonly ItemPriceInputString[]): void {
     values.forEach((value) => {
       const typed = ItemPriceInputTyped.fromStringObj(value);
-      expect(this.currentItems.computeTotal().equals(new Dollar(typed.totalItems)))
+      expect(this.currentItems.computeTotal().equals(typed.totalItems.get()))
         .toBe(true);
     });
   }
@@ -117,12 +117,12 @@ export class ShoppingCartGlue {
       const typed = CartInputTyped.fromStringObj(value);
       // The rule states the whole calculation from an item total, so drive it
       // that way rather than building a cart to reach the same numbers.
-      const total = new Dollar(typed.totalItems);
-      expect(ShoppingCart.discountAmountFor(total).equals(new Dollar(typed.discount)))
+      const total = typed.totalItems.get();
+      expect(ShoppingCart.discountAmountFor(total).equals(typed.discount.get()))
         .toBe(true);
-      expect(ShoppingCart.shippingFor(total).equals(new Dollar(typed.shipping)))
+      expect(ShoppingCart.shippingFor(total).equals(typed.shipping.get()))
         .toBe(true);
-      expect(ShoppingCart.totalPriceFor(total).equals(new Dollar(typed.totalPrice)))
+      expect(ShoppingCart.totalPriceFor(total).equals(typed.totalPrice.get()))
         .toBe(true);
     });
   }

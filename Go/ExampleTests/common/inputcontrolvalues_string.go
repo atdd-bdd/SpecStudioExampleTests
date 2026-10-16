@@ -2,15 +2,15 @@ package common
 
 type InputControlValuesString struct {
 	Frame string
-	Roll string
-	Remaining string
+	Roll PinsString
+	Remaining PinsString
 }
 
 func NewInputControlValuesStringFromSlice(v []string) InputControlValuesString {
 	s := InputControlValuesString{}
 	if len(v) > 0 { s.Frame = v[0] }
-	if len(v) > 1 { s.Roll = v[1] }
-	if len(v) > 2 { s.Remaining = v[2] }
+	if len(v) > 1 { s.Roll = PinsString(v[1]) }
+	if len(v) > 2 { s.Remaining = PinsString(v[2]) }
 	return s
 }
 
@@ -19,19 +19,19 @@ func NewInputControlValuesStringFromText(text string) InputControlValuesString {
 	parts := RequireTokens(text, 3, "InputControlValues")
 	return InputControlValuesString{
 		Frame: parts[0],
-		Roll: parts[1],
-		Remaining: parts[2],
+		Roll: PinsString(parts[1]),
+		Remaining: PinsString(parts[2]),
 	}
 }
 
 func (s InputControlValuesString) String() string {
-	return Token(s.Frame) + " " + Token(s.Roll) + " " + Token(s.Remaining)
+	return Token(s.Frame) + " " + Token(string(s.Roll)) + " " + Token(string(s.Remaining))
 }
 
 func (s InputControlValuesString) Equals(o InputControlValuesString) bool {
 	return DNCEqual(s.Frame, o.Frame) &&
-		DNCEqual(s.Roll, o.Roll) &&
-		DNCEqual(s.Remaining, o.Remaining)
+		DNCEqual(string(s.Roll), string(o.Roll)) &&
+		DNCEqual(string(s.Remaining), string(o.Remaining))
 }
 
 func EqualInputControlValuesStringSlices(a, b []InputControlValuesString) bool {

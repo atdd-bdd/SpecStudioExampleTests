@@ -1,12 +1,13 @@
 import { ShippingInputString } from "./ShippingInputString.js";
 import * as _json from "./json.js";
+import { DollarTyped } from "./DollarTyped.js";
 
 export class ShippingInputTyped {
-  totalPrice: string;
-  shippingCost: string;
+  totalPrice: DollarTyped;
+  shippingCost: DollarTyped;
   notes: string;
 
-  constructor(totalPrice: string, shippingCost: string, notes: string) {
+  constructor(totalPrice: DollarTyped, shippingCost: DollarTyped, notes: string) {
     this.totalPrice = totalPrice;
     this.shippingCost = shippingCost;
     this.notes = notes;
@@ -14,8 +15,8 @@ export class ShippingInputTyped {
 
   static fromStringObj(s: ShippingInputString): ShippingInputTyped {
     return new ShippingInputTyped(
-      s.totalPrice,
-      s.shippingCost,
+      new DollarTyped(s.totalPrice),
+      new DollarTyped(s.shippingCost),
       s.notes
     );
   }
@@ -38,8 +39,8 @@ export class ShippingInputTyped {
 
   toJsonValue(): Record<string, unknown> {
     return {
-      totalPrice: this.totalPrice,
-      shippingCost: this.shippingCost,
+      totalPrice: String(this.totalPrice),
+      shippingCost: String(this.shippingCost),
       notes: this.notes,
     };
   }
@@ -48,8 +49,8 @@ export class ShippingInputTyped {
 
   static fromJsonValue(m: unknown): ShippingInputTyped {
     return new ShippingInputTyped(
-      _json.asString(_json.requireField(m, "totalPrice"), "totalPrice"),
-      _json.asString(_json.requireField(m, "shippingCost"), "shippingCost"),
+      new DollarTyped(_json.asString(_json.requireField(m, "totalPrice"), "totalPrice")),
+      new DollarTyped(_json.asString(_json.requireField(m, "shippingCost"), "shippingCost")),
       _json.asString(_json.requireField(m, "notes"), "notes")
     );
   }
@@ -72,8 +73,8 @@ export class ShippingInputTyped {
   }
 
   equals(other: ShippingInputTyped): boolean {
-    return this.totalPrice === other.totalPrice
-      && this.shippingCost === other.shippingCost
+    return this.totalPrice.equals(other.totalPrice)
+      && this.shippingCost.equals(other.shippingCost)
       && this.notes === other.notes;
   }
 }

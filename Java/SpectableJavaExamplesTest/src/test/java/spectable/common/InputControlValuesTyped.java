@@ -11,10 +11,10 @@ import calculator.*;
 
 public class InputControlValuesTyped {
     public int frame;
-    public Pins roll;
-    public Pins remaining;
+    public PinsTyped roll;
+    public PinsTyped remaining;
 
-    public InputControlValuesTyped(int frame, Pins roll, Pins remaining) {
+    public InputControlValuesTyped(int frame, PinsTyped roll, PinsTyped remaining) {
         this.frame = frame;
         this.roll = roll;
         this.remaining = remaining;
@@ -22,8 +22,8 @@ public class InputControlValuesTyped {
 
     public InputControlValuesTyped(InputControlValuesString s) {
         this.frame = Integer.parseInt(s.frame);
-        this.roll = new Pins(s.roll);
-        this.remaining = new Pins(s.remaining);
+        this.roll = new PinsTyped(s.roll);
+        this.remaining = new PinsTyped(s.remaining);
     }
 
     @Override
@@ -73,8 +73,8 @@ public class InputControlValuesTyped {
         if (m == null) return null;
         return new InputControlValuesTyped(
             Json.asInt(Json.require(m, "frame"), "frame"),
-            new Pins(Json.asString(Json.require(m, "roll"), "roll")),
-            new Pins(Json.asString(Json.require(m, "remaining"), "remaining")));
+            new PinsTyped(new PinsString(Json.asString(Json.require(m, "roll"), "roll"))),
+            new PinsTyped(new PinsString(Json.asString(Json.require(m, "remaining"), "remaining"))));
     }
 
     public static InputControlValuesTyped fromJSON(String json) {

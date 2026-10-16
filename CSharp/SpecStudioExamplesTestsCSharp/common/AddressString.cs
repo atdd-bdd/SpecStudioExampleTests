@@ -4,12 +4,12 @@ using production;
 
     public class AddressString
     {
-        public string street;
-        public string city;
-        public string state;
-        public string zIP;
+        public SimpleTextString street;
+        public SimpleTextString city;
+        public SimpleTextString state;
+        public SimpleTextString zIP;
 
-        public AddressString(string street, string city, string state, string zIP)
+        public AddressString(SimpleTextString street, SimpleTextString city, SimpleTextString state, SimpleTextString zIP)
         {
             this.street = street;
             this.city = city;
@@ -36,10 +36,10 @@ using production;
         public AddressTyped ToAddressTyped()
         {
             return new AddressTyped(
-                new SimpleText(this.street),
-                new SimpleText(this.city),
-                new SimpleText(this.state),
-                new SimpleText(this.zIP)
+                new SimpleTextTyped(this.street),
+                new SimpleTextTyped(this.city),
+                new SimpleTextTyped(this.state),
+                new SimpleTextTyped(this.zIP)
             );
         }
 
@@ -53,10 +53,10 @@ using production;
         public override bool Equals(object? obj)
         {
             if (obj is not AddressString other) return false;
-            return (DNCString == this.street || DNCString == other.street || object.Equals(this.street, other.street))
-                && (DNCString == this.city || DNCString == other.city || object.Equals(this.city, other.city))
-                && (DNCString == this.state || DNCString == other.state || object.Equals(this.state, other.state))
-                && (DNCString == this.zIP || DNCString == other.zIP || object.Equals(this.zIP, other.zIP));
+            return (DNCString == this.street.Value || DNCString == other.street.Value || this.street.Value == other.street.Value)
+                && (DNCString == this.city.Value || DNCString == other.city.Value || this.city.Value == other.city.Value)
+                && (DNCString == this.state.Value || DNCString == other.state.Value || this.state.Value == other.state.Value)
+                && (DNCString == this.zIP.Value || DNCString == other.zIP.Value || this.zIP.Value == other.zIP.Value);
         }
 
         public override int GetHashCode()

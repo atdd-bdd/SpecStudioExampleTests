@@ -40,8 +40,8 @@ export class CatalogItemTyped {
 
   static fromJsonValue(m) {
     return new CatalogItemTyped(
-      new SimpleText(_json.asString(_json.require(m, "name"), "name")),
-      new Dollar(_json.asString(_json.require(m, "price"), "price"))
+      _json.asString(_json.require(m, "name"), "name"),
+      _json.asString(_json.require(m, "price"), "price")
     );
   }
 

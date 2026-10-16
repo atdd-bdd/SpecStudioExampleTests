@@ -2,22 +2,23 @@
 
 use super::json;
 use super::itempriceinput_string::ItemPriceInputString;
+use super::dollar_typed::DollarTyped;
 
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct ItemPriceInputTyped {
-    pub totalitems: String,
+    pub totalitems: DollarTyped,
 }
 
 impl ItemPriceInputTyped {
     pub fn from_str_struct(s: &ItemPriceInputString) -> Self {
         Self {
-            totalitems: s.totalitems.clone(),
+            totalitems: DollarTyped::from_str_struct(&s.totalitems),
         }
     }
 
     pub fn to_str_struct(&self) -> ItemPriceInputString {
         ItemPriceInputString {
-            totalitems: self.totalitems.clone(),
+            totalitems: self.totalitems.to_str_struct(),
         }
     }
 
@@ -31,7 +32,7 @@ impl ItemPriceInputTyped {
 
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("TotalItems".to_string(), json::Value::Str(self.totalitems.clone())),
+            ("TotalItems".to_string(), json::Value::Str(self.totalitems.text.clone())),
         ])
     }
 
@@ -41,7 +42,7 @@ impl ItemPriceInputTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            totalitems: json::as_string(json::require(v, "TotalItems")?, "TotalItems")?,
+            totalitems: DollarTyped::from(json::as_string(json::require(v, "TotalItems")?, "TotalItems")?),
         })
     }
 

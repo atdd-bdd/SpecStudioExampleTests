@@ -8,10 +8,10 @@ import calculator.*;
 public class ItemPriceInputString {
     private static final String DNCString = "?DNC?";
 
-    public String totalItems;
+    public DollarString totalItems;
 
     public ItemPriceInputString(String totalItems) {
-        this.totalItems = totalItems;
+        this.totalItems = new DollarString(totalItems);
     }
 
     /** Builds from the text form, e.g. Money as "25 USD". */
@@ -25,7 +25,7 @@ public class ItemPriceInputString {
         if (this == o) return true;
         if (!(o instanceof ItemPriceInputString)) return false;
         ItemPriceInputString that = (ItemPriceInputString) o;
-        return (DNCString.equals(totalItems) || DNCString.equals(that.totalItems) || Objects.equals(totalItems, that.totalItems));
+        return (DNCString.equals(totalItems.value) || DNCString.equals(that.totalItems.value) || Objects.equals(totalItems.value, that.totalItems.value));
     }
 
     @Override
@@ -35,6 +35,6 @@ public class ItemPriceInputString {
 
     @Override
     public String toString() {
-        return Tokens.token(totalItems);
+        return Tokens.token(totalItems.value);
     }
 }

@@ -4,21 +4,21 @@ import "strconv"
 
 type FrameValuesTyped struct {
 	Frame int
-	Roll1 string
-	Roll2 string
-	Roll3 string
-	Score string
-	TotalScore string
+	Roll1 PinsTyped
+	Roll2 PinsTyped
+	Roll3 PinsTyped
+	Score ScoreTyped
+	TotalScore ScoreTyped
 }
 
 func NewFrameValuesTypedFromString(s FrameValuesString) FrameValuesTyped {
 	t := FrameValuesTyped{}
 	if v, err := strconv.Atoi(s.Frame); err == nil { t.Frame = v }
-	t.Roll1 = s.Roll1
-	t.Roll2 = s.Roll2
-	t.Roll3 = s.Roll3
-	t.Score = s.Score
-	t.TotalScore = s.TotalScore
+	t.Roll1 = NewPinsTypedFromString(s.Roll1)
+	t.Roll2 = NewPinsTypedFromString(s.Roll2)
+	t.Roll3 = NewPinsTypedFromString(s.Roll3)
+	t.Score = NewScoreTypedFromString(s.Score)
+	t.TotalScore = NewScoreTypedFromString(s.TotalScore)
 	return t
 }
 
@@ -26,11 +26,11 @@ func NewFrameValuesTypedFromString(s FrameValuesString) FrameValuesTyped {
 func (t FrameValuesTyped) ToFrameValuesString() FrameValuesString {
 	s := FrameValuesString{}
 	s.Frame = strconv.Itoa(t.Frame)
-	s.Roll1 = t.Roll1
-	s.Roll2 = t.Roll2
-	s.Roll3 = t.Roll3
-	s.Score = t.Score
-	s.TotalScore = t.TotalScore
+	s.Roll1 = t.Roll1.ToPinsString()
+	s.Roll2 = t.Roll2.ToPinsString()
+	s.Roll3 = t.Roll3.ToPinsString()
+	s.Score = t.Score.ToScoreString()
+	s.TotalScore = t.TotalScore.ToScoreString()
 	return s
 }
 
@@ -52,11 +52,11 @@ func FrameValuesTypedFromStringList(list []FrameValuesString) []FrameValuesTyped
 func (t FrameValuesTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
 		"Frame": t.Frame,
-		"Roll1": t.Roll1,
-		"Roll2": t.Roll2,
-		"Roll3": t.Roll3,
-		"Score": t.Score,
-		"TotalScore": t.TotalScore,
+		"Roll1": t.Roll1.String(),
+		"Roll2": t.Roll2.String(),
+		"Roll3": t.Roll3.String(),
+		"Score": t.Score.String(),
+		"TotalScore": t.TotalScore.String(),
 	}
 }
 
@@ -83,7 +83,7 @@ func NewFrameValuesTypedFromJSONValue(m map[string]interface{}) (FrameValuesType
 	if err != nil {
 		return t, err
 	}
-	t.Roll1 = valRoll1
+	t.Roll1 = NewPinsTyped(valRoll1)
 	rawRoll2, err := JSONRequire(m, "Roll2")
 	if err != nil {
 		return t, err
@@ -92,7 +92,7 @@ func NewFrameValuesTypedFromJSONValue(m map[string]interface{}) (FrameValuesType
 	if err != nil {
 		return t, err
 	}
-	t.Roll2 = valRoll2
+	t.Roll2 = NewPinsTyped(valRoll2)
 	rawRoll3, err := JSONRequire(m, "Roll3")
 	if err != nil {
 		return t, err
@@ -101,7 +101,7 @@ func NewFrameValuesTypedFromJSONValue(m map[string]interface{}) (FrameValuesType
 	if err != nil {
 		return t, err
 	}
-	t.Roll3 = valRoll3
+	t.Roll3 = NewPinsTyped(valRoll3)
 	rawScore, err := JSONRequire(m, "Score")
 	if err != nil {
 		return t, err
@@ -110,7 +110,7 @@ func NewFrameValuesTypedFromJSONValue(m map[string]interface{}) (FrameValuesType
 	if err != nil {
 		return t, err
 	}
-	t.Score = valScore
+	t.Score = NewScoreTyped(valScore)
 	rawTotalScore, err := JSONRequire(m, "TotalScore")
 	if err != nil {
 		return t, err
@@ -119,7 +119,7 @@ func NewFrameValuesTypedFromJSONValue(m map[string]interface{}) (FrameValuesType
 	if err != nil {
 		return t, err
 	}
-	t.TotalScore = valTotalScore
+	t.TotalScore = NewScoreTyped(valTotalScore)
 	return t, nil
 }
 

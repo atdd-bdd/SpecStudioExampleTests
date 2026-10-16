@@ -10,19 +10,19 @@ import records.*;
 import calculator.*;
 
 public class DiscountInputTyped {
-    public Dollar totalPrice;
-    public Percentage discount;
+    public DollarTyped totalPrice;
+    public PercentageTyped discount;
     public String notes;
 
-    public DiscountInputTyped(Dollar totalPrice, Percentage discount, String notes) {
+    public DiscountInputTyped(DollarTyped totalPrice, PercentageTyped discount, String notes) {
         this.totalPrice = totalPrice;
         this.discount = discount;
         this.notes = notes;
     }
 
     public DiscountInputTyped(DiscountInputString s) {
-        this.totalPrice = new Dollar(s.totalPrice);
-        this.discount = new Percentage(s.discount);
+        this.totalPrice = new DollarTyped(s.totalPrice);
+        this.discount = new PercentageTyped(s.discount);
         this.notes = s.notes;
     }
 
@@ -72,8 +72,8 @@ public class DiscountInputTyped {
     public static DiscountInputTyped fromJsonValue(Map<String, Object> m) {
         if (m == null) return null;
         return new DiscountInputTyped(
-            new Dollar(Json.asString(Json.require(m, "totalPrice"), "totalPrice")),
-            new Percentage(Json.asString(Json.require(m, "discount"), "discount")),
+            new DollarTyped(new DollarString(Json.asString(Json.require(m, "totalPrice"), "totalPrice"))),
+            new PercentageTyped(new PercentageString(Json.asString(Json.require(m, "discount"), "discount"))),
             Json.asString(Json.require(m, "notes"), "notes"));
     }
 

@@ -3,30 +3,31 @@
 #include <vector>
 #include "json.h"
 #include "cartinput_string.h"
+#include "dollar_typed.h"
 
 struct CartInputTyped {
-    std::string totalitems;
-    std::string shipping;
-    std::string discount;
-    std::string total_price;
+    DollarTyped totalitems;
+    DollarTyped shipping;
+    DollarTyped discount;
+    DollarTyped total_price;
     std::string notes;
 
     static CartInputTyped from_string_struct(const CartInputString& s) {
         CartInputTyped t;
-        t.totalitems = s.totalitems;
-        t.shipping = s.shipping;
-        t.discount = s.discount;
-        t.total_price = s.total_price;
+        t.totalitems = DollarTyped::from_string_struct(s.totalitems);
+        t.shipping = DollarTyped::from_string_struct(s.shipping);
+        t.discount = DollarTyped::from_string_struct(s.discount);
+        t.total_price = DollarTyped::from_string_struct(s.total_price);
         t.notes = s.notes;
         return t;
     }
 
     CartInputString to_string_struct() const {
         CartInputString s;
-        s.totalitems = totalitems;
-        s.shipping = shipping;
-        s.discount = discount;
-        s.total_price = total_price;
+        s.totalitems = totalitems.to_string_struct();
+        s.shipping = shipping.to_string_struct();
+        s.discount = discount.to_string_struct();
+        s.total_price = total_price.to_string_struct();
         s.notes = notes;
         return s;
     }
@@ -45,10 +46,10 @@ struct CartInputTyped {
 
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("TotalItems", json::Convert<std::string>::to_json(totalitems));
-        m.emplace_back("Shipping", json::Convert<std::string>::to_json(shipping));
-        m.emplace_back("Discount", json::Convert<std::string>::to_json(discount));
-        m.emplace_back("Total Price", json::Convert<std::string>::to_json(total_price));
+        m.emplace_back("TotalItems", totalitems.to_json_value());
+        m.emplace_back("Shipping", shipping.to_json_value());
+        m.emplace_back("Discount", discount.to_json_value());
+        m.emplace_back("Total Price", total_price.to_json_value());
         m.emplace_back("Notes", json::Convert<std::string>::to_json(notes));
         return json::Value::make_object(std::move(m));
     }
@@ -57,10 +58,10 @@ struct CartInputTyped {
 
     static CartInputTyped from_json_value(const json::Value& v) {
         CartInputTyped t;
-        t.totalitems = json::Convert<std::string>::from_json(json::require(v, "TotalItems"), "TotalItems");
-        t.shipping = json::Convert<std::string>::from_json(json::require(v, "Shipping"), "Shipping");
-        t.discount = json::Convert<std::string>::from_json(json::require(v, "Discount"), "Discount");
-        t.total_price = json::Convert<std::string>::from_json(json::require(v, "Total Price"), "Total Price");
+        t.totalitems = DollarTyped::from_json_value(json::require(v, "TotalItems"));
+        t.shipping = DollarTyped::from_json_value(json::require(v, "Shipping"));
+        t.discount = DollarTyped::from_json_value(json::require(v, "Discount"));
+        t.total_price = DollarTyped::from_json_value(json::require(v, "Total Price"));
         t.notes = json::Convert<std::string>::from_json(json::require(v, "Notes"), "Notes");
         return t;
     }

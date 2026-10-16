@@ -1,18 +1,18 @@
 package common
 
 type AddressString struct {
-	Street string
-	City string
-	State string
-	ZIP string
+	Street SimpleTextString
+	City SimpleTextString
+	State SimpleTextString
+	ZIP SimpleTextString
 }
 
 func NewAddressStringFromSlice(v []string) AddressString {
 	s := AddressString{}
-	if len(v) > 0 { s.Street = v[0] }
-	if len(v) > 1 { s.City = v[1] }
-	if len(v) > 2 { s.State = v[2] }
-	if len(v) > 3 { s.ZIP = v[3] }
+	if len(v) > 0 { s.Street = SimpleTextString(v[0]) }
+	if len(v) > 1 { s.City = SimpleTextString(v[1]) }
+	if len(v) > 2 { s.State = SimpleTextString(v[2]) }
+	if len(v) > 3 { s.ZIP = SimpleTextString(v[3]) }
 	return s
 }
 
@@ -20,22 +20,22 @@ func NewAddressStringFromSlice(v []string) AddressString {
 func NewAddressStringFromText(text string) AddressString {
 	parts := RequireTokens(text, 4, "Address")
 	return AddressString{
-		Street: parts[0],
-		City: parts[1],
-		State: parts[2],
-		ZIP: parts[3],
+		Street: SimpleTextString(parts[0]),
+		City: SimpleTextString(parts[1]),
+		State: SimpleTextString(parts[2]),
+		ZIP: SimpleTextString(parts[3]),
 	}
 }
 
 func (s AddressString) String() string {
-	return Token(s.Street) + " " + Token(s.City) + " " + Token(s.State) + " " + Token(s.ZIP)
+	return Token(string(s.Street)) + " " + Token(string(s.City)) + " " + Token(string(s.State)) + " " + Token(string(s.ZIP))
 }
 
 func (s AddressString) Equals(o AddressString) bool {
-	return DNCEqual(s.Street, o.Street) &&
-		DNCEqual(s.City, o.City) &&
-		DNCEqual(s.State, o.State) &&
-		DNCEqual(s.ZIP, o.ZIP)
+	return DNCEqual(string(s.Street), string(o.Street)) &&
+		DNCEqual(string(s.City), string(o.City)) &&
+		DNCEqual(string(s.State), string(o.State)) &&
+		DNCEqual(string(s.ZIP), string(o.ZIP))
 }
 
 func EqualAddressStringSlices(a, b []AddressString) bool {

@@ -33,7 +33,7 @@ fn scenario_a_shoppingcart_with_addresses() {
         CatalogItemString::from_vec(&["WhatCallIt", "20"]),
         CatalogItemString::from_vec(&["ThingaMaJig", "30"]),
     ]);
-    glue.given_shopping_cart(&[ShoppingCartString { items: "=EmptyCart".to_string(), shipping: "$0".to_string(), discount: "$0".to_string(), totalprice: "$0".to_string(), shippingaddress: AddressString { street: "2 Apple Lane".to_string(), city: "Somewhere".to_string(), state: "NC".to_string(), zip: "27706".to_string() }, billingaddress: AddressString { street: "1 Apple Lane".to_string(), city: "Somewhere".to_string(), state: "NC".to_string(), zip: "27705".to_string() } }]);
+    glue.given_shopping_cart(&[ShoppingCartString { items: "=EmptyCart".to_string(), shipping: DollarString::from("$0"), discount: DollarString::from("$0"), totalprice: DollarString::from("$0"), shippingaddress: AddressString { street: SimpleTextString::from("2 Apple Lane"), city: SimpleTextString::from("Somewhere"), state: SimpleTextString::from("NC"), zip: SimpleTextString::from("27706") }, billingaddress: AddressString { street: SimpleTextString::from("1 Apple Lane"), city: SimpleTextString::from("Somewhere"), state: SimpleTextString::from("NC"), zip: SimpleTextString::from("27705") } }]);
 }
 
 #[test]
@@ -44,10 +44,10 @@ fn scenario_add_items_to_shopping_cart() {
         CatalogItemString::from_vec(&["WhatCallIt", "20"]),
         CatalogItemString::from_vec(&["ThingaMaJig", "30"]),
     ]);
-    glue.given_shopping_cart(&[ShoppingCartString { items: "=EmptyCart".to_string(), shipping: "$0".to_string(), discount: "$0".to_string(), totalprice: "$0".to_string(), shippingaddress: AddressString { street: "".to_string(), city: "".to_string(), state: "".to_string(), zip: "".to_string() }, billingaddress: AddressString { street: "".to_string(), city: "".to_string(), state: "".to_string(), zip: "".to_string() } }]);
+    glue.given_shopping_cart(&[ShoppingCartString { items: "=EmptyCart".to_string(), shipping: DollarString::from("$0"), discount: DollarString::from("$0"), totalprice: DollarString::from("$0"), shippingaddress: AddressString { street: SimpleTextString::from(""), city: SimpleTextString::from(""), state: SimpleTextString::from(""), zip: SimpleTextString::from("") }, billingaddress: AddressString { street: SimpleTextString::from(""), city: SimpleTextString::from(""), state: SimpleTextString::from(""), zip: SimpleTextString::from("") } }]);
     glue.when_item_added(&[OrderItemString::from_vec(&["Widget", "2", "1", "1"])]);
     glue.when_item_added(&[OrderItemString::from_vec(&["WhatCallIt", "3", "1", "1"])]);
-    glue.then_shopping_cart_is(&[ShoppingCartString { items: "=TwoItemCart".to_string(), shipping: "$5".to_string(), discount: "$4".to_string(), totalprice: "$81".to_string(), shippingaddress: AddressString { street: "".to_string(), city: "".to_string(), state: "".to_string(), zip: "".to_string() }, billingaddress: AddressString { street: "".to_string(), city: "".to_string(), state: "".to_string(), zip: "".to_string() } }]);
+    glue.then_shopping_cart_is(&[ShoppingCartString { items: "=TwoItemCart".to_string(), shipping: DollarString::from("$5"), discount: DollarString::from("$4"), totalprice: DollarString::from("$81"), shippingaddress: AddressString { street: SimpleTextString::from(""), city: SimpleTextString::from(""), state: SimpleTextString::from(""), zip: SimpleTextString::from("") }, billingaddress: AddressString { street: SimpleTextString::from(""), city: SimpleTextString::from(""), state: SimpleTextString::from(""), zip: SimpleTextString::from("") } }]);
 }
 
 #[test]

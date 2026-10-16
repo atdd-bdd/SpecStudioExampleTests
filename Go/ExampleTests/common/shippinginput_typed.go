@@ -1,15 +1,15 @@
 package common
 
 type ShippingInputTyped struct {
-	TotalPrice string
-	ShippingCost string
+	TotalPrice DollarTyped
+	ShippingCost DollarTyped
 	Notes string
 }
 
 func NewShippingInputTypedFromString(s ShippingInputString) ShippingInputTyped {
 	t := ShippingInputTyped{}
-	t.TotalPrice = s.TotalPrice
-	t.ShippingCost = s.ShippingCost
+	t.TotalPrice = NewDollarTypedFromString(s.TotalPrice)
+	t.ShippingCost = NewDollarTypedFromString(s.ShippingCost)
 	t.Notes = s.Notes
 	return t
 }
@@ -17,8 +17,8 @@ func NewShippingInputTypedFromString(s ShippingInputString) ShippingInputTyped {
 // ToShippingInputString converts this ShippingInputTyped back to the string form a table compares.
 func (t ShippingInputTyped) ToShippingInputString() ShippingInputString {
 	s := ShippingInputString{}
-	s.TotalPrice = t.TotalPrice
-	s.ShippingCost = t.ShippingCost
+	s.TotalPrice = t.TotalPrice.ToDollarString()
+	s.ShippingCost = t.ShippingCost.ToDollarString()
 	s.Notes = t.Notes
 	return s
 }
@@ -40,8 +40,8 @@ func ShippingInputTypedFromStringList(list []ShippingInputString) []ShippingInpu
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t ShippingInputTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"Total Price": t.TotalPrice,
-		"Shipping Cost": t.ShippingCost,
+		"Total Price": t.TotalPrice.String(),
+		"Shipping Cost": t.ShippingCost.String(),
 		"Notes": t.Notes,
 	}
 }
@@ -60,7 +60,7 @@ func NewShippingInputTypedFromJSONValue(m map[string]interface{}) (ShippingInput
 	if err != nil {
 		return t, err
 	}
-	t.TotalPrice = valTotalPrice
+	t.TotalPrice = NewDollarTyped(valTotalPrice)
 	rawShippingCost, err := JSONRequire(m, "Shipping Cost")
 	if err != nil {
 		return t, err
@@ -69,7 +69,7 @@ func NewShippingInputTypedFromJSONValue(m map[string]interface{}) (ShippingInput
 	if err != nil {
 		return t, err
 	}
-	t.ShippingCost = valShippingCost
+	t.ShippingCost = NewDollarTyped(valShippingCost)
 	rawNotes, err := JSONRequire(m, "Notes")
 	if err != nil {
 		return t, err

@@ -5,10 +5,10 @@ using production;
     public class InputControlValuesString
     {
         public string frame;
-        public string roll;
-        public string remaining;
+        public PinsString roll;
+        public PinsString remaining;
 
-        public InputControlValuesString(string frame, string roll, string remaining)
+        public InputControlValuesString(string frame, PinsString roll, PinsString remaining)
         {
             this.frame = frame;
             this.roll = roll;
@@ -34,8 +34,8 @@ using production;
         {
             return new InputControlValuesTyped(
                 int.Parse(this.frame),
-                new Pins(this.roll),
-                new Pins(this.remaining)
+                new PinsTyped(this.roll),
+                new PinsTyped(this.remaining)
             );
         }
 
@@ -50,8 +50,8 @@ using production;
         {
             if (obj is not InputControlValuesString other) return false;
             return (DNCString == this.frame || DNCString == other.frame || object.Equals(this.frame, other.frame))
-                && (DNCString == this.roll || DNCString == other.roll || object.Equals(this.roll, other.roll))
-                && (DNCString == this.remaining || DNCString == other.remaining || object.Equals(this.remaining, other.remaining));
+                && (DNCString == this.roll.Value || DNCString == other.roll.Value || this.roll.Value == other.roll.Value)
+                && (DNCString == this.remaining.Value || DNCString == other.remaining.Value || this.remaining.Value == other.remaining.Value);
         }
 
         public override int GetHashCode()

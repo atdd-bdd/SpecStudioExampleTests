@@ -11,7 +11,7 @@ public:
     void given_catalog_has(const std::vector<CatalogItemString>& values) {
         for (const auto& value : values) {
             const CatalogItemTyped t = CatalogItemTyped::from_string_struct(value);
-            catalog_.add(CatalogItem(SimpleText::unchecked(t.name), Dollar(t.price)));
+            catalog_.add(CatalogItem(t.name.get(), t.price.get()));
         }
     }
 
@@ -23,8 +23,8 @@ public:
         items_ = OrderItemCollection();
         for (const auto& value : values) {
             const OrderItemTyped t = OrderItemTyped::from_string_struct(value);
-            items_.add(OrderItem(SimpleText::unchecked(t.name), t.quantity,
-                                 Dollar(t.price), Dollar(t.itemtotal)));
+            items_.add(OrderItem(t.name.get(), t.quantity,
+                                 t.price.get(), t.itemtotal.get()));
         }
     }
 
@@ -32,8 +32,8 @@ public:
         for (const auto& value : values) {
             const OrderItemTyped t = OrderItemTyped::from_string_struct(value);
             auto item = OrderItem::from_catalog(
-                catalog_, SimpleText::unchecked(t.name), t.quantity);
-            ASSERT_TRUE(item.has_value()) << "item not in catalog: " << t.name;
+                catalog_, t.name.get(), t.quantity);
+            ASSERT_TRUE(item.has_value()) << "item not in catalog: " << t.name.text;
             items_.add(*item);
         }
     }
@@ -43,10 +43,10 @@ public:
         ASSERT_EQ(values.size(), actual.size()) << "Item count";
         for (std::size_t i = 0; i < values.size(); ++i) {
             const OrderItemTyped t = OrderItemTyped::from_string_struct(values[i]);
-            EXPECT_EQ(t.name, actual[i].name.value()) << "Item " << i << " name";
+            EXPECT_EQ(t.name.text, actual[i].name.value()) << "Item " << i << " name";
             EXPECT_EQ(t.quantity, actual[i].quantity) << "Item " << i << " quantity";
-            EXPECT_EQ(Dollar(t.price), actual[i].price) << "Item " << i << " price";
-            EXPECT_EQ(Dollar(t.itemtotal), actual[i].item_total)
+            EXPECT_EQ(t.price.get(), actual[i].price) << "Item " << i << " price";
+            EXPECT_EQ(t.itemtotal.get(), actual[i].item_total)
                 << "Item " << i << " itemTotal";
         }
     }
@@ -63,9 +63,9 @@ public:
             const ShoppingCart cart(items_);
             // Shipping and Discount are outcomes of the two business rules, not
             // the values the Given supplied, so ask the cart for them.
-            EXPECT_EQ(Dollar(t.totalprice), cart.compute_total()) << "TotalPrice";
-            EXPECT_EQ(Dollar(t.shipping), cart.shipping_cost()) << "Shipping";
-            EXPECT_EQ(Dollar(t.discount), cart.discount_amount()) << "Discount";
+            EXPECT_EQ(t.totalprice.get(), cart.compute_total()) << "TotalPrice";
+            EXPECT_EQ(t.shipping.get(), cart.shipping_cost()) << "Shipping";
+            EXPECT_EQ(t.discount.get(), cart.discount_amount()) << "Discount";
         }
     }
 
@@ -75,18 +75,18 @@ public:
     void examples_businessrule_shipping_cost(const std::vector<ShippingInputString>& values) {
         for (const auto& value : values) {
             const ShippingInputTyped t = ShippingInputTyped::from_string_struct(value);
-            EXPECT_EQ(Dollar(t.shipping_cost),
-                      ShoppingCart::shipping_cost_for(Dollar(t.total_price)))
-                << "Shipping cost for " << t.total_price;
+            EXPECT_EQ(t.shipping_cost.get(),
+                      ShoppingCart::shipping_cost_for(t.total_price.get()))
+                << "Shipping cost for " << t.total_price.text;
         }
     }
 
     void examples_businessrule_discount(const std::vector<DiscountInputString>& values) {
         for (const auto& value : values) {
             const DiscountInputTyped t = DiscountInputTyped::from_string_struct(value);
-            EXPECT_EQ(Percentage(t.discount),
-                      ShoppingCart::discount_for(Dollar(t.total_price)))
-                << "Discount for " << t.total_price;
+            EXPECT_EQ(t.discount.get(),
+                      ShoppingCart::discount_for(t.total_price.get()))
+                << "Discount for " << t.total_price.text;
         }
     }
 
@@ -102,7 +102,7 @@ public:
     void then_total_of_items_is(const std::vector<ItemPriceInputString>& values) {
         for (const auto& value : values) {
             const ItemPriceInputTyped t = ItemPriceInputTyped::from_string_struct(value);
-            EXPECT_EQ(Dollar(t.totalitems), items_.compute_total()) << "TotalItems";
+            EXPECT_EQ(t.totalitems.get(), items_.compute_total()) << "TotalItems";
         }
     }
 
@@ -111,13 +111,13 @@ public:
             const CartInputTyped t = CartInputTyped::from_string_struct(value);
             // The rule states the whole calculation from an item total, so drive
             // it that way rather than building a cart to reach the same numbers.
-            const Dollar total(t.totalitems);
-            EXPECT_EQ(Dollar(t.discount), ShoppingCart::discount_amount_for(total))
-                << "Discount for " << t.totalitems;
-            EXPECT_EQ(Dollar(t.shipping), ShoppingCart::shipping_for(total))
-                << "Shipping for " << t.totalitems;
-            EXPECT_EQ(Dollar(t.total_price), ShoppingCart::total_price_for(total))
-                << "Total Price for " << t.totalitems;
+            const Dollar total = t.totalitems.get();
+            EXPECT_EQ(t.discount.get(), ShoppingCart::discount_amount_for(total))
+                << "Discount for " << t.totalitems.text;
+            EXPECT_EQ(t.shipping.get(), ShoppingCart::shipping_for(total))
+                << "Shipping for " << t.totalitems.text;
+            EXPECT_EQ(t.total_price.get(), ShoppingCart::total_price_for(total))
+                << "Total Price for " << t.totalitems.text;
         }
     }
 

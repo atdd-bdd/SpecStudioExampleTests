@@ -11,13 +11,13 @@ using production;
     public class FrameValuesTyped
     {
         public int frame;
-        public Pins roll1;
-        public Pins roll2;
-        public Pins roll3;
-        public Score score;
-        public Score totalScore;
+        public PinsTyped roll1;
+        public PinsTyped roll2;
+        public PinsTyped roll3;
+        public ScoreTyped score;
+        public ScoreTyped totalScore;
 
-        public FrameValuesTyped(int frame, Pins roll1, Pins roll2, Pins roll3, Score score, Score totalScore)
+        public FrameValuesTyped(int frame, PinsTyped roll1, PinsTyped roll2, PinsTyped roll3, ScoreTyped score, ScoreTyped totalScore)
         {
             this.frame = frame;
             this.roll1 = roll1;
@@ -57,11 +57,11 @@ using production;
         {
             w.WriteStartObject();
             w.WriteNumber("frame", this.frame);
-            w.WriteString("roll1", Json.ToText(this.roll1));
-            w.WriteString("roll2", Json.ToText(this.roll2));
-            w.WriteString("roll3", Json.ToText(this.roll3));
-            w.WriteString("score", Json.ToText(this.score));
-            w.WriteString("totalScore", Json.ToText(this.totalScore));
+            w.WriteString("roll1", this.roll1.ToString());
+            w.WriteString("roll2", this.roll2.ToString());
+            w.WriteString("roll3", this.roll3.ToString());
+            w.WriteString("score", this.score.ToString());
+            w.WriteString("totalScore", this.totalScore.ToString());
             w.WriteEndObject();
         }
 
@@ -76,11 +76,11 @@ using production;
         {
             return new FrameValuesTyped(
                 Json.AsInt(Json.Require(m, "frame"), "frame"),
-                new Pins(Json.AsString(Json.Require(m, "roll1"), "roll1")),
-                new Pins(Json.AsString(Json.Require(m, "roll2"), "roll2")),
-                new Pins(Json.AsString(Json.Require(m, "roll3"), "roll3")),
-                new Score(Json.AsString(Json.Require(m, "score"), "score")),
-                new Score(Json.AsString(Json.Require(m, "totalScore"), "totalScore"))
+                new PinsTyped(new PinsString(Json.AsString(Json.Require(m, "roll1"), "roll1"))),
+                new PinsTyped(new PinsString(Json.AsString(Json.Require(m, "roll2"), "roll2"))),
+                new PinsTyped(new PinsString(Json.AsString(Json.Require(m, "roll3"), "roll3"))),
+                new ScoreTyped(new ScoreString(Json.AsString(Json.Require(m, "score"), "score"))),
+                new ScoreTyped(new ScoreString(Json.AsString(Json.Require(m, "totalScore"), "totalScore")))
             );
         }
 

@@ -4,13 +4,13 @@ using production;
 
     public class CartInputString
     {
-        public string totalItems;
-        public string shipping;
-        public string discount;
-        public string totalPrice;
+        public DollarString totalItems;
+        public DollarString shipping;
+        public DollarString discount;
+        public DollarString totalPrice;
         public string notes;
 
-        public CartInputString(string totalItems, string shipping, string discount, string totalPrice, string notes)
+        public CartInputString(DollarString totalItems, DollarString shipping, DollarString discount, DollarString totalPrice, string notes)
         {
             this.totalItems = totalItems;
             this.shipping = shipping;
@@ -39,10 +39,10 @@ using production;
         public CartInputTyped ToCartInputTyped()
         {
             return new CartInputTyped(
-                new Dollar(this.totalItems),
-                new Dollar(this.shipping),
-                new Dollar(this.discount),
-                new Dollar(this.totalPrice),
+                new DollarTyped(this.totalItems),
+                new DollarTyped(this.shipping),
+                new DollarTyped(this.discount),
+                new DollarTyped(this.totalPrice),
                 this.notes
             );
         }
@@ -57,10 +57,10 @@ using production;
         public override bool Equals(object? obj)
         {
             if (obj is not CartInputString other) return false;
-            return (DNCString == this.totalItems || DNCString == other.totalItems || object.Equals(this.totalItems, other.totalItems))
-                && (DNCString == this.shipping || DNCString == other.shipping || object.Equals(this.shipping, other.shipping))
-                && (DNCString == this.discount || DNCString == other.discount || object.Equals(this.discount, other.discount))
-                && (DNCString == this.totalPrice || DNCString == other.totalPrice || object.Equals(this.totalPrice, other.totalPrice))
+            return (DNCString == this.totalItems.Value || DNCString == other.totalItems.Value || this.totalItems.Value == other.totalItems.Value)
+                && (DNCString == this.shipping.Value || DNCString == other.shipping.Value || this.shipping.Value == other.shipping.Value)
+                && (DNCString == this.discount.Value || DNCString == other.discount.Value || this.discount.Value == other.discount.Value)
+                && (DNCString == this.totalPrice.Value || DNCString == other.totalPrice.Value || this.totalPrice.Value == other.totalPrice.Value)
                 && (DNCString == this.notes || DNCString == other.notes || object.Equals(this.notes, other.notes));
         }
 

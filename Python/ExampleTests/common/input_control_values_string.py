@@ -1,3 +1,5 @@
+from .pins_string import PinsString
+from .pins_string import PinsString
 from . import tokens
 DNC_STRING = '?DNC?'
 
@@ -5,8 +7,8 @@ DNC_STRING = '?DNC?'
 class InputControlValuesString:
     def __init__(self, frame: str = '', roll: str = '', remaining: str = ''):
         self.frame = frame
-        self.roll = roll
-        self.remaining = remaining
+        self.roll = PinsString(roll)
+        self.remaining = PinsString(remaining)
 
     @classmethod
     def from_list(cls, values):

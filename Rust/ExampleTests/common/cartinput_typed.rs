@@ -2,33 +2,34 @@
 
 use super::json;
 use super::cartinput_string::CartInputString;
+use super::dollar_typed::DollarTyped;
 
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct CartInputTyped {
-    pub totalitems: String,
-    pub shipping: String,
-    pub discount: String,
-    pub total_price: String,
+    pub totalitems: DollarTyped,
+    pub shipping: DollarTyped,
+    pub discount: DollarTyped,
+    pub total_price: DollarTyped,
     pub notes: String,
 }
 
 impl CartInputTyped {
     pub fn from_str_struct(s: &CartInputString) -> Self {
         Self {
-            totalitems: s.totalitems.clone(),
-            shipping: s.shipping.clone(),
-            discount: s.discount.clone(),
-            total_price: s.total_price.clone(),
+            totalitems: DollarTyped::from_str_struct(&s.totalitems),
+            shipping: DollarTyped::from_str_struct(&s.shipping),
+            discount: DollarTyped::from_str_struct(&s.discount),
+            total_price: DollarTyped::from_str_struct(&s.total_price),
             notes: s.notes.clone(),
         }
     }
 
     pub fn to_str_struct(&self) -> CartInputString {
         CartInputString {
-            totalitems: self.totalitems.clone(),
-            shipping: self.shipping.clone(),
-            discount: self.discount.clone(),
-            total_price: self.total_price.clone(),
+            totalitems: self.totalitems.to_str_struct(),
+            shipping: self.shipping.to_str_struct(),
+            discount: self.discount.to_str_struct(),
+            total_price: self.total_price.to_str_struct(),
             notes: self.notes.clone(),
         }
     }
@@ -43,10 +44,10 @@ impl CartInputTyped {
 
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("TotalItems".to_string(), json::Value::Str(self.totalitems.clone())),
-            ("Shipping".to_string(), json::Value::Str(self.shipping.clone())),
-            ("Discount".to_string(), json::Value::Str(self.discount.clone())),
-            ("Total Price".to_string(), json::Value::Str(self.total_price.clone())),
+            ("TotalItems".to_string(), json::Value::Str(self.totalitems.text.clone())),
+            ("Shipping".to_string(), json::Value::Str(self.shipping.text.clone())),
+            ("Discount".to_string(), json::Value::Str(self.discount.text.clone())),
+            ("Total Price".to_string(), json::Value::Str(self.total_price.text.clone())),
             ("Notes".to_string(), json::Value::Str(self.notes.clone())),
         ])
     }
@@ -57,10 +58,10 @@ impl CartInputTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            totalitems: json::as_string(json::require(v, "TotalItems")?, "TotalItems")?,
-            shipping: json::as_string(json::require(v, "Shipping")?, "Shipping")?,
-            discount: json::as_string(json::require(v, "Discount")?, "Discount")?,
-            total_price: json::as_string(json::require(v, "Total Price")?, "Total Price")?,
+            totalitems: DollarTyped::from(json::as_string(json::require(v, "TotalItems")?, "TotalItems")?),
+            shipping: DollarTyped::from(json::as_string(json::require(v, "Shipping")?, "Shipping")?),
+            discount: DollarTyped::from(json::as_string(json::require(v, "Discount")?, "Discount")?),
+            total_price: DollarTyped::from(json::as_string(json::require(v, "Total Price")?, "Total Price")?),
             notes: json::as_string(json::require(v, "Notes")?, "Notes")?,
         })
     }

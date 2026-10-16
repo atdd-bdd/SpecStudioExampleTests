@@ -1,13 +1,15 @@
+import type { SimpleTextString } from "./SimpleTextString.js";
+import type { DollarString } from "./DollarString.js";
 
 import * as tokens from "./tokens.js";
 
 export class CatalogItemString {
   static readonly DNC_STRING = "?DNC?";
 
-  name: string;
-  price: string;
+  name: SimpleTextString;
+  price: DollarString;
 
-  constructor(name: string = "", price: string = "") {
+  constructor(name: SimpleTextString = "", price: DollarString = "") {
     this.name = name;
     this.price = price;
   }

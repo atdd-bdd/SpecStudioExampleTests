@@ -1,3 +1,4 @@
+import type { PinsString } from "./PinsString.js";
 
 import * as tokens from "./tokens.js";
 
@@ -5,10 +6,10 @@ export class InputControlValuesString {
   static readonly DNC_STRING = "?DNC?";
 
   frame: string;
-  roll: string;
-  remaining: string;
+  roll: PinsString;
+  remaining: PinsString;
 
-  constructor(frame: string = "", roll: string = "", remaining: string = "") {
+  constructor(frame: string = "", roll: PinsString = "", remaining: PinsString = "") {
     this.frame = frame;
     this.roll = roll;
     this.remaining = remaining;

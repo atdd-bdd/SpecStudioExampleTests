@@ -10,10 +10,10 @@ using production;
 
     public class CatalogItemTyped
     {
-        public SimpleText name;
-        public Dollar price;
+        public SimpleTextTyped name;
+        public DollarTyped price;
 
-        public CatalogItemTyped(SimpleText name, Dollar price)
+        public CatalogItemTyped(SimpleTextTyped name, DollarTyped price)
         {
             this.name = name;
             this.price = price;
@@ -44,8 +44,8 @@ using production;
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();
-            w.WriteString("name", Json.ToText(this.name));
-            w.WriteString("price", Json.ToText(this.price));
+            w.WriteString("name", this.name.ToString());
+            w.WriteString("price", this.price.ToString());
             w.WriteEndObject();
         }
 
@@ -59,8 +59,8 @@ using production;
         public static CatalogItemTyped FromJsonElement(JsonElement m)
         {
             return new CatalogItemTyped(
-                new SimpleText(Json.AsString(Json.Require(m, "name"), "name")),
-                new Dollar(Json.AsString(Json.Require(m, "price"), "price"))
+                new SimpleTextTyped(new SimpleTextString(Json.AsString(Json.Require(m, "name"), "name"))),
+                new DollarTyped(new DollarString(Json.AsString(Json.Require(m, "price"), "price")))
             );
         }
 

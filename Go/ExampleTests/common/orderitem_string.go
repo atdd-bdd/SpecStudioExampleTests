@@ -1,18 +1,18 @@
 package common
 
 type OrderItemString struct {
-	Name string
+	Name SimpleTextString
 	Quantity string
-	Price string
-	ItemTotal string
+	Price DollarString
+	ItemTotal DollarString
 }
 
 func NewOrderItemStringFromSlice(v []string) OrderItemString {
 	s := OrderItemString{}
-	if len(v) > 0 { s.Name = v[0] }
+	if len(v) > 0 { s.Name = SimpleTextString(v[0]) }
 	if len(v) > 1 { s.Quantity = v[1] }
-	if len(v) > 2 { s.Price = v[2] }
-	if len(v) > 3 { s.ItemTotal = v[3] }
+	if len(v) > 2 { s.Price = DollarString(v[2]) }
+	if len(v) > 3 { s.ItemTotal = DollarString(v[3]) }
 	return s
 }
 
@@ -20,22 +20,22 @@ func NewOrderItemStringFromSlice(v []string) OrderItemString {
 func NewOrderItemStringFromText(text string) OrderItemString {
 	parts := RequireTokens(text, 4, "OrderItem")
 	return OrderItemString{
-		Name: parts[0],
+		Name: SimpleTextString(parts[0]),
 		Quantity: parts[1],
-		Price: parts[2],
-		ItemTotal: parts[3],
+		Price: DollarString(parts[2]),
+		ItemTotal: DollarString(parts[3]),
 	}
 }
 
 func (s OrderItemString) String() string {
-	return Token(s.Name) + " " + Token(s.Quantity) + " " + Token(s.Price) + " " + Token(s.ItemTotal)
+	return Token(string(s.Name)) + " " + Token(s.Quantity) + " " + Token(string(s.Price)) + " " + Token(string(s.ItemTotal))
 }
 
 func (s OrderItemString) Equals(o OrderItemString) bool {
-	return DNCEqual(s.Name, o.Name) &&
+	return DNCEqual(string(s.Name), string(o.Name)) &&
 		DNCEqual(s.Quantity, o.Quantity) &&
-		DNCEqual(s.Price, o.Price) &&
-		DNCEqual(s.ItemTotal, o.ItemTotal)
+		DNCEqual(string(s.Price), string(o.Price)) &&
+		DNCEqual(string(s.ItemTotal), string(o.ItemTotal))
 }
 
 func EqualOrderItemStringSlices(a, b []OrderItemString) bool {

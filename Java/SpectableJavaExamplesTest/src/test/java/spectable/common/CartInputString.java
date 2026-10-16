@@ -8,17 +8,17 @@ import calculator.*;
 public class CartInputString {
     private static final String DNCString = "?DNC?";
 
-    public String totalItems;
-    public String shipping;
-    public String discount;
-    public String totalPrice;
+    public DollarString totalItems;
+    public DollarString shipping;
+    public DollarString discount;
+    public DollarString totalPrice;
     public String notes;
 
     public CartInputString(String totalItems, String shipping, String discount, String totalPrice, String notes) {
-        this.totalItems = totalItems;
-        this.shipping = shipping;
-        this.discount = discount;
-        this.totalPrice = totalPrice;
+        this.totalItems = new DollarString(totalItems);
+        this.shipping = new DollarString(shipping);
+        this.discount = new DollarString(discount);
+        this.totalPrice = new DollarString(totalPrice);
         this.notes = notes;
     }
 
@@ -42,10 +42,10 @@ public class CartInputString {
         if (this == o) return true;
         if (!(o instanceof CartInputString)) return false;
         CartInputString that = (CartInputString) o;
-        return (DNCString.equals(totalItems) || DNCString.equals(that.totalItems) || Objects.equals(totalItems, that.totalItems))
-            && (DNCString.equals(shipping) || DNCString.equals(that.shipping) || Objects.equals(shipping, that.shipping))
-            && (DNCString.equals(discount) || DNCString.equals(that.discount) || Objects.equals(discount, that.discount))
-            && (DNCString.equals(totalPrice) || DNCString.equals(that.totalPrice) || Objects.equals(totalPrice, that.totalPrice))
+        return (DNCString.equals(totalItems.value) || DNCString.equals(that.totalItems.value) || Objects.equals(totalItems.value, that.totalItems.value))
+            && (DNCString.equals(shipping.value) || DNCString.equals(that.shipping.value) || Objects.equals(shipping.value, that.shipping.value))
+            && (DNCString.equals(discount.value) || DNCString.equals(that.discount.value) || Objects.equals(discount.value, that.discount.value))
+            && (DNCString.equals(totalPrice.value) || DNCString.equals(that.totalPrice.value) || Objects.equals(totalPrice.value, that.totalPrice.value))
             && (DNCString.equals(notes) || DNCString.equals(that.notes) || Objects.equals(notes, that.notes));
     }
 
@@ -56,6 +56,6 @@ public class CartInputString {
 
     @Override
     public String toString() {
-        return Tokens.token(totalItems) + " " + Tokens.token(shipping) + " " + Tokens.token(discount) + " " + Tokens.token(totalPrice) + " " + Tokens.token(notes);
+        return Tokens.token(totalItems.value) + " " + Tokens.token(shipping.value) + " " + Tokens.token(discount.value) + " " + Tokens.token(totalPrice.value) + " " + Tokens.token(notes);
     }
 }

@@ -21,12 +21,12 @@ impl BowlingGlue {
 
     // ---- given -------------------------------------------------------------
 
-    pub fn given_rolls_are(&mut self, values: &[Vec<String>]) {
+    pub fn given_rolls_are(&mut self, values: &[PinsString]) {
         let counts = Self::pin_counts(values);
         self.game.set_rolls(&counts);
     }
 
-    pub fn given_rolls_for_tenth_frame_are(&mut self, values: &[Vec<String>]) {
+    pub fn given_rolls_for_tenth_frame_are(&mut self, values: &[PinsString]) {
         let counts = Self::pin_counts(values);
         self.game.set_tenth_frame_rolls(&counts);
     }
@@ -38,7 +38,7 @@ impl BowlingGlue {
 
     // ---- when --------------------------------------------------------------
 
-    pub fn when_roll_is(&mut self, values: &[Vec<String>]) {
+    pub fn when_roll_is(&mut self, values: &[PinsString]) {
         for pin_count in Self::pin_counts(values) {
             self.game.add_roll(pin_count);
         }
@@ -50,7 +50,7 @@ impl BowlingGlue {
 
     // ---- then --------------------------------------------------------------
 
-    pub fn then_rolls_become(&mut self, values: &[Vec<String>]) {
+    pub fn then_rolls_become(&mut self, values: &[PinsString]) {
         let expected = Self::pin_counts(values);
         let actual = self.game.rolls();
 
@@ -129,14 +129,14 @@ impl BowlingGlue {
     // ---- helpers -----------------------------------------------------------
 
     /// Flattens the step's table into the pin counts it lists, in order.
-    fn pin_counts(values: &[Vec<String>]) -> Vec<i32> {
+    // A column of Pins reaches the glue as text, so Pins itself is read here
+    // and a cell it refuses fails here rather than in the test.
+    fn pin_counts(values: &[PinsString]) -> Vec<i32> {
         let mut result = Vec::new();
-        for row in values {
-            for cell in row {
-                let text = cell.trim();
-                if !text.is_empty() {
-                    result.push(text.parse().expect("a number of pins"));
-                }
+        for cell in values {
+            let text = cell.value().trim().to_string();
+            if !text.is_empty() {
+                result.push(Pins::new(text).expect("a number of pins").value);
             }
         }
         result

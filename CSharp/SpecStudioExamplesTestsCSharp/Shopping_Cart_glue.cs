@@ -22,7 +22,7 @@ namespace SpecStudioExamplesTestsCSharp.Shopping_Cart
             foreach (var value in values)
             {
                 var typed = value.ToCatalogItemTyped();
-                catalog.Add(new CatalogItem(typed.name, typed.price));
+                catalog.Add(new CatalogItem(typed.name.Get(), typed.price.Get()));
             }
         }
 
@@ -35,8 +35,8 @@ namespace SpecStudioExamplesTestsCSharp.Shopping_Cart
             foreach (var value in values)
             {
                 var typed = value.ToOrderItemTyped();
-                currentItems.Add(new OrderItem(typed.name, typed.quantity,
-                                               typed.price, typed.itemTotal));
+                currentItems.Add(new OrderItem(typed.name.Get(), typed.quantity,
+                                               typed.price.Get(), typed.itemTotal.Get()));
             }
         }
 
@@ -45,7 +45,7 @@ namespace SpecStudioExamplesTestsCSharp.Shopping_Cart
             foreach (var value in values)
             {
                 var typed = value.ToOrderItemTyped();
-                var item = OrderItem.FromCatalog(catalog, typed.name, typed.quantity);
+                var item = OrderItem.FromCatalog(catalog, typed.name.Get(), typed.quantity);
                 Assert.IsNotNull(item, $"item not in catalog: {typed.name}");
                 currentItems.Add(item);
             }
@@ -58,10 +58,10 @@ namespace SpecStudioExamplesTestsCSharp.Shopping_Cart
             for (int i = 0; i < values.Count; i++)
             {
                 var typed = values[i].ToOrderItemTyped();
-                Assert.AreEqual(typed.name, actual[i].Name, $"Item {i} name");
+                Assert.AreEqual(typed.name.Get(), actual[i].Name, $"Item {i} name");
                 Assert.AreEqual(typed.quantity, actual[i].Quantity, $"Item {i} quantity");
-                Assert.AreEqual(typed.price, actual[i].Price, $"Item {i} price");
-                Assert.AreEqual(typed.itemTotal, actual[i].ItemTotal, $"Item {i} itemTotal");
+                Assert.AreEqual(typed.price.Get(), actual[i].Price, $"Item {i} price");
+                Assert.AreEqual(typed.itemTotal.Get(), actual[i].ItemTotal, $"Item {i} itemTotal");
             }
         }
 
@@ -80,9 +80,9 @@ namespace SpecStudioExamplesTestsCSharp.Shopping_Cart
                 var cart = Cart();
                 // Shipping and Discount are outcomes of the two business rules,
                 // not the values the Given supplied, so ask the cart for them.
-                Assert.AreEqual(typed.totalPrice, cart.ComputeTotal(), "TotalPrice");
-                Assert.AreEqual(typed.shipping, cart.ShippingCost(), "Shipping");
-                Assert.AreEqual(typed.discount, cart.DiscountAmount(), "Discount");
+                Assert.AreEqual(typed.totalPrice.Get(), cart.ComputeTotal(), "TotalPrice");
+                Assert.AreEqual(typed.shipping.Get(), cart.ShippingCost(), "Shipping");
+                Assert.AreEqual(typed.discount.Get(), cart.DiscountAmount(), "Discount");
             }
         }
 
@@ -94,8 +94,8 @@ namespace SpecStudioExamplesTestsCSharp.Shopping_Cart
             foreach (var value in values)
             {
                 var typed = value.ToShippingInputTyped();
-                Assert.AreEqual(typed.shippingCost,
-                                ShoppingCart.ShippingCostFor(typed.totalPrice),
+                Assert.AreEqual(typed.shippingCost.Get(),
+                                ShoppingCart.ShippingCostFor(typed.totalPrice.Get()),
                                 $"Shipping cost for {typed.totalPrice}");
             }
         }
@@ -105,8 +105,8 @@ namespace SpecStudioExamplesTestsCSharp.Shopping_Cart
             foreach (var value in values)
             {
                 var typed = value.ToDiscountInputTyped();
-                Assert.AreEqual(typed.discount,
-                                ShoppingCart.DiscountFor(typed.totalPrice),
+                Assert.AreEqual(typed.discount.Get(),
+                                ShoppingCart.DiscountFor(typed.totalPrice.Get()),
                                 $"Discount for {typed.totalPrice}");
             }
         }
@@ -127,7 +127,7 @@ namespace SpecStudioExamplesTestsCSharp.Shopping_Cart
             foreach (var value in values)
             {
                 var typed = value.ToItemPriceInputTyped();
-                Assert.AreEqual(typed.totalItems, currentItems.ComputeTotal(), "TotalItems");
+                Assert.AreEqual(typed.totalItems.Get(), currentItems.ComputeTotal(), "TotalItems");
             }
         }
 
@@ -138,12 +138,12 @@ namespace SpecStudioExamplesTestsCSharp.Shopping_Cart
                 var typed = value.ToCartInputTyped();
                 // The rule states the whole calculation from an item total, so
                 // drive it that way rather than building a cart to match.
-                var total = typed.totalItems;
-                Assert.AreEqual(typed.discount, ShoppingCart.DiscountAmountFor(total),
+                var total = typed.totalItems.Get();
+                Assert.AreEqual(typed.discount.Get(), ShoppingCart.DiscountAmountFor(total),
                                 $"Discount for {total}");
-                Assert.AreEqual(typed.shipping, ShoppingCart.ShippingFor(total),
+                Assert.AreEqual(typed.shipping.Get(), ShoppingCart.ShippingFor(total),
                                 $"Shipping for {total}");
-                Assert.AreEqual(typed.totalPrice, ShoppingCart.TotalPriceFor(total),
+                Assert.AreEqual(typed.totalPrice.Get(), ShoppingCart.TotalPriceFor(total),
                                 $"Total Price for {total}");
             }
         }

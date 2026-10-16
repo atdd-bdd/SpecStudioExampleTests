@@ -1,16 +1,18 @@
 from . import json_util as _json
 from .catalog_item_string import CatalogItemString
+from .simple_text_typed import SimpleTextTyped
+from .dollar_typed import DollarTyped
 
 class CatalogItemTyped:
-    def __init__(self, name: str = '', price: str = ''):
+    def __init__(self, name: 'SimpleTextTyped' = None, price: 'DollarTyped' = None):
         self.name = name
         self.price = price
 
     @classmethod
     def from_string_obj(cls, s: CatalogItemString) -> 'CatalogItemTyped':
         return cls(
-            s.name,
-            s.price
+            SimpleTextTyped(s.name),
+            DollarTyped(s.price)
         )
 
     def to_string_obj(self) -> CatalogItemString:
@@ -29,8 +31,8 @@ class CatalogItemTyped:
 
     def to_json_value(self) -> dict:
         return {
-            'Name': self.name,
-            'Price': self.price,
+            'Name': str(self.name),
+            'Price': str(self.price),
         }
 
     def to_json(self) -> str:
@@ -39,8 +41,8 @@ class CatalogItemTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'CatalogItemTyped':
         return cls(
-            _json.as_str(_json.require(m, 'Name'), 'Name'),
-            _json.as_str(_json.require(m, 'Price'), 'Price')
+            SimpleTextTyped(_json.as_str(_json.require(m, 'Name'), 'Name')),
+            DollarTyped(_json.as_str(_json.require(m, 'Price'), 'Price'))
         )
 
     @classmethod

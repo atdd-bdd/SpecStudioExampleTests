@@ -1,19 +1,19 @@
 package common
 
 type FilterValueTyped struct {
-	Value string
+	Value IDFormTyped
 }
 
 func NewFilterValueTypedFromString(s FilterValueString) FilterValueTyped {
 	t := FilterValueTyped{}
-	t.Value = s.Value
+	t.Value = NewIDFormTypedFromString(s.Value)
 	return t
 }
 
 // ToFilterValueString converts this FilterValueTyped back to the string form a table compares.
 func (t FilterValueTyped) ToFilterValueString() FilterValueString {
 	s := FilterValueString{}
-	s.Value = t.Value
+	s.Value = t.Value.ToIDFormString()
 	return s
 }
 
@@ -34,7 +34,7 @@ func FilterValueTypedFromStringList(list []FilterValueString) []FilterValueTyped
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t FilterValueTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"Value": t.Value,
+		"Value": t.Value.String(),
 	}
 }
 
@@ -52,7 +52,7 @@ func NewFilterValueTypedFromJSONValue(m map[string]interface{}) (FilterValueType
 	if err != nil {
 		return t, err
 	}
-	t.Value = valValue
+	t.Value = NewIDFormTyped(valValue)
 	return t, nil
 }
 

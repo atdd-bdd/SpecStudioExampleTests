@@ -1,12 +1,12 @@
 package common
 
 type ItemPriceInputString struct {
-	TotalItems string
+	TotalItems DollarString
 }
 
 func NewItemPriceInputStringFromSlice(v []string) ItemPriceInputString {
 	s := ItemPriceInputString{}
-	if len(v) > 0 { s.TotalItems = v[0] }
+	if len(v) > 0 { s.TotalItems = DollarString(v[0]) }
 	return s
 }
 
@@ -14,16 +14,16 @@ func NewItemPriceInputStringFromSlice(v []string) ItemPriceInputString {
 func NewItemPriceInputStringFromText(text string) ItemPriceInputString {
 	parts := RequireTokens(text, 1, "ItemPriceInput")
 	return ItemPriceInputString{
-		TotalItems: parts[0],
+		TotalItems: DollarString(parts[0]),
 	}
 }
 
 func (s ItemPriceInputString) String() string {
-	return Token(s.TotalItems)
+	return Token(string(s.TotalItems))
 }
 
 func (s ItemPriceInputString) Equals(o ItemPriceInputString) bool {
-	return DNCEqual(s.TotalItems, o.TotalItems)
+	return DNCEqual(string(s.TotalItems), string(o.TotalItems))
 }
 
 func EqualItemPriceInputStringSlices(a, b []ItemPriceInputString) bool {

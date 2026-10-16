@@ -1,19 +1,19 @@
 package common
 
 type CartInputTyped struct {
-	TotalItems string
-	Shipping string
-	Discount string
-	TotalPrice string
+	TotalItems DollarTyped
+	Shipping DollarTyped
+	Discount DollarTyped
+	TotalPrice DollarTyped
 	Notes string
 }
 
 func NewCartInputTypedFromString(s CartInputString) CartInputTyped {
 	t := CartInputTyped{}
-	t.TotalItems = s.TotalItems
-	t.Shipping = s.Shipping
-	t.Discount = s.Discount
-	t.TotalPrice = s.TotalPrice
+	t.TotalItems = NewDollarTypedFromString(s.TotalItems)
+	t.Shipping = NewDollarTypedFromString(s.Shipping)
+	t.Discount = NewDollarTypedFromString(s.Discount)
+	t.TotalPrice = NewDollarTypedFromString(s.TotalPrice)
 	t.Notes = s.Notes
 	return t
 }
@@ -21,10 +21,10 @@ func NewCartInputTypedFromString(s CartInputString) CartInputTyped {
 // ToCartInputString converts this CartInputTyped back to the string form a table compares.
 func (t CartInputTyped) ToCartInputString() CartInputString {
 	s := CartInputString{}
-	s.TotalItems = t.TotalItems
-	s.Shipping = t.Shipping
-	s.Discount = t.Discount
-	s.TotalPrice = t.TotalPrice
+	s.TotalItems = t.TotalItems.ToDollarString()
+	s.Shipping = t.Shipping.ToDollarString()
+	s.Discount = t.Discount.ToDollarString()
+	s.TotalPrice = t.TotalPrice.ToDollarString()
 	s.Notes = t.Notes
 	return s
 }
@@ -46,10 +46,10 @@ func CartInputTypedFromStringList(list []CartInputString) []CartInputTyped {
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t CartInputTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"TotalItems": t.TotalItems,
-		"Shipping": t.Shipping,
-		"Discount": t.Discount,
-		"Total Price": t.TotalPrice,
+		"TotalItems": t.TotalItems.String(),
+		"Shipping": t.Shipping.String(),
+		"Discount": t.Discount.String(),
+		"Total Price": t.TotalPrice.String(),
 		"Notes": t.Notes,
 	}
 }
@@ -68,7 +68,7 @@ func NewCartInputTypedFromJSONValue(m map[string]interface{}) (CartInputTyped, e
 	if err != nil {
 		return t, err
 	}
-	t.TotalItems = valTotalItems
+	t.TotalItems = NewDollarTyped(valTotalItems)
 	rawShipping, err := JSONRequire(m, "Shipping")
 	if err != nil {
 		return t, err
@@ -77,7 +77,7 @@ func NewCartInputTypedFromJSONValue(m map[string]interface{}) (CartInputTyped, e
 	if err != nil {
 		return t, err
 	}
-	t.Shipping = valShipping
+	t.Shipping = NewDollarTyped(valShipping)
 	rawDiscount, err := JSONRequire(m, "Discount")
 	if err != nil {
 		return t, err
@@ -86,7 +86,7 @@ func NewCartInputTypedFromJSONValue(m map[string]interface{}) (CartInputTyped, e
 	if err != nil {
 		return t, err
 	}
-	t.Discount = valDiscount
+	t.Discount = NewDollarTyped(valDiscount)
 	rawTotalPrice, err := JSONRequire(m, "Total Price")
 	if err != nil {
 		return t, err
@@ -95,7 +95,7 @@ func NewCartInputTypedFromJSONValue(m map[string]interface{}) (CartInputTyped, e
 	if err != nil {
 		return t, err
 	}
-	t.TotalPrice = valTotalPrice
+	t.TotalPrice = NewDollarTyped(valTotalPrice)
 	rawNotes, err := JSONRequire(m, "Notes")
 	if err != nil {
 		return t, err

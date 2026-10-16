@@ -36,7 +36,7 @@ export class FilterValueTyped {
 
   static fromJsonValue(m) {
     return new FilterValueTyped(
-      new IDForm(_json.asString(_json.require(m, "value"), "value"))
+      _json.asString(_json.require(m, "value"), "value")
     );
   }
 

@@ -1,15 +1,16 @@
 from . import json_util as _json
 from .idvalue_string import IDValueString
+from .idform_typed import IDFormTyped
 
 class IDValueTyped:
-    def __init__(self, id: str = '', value: int = 0):
+    def __init__(self, id: 'IDFormTyped' = None, value: int = 0):
         self.id = id
         self.value = value
 
     @classmethod
     def from_string_obj(cls, s: IDValueString) -> 'IDValueTyped':
         return cls(
-            s.id,
+            IDFormTyped(s.id),
             int(s.value) if s.value else 0
         )
 
@@ -29,7 +30,7 @@ class IDValueTyped:
 
     def to_json_value(self) -> dict:
         return {
-            'ID': self.id,
+            'ID': str(self.id),
             'Value': self.value,
         }
 
@@ -39,7 +40,7 @@ class IDValueTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'IDValueTyped':
         return cls(
-            _json.as_str(_json.require(m, 'ID'), 'ID'),
+            IDFormTyped(_json.as_str(_json.require(m, 'ID'), 'ID')),
             _json.as_int(_json.require(m, 'Value'), 'Value')
         )
 

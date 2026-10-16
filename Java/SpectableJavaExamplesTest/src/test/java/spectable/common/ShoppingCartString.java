@@ -9,17 +9,17 @@ public class ShoppingCartString {
     private static final String DNCString = "?DNC?";
 
     public String items;
-    public String shipping;
-    public String discount;
-    public String totalPrice;
+    public DollarString shipping;
+    public DollarString discount;
+    public DollarString totalPrice;
     public AddressString shippingAddress;
     public AddressString billingAddress;
 
     public ShoppingCartString(String items, String shipping, String discount, String totalPrice, AddressString shippingAddress, AddressString billingAddress) {
         this.items = items;
-        this.shipping = shipping;
-        this.discount = discount;
-        this.totalPrice = totalPrice;
+        this.shipping = new DollarString(shipping);
+        this.discount = new DollarString(discount);
+        this.totalPrice = new DollarString(totalPrice);
         this.shippingAddress = shippingAddress;
         this.billingAddress = billingAddress;
     }
@@ -46,9 +46,9 @@ public class ShoppingCartString {
         if (!(o instanceof ShoppingCartString)) return false;
         ShoppingCartString that = (ShoppingCartString) o;
         return (DNCString.equals(items) || DNCString.equals(that.items) || Objects.equals(items, that.items))
-            && (DNCString.equals(shipping) || DNCString.equals(that.shipping) || Objects.equals(shipping, that.shipping))
-            && (DNCString.equals(discount) || DNCString.equals(that.discount) || Objects.equals(discount, that.discount))
-            && (DNCString.equals(totalPrice) || DNCString.equals(that.totalPrice) || Objects.equals(totalPrice, that.totalPrice))
+            && (DNCString.equals(shipping.value) || DNCString.equals(that.shipping.value) || Objects.equals(shipping.value, that.shipping.value))
+            && (DNCString.equals(discount.value) || DNCString.equals(that.discount.value) || Objects.equals(discount.value, that.discount.value))
+            && (DNCString.equals(totalPrice.value) || DNCString.equals(that.totalPrice.value) || Objects.equals(totalPrice.value, that.totalPrice.value))
             && Objects.equals(shippingAddress, that.shippingAddress)
             && Objects.equals(billingAddress, that.billingAddress);
     }
@@ -60,6 +60,6 @@ public class ShoppingCartString {
 
     @Override
     public String toString() {
-        return Tokens.token(items) + " " + Tokens.token(shipping) + " " + Tokens.token(discount) + " " + Tokens.token(totalPrice) + " " + Tokens.nested(String.valueOf(shippingAddress)) + " " + Tokens.nested(String.valueOf(billingAddress));
+        return Tokens.token(items) + " " + Tokens.token(shipping.value) + " " + Tokens.token(discount.value) + " " + Tokens.token(totalPrice.value) + " " + Tokens.nested(String.valueOf(shippingAddress)) + " " + Tokens.nested(String.valueOf(billingAddress));
     }
 }

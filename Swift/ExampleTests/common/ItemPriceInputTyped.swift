@@ -1,17 +1,17 @@
 public struct ItemPriceInputTyped: Equatable, CustomStringConvertible {
-    public let totalItems: String
+    public let totalItems: DollarTyped
 
-    public init(totalItems: String) {
+    public init(totalItems: DollarTyped) {
         self.totalItems = totalItems
     }
 
     public init(from s: ItemPriceInputString) {
-        self.totalItems = s.totalItems
+        self.totalItems = DollarTyped(from: s.totalItems)
     }
 
     public func toStringStruct() -> ItemPriceInputString {
         return ItemPriceInputString(
-            totalItems: String(describing: totalItems)
+            totalItems: totalItems.toDollarString()
         )
     }
 
@@ -25,7 +25,7 @@ public struct ItemPriceInputTyped: Equatable, CustomStringConvertible {
 
     public func toJSONValue() -> [String: Any] {
         return [
-            "totalItems": totalItems,
+            "totalItems": totalItems.text,
         ]
     }
 
@@ -34,7 +34,7 @@ public struct ItemPriceInputTyped: Equatable, CustomStringConvertible {
     }
 
     public init(fromJSONValue m: [String: Any]) throws {
-        self.totalItems = try Json.asString(Json.require(m, "totalItems"), "totalItems")
+        self.totalItems = DollarTyped(try Json.asString(Json.require(m, "totalItems"), "totalItems"))
     }
 
     public init(fromJSON text: String) throws {

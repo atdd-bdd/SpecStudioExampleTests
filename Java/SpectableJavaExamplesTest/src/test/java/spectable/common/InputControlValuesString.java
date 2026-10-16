@@ -9,13 +9,13 @@ public class InputControlValuesString {
     private static final String DNCString = "?DNC?";
 
     public String frame;
-    public String roll;
-    public String remaining;
+    public PinsString roll;
+    public PinsString remaining;
 
     public InputControlValuesString(String frame, String roll, String remaining) {
         this.frame = frame;
-        this.roll = roll;
-        this.remaining = remaining;
+        this.roll = new PinsString(roll);
+        this.remaining = new PinsString(remaining);
     }
 
     /** Builds from the text form, e.g. Money as "25 USD". */
@@ -37,8 +37,8 @@ public class InputControlValuesString {
         if (!(o instanceof InputControlValuesString)) return false;
         InputControlValuesString that = (InputControlValuesString) o;
         return (DNCString.equals(frame) || DNCString.equals(that.frame) || Objects.equals(frame, that.frame))
-            && (DNCString.equals(roll) || DNCString.equals(that.roll) || Objects.equals(roll, that.roll))
-            && (DNCString.equals(remaining) || DNCString.equals(that.remaining) || Objects.equals(remaining, that.remaining));
+            && (DNCString.equals(roll.value) || DNCString.equals(that.roll.value) || Objects.equals(roll.value, that.roll.value))
+            && (DNCString.equals(remaining.value) || DNCString.equals(that.remaining.value) || Objects.equals(remaining.value, that.remaining.value));
     }
 
     @Override
@@ -48,6 +48,6 @@ public class InputControlValuesString {
 
     @Override
     public String toString() {
-        return Tokens.token(frame) + " " + Tokens.token(roll) + " " + Tokens.token(remaining);
+        return Tokens.token(frame) + " " + Tokens.token(roll.value) + " " + Tokens.token(remaining.value);
     }
 }

@@ -10,13 +10,13 @@ using production;
 
     public class CartInputTyped
     {
-        public Dollar totalItems;
-        public Dollar shipping;
-        public Dollar discount;
-        public Dollar totalPrice;
+        public DollarTyped totalItems;
+        public DollarTyped shipping;
+        public DollarTyped discount;
+        public DollarTyped totalPrice;
         public string notes;
 
-        public CartInputTyped(Dollar totalItems, Dollar shipping, Dollar discount, Dollar totalPrice, string notes)
+        public CartInputTyped(DollarTyped totalItems, DollarTyped shipping, DollarTyped discount, DollarTyped totalPrice, string notes)
         {
             this.totalItems = totalItems;
             this.shipping = shipping;
@@ -53,10 +53,10 @@ using production;
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();
-            w.WriteString("totalItems", Json.ToText(this.totalItems));
-            w.WriteString("shipping", Json.ToText(this.shipping));
-            w.WriteString("discount", Json.ToText(this.discount));
-            w.WriteString("totalPrice", Json.ToText(this.totalPrice));
+            w.WriteString("totalItems", this.totalItems.ToString());
+            w.WriteString("shipping", this.shipping.ToString());
+            w.WriteString("discount", this.discount.ToString());
+            w.WriteString("totalPrice", this.totalPrice.ToString());
             w.WriteString("notes", this.notes);
             w.WriteEndObject();
         }
@@ -71,10 +71,10 @@ using production;
         public static CartInputTyped FromJsonElement(JsonElement m)
         {
             return new CartInputTyped(
-                new Dollar(Json.AsString(Json.Require(m, "totalItems"), "totalItems")),
-                new Dollar(Json.AsString(Json.Require(m, "shipping"), "shipping")),
-                new Dollar(Json.AsString(Json.Require(m, "discount"), "discount")),
-                new Dollar(Json.AsString(Json.Require(m, "totalPrice"), "totalPrice")),
+                new DollarTyped(new DollarString(Json.AsString(Json.Require(m, "totalItems"), "totalItems"))),
+                new DollarTyped(new DollarString(Json.AsString(Json.Require(m, "shipping"), "shipping"))),
+                new DollarTyped(new DollarString(Json.AsString(Json.Require(m, "discount"), "discount"))),
+                new DollarTyped(new DollarString(Json.AsString(Json.Require(m, "totalPrice"), "totalPrice"))),
                 Json.AsString(Json.Require(m, "notes"), "notes")
             );
         }

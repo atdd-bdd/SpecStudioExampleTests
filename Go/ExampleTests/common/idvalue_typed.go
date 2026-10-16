@@ -3,13 +3,13 @@ package common
 import "strconv"
 
 type IDValueTyped struct {
-	ID string
+	ID IDFormTyped
 	Value int
 }
 
 func NewIDValueTypedFromString(s IDValueString) IDValueTyped {
 	t := IDValueTyped{}
-	t.ID = s.ID
+	t.ID = NewIDFormTypedFromString(s.ID)
 	if v, err := strconv.Atoi(s.Value); err == nil { t.Value = v }
 	return t
 }
@@ -17,7 +17,7 @@ func NewIDValueTypedFromString(s IDValueString) IDValueTyped {
 // ToIDValueString converts this IDValueTyped back to the string form a table compares.
 func (t IDValueTyped) ToIDValueString() IDValueString {
 	s := IDValueString{}
-	s.ID = t.ID
+	s.ID = t.ID.ToIDFormString()
 	s.Value = strconv.Itoa(t.Value)
 	return s
 }
@@ -39,7 +39,7 @@ func IDValueTypedFromStringList(list []IDValueString) []IDValueTyped {
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t IDValueTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"ID": t.ID,
+		"ID": t.ID.String(),
 		"Value": t.Value,
 	}
 }
@@ -58,7 +58,7 @@ func NewIDValueTypedFromJSONValue(m map[string]interface{}) (IDValueTyped, error
 	if err != nil {
 		return t, err
 	}
-	t.ID = valID
+	t.ID = NewIDFormTyped(valID)
 	rawValue, err := JSONRequire(m, "Value")
 	if err != nil {
 		return t, err

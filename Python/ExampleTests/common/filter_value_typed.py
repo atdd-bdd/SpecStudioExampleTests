@@ -1,14 +1,15 @@
 from . import json_util as _json
 from .filter_value_string import FilterValueString
+from .idform_typed import IDFormTyped
 
 class FilterValueTyped:
-    def __init__(self, value: str = ''):
+    def __init__(self, value: 'IDFormTyped' = None):
         self.value = value
 
     @classmethod
     def from_string_obj(cls, s: FilterValueString) -> 'FilterValueTyped':
         return cls(
-            s.value
+            IDFormTyped(s.value)
         )
 
     def to_string_obj(self) -> FilterValueString:
@@ -26,7 +27,7 @@ class FilterValueTyped:
 
     def to_json_value(self) -> dict:
         return {
-            'Value': self.value,
+            'Value': str(self.value),
         }
 
     def to_json(self) -> str:
@@ -35,7 +36,7 @@ class FilterValueTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'FilterValueTyped':
         return cls(
-            _json.as_str(_json.require(m, 'Value'), 'Value')
+            IDFormTyped(_json.as_str(_json.require(m, 'Value'), 'Value'))
         )
 
     @classmethod

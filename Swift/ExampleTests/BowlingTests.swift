@@ -4,31 +4,21 @@ final class BowlingTests: XCTestCase {
 
     func testAddingARoll() {
         let glue = BowlingGlue()
-        glue.givenRollsAre([
-            ["5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10"],
-        ])
-        glue.whenRollIs([
-            ["10"],
-        ])
-        glue.thenRollsBecome([
-            ["5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10"],
-        ])
+        glue.givenRollsAre([PinsString("5"), PinsString("5"), PinsString("4"), PinsString("5"), PinsString("8"), PinsString("2"), PinsString("10"), PinsString("0"), PinsString("10"), PinsString("10"), PinsString("6"), PinsString("2"), PinsString("10"), PinsString("4"), PinsString("6"), PinsString("10")])
+        glue.whenRollIs([PinsString("10")])
+        glue.thenRollsBecome([PinsString("5"), PinsString("5"), PinsString("4"), PinsString("5"), PinsString("8"), PinsString("2"), PinsString("10"), PinsString("0"), PinsString("10"), PinsString("10"), PinsString("6"), PinsString("2"), PinsString("10"), PinsString("4"), PinsString("6"), PinsString("10"), PinsString("10")])
     }
 
     func testFullGameComputeAndDisplay() {
         let glue = BowlingGlue()
-        glue.givenRollsAre([
-            ["5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10"],
-        ])
+        glue.givenRollsAre([PinsString("5"), PinsString("5"), PinsString("4"), PinsString("5"), PinsString("8"), PinsString("2"), PinsString("10"), PinsString("0"), PinsString("10"), PinsString("10"), PinsString("6"), PinsString("2"), PinsString("10"), PinsString("4"), PinsString("6"), PinsString("10"), PinsString("10")])
         glue.whenScored()
         glue.thenDisplayIs("| 5/ | 45 | 8/ | X  | -/ | X   | 62  | X   | 4/  | XX |\n| 14 | 23 | 43 | 63 | 83 | 101 | 109 | 129 | 149 |    |")
     }
 
     func testAGameInSteps() {
         let glue = BowlingGlue()
-        glue.givenRollsAre([
-            ["5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10"],
-        ])
+        glue.givenRollsAre([PinsString("5"), PinsString("5"), PinsString("4"), PinsString("5"), PinsString("8"), PinsString("2"), PinsString("10"), PinsString("0"), PinsString("10"), PinsString("10"), PinsString("6"), PinsString("2"), PinsString("10"), PinsString("4"), PinsString("6"), PinsString("10"), PinsString("10")])
         glue.whenScored()
         glue.thenFrameValuesAre([
             FrameValuesString(fromArray: ["1", "5", "5", "4", "14", "14"]),
@@ -63,18 +53,14 @@ final class BowlingTests: XCTestCase {
 
     func testCheckForGameComplete() {
         let glue = BowlingGlue()
-        glue.givenRollsAre([
-            ["5", "5", "4", "5", "8", "2", "10", "0", "10", "10", "6", "2", "10", "4", "6", "10", "10", "10"],
-        ])
+        glue.givenRollsAre([PinsString("5"), PinsString("5"), PinsString("4"), PinsString("5"), PinsString("8"), PinsString("2"), PinsString("10"), PinsString("0"), PinsString("10"), PinsString("10"), PinsString("6"), PinsString("2"), PinsString("10"), PinsString("4"), PinsString("6"), PinsString("10"), PinsString("10"), PinsString("10")])
         glue.whenScored()
         glue.thenGameCompleteIs([true])
     }
 
     func testValuesForTenthFrame() {
         let glue = BowlingGlue()
-        glue.givenRollsForTenthFrameAre([
-            ["10", "10"],
-        ])
+        glue.givenRollsForTenthFrameAre([PinsString("10"), PinsString("10")])
         glue.whenScored()
         glue.thenThenTenthFrameValuesAre([
             FrameValuesString(fromArray: ["10", "10", "10", "-1", "-1", "-1"]),
@@ -83,9 +69,7 @@ final class BowlingTests: XCTestCase {
 
     func testInputControlShouldBeForNextFrame() {
         let glue = BowlingGlue()
-        glue.givenRollsAre([
-            ["10"],
-        ])
+        glue.givenRollsAre([PinsString("10")])
         glue.whenScored()
         glue.thenInputControlIs([
             InputControlValuesString(fromArray: ["2", "1", "10"]),
@@ -94,16 +78,10 @@ final class BowlingTests: XCTestCase {
 
     func testTryToAddInvalidRoll() {
         let glue = BowlingGlue()
-        glue.givenRollsAre([
-            ["5"],
-        ])
+        glue.givenRollsAre([PinsString("5")])
         glue.whenScored()
-        glue.whenRollIs([
-            ["6"],
-        ])
-        glue.thenRollsBecome([
-            ["5"],
-        ])
+        glue.whenRollIs([PinsString("6")])
+        glue.thenRollsBecome([PinsString("5")])
     }
 
     func testDataTypePins() {

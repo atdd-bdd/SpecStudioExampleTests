@@ -1,12 +1,13 @@
+import type { DollarString } from "./DollarString.js";
 
 import * as tokens from "./tokens.js";
 
 export class ItemPriceInputString {
   static readonly DNC_STRING = "?DNC?";
 
-  totalItems: string;
+  totalItems: DollarString;
 
-  constructor(totalItems: string = "") {
+  constructor(totalItems: DollarString = "") {
     this.totalItems = totalItems;
   }
 

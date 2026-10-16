@@ -24,7 +24,7 @@ public class Record_Filter_Example_Test {
         objectList1.add(new IDValueString("Q1234", "3"));
         glue.Given_list_of_numbers(objectList1);
 
-        glue.When_filtered_by_ID_with_value(TableHelper.toListIDForm(List.of("Q1234")));
+        glue.When_filtered_by_ID_with_value(TableHelper.toListIDFormString(List.of("Q1234")));
 
         glue.Then_sum_is(TableHelper.toListInteger(List.of("4")));
 

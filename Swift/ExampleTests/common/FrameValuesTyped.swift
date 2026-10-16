@@ -1,12 +1,12 @@
 public struct FrameValuesTyped: Equatable, CustomStringConvertible {
     public let frame: Int
-    public let roll1: String
-    public let roll2: String
-    public let roll3: String
-    public let score: String
-    public let totalScore: String
+    public let roll1: PinsTyped
+    public let roll2: PinsTyped
+    public let roll3: PinsTyped
+    public let score: ScoreTyped
+    public let totalScore: ScoreTyped
 
-    public init(frame: Int, roll1: String, roll2: String, roll3: String, score: String, totalScore: String) {
+    public init(frame: Int, roll1: PinsTyped, roll2: PinsTyped, roll3: PinsTyped, score: ScoreTyped, totalScore: ScoreTyped) {
         self.frame = frame
         self.roll1 = roll1
         self.roll2 = roll2
@@ -17,21 +17,21 @@ public struct FrameValuesTyped: Equatable, CustomStringConvertible {
 
     public init(from s: FrameValuesString) {
         self.frame = Int(s.frame) ?? 0
-        self.roll1 = s.roll1
-        self.roll2 = s.roll2
-        self.roll3 = s.roll3
-        self.score = s.score
-        self.totalScore = s.totalScore
+        self.roll1 = PinsTyped(from: s.roll1)
+        self.roll2 = PinsTyped(from: s.roll2)
+        self.roll3 = PinsTyped(from: s.roll3)
+        self.score = ScoreTyped(from: s.score)
+        self.totalScore = ScoreTyped(from: s.totalScore)
     }
 
     public func toStringStruct() -> FrameValuesString {
         return FrameValuesString(
             frame: String(describing: frame),
-            roll1: String(describing: roll1),
-            roll2: String(describing: roll2),
-            roll3: String(describing: roll3),
-            score: String(describing: score),
-            totalScore: String(describing: totalScore)
+            roll1: roll1.toPinsString(),
+            roll2: roll2.toPinsString(),
+            roll3: roll3.toPinsString(),
+            score: score.toScoreString(),
+            totalScore: totalScore.toScoreString()
         )
     }
 
@@ -46,11 +46,11 @@ public struct FrameValuesTyped: Equatable, CustomStringConvertible {
     public func toJSONValue() -> [String: Any] {
         return [
             "frame": frame,
-            "roll1": roll1,
-            "roll2": roll2,
-            "roll3": roll3,
-            "score": score,
-            "totalScore": totalScore,
+            "roll1": roll1.text,
+            "roll2": roll2.text,
+            "roll3": roll3.text,
+            "score": score.text,
+            "totalScore": totalScore.text,
         ]
     }
 
@@ -60,11 +60,11 @@ public struct FrameValuesTyped: Equatable, CustomStringConvertible {
 
     public init(fromJSONValue m: [String: Any]) throws {
         self.frame = try Json.asInt(Json.require(m, "frame"), "frame")
-        self.roll1 = try Json.asString(Json.require(m, "roll1"), "roll1")
-        self.roll2 = try Json.asString(Json.require(m, "roll2"), "roll2")
-        self.roll3 = try Json.asString(Json.require(m, "roll3"), "roll3")
-        self.score = try Json.asString(Json.require(m, "score"), "score")
-        self.totalScore = try Json.asString(Json.require(m, "totalScore"), "totalScore")
+        self.roll1 = PinsTyped(try Json.asString(Json.require(m, "roll1"), "roll1"))
+        self.roll2 = PinsTyped(try Json.asString(Json.require(m, "roll2"), "roll2"))
+        self.roll3 = PinsTyped(try Json.asString(Json.require(m, "roll3"), "roll3"))
+        self.score = ScoreTyped(try Json.asString(Json.require(m, "score"), "score"))
+        self.totalScore = ScoreTyped(try Json.asString(Json.require(m, "totalScore"), "totalScore"))
     }
 
     public init(fromJSON text: String) throws {

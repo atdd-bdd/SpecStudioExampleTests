@@ -1,8 +1,10 @@
 from . import json_util as _json
 from .shipping_input_string import ShippingInputString
+from .dollar_typed import DollarTyped
+from .dollar_typed import DollarTyped
 
 class ShippingInputTyped:
-    def __init__(self, total_price: str = '', shipping_cost: str = '', notes: str = ''):
+    def __init__(self, total_price: 'DollarTyped' = None, shipping_cost: 'DollarTyped' = None, notes: str = ''):
         self.total_price = total_price
         self.shipping_cost = shipping_cost
         self.notes = notes
@@ -10,8 +12,8 @@ class ShippingInputTyped:
     @classmethod
     def from_string_obj(cls, s: ShippingInputString) -> 'ShippingInputTyped':
         return cls(
-            s.total_price,
-            s.shipping_cost,
+            DollarTyped(s.total_price),
+            DollarTyped(s.shipping_cost),
             s.notes
         )
 
@@ -32,8 +34,8 @@ class ShippingInputTyped:
 
     def to_json_value(self) -> dict:
         return {
-            'Total Price': self.total_price,
-            'Shipping Cost': self.shipping_cost,
+            'Total Price': str(self.total_price),
+            'Shipping Cost': str(self.shipping_cost),
             'Notes': self.notes,
         }
 
@@ -43,8 +45,8 @@ class ShippingInputTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'ShippingInputTyped':
         return cls(
-            _json.as_str(_json.require(m, 'Total Price'), 'Total Price'),
-            _json.as_str(_json.require(m, 'Shipping Cost'), 'Shipping Cost'),
+            DollarTyped(_json.as_str(_json.require(m, 'Total Price'), 'Total Price')),
+            DollarTyped(_json.as_str(_json.require(m, 'Shipping Cost'), 'Shipping Cost')),
             _json.as_str(_json.require(m, 'Notes'), 'Notes')
         )
 

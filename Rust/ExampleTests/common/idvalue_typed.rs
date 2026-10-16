@@ -2,24 +2,25 @@
 
 use super::json;
 use super::idvalue_string::IDValueString;
+use super::idform_typed::IDFormTyped;
 
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct IDValueTyped {
-    pub id: String,
+    pub id: IDFormTyped,
     pub value: i32,
 }
 
 impl IDValueTyped {
     pub fn from_str_struct(s: &IDValueString) -> Self {
         Self {
-            id: s.id.clone(),
+            id: IDFormTyped::from_str_struct(&s.id),
             value: s.value.parse::<i32>().unwrap_or_default(),
         }
     }
 
     pub fn to_str_struct(&self) -> IDValueString {
         IDValueString {
-            id: self.id.clone(),
+            id: self.id.to_str_struct(),
             value: self.value.to_string(),
         }
     }
@@ -34,7 +35,7 @@ impl IDValueTyped {
 
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("ID".to_string(), json::Value::Str(self.id.clone())),
+            ("ID".to_string(), json::Value::Str(self.id.text.clone())),
             ("Value".to_string(), json::Value::number_from_i64(self.value as i64)),
         ])
     }
@@ -45,7 +46,7 @@ impl IDValueTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            id: json::as_string(json::require(v, "ID")?, "ID")?,
+            id: IDFormTyped::from(json::as_string(json::require(v, "ID")?, "ID")?),
             value: json::as_i32(json::require(v, "Value")?, "Value")?,
         })
     }

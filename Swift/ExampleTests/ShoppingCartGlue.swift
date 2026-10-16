@@ -11,9 +11,11 @@ public class ShoppingCartGlue {
         return ShoppingCart(items: currentItems)
     }
 
-    private func dollar(_ s: String) -> Dollar {
-        guard let d = try? Dollar(s) else {
-            XCTFail("bad dollar \(s)")
+    // A Dollar column reaches the glue as text, held by the Typed form the
+    // generated test built; Dollar itself is read here.
+    private func dollar(_ cell: DollarTyped) -> Dollar {
+        guard let d = try? Dollar(cell.get()) else {
+            XCTFail("bad dollar \(cell)")
             return Dollar(cents: 0)
         }
         return d
@@ -22,7 +24,7 @@ public class ShoppingCartGlue {
     public func givenCatalogHas(_ values: [CatalogItemString]) {
         for value in values {
             let typed = CatalogItemTyped(from: value)
-            catalog.add(CatalogItem(name: SimpleText(unchecked: typed.name),
+            catalog.add(CatalogItem(name: SimpleText(unchecked: typed.name.get()),
                                     price: dollar(typed.price)))
         }
     }
@@ -35,7 +37,7 @@ public class ShoppingCartGlue {
         currentItems = OrderItemCollection()
         for value in values {
             let typed = OrderItemTyped(from: value)
-            currentItems.add(OrderItem(name: SimpleText(unchecked: typed.name),
+            currentItems.add(OrderItem(name: SimpleText(unchecked: typed.name.get()),
                                        quantity: typed.quantity,
                                        price: dollar(typed.price),
                                        itemTotal: dollar(typed.itemTotal)))
@@ -46,7 +48,7 @@ public class ShoppingCartGlue {
         for value in values {
             let typed = OrderItemTyped(from: value)
             guard let item = OrderItem.fromCatalog(
-                catalog, name: SimpleText(unchecked: typed.name),
+                catalog, name: SimpleText(unchecked: typed.name.get()),
                 quantity: typed.quantity) else {
                 return XCTFail("item not in catalog: \(typed.name)")
             }
@@ -60,7 +62,7 @@ public class ShoppingCartGlue {
         guard values.count == actual.count else { return }
         for (i, value) in values.enumerated() {
             let typed = OrderItemTyped(from: value)
-            XCTAssertEqual(typed.name, actual[i].name.value, "Item \(i) name")
+            XCTAssertEqual(typed.name.get(), actual[i].name.value, "Item \(i) name")
             XCTAssertEqual(typed.quantity, actual[i].quantity, "Item \(i) quantity")
             XCTAssertEqual(dollar(typed.price), actual[i].price, "Item \(i) price")
             XCTAssertEqual(dollar(typed.itemTotal), actual[i].itemTotal,
@@ -103,7 +105,7 @@ public class ShoppingCartGlue {
     public func examplesBusinessRuleDiscount(_ values: [DiscountInputString]) {
         for value in values {
             let typed = DiscountInputTyped(from: value)
-            guard let expected = try? Percentage(typed.discount) else {
+            guard let expected = try? Percentage(typed.discount.get()) else {
                 return XCTFail("bad percentage \(typed.discount)")
             }
             XCTAssertEqual(expected,

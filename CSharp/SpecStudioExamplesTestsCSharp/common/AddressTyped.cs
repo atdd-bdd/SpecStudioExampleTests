@@ -10,12 +10,12 @@ using production;
 
     public class AddressTyped
     {
-        public SimpleText street;
-        public SimpleText city;
-        public SimpleText state;
-        public SimpleText zIP;
+        public SimpleTextTyped street;
+        public SimpleTextTyped city;
+        public SimpleTextTyped state;
+        public SimpleTextTyped zIP;
 
-        public AddressTyped(SimpleText street, SimpleText city, SimpleText state, SimpleText zIP)
+        public AddressTyped(SimpleTextTyped street, SimpleTextTyped city, SimpleTextTyped state, SimpleTextTyped zIP)
         {
             this.street = street;
             this.city = city;
@@ -50,10 +50,10 @@ using production;
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();
-            w.WriteString("street", Json.ToText(this.street));
-            w.WriteString("city", Json.ToText(this.city));
-            w.WriteString("state", Json.ToText(this.state));
-            w.WriteString("zIP", Json.ToText(this.zIP));
+            w.WriteString("street", this.street.ToString());
+            w.WriteString("city", this.city.ToString());
+            w.WriteString("state", this.state.ToString());
+            w.WriteString("zIP", this.zIP.ToString());
             w.WriteEndObject();
         }
 
@@ -67,10 +67,10 @@ using production;
         public static AddressTyped FromJsonElement(JsonElement m)
         {
             return new AddressTyped(
-                new SimpleText(Json.AsString(Json.Require(m, "street"), "street")),
-                new SimpleText(Json.AsString(Json.Require(m, "city"), "city")),
-                new SimpleText(Json.AsString(Json.Require(m, "state"), "state")),
-                new SimpleText(Json.AsString(Json.Require(m, "zIP"), "zIP"))
+                new SimpleTextTyped(new SimpleTextString(Json.AsString(Json.Require(m, "street"), "street"))),
+                new SimpleTextTyped(new SimpleTextString(Json.AsString(Json.Require(m, "city"), "city"))),
+                new SimpleTextTyped(new SimpleTextString(Json.AsString(Json.Require(m, "state"), "state"))),
+                new SimpleTextTyped(new SimpleTextString(Json.AsString(Json.Require(m, "zIP"), "zIP")))
             );
         }
 

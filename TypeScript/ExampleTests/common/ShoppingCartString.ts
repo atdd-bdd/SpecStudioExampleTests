@@ -1,4 +1,5 @@
 import { AddressString } from "./AddressString.js";
+import type { DollarString } from "./DollarString.js";
 
 import * as tokens from "./tokens.js";
 
@@ -6,13 +7,13 @@ export class ShoppingCartString {
   static readonly DNC_STRING = "?DNC?";
 
   items: string;
-  shipping: string;
-  discount: string;
-  totalPrice: string;
+  shipping: DollarString;
+  discount: DollarString;
+  totalPrice: DollarString;
   shippingAddress: AddressString;
   billingAddress: AddressString;
 
-  constructor(items: string = "", shipping: string = "", discount: string = "", totalPrice: string = "", shippingAddress: AddressString = new AddressString(), billingAddress: AddressString = new AddressString()) {
+  constructor(items: string = "", shipping: DollarString = "", discount: DollarString = "", totalPrice: DollarString = "", shippingAddress: AddressString = new AddressString(), billingAddress: AddressString = new AddressString()) {
     this.items = items;
     this.shipping = shipping;
     this.discount = discount;

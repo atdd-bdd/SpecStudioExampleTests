@@ -1,13 +1,17 @@
+from .dollar_string import DollarString
+from .dollar_string import DollarString
+from .dollar_string import DollarString
+from .dollar_string import DollarString
 from . import tokens
 DNC_STRING = '?DNC?'
 
 
 class CartInputString:
     def __init__(self, total_items: str = '', shipping: str = '', discount: str = '', total_price: str = '', notes: str = ''):
-        self.total_items = total_items
-        self.shipping = shipping
-        self.discount = discount
-        self.total_price = total_price
+        self.total_items = DollarString(total_items)
+        self.shipping = DollarString(shipping)
+        self.discount = DollarString(discount)
+        self.total_price = DollarString(total_price)
         self.notes = notes
 
     @classmethod

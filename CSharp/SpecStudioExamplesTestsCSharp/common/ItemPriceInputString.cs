@@ -4,9 +4,9 @@ using production;
 
     public class ItemPriceInputString
     {
-        public string totalItems;
+        public DollarString totalItems;
 
-        public ItemPriceInputString(string totalItems)
+        public ItemPriceInputString(DollarString totalItems)
         {
             this.totalItems = totalItems;
         }
@@ -21,7 +21,7 @@ using production;
         public ItemPriceInputTyped ToItemPriceInputTyped()
         {
             return new ItemPriceInputTyped(
-                new Dollar(this.totalItems)
+                new DollarTyped(this.totalItems)
             );
         }
 
@@ -35,7 +35,7 @@ using production;
         public override bool Equals(object? obj)
         {
             if (obj is not ItemPriceInputString other) return false;
-            return (DNCString == this.totalItems || DNCString == other.totalItems || object.Equals(this.totalItems, other.totalItems));
+            return (DNCString == this.totalItems.Value || DNCString == other.totalItems.Value || this.totalItems.Value == other.totalItems.Value);
         }
 
         public override int GetHashCode()

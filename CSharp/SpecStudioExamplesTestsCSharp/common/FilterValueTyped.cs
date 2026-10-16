@@ -10,9 +10,9 @@ using production;
 
     public class FilterValueTyped
     {
-        public IDForm value;
+        public IDFormTyped value;
 
-        public FilterValueTyped(IDForm value)
+        public FilterValueTyped(IDFormTyped value)
         {
             this.value = value;
         }
@@ -41,7 +41,7 @@ using production;
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();
-            w.WriteString("value", Json.ToText(this.value));
+            w.WriteString("value", this.value.ToString());
             w.WriteEndObject();
         }
 
@@ -55,7 +55,7 @@ using production;
         public static FilterValueTyped FromJsonElement(JsonElement m)
         {
             return new FilterValueTyped(
-                new IDForm(Json.AsString(Json.Require(m, "value"), "value"))
+                new IDFormTyped(new IDFormString(Json.AsString(Json.Require(m, "value"), "value")))
             );
         }
 

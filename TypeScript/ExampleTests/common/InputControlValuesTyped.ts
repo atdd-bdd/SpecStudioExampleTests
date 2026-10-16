@@ -1,12 +1,13 @@
 import { InputControlValuesString } from "./InputControlValuesString.js";
 import * as _json from "./json.js";
+import { PinsTyped } from "./PinsTyped.js";
 
 export class InputControlValuesTyped {
   frame: number;
-  roll: string;
-  remaining: string;
+  roll: PinsTyped;
+  remaining: PinsTyped;
 
-  constructor(frame: number, roll: string, remaining: string) {
+  constructor(frame: number, roll: PinsTyped, remaining: PinsTyped) {
     this.frame = frame;
     this.roll = roll;
     this.remaining = remaining;
@@ -15,8 +16,8 @@ export class InputControlValuesTyped {
   static fromStringObj(s: InputControlValuesString): InputControlValuesTyped {
     return new InputControlValuesTyped(
       s.frame !== "" ? Number(s.frame) : 0,
-      s.roll,
-      s.remaining
+      new PinsTyped(s.roll),
+      new PinsTyped(s.remaining)
     );
   }
 
@@ -39,8 +40,8 @@ export class InputControlValuesTyped {
   toJsonValue(): Record<string, unknown> {
     return {
       frame: this.frame,
-      roll: this.roll,
-      remaining: this.remaining,
+      roll: String(this.roll),
+      remaining: String(this.remaining),
     };
   }
 
@@ -49,8 +50,8 @@ export class InputControlValuesTyped {
   static fromJsonValue(m: unknown): InputControlValuesTyped {
     return new InputControlValuesTyped(
       _json.asInt(_json.requireField(m, "frame"), "frame"),
-      _json.asString(_json.requireField(m, "roll"), "roll"),
-      _json.asString(_json.requireField(m, "remaining"), "remaining")
+      new PinsTyped(_json.asString(_json.requireField(m, "roll"), "roll")),
+      new PinsTyped(_json.asString(_json.requireField(m, "remaining"), "remaining"))
     );
   }
 
@@ -73,7 +74,7 @@ export class InputControlValuesTyped {
 
   equals(other: InputControlValuesTyped): boolean {
     return this.frame === other.frame
-      && this.roll === other.roll
-      && this.remaining === other.remaining;
+      && this.roll.equals(other.roll)
+      && this.remaining.equals(other.remaining);
   }
 }

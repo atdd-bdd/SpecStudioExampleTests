@@ -2,31 +2,33 @@
 
 use super::json;
 use super::orderitem_string::OrderItemString;
+use super::simpletext_typed::SimpleTextTyped;
+use super::dollar_typed::DollarTyped;
 
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct OrderItemTyped {
-    pub name: String,
+    pub name: SimpleTextTyped,
     pub quantity: i32,
-    pub price: String,
-    pub itemtotal: String,
+    pub price: DollarTyped,
+    pub itemtotal: DollarTyped,
 }
 
 impl OrderItemTyped {
     pub fn from_str_struct(s: &OrderItemString) -> Self {
         Self {
-            name: s.name.clone(),
+            name: SimpleTextTyped::from_str_struct(&s.name),
             quantity: s.quantity.parse::<i32>().unwrap_or_default(),
-            price: s.price.clone(),
-            itemtotal: s.itemtotal.clone(),
+            price: DollarTyped::from_str_struct(&s.price),
+            itemtotal: DollarTyped::from_str_struct(&s.itemtotal),
         }
     }
 
     pub fn to_str_struct(&self) -> OrderItemString {
         OrderItemString {
-            name: self.name.clone(),
+            name: self.name.to_str_struct(),
             quantity: self.quantity.to_string(),
-            price: self.price.clone(),
-            itemtotal: self.itemtotal.clone(),
+            price: self.price.to_str_struct(),
+            itemtotal: self.itemtotal.to_str_struct(),
         }
     }
 
@@ -40,10 +42,10 @@ impl OrderItemTyped {
 
     pub fn to_json_value(&self) -> json::Value {
         json::Value::Object(vec![
-            ("Name".to_string(), json::Value::Str(self.name.clone())),
+            ("Name".to_string(), json::Value::Str(self.name.text.clone())),
             ("Quantity".to_string(), json::Value::number_from_i64(self.quantity as i64)),
-            ("Price".to_string(), json::Value::Str(self.price.clone())),
-            ("ItemTotal".to_string(), json::Value::Str(self.itemtotal.clone())),
+            ("Price".to_string(), json::Value::Str(self.price.text.clone())),
+            ("ItemTotal".to_string(), json::Value::Str(self.itemtotal.text.clone())),
         ])
     }
 
@@ -53,10 +55,10 @@ impl OrderItemTyped {
 
     pub fn from_json_value(v: &json::Value) -> json::JsonResult<Self> {
         Ok(Self {
-            name: json::as_string(json::require(v, "Name")?, "Name")?,
+            name: SimpleTextTyped::from(json::as_string(json::require(v, "Name")?, "Name")?),
             quantity: json::as_i32(json::require(v, "Quantity")?, "Quantity")?,
-            price: json::as_string(json::require(v, "Price")?, "Price")?,
-            itemtotal: json::as_string(json::require(v, "ItemTotal")?, "ItemTotal")?,
+            price: DollarTyped::from(json::as_string(json::require(v, "Price")?, "Price")?),
+            itemtotal: DollarTyped::from(json::as_string(json::require(v, "ItemTotal")?, "ItemTotal")?),
         })
     }
 

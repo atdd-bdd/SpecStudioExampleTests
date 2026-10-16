@@ -1,13 +1,14 @@
 import { AddressString } from "./AddressString.js";
 import * as _json from "./json.js";
+import { SimpleTextTyped } from "./SimpleTextTyped.js";
 
 export class AddressTyped {
-  street: string;
-  city: string;
-  state: string;
-  zIP: string;
+  street: SimpleTextTyped;
+  city: SimpleTextTyped;
+  state: SimpleTextTyped;
+  zIP: SimpleTextTyped;
 
-  constructor(street: string, city: string, state: string, zIP: string) {
+  constructor(street: SimpleTextTyped, city: SimpleTextTyped, state: SimpleTextTyped, zIP: SimpleTextTyped) {
     this.street = street;
     this.city = city;
     this.state = state;
@@ -16,10 +17,10 @@ export class AddressTyped {
 
   static fromStringObj(s: AddressString): AddressTyped {
     return new AddressTyped(
-      s.street,
-      s.city,
-      s.state,
-      s.zIP
+      new SimpleTextTyped(s.street),
+      new SimpleTextTyped(s.city),
+      new SimpleTextTyped(s.state),
+      new SimpleTextTyped(s.zIP)
     );
   }
 
@@ -42,10 +43,10 @@ export class AddressTyped {
 
   toJsonValue(): Record<string, unknown> {
     return {
-      street: this.street,
-      city: this.city,
-      state: this.state,
-      zIP: this.zIP,
+      street: String(this.street),
+      city: String(this.city),
+      state: String(this.state),
+      zIP: String(this.zIP),
     };
   }
 
@@ -53,10 +54,10 @@ export class AddressTyped {
 
   static fromJsonValue(m: unknown): AddressTyped {
     return new AddressTyped(
-      _json.asString(_json.requireField(m, "street"), "street"),
-      _json.asString(_json.requireField(m, "city"), "city"),
-      _json.asString(_json.requireField(m, "state"), "state"),
-      _json.asString(_json.requireField(m, "zIP"), "zIP")
+      new SimpleTextTyped(_json.asString(_json.requireField(m, "street"), "street")),
+      new SimpleTextTyped(_json.asString(_json.requireField(m, "city"), "city")),
+      new SimpleTextTyped(_json.asString(_json.requireField(m, "state"), "state")),
+      new SimpleTextTyped(_json.asString(_json.requireField(m, "zIP"), "zIP"))
     );
   }
 
@@ -78,9 +79,9 @@ export class AddressTyped {
   }
 
   equals(other: AddressTyped): boolean {
-    return this.street === other.street
-      && this.city === other.city
-      && this.state === other.state
-      && this.zIP === other.zIP;
+    return this.street.equals(other.street)
+      && this.city.equals(other.city)
+      && this.state.equals(other.state)
+      && this.zIP.equals(other.zIP);
   }
 }

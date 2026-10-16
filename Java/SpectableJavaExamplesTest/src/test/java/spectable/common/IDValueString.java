@@ -8,11 +8,11 @@ import calculator.*;
 public class IDValueString {
     private static final String DNCString = "?DNC?";
 
-    public String iD;
+    public IDFormString iD;
     public String value;
 
     public IDValueString(String iD, String value) {
-        this.iD = iD;
+        this.iD = new IDFormString(iD);
         this.value = value;
     }
 
@@ -33,7 +33,7 @@ public class IDValueString {
         if (this == o) return true;
         if (!(o instanceof IDValueString)) return false;
         IDValueString that = (IDValueString) o;
-        return (DNCString.equals(iD) || DNCString.equals(that.iD) || Objects.equals(iD, that.iD))
+        return (DNCString.equals(iD.value) || DNCString.equals(that.iD.value) || Objects.equals(iD.value, that.iD.value))
             && (DNCString.equals(value) || DNCString.equals(that.value) || Objects.equals(value, that.value));
     }
 
@@ -44,6 +44,6 @@ public class IDValueString {
 
     @Override
     public String toString() {
-        return Tokens.token(iD) + " " + Tokens.token(value);
+        return Tokens.token(iD.value) + " " + Tokens.token(value);
     }
 }

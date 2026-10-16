@@ -1,12 +1,14 @@
 import { DiscountInputString } from "./DiscountInputString.js";
 import * as _json from "./json.js";
+import { DollarTyped } from "./DollarTyped.js";
+import { PercentageTyped } from "./PercentageTyped.js";
 
 export class DiscountInputTyped {
-  totalPrice: string;
-  discount: string;
+  totalPrice: DollarTyped;
+  discount: PercentageTyped;
   notes: string;
 
-  constructor(totalPrice: string, discount: string, notes: string) {
+  constructor(totalPrice: DollarTyped, discount: PercentageTyped, notes: string) {
     this.totalPrice = totalPrice;
     this.discount = discount;
     this.notes = notes;
@@ -14,8 +16,8 @@ export class DiscountInputTyped {
 
   static fromStringObj(s: DiscountInputString): DiscountInputTyped {
     return new DiscountInputTyped(
-      s.totalPrice,
-      s.discount,
+      new DollarTyped(s.totalPrice),
+      new PercentageTyped(s.discount),
       s.notes
     );
   }
@@ -38,8 +40,8 @@ export class DiscountInputTyped {
 
   toJsonValue(): Record<string, unknown> {
     return {
-      totalPrice: this.totalPrice,
-      discount: this.discount,
+      totalPrice: String(this.totalPrice),
+      discount: String(this.discount),
       notes: this.notes,
     };
   }
@@ -48,8 +50,8 @@ export class DiscountInputTyped {
 
   static fromJsonValue(m: unknown): DiscountInputTyped {
     return new DiscountInputTyped(
-      _json.asString(_json.requireField(m, "totalPrice"), "totalPrice"),
-      _json.asString(_json.requireField(m, "discount"), "discount"),
+      new DollarTyped(_json.asString(_json.requireField(m, "totalPrice"), "totalPrice")),
+      new PercentageTyped(_json.asString(_json.requireField(m, "discount"), "discount")),
       _json.asString(_json.requireField(m, "notes"), "notes")
     );
   }
@@ -72,8 +74,8 @@ export class DiscountInputTyped {
   }
 
   equals(other: DiscountInputTyped): boolean {
-    return this.totalPrice === other.totalPrice
-      && this.discount === other.discount
+    return this.totalPrice.equals(other.totalPrice)
+      && this.discount.equals(other.discount)
       && this.notes === other.notes;
   }
 }

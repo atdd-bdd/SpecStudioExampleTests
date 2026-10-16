@@ -1,14 +1,16 @@
+import type { DollarString } from "./DollarString.js";
+import type { PercentageString } from "./PercentageString.js";
 
 import * as tokens from "./tokens.js";
 
 export class DiscountInputString {
   static readonly DNC_STRING = "?DNC?";
 
-  totalPrice: string;
-  discount: string;
+  totalPrice: DollarString;
+  discount: PercentageString;
   notes: string;
 
-  constructor(totalPrice: string = "", discount: string = "", notes: string = "") {
+  constructor(totalPrice: DollarString = "", discount: PercentageString = "", notes: string = "") {
     this.totalPrice = totalPrice;
     this.discount = discount;
     this.notes = notes;

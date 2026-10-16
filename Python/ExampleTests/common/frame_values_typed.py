@@ -1,8 +1,13 @@
 from . import json_util as _json
 from .frame_values_string import FrameValuesString
+from .pins_typed import PinsTyped
+from .pins_typed import PinsTyped
+from .pins_typed import PinsTyped
+from .score_typed import ScoreTyped
+from .score_typed import ScoreTyped
 
 class FrameValuesTyped:
-    def __init__(self, frame: int = 0, roll1: str = '', roll2: str = '', roll3: str = '', score: str = '', total_score: str = ''):
+    def __init__(self, frame: int = 0, roll1: 'PinsTyped' = None, roll2: 'PinsTyped' = None, roll3: 'PinsTyped' = None, score: 'ScoreTyped' = None, total_score: 'ScoreTyped' = None):
         self.frame = frame
         self.roll1 = roll1
         self.roll2 = roll2
@@ -14,11 +19,11 @@ class FrameValuesTyped:
     def from_string_obj(cls, s: FrameValuesString) -> 'FrameValuesTyped':
         return cls(
             int(s.frame) if s.frame else 0,
-            s.roll1,
-            s.roll2,
-            s.roll3,
-            s.score,
-            s.total_score
+            PinsTyped(s.roll1),
+            PinsTyped(s.roll2),
+            PinsTyped(s.roll3),
+            ScoreTyped(s.score),
+            ScoreTyped(s.total_score)
         )
 
     def to_string_obj(self) -> FrameValuesString:
@@ -42,11 +47,11 @@ class FrameValuesTyped:
     def to_json_value(self) -> dict:
         return {
             'Frame': self.frame,
-            'Roll1': self.roll1,
-            'Roll2': self.roll2,
-            'Roll3': self.roll3,
-            'Score': self.score,
-            'TotalScore': self.total_score,
+            'Roll1': str(self.roll1),
+            'Roll2': str(self.roll2),
+            'Roll3': str(self.roll3),
+            'Score': str(self.score),
+            'TotalScore': str(self.total_score),
         }
 
     def to_json(self) -> str:
@@ -56,11 +61,11 @@ class FrameValuesTyped:
     def from_json_value(cls, m: dict) -> 'FrameValuesTyped':
         return cls(
             _json.as_int(_json.require(m, 'Frame'), 'Frame'),
-            _json.as_str(_json.require(m, 'Roll1'), 'Roll1'),
-            _json.as_str(_json.require(m, 'Roll2'), 'Roll2'),
-            _json.as_str(_json.require(m, 'Roll3'), 'Roll3'),
-            _json.as_str(_json.require(m, 'Score'), 'Score'),
-            _json.as_str(_json.require(m, 'TotalScore'), 'TotalScore')
+            PinsTyped(_json.as_str(_json.require(m, 'Roll1'), 'Roll1')),
+            PinsTyped(_json.as_str(_json.require(m, 'Roll2'), 'Roll2')),
+            PinsTyped(_json.as_str(_json.require(m, 'Roll3'), 'Roll3')),
+            ScoreTyped(_json.as_str(_json.require(m, 'Score'), 'Score')),
+            ScoreTyped(_json.as_str(_json.require(m, 'TotalScore'), 'TotalScore'))
         )
 
     @classmethod

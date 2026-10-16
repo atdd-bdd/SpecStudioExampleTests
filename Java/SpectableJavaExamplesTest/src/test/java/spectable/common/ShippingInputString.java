@@ -8,13 +8,13 @@ import calculator.*;
 public class ShippingInputString {
     private static final String DNCString = "?DNC?";
 
-    public String totalPrice;
-    public String shippingCost;
+    public DollarString totalPrice;
+    public DollarString shippingCost;
     public String notes;
 
     public ShippingInputString(String totalPrice, String shippingCost, String notes) {
-        this.totalPrice = totalPrice;
-        this.shippingCost = shippingCost;
+        this.totalPrice = new DollarString(totalPrice);
+        this.shippingCost = new DollarString(shippingCost);
         this.notes = notes;
     }
 
@@ -36,8 +36,8 @@ public class ShippingInputString {
         if (this == o) return true;
         if (!(o instanceof ShippingInputString)) return false;
         ShippingInputString that = (ShippingInputString) o;
-        return (DNCString.equals(totalPrice) || DNCString.equals(that.totalPrice) || Objects.equals(totalPrice, that.totalPrice))
-            && (DNCString.equals(shippingCost) || DNCString.equals(that.shippingCost) || Objects.equals(shippingCost, that.shippingCost))
+        return (DNCString.equals(totalPrice.value) || DNCString.equals(that.totalPrice.value) || Objects.equals(totalPrice.value, that.totalPrice.value))
+            && (DNCString.equals(shippingCost.value) || DNCString.equals(that.shippingCost.value) || Objects.equals(shippingCost.value, that.shippingCost.value))
             && (DNCString.equals(notes) || DNCString.equals(that.notes) || Objects.equals(notes, that.notes));
     }
 
@@ -48,6 +48,6 @@ public class ShippingInputString {
 
     @Override
     public String toString() {
-        return Tokens.token(totalPrice) + " " + Tokens.token(shippingCost) + " " + Tokens.token(notes);
+        return Tokens.token(totalPrice.value) + " " + Tokens.token(shippingCost.value) + " " + Tokens.token(notes);
     }
 }

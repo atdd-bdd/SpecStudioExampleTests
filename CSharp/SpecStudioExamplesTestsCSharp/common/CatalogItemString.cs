@@ -4,10 +4,10 @@ using production;
 
     public class CatalogItemString
     {
-        public string name;
-        public string price;
+        public SimpleTextString name;
+        public DollarString price;
 
-        public CatalogItemString(string name, string price)
+        public CatalogItemString(SimpleTextString name, DollarString price)
         {
             this.name = name;
             this.price = price;
@@ -30,8 +30,8 @@ using production;
         public CatalogItemTyped ToCatalogItemTyped()
         {
             return new CatalogItemTyped(
-                new SimpleText(this.name),
-                new Dollar(this.price)
+                new SimpleTextTyped(this.name),
+                new DollarTyped(this.price)
             );
         }
 
@@ -45,8 +45,8 @@ using production;
         public override bool Equals(object? obj)
         {
             if (obj is not CatalogItemString other) return false;
-            return (DNCString == this.name || DNCString == other.name || object.Equals(this.name, other.name))
-                && (DNCString == this.price || DNCString == other.price || object.Equals(this.price, other.price));
+            return (DNCString == this.name.Value || DNCString == other.name.Value || this.name.Value == other.name.Value)
+                && (DNCString == this.price.Value || DNCString == other.price.Value || this.price.Value == other.price.Value);
         }
 
         public override int GetHashCode()

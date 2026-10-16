@@ -12,13 +12,14 @@ public:
         filter_ = RecordFilter();
         for (const auto& value : values) {
             const IDValueTyped t = IDValueTyped::from_string_struct(value);
-            filter_.add(IDValue(IDForm(t.id), t.value));
+            filter_.add(IDValue(t.id.get(), t.value));
         }
     }
 
-    void when_filtered_by_id_with_value(const std::vector<IDForm>& values) {
+    void when_filtered_by_id_with_value(const std::vector<IDFormString>& values) {
+        // The column is an IDForm, and it reaches the glue as text.
         if (!values.empty())
-            sum_ = filter_.sum_by_label(values[0]);
+            sum_ = filter_.sum_by_label(IDForm(values[0].value));
     }
 
     void then_sum_is(const std::vector<int>& values) {
@@ -29,7 +30,7 @@ public:
     void when_filtered_by(const std::vector<FilterValueString>& values) {
         for (const auto& value : values) {
             const FilterValueTyped t = FilterValueTyped::from_string_struct(value);
-            sum_ = filter_.sum_by_label(IDForm(t.value));
+            sum_ = filter_.sum_by_label(t.value.get());
         }
     }
 
@@ -43,7 +44,7 @@ public:
     void when_element_added(const std::vector<IDValueString>& values) {
         for (const auto& value : values) {
             const IDValueTyped t = IDValueTyped::from_string_struct(value);
-            filter_.add(IDValue(IDForm(t.id), t.value));
+            filter_.add(IDValue(t.id.get(), t.value));
         }
     }
 

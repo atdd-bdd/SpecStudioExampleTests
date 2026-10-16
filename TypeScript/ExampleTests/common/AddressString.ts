@@ -1,15 +1,16 @@
+import type { SimpleTextString } from "./SimpleTextString.js";
 
 import * as tokens from "./tokens.js";
 
 export class AddressString {
   static readonly DNC_STRING = "?DNC?";
 
-  street: string;
-  city: string;
-  state: string;
-  zIP: string;
+  street: SimpleTextString;
+  city: SimpleTextString;
+  state: SimpleTextString;
+  zIP: SimpleTextString;
 
-  constructor(street: string = "", city: string = "", state: string = "", zIP: string = "") {
+  constructor(street: SimpleTextString = "", city: SimpleTextString = "", state: SimpleTextString = "", zIP: SimpleTextString = "") {
     this.street = street;
     this.city = city;
     this.state = state;

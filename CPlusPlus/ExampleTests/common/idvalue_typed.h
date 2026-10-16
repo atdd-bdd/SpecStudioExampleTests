@@ -3,21 +3,22 @@
 #include <vector>
 #include "json.h"
 #include "idvalue_string.h"
+#include "idform_typed.h"
 
 struct IDValueTyped {
-    std::string id;
+    IDFormTyped id;
     int value = 0;
 
     static IDValueTyped from_string_struct(const IDValueString& s) {
         IDValueTyped t;
-        t.id = s.id;
+        t.id = IDFormTyped::from_string_struct(s.id);
         t.value = !s.value.empty() ? std::stoi(s.value) : 0;
         return t;
     }
 
     IDValueString to_string_struct() const {
         IDValueString s;
-        s.id = id;
+        s.id = id.to_string_struct();
         s.value = std::to_string(value);
         return s;
     }
@@ -36,7 +37,7 @@ struct IDValueTyped {
 
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("ID", json::Convert<std::string>::to_json(id));
+        m.emplace_back("ID", id.to_json_value());
         m.emplace_back("Value", json::Convert<int>::to_json(value));
         return json::Value::make_object(std::move(m));
     }
@@ -45,7 +46,7 @@ struct IDValueTyped {
 
     static IDValueTyped from_json_value(const json::Value& v) {
         IDValueTyped t;
-        t.id = json::Convert<std::string>::from_json(json::require(v, "ID"), "ID");
+        t.id = IDFormTyped::from_json_value(json::require(v, "ID"));
         t.value = json::Convert<int>::from_json(json::require(v, "Value"), "Value");
         return t;
     }

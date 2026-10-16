@@ -4,6 +4,7 @@
 #include <vector>
 #include <sstream>
 #include "tokens.h"
+#include "dollar_string.h"
 #include "address_string.h"
 
 #ifndef SPECTABLE_DNC_STRING
@@ -22,9 +23,9 @@ inline bool parse_bool_cell(const std::string& v) {
 
 struct ShoppingCartString {
     std::string items;
-    std::string shipping;
-    std::string discount;
-    std::string totalprice;
+    DollarString shipping;
+    DollarString discount;
+    DollarString totalprice;
     AddressString shippingaddress;
     AddressString billingaddress;
 

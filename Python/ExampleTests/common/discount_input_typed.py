@@ -1,8 +1,10 @@
 from . import json_util as _json
 from .discount_input_string import DiscountInputString
+from .dollar_typed import DollarTyped
+from .percentage_typed import PercentageTyped
 
 class DiscountInputTyped:
-    def __init__(self, total_price: str = '', discount: str = '', notes: str = ''):
+    def __init__(self, total_price: 'DollarTyped' = None, discount: 'PercentageTyped' = None, notes: str = ''):
         self.total_price = total_price
         self.discount = discount
         self.notes = notes
@@ -10,8 +12,8 @@ class DiscountInputTyped:
     @classmethod
     def from_string_obj(cls, s: DiscountInputString) -> 'DiscountInputTyped':
         return cls(
-            s.total_price,
-            s.discount,
+            DollarTyped(s.total_price),
+            PercentageTyped(s.discount),
             s.notes
         )
 
@@ -32,8 +34,8 @@ class DiscountInputTyped:
 
     def to_json_value(self) -> dict:
         return {
-            'Total Price': self.total_price,
-            'Discount': self.discount,
+            'Total Price': str(self.total_price),
+            'Discount': str(self.discount),
             'Notes': self.notes,
         }
 
@@ -43,8 +45,8 @@ class DiscountInputTyped:
     @classmethod
     def from_json_value(cls, m: dict) -> 'DiscountInputTyped':
         return cls(
-            _json.as_str(_json.require(m, 'Total Price'), 'Total Price'),
-            _json.as_str(_json.require(m, 'Discount'), 'Discount'),
+            DollarTyped(_json.as_str(_json.require(m, 'Total Price'), 'Total Price')),
+            PercentageTyped(_json.as_str(_json.require(m, 'Discount'), 'Discount')),
             _json.as_str(_json.require(m, 'Notes'), 'Notes')
         )
 

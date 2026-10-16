@@ -39,10 +39,10 @@ public class ProductionHelper {
     }
 
     public static AddressTyped AddressProductionToTyped(Address p) {
-        return new AddressTyped(p.street,
-            p.city,
-            p.state,
-            p.zIP);
+        return new AddressTyped(new SimpleTextTyped(p.street),
+            new SimpleTextTyped(p.city),
+            new SimpleTextTyped(p.state),
+            new SimpleTextTyped(p.zIP));
     }
 
     public static List<AddressTyped> AddressProductionToTypedList(List<Address> list) {
@@ -58,15 +58,15 @@ public class ProductionHelper {
     }
 
     public static Address AddressTypedToProduction(AddressTyped t) {
-        return new Address(t.street,
-            t.city,
-            t.state,
-            t.zIP);
+        return new Address(t.street.get(),
+            t.city.get(),
+            t.state.get(),
+            t.zIP.get());
     }
 
     public static CatalogItemTyped CatalogItemProductionToTyped(CatalogItem p) {
-        return new CatalogItemTyped(p.name,
-            p.price);
+        return new CatalogItemTyped(new SimpleTextTyped(p.name),
+            new DollarTyped(p.price));
     }
 
     public static List<CatalogItemTyped> CatalogItemProductionToTypedList(List<CatalogItem> list) {
@@ -82,12 +82,12 @@ public class ProductionHelper {
     }
 
     public static CatalogItem CatalogItemTypedToProduction(CatalogItemTyped t) {
-        return new CatalogItem(t.name,
-            t.price);
+        return new CatalogItem(t.name.get(),
+            t.price.get());
     }
 
     public static IDValueTyped IDValueProductionToTyped(IDValue p) {
-        return new IDValueTyped(p.iD,
+        return new IDValueTyped(new IDFormTyped(p.iD),
             p.value);
     }
 
@@ -104,7 +104,7 @@ public class ProductionHelper {
     }
 
     public static IDValue IDValueTypedToProduction(IDValueTyped t) {
-        return new IDValue(t.iD,
+        return new IDValue(t.iD.get(),
             t.value);
     }
 
@@ -131,10 +131,10 @@ public class ProductionHelper {
     }
 
     public static OrderItemTyped OrderItemProductionToTyped(OrderItem p) {
-        return new OrderItemTyped(p.name,
+        return new OrderItemTyped(new SimpleTextTyped(p.name),
             p.quantity,
-            p.price,
-            p.itemTotal);
+            new DollarTyped(p.price),
+            new DollarTyped(p.itemTotal));
     }
 
     public static List<OrderItemTyped> OrderItemProductionToTypedList(List<OrderItem> list) {
@@ -150,17 +150,17 @@ public class ProductionHelper {
     }
 
     public static OrderItem OrderItemTypedToProduction(OrderItemTyped t) {
-        return new OrderItem(t.name,
+        return new OrderItem(t.name.get(),
             t.quantity,
-            t.price,
-            t.itemTotal);
+            t.price.get(),
+            t.itemTotal.get());
     }
 
     public static ShoppingCartTyped ShoppingCartProductionToTyped(ShoppingCart p) {
         return new ShoppingCartTyped(OrderItemProductionToTypedList(p.items.read()),
-            p.shipping,
-            p.discount,
-            p.totalPrice,
+            new DollarTyped(p.shipping),
+            new DollarTyped(p.discount),
+            new DollarTyped(p.totalPrice),
             AddressProductionToTyped(p.shippingAddress),
             AddressProductionToTyped(p.billingAddress));
     }
@@ -181,9 +181,9 @@ public class ProductionHelper {
         OrderItemCollection items = new OrderItemCollection();
         for (OrderItem _item : OrderItemTypedListToProduction(t.items)) items.add(_item);
         return new ShoppingCart(items,
-            t.shipping,
-            t.discount,
-            t.totalPrice,
+            t.shipping.get(),
+            t.discount.get(),
+            t.totalPrice.get(),
             AddressTypedToProduction(t.shippingAddress),
             AddressTypedToProduction(t.billingAddress));
     }

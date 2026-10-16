@@ -1,16 +1,17 @@
 import { ItemPriceInputString } from "./ItemPriceInputString.js";
 import * as _json from "./json.js";
+import { DollarTyped } from "./DollarTyped.js";
 
 export class ItemPriceInputTyped {
-  totalItems: string;
+  totalItems: DollarTyped;
 
-  constructor(totalItems: string) {
+  constructor(totalItems: DollarTyped) {
     this.totalItems = totalItems;
   }
 
   static fromStringObj(s: ItemPriceInputString): ItemPriceInputTyped {
     return new ItemPriceInputTyped(
-      s.totalItems
+      new DollarTyped(s.totalItems)
     );
   }
 
@@ -30,7 +31,7 @@ export class ItemPriceInputTyped {
 
   toJsonValue(): Record<string, unknown> {
     return {
-      totalItems: this.totalItems,
+      totalItems: String(this.totalItems),
     };
   }
 
@@ -38,7 +39,7 @@ export class ItemPriceInputTyped {
 
   static fromJsonValue(m: unknown): ItemPriceInputTyped {
     return new ItemPriceInputTyped(
-      _json.asString(_json.requireField(m, "totalItems"), "totalItems")
+      new DollarTyped(_json.asString(_json.requireField(m, "totalItems"), "totalItems"))
     );
   }
 
@@ -60,6 +61,6 @@ export class ItemPriceInputTyped {
   }
 
   equals(other: ItemPriceInputTyped): boolean {
-    return this.totalItems === other.totalItems;
+    return this.totalItems.equals(other.totalItems);
   }
 }

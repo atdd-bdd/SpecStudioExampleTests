@@ -12,13 +12,13 @@ import calculator.*;
 
 public class ShoppingCartTyped {
     public List<OrderItemTyped> items;
-    public Dollar shipping;
-    public Dollar discount;
-    public Dollar totalPrice;
+    public DollarTyped shipping;
+    public DollarTyped discount;
+    public DollarTyped totalPrice;
     public AddressTyped shippingAddress;
     public AddressTyped billingAddress;
 
-    public ShoppingCartTyped(List<OrderItemTyped> items, Dollar shipping, Dollar discount, Dollar totalPrice, AddressTyped shippingAddress, AddressTyped billingAddress) {
+    public ShoppingCartTyped(List<OrderItemTyped> items, DollarTyped shipping, DollarTyped discount, DollarTyped totalPrice, AddressTyped shippingAddress, AddressTyped billingAddress) {
         this.items = items;
         this.shipping = shipping;
         this.discount = discount;
@@ -29,9 +29,9 @@ public class ShoppingCartTyped {
 
     public ShoppingCartTyped(ShoppingCartString s) {
         this.items = new ArrayList<>(); // Collection — populate from s.items
-        this.shipping = new Dollar(s.shipping);
-        this.discount = new Dollar(s.discount);
-        this.totalPrice = new Dollar(s.totalPrice);
+        this.shipping = new DollarTyped(s.shipping);
+        this.discount = new DollarTyped(s.discount);
+        this.totalPrice = new DollarTyped(s.totalPrice);
         this.shippingAddress = new AddressTyped(s.shippingAddress);
         this.billingAddress = new AddressTyped(s.billingAddress);
     }
@@ -96,9 +96,9 @@ public class ShoppingCartTyped {
             for (Object e : json_items) items.add(OrderItemTyped.fromJsonValue(Json.asObject(e, "items")));
         return new ShoppingCartTyped(
             items,
-            new Dollar(Json.asString(Json.require(m, "shipping"), "shipping")),
-            new Dollar(Json.asString(Json.require(m, "discount"), "discount")),
-            new Dollar(Json.asString(Json.require(m, "totalPrice"), "totalPrice")),
+            new DollarTyped(new DollarString(Json.asString(Json.require(m, "shipping"), "shipping"))),
+            new DollarTyped(new DollarString(Json.asString(Json.require(m, "discount"), "discount"))),
+            new DollarTyped(new DollarString(Json.asString(Json.require(m, "totalPrice"), "totalPrice"))),
             AddressTyped.fromJsonValue(Json.asObject(Json.require(m, "shippingAddress"), "shippingAddress")),
             AddressTyped.fromJsonValue(Json.asObject(Json.require(m, "billingAddress"), "billingAddress")));
     }

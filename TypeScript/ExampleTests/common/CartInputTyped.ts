@@ -1,14 +1,15 @@
 import { CartInputString } from "./CartInputString.js";
 import * as _json from "./json.js";
+import { DollarTyped } from "./DollarTyped.js";
 
 export class CartInputTyped {
-  totalItems: string;
-  shipping: string;
-  discount: string;
-  totalPrice: string;
+  totalItems: DollarTyped;
+  shipping: DollarTyped;
+  discount: DollarTyped;
+  totalPrice: DollarTyped;
   notes: string;
 
-  constructor(totalItems: string, shipping: string, discount: string, totalPrice: string, notes: string) {
+  constructor(totalItems: DollarTyped, shipping: DollarTyped, discount: DollarTyped, totalPrice: DollarTyped, notes: string) {
     this.totalItems = totalItems;
     this.shipping = shipping;
     this.discount = discount;
@@ -18,10 +19,10 @@ export class CartInputTyped {
 
   static fromStringObj(s: CartInputString): CartInputTyped {
     return new CartInputTyped(
-      s.totalItems,
-      s.shipping,
-      s.discount,
-      s.totalPrice,
+      new DollarTyped(s.totalItems),
+      new DollarTyped(s.shipping),
+      new DollarTyped(s.discount),
+      new DollarTyped(s.totalPrice),
       s.notes
     );
   }
@@ -46,10 +47,10 @@ export class CartInputTyped {
 
   toJsonValue(): Record<string, unknown> {
     return {
-      totalItems: this.totalItems,
-      shipping: this.shipping,
-      discount: this.discount,
-      totalPrice: this.totalPrice,
+      totalItems: String(this.totalItems),
+      shipping: String(this.shipping),
+      discount: String(this.discount),
+      totalPrice: String(this.totalPrice),
       notes: this.notes,
     };
   }
@@ -58,10 +59,10 @@ export class CartInputTyped {
 
   static fromJsonValue(m: unknown): CartInputTyped {
     return new CartInputTyped(
-      _json.asString(_json.requireField(m, "totalItems"), "totalItems"),
-      _json.asString(_json.requireField(m, "shipping"), "shipping"),
-      _json.asString(_json.requireField(m, "discount"), "discount"),
-      _json.asString(_json.requireField(m, "totalPrice"), "totalPrice"),
+      new DollarTyped(_json.asString(_json.requireField(m, "totalItems"), "totalItems")),
+      new DollarTyped(_json.asString(_json.requireField(m, "shipping"), "shipping")),
+      new DollarTyped(_json.asString(_json.requireField(m, "discount"), "discount")),
+      new DollarTyped(_json.asString(_json.requireField(m, "totalPrice"), "totalPrice")),
       _json.asString(_json.requireField(m, "notes"), "notes")
     );
   }
@@ -84,10 +85,10 @@ export class CartInputTyped {
   }
 
   equals(other: CartInputTyped): boolean {
-    return this.totalItems === other.totalItems
-      && this.shipping === other.shipping
-      && this.discount === other.discount
-      && this.totalPrice === other.totalPrice
+    return this.totalItems.equals(other.totalItems)
+      && this.shipping.equals(other.shipping)
+      && this.discount.equals(other.discount)
+      && this.totalPrice.equals(other.totalPrice)
       && this.notes === other.notes;
   }
 }

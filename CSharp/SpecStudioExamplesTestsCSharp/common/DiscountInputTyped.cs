@@ -10,11 +10,11 @@ using production;
 
     public class DiscountInputTyped
     {
-        public Dollar totalPrice;
-        public Percentage discount;
+        public DollarTyped totalPrice;
+        public PercentageTyped discount;
         public string notes;
 
-        public DiscountInputTyped(Dollar totalPrice, Percentage discount, string notes)
+        public DiscountInputTyped(DollarTyped totalPrice, PercentageTyped discount, string notes)
         {
             this.totalPrice = totalPrice;
             this.discount = discount;
@@ -47,8 +47,8 @@ using production;
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();
-            w.WriteString("totalPrice", Json.ToText(this.totalPrice));
-            w.WriteString("discount", Json.ToText(this.discount));
+            w.WriteString("totalPrice", this.totalPrice.ToString());
+            w.WriteString("discount", this.discount.ToString());
             w.WriteString("notes", this.notes);
             w.WriteEndObject();
         }
@@ -63,8 +63,8 @@ using production;
         public static DiscountInputTyped FromJsonElement(JsonElement m)
         {
             return new DiscountInputTyped(
-                new Dollar(Json.AsString(Json.Require(m, "totalPrice"), "totalPrice")),
-                new Percentage(Json.AsString(Json.Require(m, "discount"), "discount")),
+                new DollarTyped(new DollarString(Json.AsString(Json.Require(m, "totalPrice"), "totalPrice"))),
+                new PercentageTyped(new PercentageString(Json.AsString(Json.Require(m, "discount"), "discount"))),
                 Json.AsString(Json.Require(m, "notes"), "notes")
             );
         }

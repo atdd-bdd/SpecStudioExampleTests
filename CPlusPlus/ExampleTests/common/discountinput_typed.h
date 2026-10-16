@@ -3,24 +3,26 @@
 #include <vector>
 #include "json.h"
 #include "discountinput_string.h"
+#include "dollar_typed.h"
+#include "percentage_typed.h"
 
 struct DiscountInputTyped {
-    std::string total_price;
-    std::string discount;
+    DollarTyped total_price;
+    PercentageTyped discount;
     std::string notes;
 
     static DiscountInputTyped from_string_struct(const DiscountInputString& s) {
         DiscountInputTyped t;
-        t.total_price = s.total_price;
-        t.discount = s.discount;
+        t.total_price = DollarTyped::from_string_struct(s.total_price);
+        t.discount = PercentageTyped::from_string_struct(s.discount);
         t.notes = s.notes;
         return t;
     }
 
     DiscountInputString to_string_struct() const {
         DiscountInputString s;
-        s.total_price = total_price;
-        s.discount = discount;
+        s.total_price = total_price.to_string_struct();
+        s.discount = discount.to_string_struct();
         s.notes = notes;
         return s;
     }
@@ -39,8 +41,8 @@ struct DiscountInputTyped {
 
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("Total Price", json::Convert<std::string>::to_json(total_price));
-        m.emplace_back("Discount", json::Convert<std::string>::to_json(discount));
+        m.emplace_back("Total Price", total_price.to_json_value());
+        m.emplace_back("Discount", discount.to_json_value());
         m.emplace_back("Notes", json::Convert<std::string>::to_json(notes));
         return json::Value::make_object(std::move(m));
     }
@@ -49,8 +51,8 @@ struct DiscountInputTyped {
 
     static DiscountInputTyped from_json_value(const json::Value& v) {
         DiscountInputTyped t;
-        t.total_price = json::Convert<std::string>::from_json(json::require(v, "Total Price"), "Total Price");
-        t.discount = json::Convert<std::string>::from_json(json::require(v, "Discount"), "Discount");
+        t.total_price = DollarTyped::from_json_value(json::require(v, "Total Price"));
+        t.discount = PercentageTyped::from_json_value(json::require(v, "Discount"));
         t.notes = json::Convert<std::string>::from_json(json::require(v, "Notes"), "Notes");
         return t;
     }

@@ -4,6 +4,8 @@
 #include <vector>
 #include <sstream>
 #include "tokens.h"
+#include "simpletext_string.h"
+#include "dollar_string.h"
 
 #ifndef SPECTABLE_DNC_STRING
 #define SPECTABLE_DNC_STRING
@@ -20,8 +22,8 @@ inline bool parse_bool_cell(const std::string& v) {
 #endif
 
 struct CatalogItemString {
-    std::string name;
-    std::string price;
+    SimpleTextString name;
+    DollarString price;
 
     static CatalogItemString from_vec(const std::vector<std::string>& v) {
         CatalogItemString obj;

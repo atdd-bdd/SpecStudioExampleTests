@@ -14,6 +14,8 @@ from .catalog_item_string import CatalogItemString
 from .catalog_item_typed import CatalogItemTyped
 from .discount_input_string import DiscountInputString
 from .discount_input_typed import DiscountInputTyped
+from .dollar_string import DollarString
+from .dollar_typed import DollarTyped
 from .fand_c_string import FandCString
 from .fand_c_typed import FandCTyped
 from .filter_value_string import FilterValueString
@@ -22,6 +24,8 @@ from .frame_display_string import FrameDisplayString
 from .frame_display_typed import FrameDisplayTyped
 from .frame_values_string import FrameValuesString
 from .frame_values_typed import FrameValuesTyped
+from .idform_string import IDFormString
+from .idform_typed import IDFormTyped
 from .idvalue_string import IDValueString
 from .idvalue_typed import IDValueTyped
 from .input_control_values_string import InputControlValuesString
@@ -36,6 +40,10 @@ from .order_item_string import OrderItemString
 from .order_item_typed import OrderItemTyped
 from .patch_title_string import PatchTitleString
 from .patch_title_typed import PatchTitleTyped
+from .percentage_string import PercentageString
+from .percentage_typed import PercentageTyped
+from .pins_string import PinsString
+from .pins_typed import PinsTyped
 from .post_string import PostString
 from .post_typed import PostTyped
 from .replace_post_string import ReplacePostString
@@ -48,12 +56,16 @@ from .result_string import ResultString
 from .result_typed import ResultTyped
 from .result_value_string import ResultValueString
 from .result_value_typed import ResultValueTyped
+from .score_string import ScoreString
+from .score_typed import ScoreTyped
 from .shipping_input_string import ShippingInputString
 from .shipping_input_typed import ShippingInputTyped
 from .shopping_cart_string import ShoppingCartString
 from .shopping_cart_typed import ShoppingCartTyped
 from .simple_class_string import SimpleClassString
 from .simple_class_typed import SimpleClassTyped
+from .simple_text_string import SimpleTextString
+from .simple_text_typed import SimpleTextTyped
 from .status_string import StatusString
 from .status_typed import StatusTyped
 from .valid_values_string import ValidValuesString

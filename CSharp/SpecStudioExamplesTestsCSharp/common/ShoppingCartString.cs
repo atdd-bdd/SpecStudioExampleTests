@@ -5,13 +5,13 @@ using production;
     public class ShoppingCartString
     {
         public string items;
-        public string shipping;
-        public string discount;
-        public string totalPrice;
+        public DollarString shipping;
+        public DollarString discount;
+        public DollarString totalPrice;
         public AddressString shippingAddress;
         public AddressString billingAddress;
 
-        public ShoppingCartString(string items, string shipping, string discount, string totalPrice, AddressString shippingAddress, AddressString billingAddress)
+        public ShoppingCartString(string items, DollarString shipping, DollarString discount, DollarString totalPrice, AddressString shippingAddress, AddressString billingAddress)
         {
             this.items = items;
             this.shipping = shipping;
@@ -43,9 +43,9 @@ using production;
         {
             return new ShoppingCartTyped(
                 new List<OrderItemTyped>(),
-                new Dollar(this.shipping),
-                new Dollar(this.discount),
-                new Dollar(this.totalPrice),
+                new DollarTyped(this.shipping),
+                new DollarTyped(this.discount),
+                new DollarTyped(this.totalPrice),
                 this.shippingAddress.ToAddressTyped(),
                 this.billingAddress.ToAddressTyped()
             );
@@ -62,9 +62,9 @@ using production;
         {
             if (obj is not ShoppingCartString other) return false;
             return (DNCString == this.items || DNCString == other.items || object.Equals(this.items, other.items))
-                && (DNCString == this.shipping || DNCString == other.shipping || object.Equals(this.shipping, other.shipping))
-                && (DNCString == this.discount || DNCString == other.discount || object.Equals(this.discount, other.discount))
-                && (DNCString == this.totalPrice || DNCString == other.totalPrice || object.Equals(this.totalPrice, other.totalPrice))
+                && (DNCString == this.shipping.Value || DNCString == other.shipping.Value || this.shipping.Value == other.shipping.Value)
+                && (DNCString == this.discount.Value || DNCString == other.discount.Value || this.discount.Value == other.discount.Value)
+                && (DNCString == this.totalPrice.Value || DNCString == other.totalPrice.Value || this.totalPrice.Value == other.totalPrice.Value)
                 && object.Equals(this.shippingAddress, other.shippingAddress)
                 && object.Equals(this.billingAddress, other.billingAddress);
         }

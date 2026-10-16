@@ -15,11 +15,11 @@ public class BowlingGlue {
 
     // ---- given --------------------------------------------------------------
 
-    public func givenRollsAre(_ values: [[String]]) {
+    public func givenRollsAre(_ values: [PinsString]) {
         game.setRolls(pinCounts(values))
     }
 
-    public func givenRollsForTenthFrameAre(_ values: [[String]]) {
+    public func givenRollsForTenthFrameAre(_ values: [PinsString]) {
         game.setTenthFrameRolls(pinCounts(values))
     }
 
@@ -30,7 +30,7 @@ public class BowlingGlue {
 
     // ---- when ---------------------------------------------------------------
 
-    public func whenRollIs(_ values: [[String]]) {
+    public func whenRollIs(_ values: [PinsString]) {
         for pinCount in pinCounts(values) {
             game.addRoll(pinCount)
         }
@@ -42,7 +42,7 @@ public class BowlingGlue {
 
     // ---- then ---------------------------------------------------------------
 
-    public func thenRollsBecome(_ values: [[String]]) {
+    public func thenRollsBecome(_ values: [PinsString]) {
         let expected = pinCounts(values)
         let actual = game.allRolls()
 
@@ -93,8 +93,8 @@ public class BowlingGlue {
         for expected in values {
             let actual = game.inputControl()
             assertField("input control Frame", expected.frame, String(actual.frame))
-            assertField("input control Roll", expected.roll, String(actual.roll))
-            assertField("input control Remaining", expected.remaining, String(actual.remaining))
+            assertField("input control Roll", expected.roll.value, String(actual.roll))
+            assertField("input control Remaining", expected.remaining.value, String(actual.remaining))
         }
     }
 
@@ -119,12 +119,16 @@ public class BowlingGlue {
     // ---- helpers ------------------------------------------------------------
 
     /// Flattens the step's table into the pin counts it lists, in order.
-    private func pinCounts(_ values: [[String]]) -> [Int] {
+    /// A column of Pins reaches the glue as text, so Pins itself is read here
+    /// and a cell it refuses fails here rather than in the test.
+    private func pinCounts(_ values: [PinsString]) -> [Int] {
         var result: [Int] = []
-        for row in values {
-            for cell in row where !cell.trimmed.isEmpty {
-                if let count = Int(cell.trimmed) { result.append(count) }
+        for cell in values where !cell.value.trimmed.isEmpty {
+            guard let pins = try? Pins(cell.value) else {
+                XCTFail("not a number of pins: \(cell.value)")
+                continue
             }
+            result.append(pins.value)
         }
         return result
     }
@@ -138,11 +142,11 @@ public class BowlingGlue {
         }
 
         let where_ = "frame \(expected.frame) "
-        assertField(where_ + "Roll1", expected.roll1, frame.roll1.description)
-        assertField(where_ + "Roll2", expected.roll2, frame.roll2.description)
-        assertField(where_ + "Roll3", expected.roll3, frame.roll3.description)
-        assertField(where_ + "Score", expected.score, frame.score.description)
-        assertField(where_ + "TotalScore", expected.totalScore, frame.totalScore.description)
+        assertField(where_ + "Roll1", expected.roll1.value, frame.roll1.description)
+        assertField(where_ + "Roll2", expected.roll2.value, frame.roll2.description)
+        assertField(where_ + "Roll3", expected.roll3.value, frame.roll3.description)
+        assertField(where_ + "Score", expected.score.value, frame.score.description)
+        assertField(where_ + "TotalScore", expected.totalScore.value, frame.totalScore.description)
     }
 
     /// Honours the ?DNC? marker the generated *String structs use.

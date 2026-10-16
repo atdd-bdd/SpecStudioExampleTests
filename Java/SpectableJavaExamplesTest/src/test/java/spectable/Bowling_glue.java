@@ -22,12 +22,12 @@ public class Bowling_glue {
 
     // ---- given --------------------------------------------------------------
 
-    public void Given_rolls_are(List<Pins> values) {
-        game.setRolls(values);
+    public void Given_rolls_are(List<PinsString> values) {
+        game.setRolls(asPins(values));
     }
 
-    public void Given_rolls_for_tenth_frame_are(List<Pins> values) {
-        game.setTenthFrameRolls(values);
+    public void Given_rolls_for_tenth_frame_are(List<PinsString> values) {
+        game.setTenthFrameRolls(asPins(values));
     }
 
     /** The frame values from the previous step are still on the same game. */
@@ -37,9 +37,9 @@ public class Bowling_glue {
 
     // ---- when ---------------------------------------------------------------
 
-    public void When_roll_is(List<Pins> values) {
-        for (Pins roll : values)
-            game.addRoll(roll);
+    public void When_roll_is(List<PinsString> values) {
+        for (PinsString roll : values)
+            game.addRoll(new Pins(roll.value));
     }
 
     public void When_scored() {
@@ -48,11 +48,12 @@ public class Bowling_glue {
 
     // ---- then ---------------------------------------------------------------
 
-    public void Then_rolls_become(List<Pins> values) {
+    public void Then_rolls_become(List<PinsString> values) {
+        List<Pins> expected = asPins(values);
         List<Pins> actual = game.rolls();
-        assertEquals(values.size(), actual.size(), "number of rolls " + actual);
-        for (int i = 0; i < values.size(); i++)
-            assertEquals(values.get(i), actual.get(i), "roll " + (i + 1));
+        assertEquals(expected.size(), actual.size(), "number of rolls " + actual);
+        for (int i = 0; i < expected.size(); i++)
+            assertEquals(expected.get(i), actual.get(i), "roll " + (i + 1));
     }
 
     public void Then_display_is(String value) {
@@ -95,8 +96,8 @@ public class Bowling_glue {
         for (InputControlValuesString expected : values) {
             InputControl actual = game.inputControl();
             assertField("input control Frame", expected.frame, String.valueOf(actual.frame));
-            assertField("input control Roll", expected.roll, String.valueOf(actual.roll));
-            assertField("input control Remaining", expected.remaining, String.valueOf(actual.remaining));
+            assertField("input control Roll", expected.roll.value, String.valueOf(actual.roll));
+            assertField("input control Remaining", expected.remaining.value, String.valueOf(actual.remaining));
         }
     }
 
@@ -135,11 +136,11 @@ public class Bowling_glue {
     private void assertFrameEquals(FrameValuesString expected) {
         Frame frame = numberedFrame(expected.frame);
         String where = "frame " + expected.frame + " ";
-        assertField(where + "Roll1", expected.roll1, frame.roll1.toString());
-        assertField(where + "Roll2", expected.roll2, frame.roll2.toString());
-        assertField(where + "Roll3", expected.roll3, frame.roll3.toString());
-        assertField(where + "Score", expected.score, frame.score.toString());
-        assertField(where + "TotalScore", expected.totalScore, frame.totalScore.toString());
+        assertField(where + "Roll1", expected.roll1.value, frame.roll1.toString());
+        assertField(where + "Roll2", expected.roll2.value, frame.roll2.toString());
+        assertField(where + "Roll3", expected.roll3.value, frame.roll3.toString());
+        assertField(where + "Score", expected.score.value, frame.score.toString());
+        assertField(where + "TotalScore", expected.totalScore.value, frame.totalScore.toString());
     }
 
     private Frame numberedFrame(String number) {
@@ -154,6 +155,14 @@ public class Bowling_glue {
             if (frame.frame.equals(number.trim()))
                 return frame;
         throw new AssertionError("no frame numbered " + number);
+    }
+
+    /** A column of Pins reaches the glue as text; Pins itself is read here. */
+    private static List<Pins> asPins(List<PinsString> cells) {
+        List<Pins> out = new ArrayList<>();
+        for (PinsString cell : cells)
+            out.add(new Pins(cell.value));
+        return out;
     }
 
     /** Honours the ?DNC? marker the generated *String classes use. */

@@ -1,11 +1,13 @@
+from .dollar_string import DollarString
+from .percentage_string import PercentageString
 from . import tokens
 DNC_STRING = '?DNC?'
 
 
 class DiscountInputString:
     def __init__(self, total_price: str = '', discount: str = '', notes: str = ''):
-        self.total_price = total_price
-        self.discount = discount
+        self.total_price = DollarString(total_price)
+        self.discount = PercentageString(discount)
         self.notes = notes
 
     @classmethod

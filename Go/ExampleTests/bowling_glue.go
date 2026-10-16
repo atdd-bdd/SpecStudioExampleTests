@@ -25,11 +25,11 @@ func NewBowlingGlue() *BowlingGlue {
 
 // ---- given -----------------------------------------------------------------
 
-func (g *BowlingGlue) GivenRollsAre(t *testing.T, values [][]string) {
+func (g *BowlingGlue) GivenRollsAre(t *testing.T, values []common.PinsString) {
 	g.game.SetRolls(g.pinCounts(t, values))
 }
 
-func (g *BowlingGlue) GivenRollsForTenthFrameAre(t *testing.T, values [][]string) {
+func (g *BowlingGlue) GivenRollsForTenthFrameAre(t *testing.T, values []common.PinsString) {
 	g.game.SetTenthFrameRolls(g.pinCounts(t, values))
 }
 
@@ -43,7 +43,7 @@ func (g *BowlingGlue) GivenFrameValuesAreAsPrevious(t *testing.T) {
 
 // ---- when ------------------------------------------------------------------
 
-func (g *BowlingGlue) WhenRollIs(t *testing.T, values [][]string) {
+func (g *BowlingGlue) WhenRollIs(t *testing.T, values []common.PinsString) {
 	for _, pinCount := range g.pinCounts(t, values) {
 		g.game.AddRoll(pinCount)
 	}
@@ -55,7 +55,7 @@ func (g *BowlingGlue) WhenScored(t *testing.T) {
 
 // ---- then ------------------------------------------------------------------
 
-func (g *BowlingGlue) ThenRollsBecome(t *testing.T, values [][]string) {
+func (g *BowlingGlue) ThenRollsBecome(t *testing.T, values []common.PinsString) {
 	expected := g.pinCounts(t, values)
 	actual := g.game.Rolls()
 
@@ -115,8 +115,8 @@ func (g *BowlingGlue) ThenInputControlIs(t *testing.T, values []common.InputCont
 	for _, expected := range values {
 		actual := g.game.InputControl()
 		g.assertField(t, "input control Frame", expected.Frame, strconv.Itoa(actual.Frame))
-		g.assertField(t, "input control Roll", expected.Roll, strconv.Itoa(actual.Roll))
-		g.assertField(t, "input control Remaining", expected.Remaining,
+		g.assertField(t, "input control Roll", string(expected.Roll), strconv.Itoa(actual.Roll))
+		g.assertField(t, "input control Remaining", string(expected.Remaining),
 			strconv.Itoa(actual.Remaining))
 	}
 }
@@ -146,21 +146,20 @@ func (g *BowlingGlue) ExamplesDataTypeScore(t *testing.T, values []common.ValidV
 // ---- helpers ---------------------------------------------------------------
 
 // pinCounts flattens the step's table into the pin counts it lists, in order.
-func (g *BowlingGlue) pinCounts(t *testing.T, values [][]string) []int {
+// A column of Pins reaches the glue as text, so Pins itself is read here.
+func (g *BowlingGlue) pinCounts(t *testing.T, values []common.PinsString) []int {
 	var result []int
 
-	for _, row := range values {
-		for _, cell := range row {
-			text := strings.TrimSpace(cell)
-			if text == "" {
-				continue
-			}
-			count, err := strconv.Atoi(text)
-			if err != nil {
-				t.Fatalf("not a number of pins: %s", text)
-			}
-			result = append(result, count)
+	for _, cell := range values {
+		text := strings.TrimSpace(string(cell))
+		if text == "" {
+			continue
 		}
+		pins, err := production.NewPins(text)
+		if err != nil {
+			t.Fatalf("not a number of pins: %s", text)
+		}
+		result = append(result, pins.Value)
 	}
 	return result
 }
@@ -169,11 +168,11 @@ func (g *BowlingGlue) assertFrameEquals(t *testing.T, expected common.FrameValue
 	frame := g.numberedFrame(t, expected.Frame)
 	where := "frame " + expected.Frame + " "
 
-	g.assertField(t, where+"Roll1", expected.Roll1, frame.Roll1.String())
-	g.assertField(t, where+"Roll2", expected.Roll2, frame.Roll2.String())
-	g.assertField(t, where+"Roll3", expected.Roll3, frame.Roll3.String())
-	g.assertField(t, where+"Score", expected.Score, frame.Score.String())
-	g.assertField(t, where+"TotalScore", expected.TotalScore, frame.TotalScore.String())
+	g.assertField(t, where+"Roll1", string(expected.Roll1), frame.Roll1.String())
+	g.assertField(t, where+"Roll2", string(expected.Roll2), frame.Roll2.String())
+	g.assertField(t, where+"Roll3", string(expected.Roll3), frame.Roll3.String())
+	g.assertField(t, where+"Score", string(expected.Score), frame.Score.String())
+	g.assertField(t, where+"TotalScore", string(expected.TotalScore), frame.TotalScore.String())
 }
 
 func (g *BowlingGlue) numberedFrame(t *testing.T, number string) production.Frame {

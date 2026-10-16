@@ -1,20 +1,22 @@
 #![allow(dead_code, unused_imports, unused_variables)]
 
+use super::simpletext_string::SimpleTextString;
+use super::dollar_string::DollarString;
 #[derive(Debug, Clone, Default)]
 pub struct OrderItemString {
-    pub name: String,
+    pub name: SimpleTextString,
     pub quantity: String,
-    pub price: String,
-    pub itemtotal: String,
+    pub price: DollarString,
+    pub itemtotal: DollarString,
 }
 
 impl OrderItemString {
     pub fn from_vec(v: &[&str]) -> Self {
         Self {
-            name: v.get(0).copied().unwrap_or("").to_string(),
+            name: SimpleTextString::from(v.get(0).copied().unwrap_or("")),
             quantity: v.get(1).copied().unwrap_or("").to_string(),
-            price: v.get(2).copied().unwrap_or("").to_string(),
-            itemtotal: v.get(3).copied().unwrap_or("").to_string(),
+            price: DollarString::from(v.get(2).copied().unwrap_or("")),
+            itemtotal: DollarString::from(v.get(3).copied().unwrap_or("")),
         }
     }
 
@@ -22,10 +24,10 @@ impl OrderItemString {
     pub fn from_text(text: &str) -> Self {
         let parts = crate::common::tokens::require(text, 4, "OrderItem");
         Self {
-            name: parts[0].clone(),
+            name: SimpleTextString::from(parts[0].clone()),
             quantity: parts[1].clone(),
-            price: parts[2].clone(),
-            itemtotal: parts[3].clone(),
+            price: DollarString::from(parts[2].clone()),
+            itemtotal: DollarString::from(parts[3].clone()),
         }
     }
 }

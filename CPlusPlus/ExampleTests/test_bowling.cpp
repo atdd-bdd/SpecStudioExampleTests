@@ -5,20 +5,20 @@
 
 TEST(Bowling, Scenario_AddingARoll) {
     BowlingGlue glue;
-    std::vector<Pins> typedList1 = {Pins("5"), Pins("5"), Pins("4"), Pins("5"), Pins("8"), Pins("2"), Pins("10"), Pins("0"), Pins("10"), Pins("10"), Pins("6"), Pins("2"), Pins("10"), Pins("4"), Pins("6"), Pins("10")};
+    std::vector<PinsString> typedList1 = {PinsString("5"), PinsString("5"), PinsString("4"), PinsString("5"), PinsString("8"), PinsString("2"), PinsString("10"), PinsString("0"), PinsString("10"), PinsString("10"), PinsString("6"), PinsString("2"), PinsString("10"), PinsString("4"), PinsString("6"), PinsString("10")};
     glue.given_rolls_are(typedList1);
 
-    std::vector<Pins> typedList2 = {Pins("10")};
+    std::vector<PinsString> typedList2 = {PinsString("10")};
     glue.when_roll_is(typedList2);
 
-    std::vector<Pins> typedList3 = {Pins("5"), Pins("5"), Pins("4"), Pins("5"), Pins("8"), Pins("2"), Pins("10"), Pins("0"), Pins("10"), Pins("10"), Pins("6"), Pins("2"), Pins("10"), Pins("4"), Pins("6"), Pins("10"), Pins("10")};
+    std::vector<PinsString> typedList3 = {PinsString("5"), PinsString("5"), PinsString("4"), PinsString("5"), PinsString("8"), PinsString("2"), PinsString("10"), PinsString("0"), PinsString("10"), PinsString("10"), PinsString("6"), PinsString("2"), PinsString("10"), PinsString("4"), PinsString("6"), PinsString("10"), PinsString("10")};
     glue.then_rolls_become(typedList3);
 
 }
 
 TEST(Bowling, Scenario_FullGameComputeAndDisplay) {
     BowlingGlue glue;
-    std::vector<Pins> typedList4 = {Pins("5"), Pins("5"), Pins("4"), Pins("5"), Pins("8"), Pins("2"), Pins("10"), Pins("0"), Pins("10"), Pins("10"), Pins("6"), Pins("2"), Pins("10"), Pins("4"), Pins("6"), Pins("10"), Pins("10")};
+    std::vector<PinsString> typedList4 = {PinsString("5"), PinsString("5"), PinsString("4"), PinsString("5"), PinsString("8"), PinsString("2"), PinsString("10"), PinsString("0"), PinsString("10"), PinsString("10"), PinsString("6"), PinsString("2"), PinsString("10"), PinsString("4"), PinsString("6"), PinsString("10"), PinsString("10")};
     glue.given_rolls_are(typedList4);
 
     glue.when_scored();
@@ -27,7 +27,7 @@ TEST(Bowling, Scenario_FullGameComputeAndDisplay) {
 
 TEST(Bowling, Scenario_AGameInSteps) {
     BowlingGlue glue;
-    std::vector<Pins> typedList5 = {Pins("5"), Pins("5"), Pins("4"), Pins("5"), Pins("8"), Pins("2"), Pins("10"), Pins("0"), Pins("10"), Pins("10"), Pins("6"), Pins("2"), Pins("10"), Pins("4"), Pins("6"), Pins("10"), Pins("10")};
+    std::vector<PinsString> typedList5 = {PinsString("5"), PinsString("5"), PinsString("4"), PinsString("5"), PinsString("8"), PinsString("2"), PinsString("10"), PinsString("0"), PinsString("10"), PinsString("10"), PinsString("6"), PinsString("2"), PinsString("10"), PinsString("4"), PinsString("6"), PinsString("10"), PinsString("10")};
     glue.given_rolls_are(typedList5);
 
     glue.when_scored();
@@ -72,7 +72,7 @@ TEST(Bowling, Scenario_AGameInSteps) {
 
 TEST(Bowling, Scenario_CheckForGameComplete) {
     BowlingGlue glue;
-    std::vector<Pins> typedList10 = {Pins("5"), Pins("5"), Pins("4"), Pins("5"), Pins("8"), Pins("2"), Pins("10"), Pins("0"), Pins("10"), Pins("10"), Pins("6"), Pins("2"), Pins("10"), Pins("4"), Pins("6"), Pins("10"), Pins("10"), Pins("10")};
+    std::vector<PinsString> typedList10 = {PinsString("5"), PinsString("5"), PinsString("4"), PinsString("5"), PinsString("8"), PinsString("2"), PinsString("10"), PinsString("0"), PinsString("10"), PinsString("10"), PinsString("6"), PinsString("2"), PinsString("10"), PinsString("4"), PinsString("6"), PinsString("10"), PinsString("10"), PinsString("10")};
     glue.given_rolls_are(typedList10);
 
     glue.when_scored();
@@ -83,7 +83,7 @@ TEST(Bowling, Scenario_CheckForGameComplete) {
 
 TEST(Bowling, Scenario_ValuesForTenthFrame) {
     BowlingGlue glue;
-    std::vector<Pins> typedList12 = {Pins("10"), Pins("10")};
+    std::vector<PinsString> typedList12 = {PinsString("10"), PinsString("10")};
     glue.given_rolls_for_tenth_frame_are(typedList12);
 
     glue.when_scored();
@@ -96,7 +96,7 @@ TEST(Bowling, Scenario_ValuesForTenthFrame) {
 
 TEST(Bowling, Scenario_InputControlShouldBeForNextFrame) {
     BowlingGlue glue;
-    std::vector<Pins> typedList14 = {Pins("10")};
+    std::vector<PinsString> typedList14 = {PinsString("10")};
     glue.given_rolls_are(typedList14);
 
     glue.when_scored();
@@ -109,14 +109,14 @@ TEST(Bowling, Scenario_InputControlShouldBeForNextFrame) {
 
 TEST(Bowling, Scenario_TryToAddInvalidRoll) {
     BowlingGlue glue;
-    std::vector<Pins> typedList16 = {Pins("5")};
+    std::vector<PinsString> typedList16 = {PinsString("5")};
     glue.given_rolls_are(typedList16);
 
     glue.when_scored();
-    std::vector<Pins> typedList17 = {Pins("6")};
+    std::vector<PinsString> typedList17 = {PinsString("6")};
     glue.when_roll_is(typedList17);
 
-    std::vector<Pins> typedList18 = {Pins("5")};
+    std::vector<PinsString> typedList18 = {PinsString("5")};
     glue.then_rolls_become(typedList18);
 
 }

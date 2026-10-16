@@ -20,11 +20,11 @@ class BowlingGlue:
 
     # ---- given -----------------------------------------------------------
 
-    def given_rolls_are(self, values: list[Pins]):
-        self.game.set_rolls(values)
+    def given_rolls_are(self, values: list[PinsString]):
+        self.game.set_rolls([Pins(cell) for cell in values])
 
-    def given_rolls_for_tenth_frame_are(self, values: list[Pins]):
-        self.game.set_tenth_frame_rolls(values)
+    def given_rolls_for_tenth_frame_are(self, values: list[PinsString]):
+        self.game.set_tenth_frame_rolls([Pins(cell) for cell in values])
 
     def given_frame_values_are_as_previous(self):
         """The frame values from the previous step are still on the same game."""
@@ -32,21 +32,21 @@ class BowlingGlue:
 
     # ---- when ------------------------------------------------------------
 
-    def when_roll_is(self, values: list[Pins]):
+    def when_roll_is(self, values: list[PinsString]):
         for roll in values:
-            self.game.add_roll(roll)
+            self.game.add_roll(Pins(roll))
 
     def when_scored(self):
         self.game.score()
 
     # ---- then ------------------------------------------------------------
 
-    def then_rolls_become(self, values: list[Pins]):
+    def then_rolls_become(self, values: list[PinsString]):
         actual = self.game.rolls()
 
         assert len(values) == len(actual), 'number of rolls %s' % actual
-        for i, want in enumerate(values):
-            assert want == actual[i], 'roll %d' % (i + 1)
+        for i, cell in enumerate(values):
+            assert Pins(cell) == actual[i], 'roll %d' % (i + 1)
 
     def then_display_is(self, value: str):
         assert self.game.display() == value, 'display'

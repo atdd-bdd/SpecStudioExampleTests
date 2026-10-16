@@ -4,6 +4,7 @@
 #include <vector>
 #include <sstream>
 #include "tokens.h"
+#include "simpletext_string.h"
 
 #ifndef SPECTABLE_DNC_STRING
 #define SPECTABLE_DNC_STRING
@@ -20,10 +21,10 @@ inline bool parse_bool_cell(const std::string& v) {
 #endif
 
 struct AddressString {
-    std::string street;
-    std::string city;
-    std::string state;
-    std::string zip;
+    SimpleTextString street;
+    SimpleTextString city;
+    SimpleTextString state;
+    SimpleTextString zip;
 
     static AddressString from_vec(const std::vector<std::string>& v) {
         AddressString obj;

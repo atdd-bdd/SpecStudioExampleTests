@@ -3,28 +3,28 @@ package common
 import "strconv"
 
 type OrderItemTyped struct {
-	Name string
+	Name SimpleTextTyped
 	Quantity int
-	Price string
-	ItemTotal string
+	Price DollarTyped
+	ItemTotal DollarTyped
 }
 
 func NewOrderItemTypedFromString(s OrderItemString) OrderItemTyped {
 	t := OrderItemTyped{}
-	t.Name = s.Name
+	t.Name = NewSimpleTextTypedFromString(s.Name)
 	if v, err := strconv.Atoi(s.Quantity); err == nil { t.Quantity = v }
-	t.Price = s.Price
-	t.ItemTotal = s.ItemTotal
+	t.Price = NewDollarTypedFromString(s.Price)
+	t.ItemTotal = NewDollarTypedFromString(s.ItemTotal)
 	return t
 }
 
 // ToOrderItemString converts this OrderItemTyped back to the string form a table compares.
 func (t OrderItemTyped) ToOrderItemString() OrderItemString {
 	s := OrderItemString{}
-	s.Name = t.Name
+	s.Name = t.Name.ToSimpleTextString()
 	s.Quantity = strconv.Itoa(t.Quantity)
-	s.Price = t.Price
-	s.ItemTotal = t.ItemTotal
+	s.Price = t.Price.ToDollarString()
+	s.ItemTotal = t.ItemTotal.ToDollarString()
 	return s
 }
 
@@ -45,10 +45,10 @@ func OrderItemTypedFromStringList(list []OrderItemString) []OrderItemTyped {
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t OrderItemTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"Name": t.Name,
+		"Name": t.Name.String(),
 		"Quantity": t.Quantity,
-		"Price": t.Price,
-		"ItemTotal": t.ItemTotal,
+		"Price": t.Price.String(),
+		"ItemTotal": t.ItemTotal.String(),
 	}
 }
 
@@ -66,7 +66,7 @@ func NewOrderItemTypedFromJSONValue(m map[string]interface{}) (OrderItemTyped, e
 	if err != nil {
 		return t, err
 	}
-	t.Name = valName
+	t.Name = NewSimpleTextTyped(valName)
 	rawQuantity, err := JSONRequire(m, "Quantity")
 	if err != nil {
 		return t, err
@@ -84,7 +84,7 @@ func NewOrderItemTypedFromJSONValue(m map[string]interface{}) (OrderItemTyped, e
 	if err != nil {
 		return t, err
 	}
-	t.Price = valPrice
+	t.Price = NewDollarTyped(valPrice)
 	rawItemTotal, err := JSONRequire(m, "ItemTotal")
 	if err != nil {
 		return t, err
@@ -93,7 +93,7 @@ func NewOrderItemTypedFromJSONValue(m map[string]interface{}) (OrderItemTyped, e
 	if err != nil {
 		return t, err
 	}
-	t.ItemTotal = valItemTotal
+	t.ItemTotal = NewDollarTyped(valItemTotal)
 	return t, nil
 }
 

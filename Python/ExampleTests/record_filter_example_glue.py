@@ -13,11 +13,11 @@ class RecordFilterExampleGlue:
         self.record_filter = RecordFilter()
         for value in values:
             typed = IDValueTyped.from_string_obj(value)
-            self.record_filter.add(IDValue(IDForm(typed.id), typed.value))
+            self.record_filter.add(IDValue(typed.id.get(), typed.value))
 
-    def when_filtered_by_id_with_value(self, values: list[IDForm]):
+    def when_filtered_by_id_with_value(self, values: list[IDFormString]):
         if values:
-            self.computed_sum = self.record_filter.sum_by_label(values[0])
+            self.computed_sum = self.record_filter.sum_by_label(IDForm(values[0]))
 
     def then_sum_is(self, values: list[int]):
         if values:
@@ -26,7 +26,7 @@ class RecordFilterExampleGlue:
     def when_filtered_by(self, values: list):
         for value in values:
             typed = FilterValueTyped.from_string_obj(value)
-            self.computed_sum = self.record_filter.sum_by_label(IDForm(typed.value))
+            self.computed_sum = self.record_filter.sum_by_label(typed.value.get())
 
     def then_result(self, values: list):
         for value in values:
@@ -36,7 +36,7 @@ class RecordFilterExampleGlue:
     def when_element_added(self, values: list):
         for value in values:
             typed = IDValueTyped.from_string_obj(value)
-            self.record_filter.add(IDValue(IDForm(typed.id), typed.value))
+            self.record_filter.add(IDValue(typed.id.get(), typed.value))
 
     def examples_Calculation_ConvertFToC(self, values: list):
         for value in values:

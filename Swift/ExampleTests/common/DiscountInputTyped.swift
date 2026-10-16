@@ -1,24 +1,24 @@
 public struct DiscountInputTyped: Equatable, CustomStringConvertible {
-    public let totalPrice: String
-    public let discount: String
+    public let totalPrice: DollarTyped
+    public let discount: PercentageTyped
     public let notes: String
 
-    public init(totalPrice: String, discount: String, notes: String) {
+    public init(totalPrice: DollarTyped, discount: PercentageTyped, notes: String) {
         self.totalPrice = totalPrice
         self.discount = discount
         self.notes = notes
     }
 
     public init(from s: DiscountInputString) {
-        self.totalPrice = s.totalPrice
-        self.discount = s.discount
+        self.totalPrice = DollarTyped(from: s.totalPrice)
+        self.discount = PercentageTyped(from: s.discount)
         self.notes = s.notes
     }
 
     public func toStringStruct() -> DiscountInputString {
         return DiscountInputString(
-            totalPrice: String(describing: totalPrice),
-            discount: String(describing: discount),
+            totalPrice: totalPrice.toDollarString(),
+            discount: discount.toPercentageString(),
             notes: String(describing: notes)
         )
     }
@@ -33,8 +33,8 @@ public struct DiscountInputTyped: Equatable, CustomStringConvertible {
 
     public func toJSONValue() -> [String: Any] {
         return [
-            "totalPrice": totalPrice,
-            "discount": discount,
+            "totalPrice": totalPrice.text,
+            "discount": discount.text,
             "notes": notes,
         ]
     }
@@ -44,8 +44,8 @@ public struct DiscountInputTyped: Equatable, CustomStringConvertible {
     }
 
     public init(fromJSONValue m: [String: Any]) throws {
-        self.totalPrice = try Json.asString(Json.require(m, "totalPrice"), "totalPrice")
-        self.discount = try Json.asString(Json.require(m, "discount"), "discount")
+        self.totalPrice = DollarTyped(try Json.asString(Json.require(m, "totalPrice"), "totalPrice"))
+        self.discount = PercentageTyped(try Json.asString(Json.require(m, "discount"), "discount"))
         self.notes = try Json.asString(Json.require(m, "notes"), "notes")
     }
 

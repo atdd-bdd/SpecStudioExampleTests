@@ -57,11 +57,11 @@ export class FrameValuesTyped {
   static fromJsonValue(m) {
     return new FrameValuesTyped(
       _json.asInt(_json.require(m, "frame"), "frame"),
-      new Pins(_json.asString(_json.require(m, "roll1"), "roll1")),
-      new Pins(_json.asString(_json.require(m, "roll2"), "roll2")),
-      new Pins(_json.asString(_json.require(m, "roll3"), "roll3")),
-      new Score(_json.asString(_json.require(m, "score"), "score")),
-      new Score(_json.asString(_json.require(m, "totalScore"), "totalScore"))
+      _json.asString(_json.require(m, "roll1"), "roll1"),
+      _json.asString(_json.require(m, "roll2"), "roll2"),
+      _json.asString(_json.require(m, "roll3"), "roll3"),
+      _json.asString(_json.require(m, "score"), "score"),
+      _json.asString(_json.require(m, "totalScore"), "totalScore")
     );
   }
 

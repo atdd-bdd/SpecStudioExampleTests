@@ -4,6 +4,8 @@
 #include <vector>
 #include <sstream>
 #include "tokens.h"
+#include "pins_string.h"
+#include "score_string.h"
 
 #ifndef SPECTABLE_DNC_STRING
 #define SPECTABLE_DNC_STRING
@@ -21,11 +23,11 @@ inline bool parse_bool_cell(const std::string& v) {
 
 struct FrameValuesString {
     std::string frame;
-    std::string roll1;
-    std::string roll2;
-    std::string roll3;
-    std::string score;
-    std::string totalscore;
+    PinsString roll1;
+    PinsString roll2;
+    PinsString roll3;
+    ScoreString score;
+    ScoreString totalscore;
 
     static FrameValuesString from_vec(const std::vector<std::string>& v) {
         FrameValuesString obj;

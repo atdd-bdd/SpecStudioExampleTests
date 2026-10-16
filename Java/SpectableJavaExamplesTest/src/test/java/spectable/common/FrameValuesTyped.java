@@ -11,13 +11,13 @@ import calculator.*;
 
 public class FrameValuesTyped {
     public int frame;
-    public Pins roll1;
-    public Pins roll2;
-    public Pins roll3;
-    public Score score;
-    public Score totalScore;
+    public PinsTyped roll1;
+    public PinsTyped roll2;
+    public PinsTyped roll3;
+    public ScoreTyped score;
+    public ScoreTyped totalScore;
 
-    public FrameValuesTyped(int frame, Pins roll1, Pins roll2, Pins roll3, Score score, Score totalScore) {
+    public FrameValuesTyped(int frame, PinsTyped roll1, PinsTyped roll2, PinsTyped roll3, ScoreTyped score, ScoreTyped totalScore) {
         this.frame = frame;
         this.roll1 = roll1;
         this.roll2 = roll2;
@@ -28,11 +28,11 @@ public class FrameValuesTyped {
 
     public FrameValuesTyped(FrameValuesString s) {
         this.frame = Integer.parseInt(s.frame);
-        this.roll1 = new Pins(s.roll1);
-        this.roll2 = new Pins(s.roll2);
-        this.roll3 = new Pins(s.roll3);
-        this.score = new Score(s.score);
-        this.totalScore = new Score(s.totalScore);
+        this.roll1 = new PinsTyped(s.roll1);
+        this.roll2 = new PinsTyped(s.roll2);
+        this.roll3 = new PinsTyped(s.roll3);
+        this.score = new ScoreTyped(s.score);
+        this.totalScore = new ScoreTyped(s.totalScore);
     }
 
     @Override
@@ -88,11 +88,11 @@ public class FrameValuesTyped {
         if (m == null) return null;
         return new FrameValuesTyped(
             Json.asInt(Json.require(m, "frame"), "frame"),
-            new Pins(Json.asString(Json.require(m, "roll1"), "roll1")),
-            new Pins(Json.asString(Json.require(m, "roll2"), "roll2")),
-            new Pins(Json.asString(Json.require(m, "roll3"), "roll3")),
-            new Score(Json.asString(Json.require(m, "score"), "score")),
-            new Score(Json.asString(Json.require(m, "totalScore"), "totalScore")));
+            new PinsTyped(new PinsString(Json.asString(Json.require(m, "roll1"), "roll1"))),
+            new PinsTyped(new PinsString(Json.asString(Json.require(m, "roll2"), "roll2"))),
+            new PinsTyped(new PinsString(Json.asString(Json.require(m, "roll3"), "roll3"))),
+            new ScoreTyped(new ScoreString(Json.asString(Json.require(m, "score"), "score"))),
+            new ScoreTyped(new ScoreString(Json.asString(Json.require(m, "totalScore"), "totalScore"))));
     }
 
     public static FrameValuesTyped fromJSON(String json) {

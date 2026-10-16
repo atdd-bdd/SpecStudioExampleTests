@@ -10,9 +10,9 @@ using production;
 
     public class ItemPriceInputTyped
     {
-        public Dollar totalItems;
+        public DollarTyped totalItems;
 
-        public ItemPriceInputTyped(Dollar totalItems)
+        public ItemPriceInputTyped(DollarTyped totalItems)
         {
             this.totalItems = totalItems;
         }
@@ -41,7 +41,7 @@ using production;
         public void WriteJson(Utf8JsonWriter w)
         {
             w.WriteStartObject();
-            w.WriteString("totalItems", Json.ToText(this.totalItems));
+            w.WriteString("totalItems", this.totalItems.ToString());
             w.WriteEndObject();
         }
 
@@ -55,7 +55,7 @@ using production;
         public static ItemPriceInputTyped FromJsonElement(JsonElement m)
         {
             return new ItemPriceInputTyped(
-                new Dollar(Json.AsString(Json.Require(m, "totalItems"), "totalItems"))
+                new DollarTyped(new DollarString(Json.AsString(Json.Require(m, "totalItems"), "totalItems")))
             );
         }
 

@@ -1,21 +1,21 @@
 public struct CatalogItemTyped: Equatable, CustomStringConvertible {
-    public let name: String
-    public let price: String
+    public let name: SimpleTextTyped
+    public let price: DollarTyped
 
-    public init(name: String, price: String) {
+    public init(name: SimpleTextTyped, price: DollarTyped) {
         self.name = name
         self.price = price
     }
 
     public init(from s: CatalogItemString) {
-        self.name = s.name
-        self.price = s.price
+        self.name = SimpleTextTyped(from: s.name)
+        self.price = DollarTyped(from: s.price)
     }
 
     public func toStringStruct() -> CatalogItemString {
         return CatalogItemString(
-            name: String(describing: name),
-            price: String(describing: price)
+            name: name.toSimpleTextString(),
+            price: price.toDollarString()
         )
     }
 
@@ -29,8 +29,8 @@ public struct CatalogItemTyped: Equatable, CustomStringConvertible {
 
     public func toJSONValue() -> [String: Any] {
         return [
-            "name": name,
-            "price": price,
+            "name": name.text,
+            "price": price.text,
         ]
     }
 
@@ -39,8 +39,8 @@ public struct CatalogItemTyped: Equatable, CustomStringConvertible {
     }
 
     public init(fromJSONValue m: [String: Any]) throws {
-        self.name = try Json.asString(Json.require(m, "name"), "name")
-        self.price = try Json.asString(Json.require(m, "price"), "price")
+        self.name = SimpleTextTyped(try Json.asString(Json.require(m, "name"), "name"))
+        self.price = DollarTyped(try Json.asString(Json.require(m, "price"), "price"))
     }
 
     public init(fromJSON text: String) throws {

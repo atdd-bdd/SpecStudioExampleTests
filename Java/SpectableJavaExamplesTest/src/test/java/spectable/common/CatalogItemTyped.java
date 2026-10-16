@@ -10,17 +10,17 @@ import records.*;
 import calculator.*;
 
 public class CatalogItemTyped {
-    public SimpleText name;
-    public Dollar price;
+    public SimpleTextTyped name;
+    public DollarTyped price;
 
-    public CatalogItemTyped(SimpleText name, Dollar price) {
+    public CatalogItemTyped(SimpleTextTyped name, DollarTyped price) {
         this.name = name;
         this.price = price;
     }
 
     public CatalogItemTyped(CatalogItemString s) {
-        this.name = new SimpleText(s.name);
-        this.price = new Dollar(s.price);
+        this.name = new SimpleTextTyped(s.name);
+        this.price = new DollarTyped(s.price);
     }
 
     @Override
@@ -67,8 +67,8 @@ public class CatalogItemTyped {
     public static CatalogItemTyped fromJsonValue(Map<String, Object> m) {
         if (m == null) return null;
         return new CatalogItemTyped(
-            new SimpleText(Json.asString(Json.require(m, "name"), "name")),
-            new Dollar(Json.asString(Json.require(m, "price"), "price")));
+            new SimpleTextTyped(new SimpleTextString(Json.asString(Json.require(m, "name"), "name"))),
+            new DollarTyped(new DollarString(Json.asString(Json.require(m, "price"), "price"))));
     }
 
     public static CatalogItemTyped fromJSON(String json) {

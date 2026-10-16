@@ -52,10 +52,10 @@ export class CartInputTyped {
 
   static fromJsonValue(m) {
     return new CartInputTyped(
-      new Dollar(_json.asString(_json.require(m, "totalItems"), "totalItems")),
-      new Dollar(_json.asString(_json.require(m, "shipping"), "shipping")),
-      new Dollar(_json.asString(_json.require(m, "discount"), "discount")),
-      new Dollar(_json.asString(_json.require(m, "totalPrice"), "totalPrice")),
+      _json.asString(_json.require(m, "totalItems"), "totalItems"),
+      _json.asString(_json.require(m, "shipping"), "shipping"),
+      _json.asString(_json.require(m, "discount"), "discount"),
+      _json.asString(_json.require(m, "totalPrice"), "totalPrice"),
       _json.asString(_json.require(m, "notes"), "notes")
     );
   }

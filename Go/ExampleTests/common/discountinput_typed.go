@@ -1,15 +1,15 @@
 package common
 
 type DiscountInputTyped struct {
-	TotalPrice string
-	Discount string
+	TotalPrice DollarTyped
+	Discount PercentageTyped
 	Notes string
 }
 
 func NewDiscountInputTypedFromString(s DiscountInputString) DiscountInputTyped {
 	t := DiscountInputTyped{}
-	t.TotalPrice = s.TotalPrice
-	t.Discount = s.Discount
+	t.TotalPrice = NewDollarTypedFromString(s.TotalPrice)
+	t.Discount = NewPercentageTypedFromString(s.Discount)
 	t.Notes = s.Notes
 	return t
 }
@@ -17,8 +17,8 @@ func NewDiscountInputTypedFromString(s DiscountInputString) DiscountInputTyped {
 // ToDiscountInputString converts this DiscountInputTyped back to the string form a table compares.
 func (t DiscountInputTyped) ToDiscountInputString() DiscountInputString {
 	s := DiscountInputString{}
-	s.TotalPrice = t.TotalPrice
-	s.Discount = t.Discount
+	s.TotalPrice = t.TotalPrice.ToDollarString()
+	s.Discount = t.Discount.ToPercentageString()
 	s.Notes = t.Notes
 	return s
 }
@@ -40,8 +40,8 @@ func DiscountInputTypedFromStringList(list []DiscountInputString) []DiscountInpu
 // ToJSONValue renders the struct as a plain map for encoding/json.
 func (t DiscountInputTyped) ToJSONValue() map[string]interface{} {
 	return map[string]interface{}{
-		"Total Price": t.TotalPrice,
-		"Discount": t.Discount,
+		"Total Price": t.TotalPrice.String(),
+		"Discount": t.Discount.String(),
 		"Notes": t.Notes,
 	}
 }
@@ -60,7 +60,7 @@ func NewDiscountInputTypedFromJSONValue(m map[string]interface{}) (DiscountInput
 	if err != nil {
 		return t, err
 	}
-	t.TotalPrice = valTotalPrice
+	t.TotalPrice = NewDollarTyped(valTotalPrice)
 	rawDiscount, err := JSONRequire(m, "Discount")
 	if err != nil {
 		return t, err
@@ -69,7 +69,7 @@ func NewDiscountInputTypedFromJSONValue(m map[string]interface{}) (DiscountInput
 	if err != nil {
 		return t, err
 	}
-	t.Discount = valDiscount
+	t.Discount = NewPercentageTyped(valDiscount)
 	rawNotes, err := JSONRequire(m, "Notes")
 	if err != nil {
 		return t, err

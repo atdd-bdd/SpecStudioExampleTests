@@ -3,19 +3,20 @@
 #include <vector>
 #include "json.h"
 #include "itempriceinput_string.h"
+#include "dollar_typed.h"
 
 struct ItemPriceInputTyped {
-    std::string totalitems;
+    DollarTyped totalitems;
 
     static ItemPriceInputTyped from_string_struct(const ItemPriceInputString& s) {
         ItemPriceInputTyped t;
-        t.totalitems = s.totalitems;
+        t.totalitems = DollarTyped::from_string_struct(s.totalitems);
         return t;
     }
 
     ItemPriceInputString to_string_struct() const {
         ItemPriceInputString s;
-        s.totalitems = totalitems;
+        s.totalitems = totalitems.to_string_struct();
         return s;
     }
 
@@ -33,7 +34,7 @@ struct ItemPriceInputTyped {
 
     json::Value to_json_value() const {
         json::Members m;
-        m.emplace_back("TotalItems", json::Convert<std::string>::to_json(totalitems));
+        m.emplace_back("TotalItems", totalitems.to_json_value());
         return json::Value::make_object(std::move(m));
     }
 
@@ -41,7 +42,7 @@ struct ItemPriceInputTyped {
 
     static ItemPriceInputTyped from_json_value(const json::Value& v) {
         ItemPriceInputTyped t;
-        t.totalitems = json::Convert<std::string>::from_json(json::require(v, "TotalItems"), "TotalItems");
+        t.totalitems = DollarTyped::from_json_value(json::require(v, "TotalItems"));
         return t;
     }
 

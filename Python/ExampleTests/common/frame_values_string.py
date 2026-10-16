@@ -1,3 +1,8 @@
+from .pins_string import PinsString
+from .pins_string import PinsString
+from .pins_string import PinsString
+from .score_string import ScoreString
+from .score_string import ScoreString
 from . import tokens
 DNC_STRING = '?DNC?'
 
@@ -5,11 +10,11 @@ DNC_STRING = '?DNC?'
 class FrameValuesString:
     def __init__(self, frame: str = '', roll1: str = '', roll2: str = '', roll3: str = '', score: str = '', total_score: str = ''):
         self.frame = frame
-        self.roll1 = roll1
-        self.roll2 = roll2
-        self.roll3 = roll3
-        self.score = score
-        self.total_score = total_score
+        self.roll1 = PinsString(roll1)
+        self.roll2 = PinsString(roll2)
+        self.roll3 = PinsString(roll3)
+        self.score = ScoreString(score)
+        self.total_score = ScoreString(total_score)
 
     @classmethod
     def from_list(cls, values):

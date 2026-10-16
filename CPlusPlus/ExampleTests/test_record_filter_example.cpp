@@ -12,7 +12,7 @@ TEST(RecordFilterExample, Scenario_FilterDataByID) {
     };
     glue.given_list_of_numbers(objectList1);
 
-    std::vector<IDForm> typedList2 = {IDForm("Q1234")};
+    std::vector<IDFormString> typedList2 = {IDFormString("Q1234")};
     glue.when_filtered_by_id_with_value(typedList2);
 
     std::vector<int> typedList3 = {std::stoi("4")};

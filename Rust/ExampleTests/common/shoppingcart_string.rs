@@ -1,12 +1,13 @@
 #![allow(dead_code, unused_imports, unused_variables)]
 
 use super::address_string::AddressString;
+use super::dollar_string::DollarString;
 #[derive(Debug, Clone, Default)]
 pub struct ShoppingCartString {
     pub items: String,
-    pub shipping: String,
-    pub discount: String,
-    pub totalprice: String,
+    pub shipping: DollarString,
+    pub discount: DollarString,
+    pub totalprice: DollarString,
     pub shippingaddress: AddressString,
     pub billingaddress: AddressString,
 }
@@ -15,9 +16,9 @@ impl ShoppingCartString {
     pub fn from_vec(v: &[&str]) -> Self {
         Self {
             items: v.get(0).copied().unwrap_or("").to_string(),
-            shipping: v.get(1).copied().unwrap_or("").to_string(),
-            discount: v.get(2).copied().unwrap_or("").to_string(),
-            totalprice: v.get(3).copied().unwrap_or("").to_string(),
+            shipping: DollarString::from(v.get(1).copied().unwrap_or("")),
+            discount: DollarString::from(v.get(2).copied().unwrap_or("")),
+            totalprice: DollarString::from(v.get(3).copied().unwrap_or("")),
             shippingaddress: Default::default(),
             billingaddress: Default::default(),
         }
@@ -28,9 +29,9 @@ impl ShoppingCartString {
         let parts = crate::common::tokens::require(text, 6, "ShoppingCart");
         Self {
             items: parts[0].clone(),
-            shipping: parts[1].clone(),
-            discount: parts[2].clone(),
-            totalprice: parts[3].clone(),
+            shipping: DollarString::from(parts[1].clone()),
+            discount: DollarString::from(parts[2].clone()),
+            totalprice: DollarString::from(parts[3].clone()),
             shippingaddress: AddressString::from_text(&parts[4]),
             billingaddress: AddressString::from_text(&parts[5]),
         }
