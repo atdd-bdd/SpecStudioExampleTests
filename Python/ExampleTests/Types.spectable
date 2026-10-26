@@ -2,8 +2,8 @@ Specification Types
 
 DataType Dollar
 Description Monetary amount in US dollars.
-Details \
-  Stored as decimal with two digits of precision. 
+Details
+  \ Stored as decimal with two digits of precision.
 Constraint Must not have more than two decimal digits.
 Uses Decimal	
 Examples: ValidValues
