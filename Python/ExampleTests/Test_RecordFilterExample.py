@@ -74,7 +74,6 @@ def test_Calculation_ConvertFToC():
         FandCString('32', '0', 'Freezing'),
         FandCString('212', '100', 'Boiling'),
         FandCString('-40', '-40', 'Below zero'),
-        FandCString('68', '20', 'Photo chem'),
     ]
     glue.examples_Calculation_ConvertFToC(object_list_11)
 

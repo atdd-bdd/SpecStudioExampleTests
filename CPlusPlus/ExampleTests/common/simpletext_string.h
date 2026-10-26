@@ -4,8 +4,7 @@
 // signature while behaving like the text it is. It converts to and from a
 // string implicitly, so glue written against the text keeps working and a
 // cell can be compared, streamed or handed to the production class directly.
-// No operator== of its own, deliberately: one would make `cell == "x"`
-// ambiguous against the string comparison the conversion already allows.
+// Comparison and empty() are its own, for the reason given above them.
 
 #include <cctype>
 #include <ostream>
@@ -37,6 +36,17 @@ struct SimpleTextString {
 
     static SimpleTextString from_text(const std::string& text) { return SimpleTextString(text); }
     std::string to_string() const { return value; }
+    bool empty() const { return value.empty(); }
 };
 
+inline bool operator==(const SimpleTextString& a, const SimpleTextString& b) { return a.value == b.value; }
+inline bool operator!=(const SimpleTextString& a, const SimpleTextString& b) { return !(a == b); }
+inline bool operator==(const SimpleTextString& a, const std::string& b) { return a.value == b; }
+inline bool operator!=(const SimpleTextString& a, const std::string& b) { return !(a == b); }
+inline bool operator==(const std::string& a, const SimpleTextString& b) { return a == b.value; }
+inline bool operator!=(const std::string& a, const SimpleTextString& b) { return !(a == b); }
+inline bool operator==(const SimpleTextString& a, const char* b) { return a.value == (b ? b : ""); }
+inline bool operator!=(const SimpleTextString& a, const char* b) { return !(a == b); }
+inline bool operator==(const char* a, const SimpleTextString& b) { return (a ? a : "") == b.value; }
+inline bool operator!=(const char* a, const SimpleTextString& b) { return !(a == b); }
 inline std::ostream& operator<<(std::ostream& os, const SimpleTextString& v) { return os << v.value; }

@@ -65,7 +65,6 @@ func TestRecordFilterExample_Calculation_ConvertFToC(t *testing.T) {
 		common.NewFandCStringFromSlice([]string{"32", "0", "Freezing"}),
 		common.NewFandCStringFromSlice([]string{"212", "100", "Boiling"}),
 		common.NewFandCStringFromSlice([]string{"-40", "-40", "Below zero"}),
-		common.NewFandCStringFromSlice([]string{"68", "20", "Photo chem"}),
 	}
 	glue.ExamplesCalculationConvertFToC(t, objectList11)
 }

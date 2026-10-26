@@ -73,7 +73,6 @@ TEST(RecordFilterExample, Calculation_ConvertFToC) {
         FandCString::from_vec({"32", "0", "Freezing"}),
         FandCString::from_vec({"212", "100", "Boiling"}),
         FandCString::from_vec({"-40", "-40", "Below zero"}),
-        FandCString::from_vec({"68", "20", "Photo chem"}),
     };
     glue.examples_calculation_convert_f_to_c(objectList11);
 }

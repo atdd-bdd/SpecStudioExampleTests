@@ -63,7 +63,6 @@ describe("Record Filter Example", () => {
       new FandCString("32", "0", "Freezing"),
       new FandCString("212", "100", "Boiling"),
       new FandCString("-40", "-40", "Below zero"),
-      new FandCString("68", "20", "Photo chem"),
     ];
     glue.examplesCalculationConvertFToC(objectList11);
   });

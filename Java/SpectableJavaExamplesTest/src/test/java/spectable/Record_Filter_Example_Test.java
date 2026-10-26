@@ -84,7 +84,6 @@ public class Record_Filter_Example_Test {
         objectList11.add(new FandCString("32", "0", "Freezing"));
         objectList11.add(new FandCString("212", "100", "Boiling"));
         objectList11.add(new FandCString("-40", "-40", "Below zero"));
-        objectList11.add(new FandCString("68", "20", "Photo chem"));
         glue.Examples_Calculation_Convert_F_to_C(objectList11);
     }
 

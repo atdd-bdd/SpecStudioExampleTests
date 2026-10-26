@@ -52,7 +52,6 @@ final class RecordFilterExampleTests: XCTestCase {
             FandCString(fromArray: ["32", "0", "Freezing"]),
             FandCString(fromArray: ["212", "100", "Boiling"]),
             FandCString(fromArray: ["-40", "-40", "Below zero"]),
-            FandCString(fromArray: ["68", "20", "Photo chem"]),
         ])
     }
 

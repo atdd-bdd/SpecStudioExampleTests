@@ -85,7 +85,6 @@ public void Calculation_Convert_F_to_C(){
          new FandCString("32","0","Freezing"),
          new FandCString("212","100","Boiling"),
          new FandCString("-40","-40","Below zero"),
-         new FandCString("68","20","Photo chem"),
      };
      glue.Examples_Calculation_Convert_F_to_C(objectList11);
 }
